@@ -79,6 +79,7 @@ export function serializeProductShowcase(
   product: NonNullable<Awaited<ReturnType<typeof loadProductShowcase>>>,
 ): ShowcaseProduct {
   return {
+    id: product.id,
     name: product.name,
     slug: product.slug,
     ean: product.ean,
@@ -99,6 +100,7 @@ export function serializePosOfferCard(
     discountPct: number | null;
     stock: number;
     product: {
+      id: string;
       name: string;
       slug: string;
       imageUrl: string | null;
@@ -124,6 +126,7 @@ export function serializePosOfferCard(
       offer.discountPct ??
       discountPercent(offer.priceRemise, offer.priceReference),
     stock: offer.stock,
+    productId: offer.product.id,
     productName: offer.product.name,
     productSlug: offer.product.slug,
     imageUrl: offer.product.imageUrl,
@@ -159,7 +162,7 @@ export const getCachedProductPage = unstable_cache(
       offers: product.offers.map(serializeShowcaseOffer),
     };
   },
-  ["catalog-product-page-v2"],
+  ["catalog-product-page-v3"],
   { revalidate: CACHE_TTL },
 );
 
@@ -185,6 +188,7 @@ export const getCachedPosPage = unstable_cache(
       return null;
     }
     return {
+      id: pos.id,
       slug: pos.slug,
       name: pos.name,
       city: pos.city,
@@ -199,7 +203,7 @@ export const getCachedPosPage = unstable_cache(
       offers: pos.offers.map((offer) => serializePosOfferCard(offer, pos)),
     };
   },
-  ["catalog-pos-page"],
+  ["catalog-pos-page-v2"],
   { revalidate: CACHE_TTL },
 );
 
@@ -232,6 +236,7 @@ async function getCityCategoryOffers(cityName: string, categoryId: string) {
       ...offerPosInclude,
       product: {
         select: {
+          id: true,
           name: true,
           slug: true,
           imageUrl: true,
@@ -262,7 +267,7 @@ export const getCachedCityCategoryPage = unstable_cache(
       offers: offers.map((offer) => serializePosOfferCard(offer, offer.pos)),
     };
   },
-  ["catalog-city-category-page"],
+  ["catalog-city-category-page-v2"],
   { revalidate: CACHE_TTL },
 );
 

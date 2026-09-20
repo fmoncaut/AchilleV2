@@ -8,7 +8,7 @@ import { Distance } from "@/components/distance";
 import { OfferCard } from "@/components/offer-card";
 import { haversineMeters } from "@/lib/haversine";
 import type { NearbyOfferCard } from "@/lib/geo";
-import { offerPath } from "@/lib/urls";
+import { loginWithReturn, offerPath } from "@/lib/urls";
 
 type PosDistanceProps = {
   posLat: number;
@@ -39,9 +39,16 @@ export function PosDistance(props: PosDistanceProps) {
 type PosOfferListProps = {
   posSlug: string;
   offers: NearbyOfferCard[];
+  signedIn?: boolean;
+  favoriteProductIds?: string[];
 };
 
-function PosOfferListInner({ posSlug, offers }: PosOfferListProps) {
+function PosOfferListInner({
+  posSlug,
+  offers,
+  signedIn = false,
+  favoriteProductIds = [],
+}: PosOfferListProps) {
   const { lat, lng } = parseCatalogQuery(useSearchParams());
   const located =
     lat != null && lng != null
@@ -62,6 +69,9 @@ function PosOfferListInner({ posSlug, offers }: PosOfferListProps) {
               lat,
               lng,
             })}
+            signedIn={signedIn}
+            isProductFavorite={favoriteProductIds.includes(offer.productId)}
+            loginHref={loginWithReturn(`/magasin/${posSlug}`)}
           />
         </li>
       ))}
@@ -79,6 +89,11 @@ export function PosOfferList(props: PosOfferListProps) {
               <OfferCard
                 offer={offer}
                 href={offerPath(offer.productSlug, { posSlug: props.posSlug })}
+                signedIn={props.signedIn}
+                isProductFavorite={props.favoriteProductIds?.includes(
+                  offer.productId,
+                )}
+                loginHref={loginWithReturn(`/magasin/${props.posSlug}`)}
               />
             </li>
           ))}

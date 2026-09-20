@@ -14,6 +14,7 @@ import {
 } from "@/components/catalog/query";
 import { Distance } from "@/components/distance";
 import { MerchantCta } from "@/components/merchant-cta";
+import { FavoriteButton } from "@/components/favorite-button";
 import { OfferCard } from "@/components/offer-card";
 import { OpeningHoursList } from "@/components/opening-hours";
 import { PriceTag } from "@/components/price-tag";
@@ -26,13 +27,15 @@ import {
   type ShowcaseProduct,
 } from "@/lib/catalog-view";
 import { discountPercent } from "@/lib/money";
-import { magasinPath, offerPath, villeCategoriePath } from "@/lib/urls";
+import type { FavoriteFlags } from "@/lib/favorites";
+import { loginWithReturn, magasinPath, offerPath, villeCategoriePath } from "@/lib/urls";
 
 type LocatedOffer = ShowcaseOffer & { distanceM: number | null };
 
 type OfferShowcaseProps = {
   product: ShowcaseProduct;
   offers: ShowcaseOffer[];
+  favorites: FavoriteFlags;
 };
 
 function formatAddress(pos: ShowcaseOffer["pos"]): string {
@@ -67,6 +70,7 @@ function pickCurrentOffer(
 function OfferShowcaseView({
   product,
   offers,
+  favorites,
   query,
 }: OfferShowcaseProps & { query: CatalogQuery }) {
   const located = sortLocatedOffers(
@@ -135,7 +139,17 @@ function OfferShowcaseView({
             <p className="text-orange text-sm font-semibold tracking-wide uppercase">
               {product.brandName ?? "Bonne affaire locale"}
             </p>
-            <h1 className="text-navy text-3xl sm:text-4xl">{product.name}</h1>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <h1 className="text-navy text-3xl sm:text-4xl">{product.name}</h1>
+              <FavoriteButton
+                kind="product"
+                targetId={product.id}
+                signedIn={favorites.signedIn}
+                isFavorite={favorites.productIds.includes(product.id)}
+                loginHref={loginWithReturn(`/offre/${product.slug}`)}
+                variant="label"
+              />
+            </div>
             {product.ean ? (
               <p className="text-slate text-sm font-medium">EAN {product.ean}</p>
             ) : null}
@@ -240,6 +254,9 @@ function OfferShowcaseView({
                       lng,
                       tri,
                     })}
+                    signedIn={favorites.signedIn}
+                    isProductFavorite={favorites.productIds.includes(product.id)}
+                    loginHref={loginWithReturn(`/offre/${product.slug}`)}
                   />
                 </li>
               ))}

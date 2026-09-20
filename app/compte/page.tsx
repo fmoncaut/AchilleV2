@@ -42,11 +42,19 @@ export default async function AccountPage() {
               </dd>
             </div>
           </dl>
+          <p className="mt-6">
+            <Link
+              href="/compte/favoris"
+              className="bg-orange text-navy inline-flex h-11 w-full items-center justify-center rounded-xl text-sm font-bold"
+            >
+              Mes favoris
+            </Link>
+          </p>
           {actor ? (
-            <p className="mt-6">
+            <p className="mt-3">
               <Link
                 href="/admin/offres"
-                className="bg-orange text-navy inline-flex h-11 w-full items-center justify-center rounded-xl text-sm font-bold"
+                className="text-navy ring-border inline-flex h-11 w-full items-center justify-center rounded-xl text-sm font-bold ring-1"
               >
                 Back-office {actor.merchantName}
               </Link>

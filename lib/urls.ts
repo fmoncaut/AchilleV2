@@ -63,6 +63,13 @@ export function outboundPath(offerId: string): string {
   return `/api/out/${offerId}`;
 }
 
+export function loginWithReturn(path: string): string {
+  if (!path.startsWith("/") || path.startsWith("//")) {
+    return "/login?callbackUrl=/compte/favoris";
+  }
+  return `/login?callbackUrl=${encodeURIComponent(path)}`;
+}
+
 export function withLocationQuery(
   href: string,
   lat?: number | null,

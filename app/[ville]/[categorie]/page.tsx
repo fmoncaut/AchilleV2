@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { CityOffers } from "@/components/catalog/city-offers";
+import { auth } from "@/auth";
 import { getCachedCityCategoryPage } from "@/lib/catalog";
+import { getFavoriteFlags } from "@/lib/favorites";
 import { getSiteUrl } from "@/lib/site";
 
 export const revalidate = 600;
@@ -15,6 +17,10 @@ const RESERVED_VILLE_SLUGS = new Set([
   "compte",
   "admin",
   "api",
+  "mentions-legales",
+  "confidentialite",
+  "cgu",
+  "offline",
 ]);
 
 type VilleCategoriePageProps = {
@@ -66,6 +72,9 @@ export default async function VilleCategoriePage({
     notFound();
   }
 
+  const session = await auth();
+  const favorites = await getFavoriteFlags(session?.user?.id);
+
   return (
     <CityOffers
       villeSlug={ville}
@@ -73,6 +82,8 @@ export default async function VilleCategoriePage({
       categorySlug={page.categorySlug}
       categoryName={page.categoryName}
       offers={page.offers}
+      signedIn={favorites.signedIn}
+      favoriteProductIds={favorites.productIds}
     />
   );
 }

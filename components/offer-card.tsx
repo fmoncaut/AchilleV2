@@ -1,18 +1,29 @@
 import Link from "next/link";
 
 import { Distance } from "@/components/distance";
+import { FavoriteButton } from "@/components/favorite-button";
 import { cn } from "@/lib/utils";
 import type { NearbyOfferCard } from "@/lib/geo";
 import { discountPercent, formatEur } from "@/lib/money";
-import { offerPath } from "@/lib/urls";
+import { loginWithReturn, offerPath } from "@/lib/urls";
 
 type OfferCardProps = {
   offer: NearbyOfferCard;
   href?: string;
   selected?: boolean;
+  signedIn?: boolean;
+  isProductFavorite?: boolean;
+  loginHref?: string;
 };
 
-export function OfferCard({ offer, href, selected = false }: OfferCardProps) {
+export function OfferCard({
+  offer,
+  href,
+  selected = false,
+  signedIn = false,
+  isProductFavorite = false,
+  loginHref = loginWithReturn("/compte/favoris"),
+}: OfferCardProps) {
   const discount =
     offer.discountPct ??
     discountPercent(offer.priceRemise, offer.priceReference);
@@ -23,10 +34,20 @@ export function OfferCard({ offer, href, selected = false }: OfferCardProps) {
     <article
       id={`offre-${offer.id}`}
       className={cn(
-        "bg-card ring-border overflow-hidden rounded-2xl shadow-sm ring-1 transition-shadow",
+        "bg-card ring-border relative overflow-hidden rounded-2xl shadow-sm ring-1 transition-shadow",
         selected && "ring-orange ring-2 shadow-md",
       )}
     >
+      <div className="absolute top-3 right-3 z-10">
+        <FavoriteButton
+          kind="product"
+          targetId={offer.productId}
+          signedIn={signedIn}
+          isFavorite={isProductFavorite}
+          loginHref={loginHref}
+          variant="icon"
+        />
+      </div>
       <Link href={destination} className="flex h-full flex-col outline-none">
         <div className="bg-muted relative aspect-[4/3] overflow-hidden">
           {offer.imageUrl ? (

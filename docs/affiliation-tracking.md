@@ -26,7 +26,7 @@ Pas d’IP, pas de user-agent, pas d’e-mail, pas de nom.
 
 - Posé s’il est absent, sur les réponses de `/api/out/[offerId]` (y compris 400/404).
 - `httpOnly`, `SameSite=Lax`, `Path=/`, durée ~1 an, `Secure` en production.
-- Sert uniquement à attribuer les clics anonymes. **À déclarer dans la passe RGPD (incrément 1.5)** : cookie technique de mesure d’affiliation, pas de profilage publicitaire.
+- Sert uniquement à attribuer les clics anonymes. Déclaré dans le bandeau de consentement et la politique de confidentialité (incrément 1.5).
 
 ## Anti-abus léger
 

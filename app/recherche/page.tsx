@@ -6,7 +6,9 @@ import { OfferCard } from "@/components/offer-card";
 import { EmptyState } from "@/components/search/empty-state";
 import { SearchForm } from "@/components/search/search-form";
 import { ViewToggle } from "@/components/search/view-toggle";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { getFavoriteFlags } from "@/lib/favorites";
 import { findOffersNearby, toOfferCard } from "@/lib/geo";
 import { geocodeAddress } from "@/lib/geocode";
 import { getIgnMapConfig } from "@/lib/map-config";
@@ -15,6 +17,7 @@ import {
   searchHref,
   type SearchQuery,
 } from "@/lib/search";
+import { loginWithReturn } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -100,6 +103,9 @@ export default async function RecherchePage({
   const ign = getIgnMapConfig();
   const recherchePath = searchHref(query);
   const locationLabel = query.lieu || "votre position";
+  const session = await auth();
+  const favorites = await getFavoriteFlags(session?.user?.id);
+  const loginHref = loginWithReturn(recherchePath);
 
   return (
     <main className="bg-paper flex flex-1 flex-col">
@@ -176,6 +182,11 @@ export default async function RecherchePage({
                     <OfferCard
                       offer={offer}
                       selected={offer.id === query.offre}
+                      signedIn={favorites.signedIn}
+                      isProductFavorite={favorites.productIds.includes(
+                        offer.productId,
+                      )}
+                      loginHref={loginHref}
                     />
                   </li>
                 ))}

@@ -1,6 +1,11 @@
 import Link from "next/link";
 
-export function SiteHeader() {
+import { auth } from "@/auth";
+
+export async function SiteHeader() {
+  const session = await auth();
+  const signedIn = Boolean(session?.user);
+
   return (
     <header className="bg-navy text-paper w-full">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-5">
@@ -19,12 +24,29 @@ export function SiteHeader() {
           >
             Offres
           </Link>
-          <Link
-            href="/login"
-            className="text-sm font-semibold underline-offset-4 hover:underline"
-          >
-            Connexion
-          </Link>
+          {signedIn ? (
+            <>
+              <Link
+                href="/compte/favoris"
+                className="text-sm font-semibold underline-offset-4 hover:underline"
+              >
+                Favoris
+              </Link>
+              <Link
+                href="/compte"
+                className="text-sm font-semibold underline-offset-4 hover:underline"
+              >
+                Compte
+              </Link>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className="text-sm font-semibold underline-offset-4 hover:underline"
+            >
+              Connexion
+            </Link>
+          )}
         </nav>
       </div>
     </header>

@@ -3,10 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { PosDistance, PosOfferList } from "@/components/catalog/pos-offers";
+import { FavoriteButton } from "@/components/favorite-button";
 import { OpeningHoursList } from "@/components/opening-hours";
 import { EmptyState } from "@/components/search/empty-state";
+import { auth } from "@/auth";
 import { getCachedPosPage } from "@/lib/catalog";
+import { getFavoriteFlags } from "@/lib/favorites";
 import { getSiteUrl } from "@/lib/site";
+import { loginWithReturn } from "@/lib/urls";
 
 export const revalidate = 600;
 
@@ -62,8 +66,11 @@ export default async function MagasinPage({ params }: MagasinPageProps) {
     notFound();
   }
 
+  const session = await auth();
+  const favorites = await getFavoriteFlags(session?.user?.id);
   const address = formatAddress(pos);
   const cards = pos.offers;
+  const loginHref = loginWithReturn(`/magasin/${pos.slug}`);
 
   return (
     <main className="bg-paper flex flex-1 flex-col">
@@ -77,10 +84,22 @@ export default async function MagasinPage({ params }: MagasinPageProps) {
         </nav>
 
         <header className="bg-card ring-border rounded-2xl p-6 shadow-sm ring-1">
-          <p className="text-orange text-sm font-semibold tracking-wide uppercase">
-            {pos.merchantName}
-          </p>
-          <h1 className="text-navy mt-2 text-3xl">{pos.name}</h1>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="text-orange text-sm font-semibold tracking-wide uppercase">
+                {pos.merchantName}
+              </p>
+              <h1 className="text-navy mt-2 text-3xl">{pos.name}</h1>
+            </div>
+            <FavoriteButton
+              kind="pos"
+              targetId={pos.id}
+              signedIn={favorites.signedIn}
+              isFavorite={favorites.posIds.includes(pos.id)}
+              loginHref={loginHref}
+              variant="label"
+            />
+          </div>
           {address ? (
             <p className="text-slate mt-2 text-sm font-medium">{address}</p>
           ) : null}
@@ -106,7 +125,12 @@ export default async function MagasinPage({ params }: MagasinPageProps) {
             <h2 className="text-navy text-2xl">
               {cards.length} offre{cards.length > 1 ? "s" : ""} en ligne
             </h2>
-            <PosOfferList posSlug={pos.slug} offers={cards} />
+            <PosOfferList
+              posSlug={pos.slug}
+              offers={cards}
+              signedIn={favorites.signedIn}
+              favoriteProductIds={favorites.productIds}
+            />
           </section>
         )}
       </article>

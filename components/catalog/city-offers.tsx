@@ -15,7 +15,7 @@ import {
 import { OfferCard } from "@/components/offer-card";
 import { EmptyState } from "@/components/search/empty-state";
 import type { NearbyOfferCard } from "@/lib/geo";
-import { offerPath, villeCategoriePath } from "@/lib/urls";
+import { loginWithReturn, offerPath, villeCategoriePath } from "@/lib/urls";
 
 type CityOffersProps = {
   villeSlug: string;
@@ -23,6 +23,8 @@ type CityOffersProps = {
   categorySlug: string;
   categoryName: string;
   offers: NearbyOfferCard[];
+  signedIn?: boolean;
+  favoriteProductIds?: string[];
 };
 
 function CityOffersView({
@@ -31,6 +33,8 @@ function CityOffersView({
   categorySlug,
   categoryName,
   offers,
+  signedIn = false,
+  favoriteProductIds = [],
   query,
 }: CityOffersProps & { query: CatalogQuery }) {
   const { lat, lng, tri } = query;
@@ -38,6 +42,7 @@ function CityOffersView({
     locateByCoords(offers, lat, lng),
     tri,
   );
+  const loginHref = loginWithReturn(`/${villeSlug}/${categorySlug}`);
 
   return (
     <main className="bg-paper flex flex-1 flex-col">
@@ -94,6 +99,9 @@ function CityOffersView({
                     lat,
                     lng,
                   })}
+                  signedIn={signedIn}
+                  isProductFavorite={favoriteProductIds.includes(offer.productId)}
+                  loginHref={loginHref}
                 />
               </li>
             ))}

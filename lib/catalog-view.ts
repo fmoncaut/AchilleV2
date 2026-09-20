@@ -30,6 +30,7 @@ export type ShowcaseOffer = {
 };
 
 export type ShowcaseProduct = {
+  id: string;
   name: string;
   slug: string;
   ean: string | null;
@@ -56,6 +57,7 @@ export function showcaseOfferToCard(
   offer: ShowcaseOffer & { distanceM: number | null },
   product: Pick<
     ShowcaseProduct,
+    | "id"
     | "name"
     | "slug"
     | "imageUrl"
@@ -72,6 +74,7 @@ export function showcaseOfferToCard(
       offer.discountPct ??
       discountPercent(offer.priceRemise, offer.priceReference),
     stock: offer.stock,
+    productId: product.id,
     productName: product.name,
     productSlug: product.slug,
     imageUrl: product.imageUrl,

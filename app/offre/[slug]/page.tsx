@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { auth } from "@/auth";
 import { OfferShowcase } from "@/components/catalog/offer-showcase";
 import { getCachedProductPage } from "@/lib/catalog";
+import { getFavoriteFlags } from "@/lib/favorites";
 import { getSiteUrl } from "@/lib/site";
 
 export const revalidate = 600;
@@ -51,5 +53,14 @@ export default async function OffrePage({ params }: OffrePageProps) {
     notFound();
   }
 
-  return <OfferShowcase product={page.product} offers={page.offers} />;
+  const session = await auth();
+  const favorites = await getFavoriteFlags(session?.user?.id);
+
+  return (
+    <OfferShowcase
+      product={page.product}
+      offers={page.offers}
+      favorites={favorites}
+    />
+  );
 }

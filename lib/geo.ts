@@ -10,6 +10,7 @@ export type NearbyOffer = {
   priceReference: Prisma.Decimal | null;
   discountPct: number | null;
   stock: number;
+  productId: string;
   productName: string;
   productSlug: string;
   imageUrl: string | null;
@@ -41,6 +42,7 @@ export type NearbyOfferCard = {
   priceReference: string | null;
   discountPct: number | null;
   stock: number;
+  productId: string;
   productName: string;
   productSlug: string;
   imageUrl: string | null;
@@ -63,6 +65,7 @@ type NearbyOfferRow = {
   priceReference: Prisma.Decimal | null;
   discountPct: number | null;
   stock: number;
+  productId: string;
   productName: string;
   productSlug: string;
   imageUrl: string | null;
@@ -152,6 +155,7 @@ export async function findOffersNearby(
       o."priceReference",
       o."discountPct",
       o.stock,
+      pr.id AS "productId",
       pr.name AS "productName",
       pr.slug AS "productSlug",
       pr."imageUrl",
@@ -193,6 +197,7 @@ export async function findOffersNearby(
       discountPct:
         row.discountPct ?? discountPercent(priceRemise, priceReference),
       stock: row.stock,
+      productId: row.productId,
       productName: row.productName,
       productSlug: row.productSlug,
       imageUrl: row.imageUrl,
