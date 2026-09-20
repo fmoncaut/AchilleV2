@@ -34,6 +34,10 @@ La base locale est PostgreSQL 16 + PostGIS (`postgis/postgis`). Arrêt : `docker
 
 La colonne `geog` des points de vente est une colonne PostGIS **générée** (migration SQL), absente de `schema.prisma` volontairement. Ne pas la supprimer.
 
+## Déploiement
+
+Voir **`docs/deployment.md`** : Clever Cloud (Paris), PostgreSQL dédié + PostGIS, hook `prisma migrate deploy`, intégration GitHub. Le CI (`.github/workflows/ci.yml`) ne déploie pas.
+
 ## Identité
 
 Navy `#002642` · Orange `#FF9900` · fond papier `#FBFAF8`.
@@ -45,6 +49,7 @@ Navy `#002642` · Orange `#FF9900` · fond papier `#FBFAF8`.
 docs/project-brief.md         Produit, modèle, interfaces de référence
 docs/data-model.md            Schéma Prisma (affiliation) + stratégie PostGIS
 docs/roadmap-increments.md    Briefs d'incréments (Phase 0 puis Phase 1)
+docs/deployment.md            Déploiement Clever Cloud + CI GitHub
 ```
 
 Pilote l'agent **un incrément à la fois**, dans l'ordre de `docs/roadmap-increments.md`.
