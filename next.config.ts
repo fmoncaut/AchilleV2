@@ -3,7 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   agentRules: false,
   output: "standalone",
-  serverExternalPackages: ["@prisma/client", "nodemailer"],
+  allowedDevOrigins: ["127.0.0.1"],
+  serverExternalPackages: ["@prisma/client", "nodemailer", "maplibre-gl"],
 };
 
 export default nextConfig;

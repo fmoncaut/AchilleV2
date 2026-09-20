@@ -12,12 +12,20 @@ export function SiteHeader() {
             Think global, shop local
           </p>
         </div>
-        <Link
-          href="/login"
-          className="text-sm font-semibold underline-offset-4 hover:underline"
-        >
-          Connexion
-        </Link>
+        <nav className="flex items-center gap-4">
+          <Link
+            href="/recherche"
+            className="text-sm font-semibold underline-offset-4 hover:underline"
+          >
+            Offres
+          </Link>
+          <Link
+            href="/login"
+            className="text-sm font-semibold underline-offset-4 hover:underline"
+          >
+            Connexion
+          </Link>
+        </nav>
       </div>
     </header>
   );

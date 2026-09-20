@@ -14,6 +14,7 @@ Dans `.env` (fichier **local**, jamais commité), renseigner au minimum :
 
 ```
 DATABASE_URL=postgresql://achille:achille@localhost:5432/achille
+NEXT_PUBLIC_IGN_STYLE_URL=https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/standard.json
 ```
 
 Puis :
