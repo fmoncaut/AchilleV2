@@ -1,0 +1,68 @@
+---
+description: Règles projet Achille — place de marché de bonnes affaires locales géolocalisées. Stack, conventions, sécurité souveraine et périmètre. Toujours appliquées.
+globs:
+alwaysApply: true
+---
+
+# Achille — règles projet
+
+Tu construis **Achille**, une place de marché **de bonnes affaires locales géolocalisées** (« Think global, shop local ») : un acheteur trouve des produits en déstockage disponibles dans des points de vente physiques proches de lui, avec prix remisé + distance + enseigne.
+
+Refonte d'un ancien produit AWS lourd vers un **portail web unique, responsive et PWA-ready**. On reprend le métier, pas l'ancienne techno.
+
+## Périmètre — à respecter strictement
+
+Trois étapes. **On construit l'étape 1 uniquement**, sauf instruction explicite.
+
+1. **Affiliation (MVP en cours).** Achille = vitrine géolocalisée + fiche offre. L'acheteur est **redirigé vers le site du marchand** pour finaliser (deep-link), et on **track** ce renvoi. **PAS de panier interne, PAS de paiement, PAS de checkout dans Achille.**
+2. **Directe (plus tard).** Le POS vend sur Achille : panier mono-magasin, paiement, retrait en magasin (click-and-collect) validé par QR / code acheteur. Ne pas coder tant que ce n'est pas demandé.
+3. **Mobile (plus tard).** PWA d'abord, natif ensuite.
+
+> Garde-fou : si une demande t'amène à ajouter un panier, un paiement ou un checkout en phase 1, **arrête-toi et signale-le** — c'est hors périmètre affiliation. Le « panier » de l'affiliation est un **renvoi tracké vers le marchand**.
+
+## Stack — verrouillée, ne pas dévier
+
+- **Next.js (App Router) + TypeScript** — un seul dépôt (rendu + API), Server Components par défaut, PWA-ready.
+- **Tailwind CSS + shadcn/ui** pour l'UI.
+- **PostgreSQL + PostGIS** via **Prisma**. Requêtes géo (rayon, distance) en **SQL brut** (`ST_DWithin`, `ST_Distance`) — voir `docs/data-model.md`.
+- **Auth.js (NextAuth) + adapter Prisma/Postgres** — login e-mail + Apple + Google. Les comptes vivent dans **notre** base.
+- **MapLibre GL** + tuiles **IGN Géoplateforme** (carte souveraine). **Jamais** Google Maps / Google Places / Mapbox.
+- **Hébergement Clever Cloud** (PaaS français) ; médias sur Scaleway Object Storage + CDN ; e-mails via Brevo ; analytics Plausible/Matomo.
+- Validation des entrées avec **zod**. Money en **Decimal** (jamais de `float` pour un prix).
+
+Ne propose pas d'autre framework, ORM, fournisseur d'auth ou de carte sans qu'on te le demande explicitement.
+
+## Architecture & conventions
+
+- **App Router** : Server Components par défaut ; `"use client"` seulement quand nécessaire (interactivité, carte, état local).
+- **Server Actions** pour les mutations ; **Route Handlers** (`app/api/**`) pour les endpoints publics (tracking, webhooks, import).
+- Structure : `app/` (routes), `components/` (ui + métier), `lib/` (db, auth, geo, utils), `prisma/` (schema + migrations), `docs/`.
+- Accès données centralisé dans `lib/db.ts` (client Prisma singleton) et `lib/geo.ts` (requêtes PostGIS).
+- Nommage en anglais dans le code ; **contenu et UI en français**.
+- Gère les états vides et d'erreur explicitement (message clair + action), jamais un écran blanc.
+
+## SEO — première classe (c'est un canal de croissance)
+
+- Chaque **produit**, **magasin (POS)** et **ville** a une page indexable, rendue serveur (SSG/ISR).
+- `generateMetadata` par page (title, description, Open Graph). `sitemap.ts` + `robots.ts`.
+- URLs lisibles : `/offre/[slug]`, `/magasin/[slug]`, `/[ville]/[categorie]`.
+
+## Sécurité & souveraineté — règles Achille (non négociables)
+
+- **Aucun secret dans le code ni dans le dépôt.** Tout par variables d'environnement (`.env`, jamais commité) ; fournis toujours un `.env.example` sans valeurs.
+- **Données en UE / hébergeur souverain.** Pas de service US pour stocker de la donnée utilisateur.
+- **Minimisation des données.** En affiliation, Achille ne détient ni paiement ni donnée sensible : ne collecte que le strict nécessaire à la mise en relation (compte, localisation approximative, favoris, événements de renvoi anonymisables).
+- **Auth** entièrement gérée par Auth.js ; **ne stocke jamais de mot de passe en clair** ni ne réimplémente d'auth maison.
+- Valide et échappe toute entrée externe ; requêtes paramétrées (pas de SQL concaténé).
+- CI/CD via GitHub Actions + **OIDC** (aucune clé statique).
+
+## Identité visuelle (source : Figma Achille)
+
+- Navy `#002642` (fond d'en-têtes, texte fort) ; Orange `#FF9900` (CTA, prix, badges remise).
+- Fond clair, cartes arrondies, sans-serif gras, hiérarchie nette. Badge remise `-XX%` orange ; prix remisé + prix barré ; enseigne + distance sur chaque carte offre.
+- Reproduis les écrans du Figma (`docs/` référence les flux : Home, Search, Product, Magasin, Onboarding, Profil). Mets ces tokens dans `tailwind.config`.
+
+## Accessibilité & qualité
+
+- Responsive mobile-first ; focus clavier visible ; `prefers-reduced-motion` respecté ; contrastes suffisants.
+- TypeScript strict ; pas de `any` non justifié. Lint + format avant commit.
