@@ -127,13 +127,13 @@ model Offer {               // Produit @ POS : le cœur de l'affiliation
   @@index([posId]) @@index([productId]) @@index([isOnline])
 }
 
-model OfferClick {          // tracking du renvoi affiliation
+model OfferClick {          // tracking du renvoi affiliation (pas de PII : pas d'IP, UA, e-mail)
   id        String   @id @default(cuid())
   offerId   String
   offer     Offer    @relation(fields: [offerId], references: [id])
-  userId    String?
-  sessionId String?
-  referrer  String?
+  userId    String?                  // compte Auth.js si connecté, sinon null
+  sessionId String?                  // cookie anonId (UUID opaque), voir docs/affiliation-tracking.md
+  referrer  String?                  // origine + chemin, sans query
   createdAt DateTime @default(now())
   @@index([offerId]) @@index([createdAt])
 }

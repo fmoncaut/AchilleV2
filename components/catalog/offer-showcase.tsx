@@ -13,7 +13,7 @@ import {
   type CatalogQuery,
 } from "@/components/catalog/query";
 import { Distance } from "@/components/distance";
-import { MerchantCtaPlaceholder } from "@/components/merchant-cta";
+import { MerchantCta } from "@/components/merchant-cta";
 import { OfferCard } from "@/components/offer-card";
 import { OpeningHoursList } from "@/components/opening-hours";
 import { PriceTag } from "@/components/price-tag";
@@ -186,7 +186,11 @@ function OfferShowcaseView({
                   <OpeningHoursList value={current.pos.openingHours} />
                 </div>
                 <div className="mt-6">
-                  <MerchantCtaPlaceholder />
+                  <MerchantCta
+                    offerId={current.id}
+                    isOnline={current.isOnline}
+                    merchantUrl={current.merchantUrl}
+                  />
                 </div>
               </section>
             ) : (

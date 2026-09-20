@@ -13,6 +13,8 @@
     "seed": "prisma db seed",
     "promote-merchant": "tsx scripts/promote-merchant.ts",
     "verify-admin-isolation": "tsx scripts/verify-tenant-isolation.ts",
+    "verify-affiliation": "tsx scripts/verify-affiliation.ts",
+    "verify-affiliation-http": "tsx scripts/verify-affiliation-http.ts",
     "postinstall": "prisma generate"
   },
   "prisma": {

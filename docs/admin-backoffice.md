@@ -1,6 +1,10 @@
 # Back-office enseigne (incrément 1.1)
 
-Espace protégé `/admin` : session Auth.js obligatoire, puis rôle `MERCHANT` ou `ADMIN` **et** `User.merchantId` renseigné. Un marchand ne liste, n’édite, ne publie et ne retire que les offres de **son** enseigne (`where: { merchantId }`).
+Espace protégé `/admin` : session Auth.js obligatoire. Un **MERCHANT** (rôle + `merchantId`) gère les offres de **son** enseigne (`where: { merchantId }`). Un **ADMIN** voit le tableau de bord des **renvois de toutes les enseignes** ; s’il a aussi un `merchantId`, il peut éditer les offres de cette enseigne uniquement.
+
+## Renvois (affiliation)
+
+`/admin/renvois` : nombre de clics `OfferClick` par jour, par enseigne et par offre, sur 7 ou 30 jours. Isolation : un marchand ne voit que les clics de son enseigne. Détail du cookie `anonId` et de l’anti-doublon : `docs/affiliation-tracking.md`.
 
 ## Marquer un utilisateur comme marchand
 

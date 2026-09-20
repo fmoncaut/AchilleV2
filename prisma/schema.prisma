@@ -117,8 +117,11 @@ model OfferClick {
   id        String   @id @default(cuid())
   offerId   String
   offer     Offer    @relation(fields: [offerId], references: [id])
+  /// Compte Auth.js si connecté, sinon null — pas de PII
   userId    String?
+  /// Cookie anonId (UUID opaque), voir docs/affiliation-tracking.md
   sessionId String?
+  /// Origine + chemin du Referer, sans query
   referrer  String?
   createdAt DateTime @default(now())
 

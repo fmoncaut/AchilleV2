@@ -43,6 +43,8 @@ export function serializeShowcaseOffer(
     stock: offer.stock,
     tvaRate: offer.tvaRate?.toFixed(2) ?? null,
     condition: offer.condition,
+    isOnline: offer.isOnline,
+    merchantUrl: offer.merchantUrl,
     merchantName: offer.merchant.name,
     pos: {
       id: offer.pos.id,
@@ -157,7 +159,7 @@ export const getCachedProductPage = unstable_cache(
       offers: product.offers.map(serializeShowcaseOffer),
     };
   },
-  ["catalog-product-page"],
+  ["catalog-product-page-v2"],
   { revalidate: CACHE_TTL },
 );
 

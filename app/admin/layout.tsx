@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { auth } from "@/auth";
 import { AdminHeader } from "@/components/admin/admin-header";
-import { getAdminActor } from "@/lib/admin/actor";
+import { canManageOffers, getDashboardActor } from "@/lib/admin/actor";
 
 export const dynamic = "force-dynamic";
 
@@ -20,10 +20,10 @@ export default async function AdminLayout({
 }) {
   const session = await auth();
   if (!session?.user) {
-    redirect("/login?callbackUrl=/admin/offres");
+    redirect("/login?callbackUrl=/admin");
   }
 
-  const actor = await getAdminActor();
+  const actor = await getDashboardActor();
   if (!actor) {
     return (
       <main className="bg-paper flex flex-1 flex-col">
@@ -51,7 +51,10 @@ export default async function AdminLayout({
 
   return (
     <div className="bg-paper flex flex-1 flex-col">
-      <AdminHeader merchantName={actor.merchantName} />
+      <AdminHeader
+        merchantName={actor.merchantName ?? "Administration"}
+        showOffers={canManageOffers(actor)}
+      />
       {children}
     </div>
   );

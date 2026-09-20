@@ -163,12 +163,19 @@ export function SearchForm({
     "border-border bg-paper text-navy focus-visible:ring-orange h-11 w-full rounded-xl border px-3 text-sm font-medium outline-none focus-visible:ring-2";
 
   const suggestionOpen = open && hits.length > 0;
+  const ignorePasswordManagers = {
+    autoComplete: "off" as const,
+    "data-1p-ignore": true,
+    "data-lpignore": "true",
+  };
 
   return (
     <form
       action={action}
       method="get"
       onSubmit={onSubmit}
+      autoComplete="off"
+      suppressHydrationWarning
       className="bg-card ring-border grid gap-4 rounded-2xl p-5 shadow-sm ring-1 md:grid-cols-12"
     >
       <input type="hidden" name="lat" value={lat} />
@@ -184,12 +191,13 @@ export function SearchForm({
           name="lieu"
           value={lieu}
           role="combobox"
-          autoComplete="off"
           aria-autocomplete="list"
           aria-controls={listId}
           aria-expanded={suggestionOpen}
           placeholder="Ville, adresse…"
           className={inputClass}
+          suppressHydrationWarning
+          {...ignorePasswordManagers}
           onChange={(event) => onLieuChange(event.target.value)}
           onFocus={() => {
             if (hits.length > 0) {
@@ -224,6 +232,7 @@ export function SearchForm({
         <button
           type="button"
           onClick={() => void locateMe()}
+          suppressHydrationWarning
           className="text-navy mt-2 text-sm font-semibold underline-offset-4 hover:underline"
         >
           {geoPending ? "Localisation…" : "Utiliser ma position"}
@@ -245,6 +254,8 @@ export function SearchForm({
           defaultValue={values.q}
           placeholder="Perceuse, canapé…"
           className={inputClass}
+          suppressHydrationWarning
+          {...ignorePasswordManagers}
         />
       </div>
 
@@ -252,7 +263,13 @@ export function SearchForm({
         <label htmlFor="r" className="text-navy mb-1 block text-sm font-semibold">
           Rayon
         </label>
-        <select id="r" name="r" defaultValue={values.r} className={inputClass}>
+        <select
+          id="r"
+          name="r"
+          defaultValue={values.r}
+          className={inputClass}
+          suppressHydrationWarning
+        >
           {RADIUS_KM_OPTIONS.map((km) => (
             <option key={km} value={km}>
               {km} km
@@ -265,7 +282,13 @@ export function SearchForm({
         <label htmlFor="cat" className="text-navy mb-1 block text-sm font-semibold">
           Catégorie
         </label>
-        <select id="cat" name="cat" defaultValue={values.cat} className={inputClass}>
+        <select
+          id="cat"
+          name="cat"
+          defaultValue={values.cat}
+          className={inputClass}
+          suppressHydrationWarning
+        >
           <option value="">Toutes</option>
           {categories.map((category) => (
             <option key={category.slug} value={category.slug}>
@@ -289,6 +312,8 @@ export function SearchForm({
           defaultValue={values.prixMin}
           placeholder="€"
           className={inputClass}
+          suppressHydrationWarning
+          {...ignorePasswordManagers}
         />
       </div>
 
@@ -306,6 +331,8 @@ export function SearchForm({
           defaultValue={values.prixMax}
           placeholder="€"
           className={inputClass}
+          suppressHydrationWarning
+          {...ignorePasswordManagers}
         />
       </div>
 
@@ -318,6 +345,7 @@ export function SearchForm({
           name="sort"
           defaultValue={values.sort}
           className={inputClass}
+          suppressHydrationWarning
         >
           <option value="distance">Distance</option>
           <option value="price">Prix croissant</option>
@@ -328,6 +356,7 @@ export function SearchForm({
         <Button
           type="submit"
           size="lg"
+          suppressHydrationWarning
           className="h-11 w-full rounded-xl px-6 text-base font-bold md:w-auto"
         >
           Voir les offres

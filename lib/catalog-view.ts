@@ -23,6 +23,8 @@ export type ShowcaseOffer = {
   stock: number;
   tvaRate: string | null;
   condition: ProductCondition;
+  isOnline: boolean;
+  merchantUrl: string | null;
   merchantName: string;
   pos: ShowcasePos;
 };

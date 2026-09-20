@@ -59,6 +59,10 @@ export function villeCategoriePath(
   return query ? `${path}?${query}` : path;
 }
 
+export function outboundPath(offerId: string): string {
+  return `/api/out/${offerId}`;
+}
+
 export function withLocationQuery(
   href: string,
   lat?: number | null,
