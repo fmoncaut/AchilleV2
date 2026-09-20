@@ -70,8 +70,8 @@ async function main() {
   await prisma.pos.deleteMany();
   await prisma.brand.deleteMany();
   await prisma.category.deleteMany();
+  await prisma.user.updateMany({ data: { merchantId: null } });
   await prisma.merchant.deleteMany();
-  await prisma.user.deleteMany();
 
   const [bricomarche, aline, norauto] = await Promise.all([
     prisma.merchant.create({

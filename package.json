@@ -11,6 +11,8 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "seed": "prisma db seed",
+    "promote-merchant": "tsx scripts/promote-merchant.ts",
+    "verify-admin-isolation": "tsx scripts/verify-tenant-isolation.ts",
     "postinstall": "prisma generate"
   },
   "prisma": {

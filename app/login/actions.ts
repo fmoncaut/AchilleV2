@@ -7,8 +7,14 @@ import { signIn } from "@/auth";
 
 const emailSchema = z.string().trim().email();
 
-function safeRedirectPath(): string {
-  return "/compte";
+function safeCallbackUrl(raw: unknown): string {
+  if (typeof raw !== "string") {
+    return "/compte";
+  }
+  if (!raw.startsWith("/") || raw.startsWith("//") || raw.includes("://")) {
+    return "/compte";
+  }
+  return raw;
 }
 
 export async function signInWithEmail(formData: FormData) {
@@ -19,18 +25,18 @@ export async function signInWithEmail(formData: FormData) {
 
   await signIn("email", {
     email: parsed.data,
-    redirectTo: safeRedirectPath(),
+    redirectTo: safeCallbackUrl(formData.get("callbackUrl")),
   });
 }
 
-export async function signInWithGoogle() {
+export async function signInWithGoogle(formData: FormData) {
   await signIn("google", {
-    redirectTo: safeRedirectPath(),
+    redirectTo: safeCallbackUrl(formData.get("callbackUrl")),
   });
 }
 
-export async function signInWithApple() {
+export async function signInWithApple(formData: FormData) {
   await signIn("apple", {
-    redirectTo: safeRedirectPath(),
+    redirectTo: safeCallbackUrl(formData.get("callbackUrl")),
   });
 }

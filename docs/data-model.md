@@ -138,16 +138,21 @@ model OfferClick {          // tracking du renvoi affiliation
   @@index([offerId]) @@index([createdAt])
 }
 
-model User {               // acheteur (Auth.js remplit le reste : Account/Session/VerificationToken)
-  id        String   @id @default(cuid())
-  email     String?  @unique
-  name      String?
-  image     String?
-  lastLat   Float?
-  lastLng   Float?
-  favorites Favorite[]
-  createdAt DateTime @default(now())
+model User {               // acheteur (Auth.js remplit Account/Session/VerificationToken)
+  id            String   @id @default(cuid())
+  email         String?  @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  lastLat       Float?
+  lastLng       Float?
+  role          UserRole @default(USER) // USER | MERCHANT | ADMIN
+  merchantId    String?                 // rattachement enseigne (back-office 1.1)
+  favorites     Favorite[]
+  createdAt     DateTime @default(now())
 }
+
+enum UserRole { USER MERCHANT ADMIN }
 
 model Favorite {
   id        String   @id @default(cuid())

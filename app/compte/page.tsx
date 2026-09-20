@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { signOutAction } from "@/app/compte/actions";
 import { Button } from "@/components/ui/button";
+import { getAdminActor } from "@/lib/admin/actor";
 
 export const metadata = {
   title: "Mon compte — Achille",
@@ -16,6 +17,8 @@ export default async function AccountPage() {
   if (!user) {
     redirect("/login?callbackUrl=/compte");
   }
+
+  const actor = await getAdminActor();
 
   return (
     <main className="bg-paper flex flex-1 flex-col">
@@ -39,6 +42,16 @@ export default async function AccountPage() {
               </dd>
             </div>
           </dl>
+          {actor ? (
+            <p className="mt-6">
+              <Link
+                href="/admin/offres"
+                className="bg-orange text-navy inline-flex h-11 w-full items-center justify-center rounded-xl text-sm font-bold"
+              >
+                Back-office {actor.merchantName}
+              </Link>
+            </p>
+          ) : null}
           <form action={signOutAction} className="mt-8">
             <Button
               type="submit"

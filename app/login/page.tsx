@@ -27,6 +27,10 @@ export const metadata = {
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const params = await searchParams;
   const emailError = params.erreur === "email";
+  const callbackUrl =
+    params.callbackUrl?.startsWith("/") && !params.callbackUrl.startsWith("//")
+      ? params.callbackUrl
+      : "/compte";
 
   return (
     <main className="bg-paper flex flex-1 flex-col">
@@ -49,6 +53,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
           {isEmailAuthEnabled ? (
             <form action={signInWithEmail} className="mt-8 flex flex-col gap-3">
+              <input type="hidden" name="callbackUrl" value={callbackUrl} />
               <label
                 htmlFor="email"
                 className="text-navy text-sm font-semibold"
@@ -82,6 +87,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             <div className="mt-6 flex flex-col gap-2">
               {isGoogleAuthEnabled ? (
                 <form action={signInWithGoogle}>
+                  <input type="hidden" name="callbackUrl" value={callbackUrl} />
                   <Button
                     type="submit"
                     variant="outline"
@@ -94,6 +100,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               ) : null}
               {isAppleAuthEnabled ? (
                 <form action={signInWithApple}>
+                  <input type="hidden" name="callbackUrl" value={callbackUrl} />
                   <Button
                     type="submit"
                     variant="outline"
