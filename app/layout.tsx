@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 
+import { SiteHeader } from "@/components/site-header";
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
@@ -18,16 +19,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" className={cn("h-full font-sans", geist.variable)}>
+    <html
+      lang="fr"
+      data-scroll-behavior="smooth"
+      className={cn("h-full font-sans", geist.variable)}
+    >
       <body className="flex min-h-svh w-full flex-col">
-        <header className="bg-navy text-paper w-full">
-          <div className="mx-auto flex max-w-5xl flex-col gap-1 px-6 py-5 sm:flex-row sm:items-baseline sm:gap-4">
-            <p className="text-2xl font-bold tracking-tight">Achille</p>
-            <p className="text-paper/80 text-sm font-medium">
-              Think global, shop local
-            </p>
-          </div>
-        </header>
+        <SiteHeader />
         {children}
       </body>
     </html>

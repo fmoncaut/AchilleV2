@@ -6,3 +6,5 @@ coverage
 package-lock.json
 docs
 .cursor
+prisma/migrations
+

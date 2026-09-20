@@ -1,0 +1,185 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Merchant {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  logoUrl   String?
+  pos       Pos[]
+  offers    Offer[]
+  createdAt DateTime @default(now())
+}
+
+// Colonne PostGIS `geog geography(Point,4326)` : générée en migration SQL
+// (GENERATED ALWAYS AS ST_SetSRID(ST_MakePoint(lng, lat), 4326)::geography STORED)
+// + index GiST `pos_geog_idx`. Ne pas la supprimer ; ne pas la déclarer ici
+// (Prisma ne gère pas nativement le type geography).
+model Pos {
+  id           String   @id @default(cuid())
+  merchantId   String
+  merchant     Merchant @relation(fields: [merchantId], references: [id])
+  name         String
+  slug         String   @unique
+  address      String?
+  postalCode   String?
+  city         String?
+  phone        String?
+  openingHours Json?
+  lat          Float
+  lng          Float
+  offers       Offer[]
+  createdAt    DateTime @default(now())
+
+  @@index([city])
+}
+
+model Brand {
+  id       String    @id @default(cuid())
+  name     String
+  slug     String    @unique
+  products Product[]
+}
+
+model Category {
+  id       String     @id @default(cuid())
+  name     String
+  slug     String     @unique
+  icon     String?
+  parentId String?
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryTree")
+  products Product[]
+}
+
+model Product {
+  id               String    @id @default(cuid())
+  ean              String?   @unique
+  name             String
+  slug             String    @unique
+  description      String?
+  shortDescription String?
+  imageUrl         String?
+  images           String[]
+  publicPrice      Decimal?  @db.Decimal(10, 2)
+  weight           Float?
+  keywords         String?
+  brandId          String?
+  brand            Brand?    @relation(fields: [brandId], references: [id])
+  categoryId       String?
+  category         Category? @relation(fields: [categoryId], references: [id])
+  offers           Offer[]
+
+  @@index([categoryId])
+}
+
+enum ProductCondition {
+  NEUF
+  OCCASION
+  RECONDITIONNE
+}
+
+model Offer {
+  id             String           @id @default(cuid())
+  productId      String
+  product        Product          @relation(fields: [productId], references: [id])
+  posId          String
+  pos            Pos              @relation(fields: [posId], references: [id])
+  merchantId     String
+  merchant       Merchant         @relation(fields: [merchantId], references: [id])
+  priceRemise    Decimal          @db.Decimal(10, 2)
+  priceReference Decimal?         @db.Decimal(10, 2)
+  discountPct    Int?
+  tvaRate        Decimal?         @db.Decimal(4, 2)
+  stock          Int              @default(0)
+  condition      ProductCondition @default(NEUF)
+  isOnline       Boolean          @default(false)
+  merchantUrl    String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  clicks         OfferClick[]
+
+  @@index([posId])
+  @@index([productId])
+  @@index([isOnline])
+}
+
+model OfferClick {
+  id        String   @id @default(cuid())
+  offerId   String
+  offer     Offer    @relation(fields: [offerId], references: [id])
+  userId    String?
+  sessionId String?
+  referrer  String?
+  createdAt DateTime @default(now())
+
+  @@index([offerId])
+  @@index([createdAt])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String?   @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  lastLat       Float?
+  lastLng       Float?
+  accounts      Account[]
+  sessions      Session[]
+  favorites     Favorite[]
+  createdAt     DateTime  @default(now())
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  sessionToken String   @id
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([token])
+  @@id([identifier, token])
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String?
+  posId     String?
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId, posId])
+}
