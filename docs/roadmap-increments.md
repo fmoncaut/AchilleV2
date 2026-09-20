@@ -1,6 +1,8 @@
 # Achille — briefs d'incréments (prêts pour Cursor)
 
-Chaque incrément est cadré pour être donné tel quel à l'agent : **objectif**, **périmètre**, **livrables**, **critères d'acceptation**. On les fait dans l'ordre. On ne code pas la phase « directe » ni le paiement.
+**État au 20 septembre 2026 :** Phase 0 et Phase 1 (affiliation) sont **terminées**. Point d’étape : `docs/status.md`. On ne code **pas** la phase « directe » ni le paiement tant que ce n’est pas demandé.
+
+Chaque incrément est cadré pour être donné tel quel à l'agent : **objectif**, **périmètre**, **livrables**, **critères d'acceptation**. On les fait dans l'ordre.
 
 ---
 

@@ -6,7 +6,7 @@ Une place de marché **de bonnes affaires locales géolocalisées**. L'acheteur 
 Le produit a déjà existé et fonctionné (apps mobiles acheteur + vendeur, et un back-office **web** marchand « Achille Business Solution »). On le refond en **portail web responsive**, en repartant du métier.
 
 ## Modèle en trois étapes
-- **Affiliation (ce qu'on construit) :** Achille présente l'offre et **renvoie vers le site du marchand** pour l'achat ; on **track** le renvoi. Pas de paiement chez Achille → surface de sécurité et charge RGPD minimales.
+- **Affiliation (livré, sept. 2026) :** Achille présente l'offre et **renvoie vers le site du marchand** pour l'achat ; on **track** le renvoi. Pas de paiement chez Achille → surface de sécurité et charge RGPD minimales. Détail : `docs/status.md`.
 - **Directe (plus tard) :** l'achat se fait sur Achille, retrait en magasin (click-and-collect) validé par **QR / code acheteur**, facture. Le POS gère stock et offres.
 - **Mobile (plus tard) :** PWA puis natif.
 
