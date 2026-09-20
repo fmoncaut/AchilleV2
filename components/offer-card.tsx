@@ -4,6 +4,7 @@ import { Distance } from "@/components/distance";
 import { cn } from "@/lib/utils";
 import type { NearbyOfferCard } from "@/lib/geo";
 import { discountPercent, formatEur } from "@/lib/money";
+import { offerPath } from "@/lib/urls";
 
 type OfferCardProps = {
   offer: NearbyOfferCard;
@@ -15,7 +16,8 @@ export function OfferCard({ offer, href, selected = false }: OfferCardProps) {
   const discount =
     offer.discountPct ??
     discountPercent(offer.priceRemise, offer.priceReference);
-  const destination = href ?? `/offre/${offer.productSlug}`;
+  const destination =
+    href ?? offerPath(offer.productSlug, { posSlug: offer.posSlug || undefined });
 
   return (
     <article
@@ -64,8 +66,17 @@ export function OfferCard({ offer, href, selected = false }: OfferCardProps) {
           </p>
           <p className="text-slate mt-auto text-sm font-medium">
             {offer.merchantName}
-            <span aria-hidden> · </span>
-            <Distance meters={offer.distanceM} />
+            {offer.distanceM != null ? (
+              <>
+                <span aria-hidden> · </span>
+                <Distance meters={offer.distanceM} />
+              </>
+            ) : offer.city ? (
+              <>
+                <span aria-hidden> · </span>
+                {offer.city}
+              </>
+            ) : null}
           </p>
         </div>
       </Link>

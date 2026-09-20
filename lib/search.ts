@@ -50,6 +50,32 @@ function optionalDecimal(value: string): Prisma.Decimal | null {
 
 const coordSchema = z.coerce.number().finite();
 
+export function parseLatLng(params: RawSearchParams): {
+  lat: number | null;
+  lng: number | null;
+} {
+  const latRaw = first(params.lat);
+  const lngRaw = first(params.lng);
+  if (!latRaw || !lngRaw) {
+    return { lat: null, lng: null };
+  }
+
+  const latResult = coordSchema.safeParse(latRaw);
+  const lngResult = coordSchema.safeParse(lngRaw);
+  if (
+    latResult.success &&
+    lngResult.success &&
+    latResult.data >= -90 &&
+    latResult.data <= 90 &&
+    lngResult.data >= -180 &&
+    lngResult.data <= 180
+  ) {
+    return { lat: latResult.data, lng: lngResult.data };
+  }
+
+  return { lat: null, lng: null };
+}
+
 export function parseSearchParams(params: RawSearchParams): SearchQuery {
   const q = first(params.q).slice(0, 120);
   const lieu = first(params.lieu).slice(0, 200);
@@ -64,26 +90,7 @@ export function parseSearchParams(params: RawSearchParams): SearchQuery {
   const sort: SearchSort = first(params.sort) === "price" ? "price" : "distance";
   const vue: SearchView = first(params.vue) === "carte" ? "carte" : "liste";
 
-  let lat: number | null = null;
-  let lng: number | null = null;
-
-  const latRaw = first(params.lat);
-  const lngRaw = first(params.lng);
-  if (latRaw && lngRaw) {
-    const latResult = coordSchema.safeParse(latRaw);
-    const lngResult = coordSchema.safeParse(lngRaw);
-    if (
-      latResult.success &&
-      lngResult.success &&
-      latResult.data >= -90 &&
-      latResult.data <= 90 &&
-      lngResult.data >= -180 &&
-      lngResult.data <= 180
-    ) {
-      lat = latResult.data;
-      lng = lngResult.data;
-    }
-  }
+  const { lat, lng } = parseLatLng(params);
 
   let prixMin = optionalDecimal(first(params.prixMin));
   let prixMax = optionalDecimal(first(params.prixMax));

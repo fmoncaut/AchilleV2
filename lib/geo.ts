@@ -54,7 +54,7 @@ export type NearbyOfferCard = {
   city: string | null;
   lat: number;
   lng: number;
-  distanceM: number;
+  distanceM: number | null;
 };
 
 type NearbyOfferRow = {
@@ -209,4 +209,32 @@ export async function findOffersNearby(
       distanceM: Number(row.distanceM),
     };
   });
+}
+
+export async function distancesToPos(
+  lat: number,
+  lng: number,
+  posIds: string[],
+): Promise<Map<string, number>> {
+  if (posIds.length === 0) {
+    return new Map();
+  }
+
+  const idList = Prisma.join(
+    posIds.map((id) => Prisma.sql`${id}`),
+    ", ",
+  );
+
+  const rows = await prisma.$queryRaw<{ id: string; distanceM: number | string }[]>`
+    SELECT
+      p.id,
+      ST_Distance(
+        p.geog,
+        ST_MakePoint(${lng}, ${lat})::geography
+      ) AS "distanceM"
+    FROM "Pos" p
+    WHERE p.id IN (${idList})
+  `;
+
+  return new Map(rows.map((row) => [row.id, Number(row.distanceM)]));
 }

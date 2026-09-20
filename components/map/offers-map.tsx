@@ -15,6 +15,7 @@ import { formatDistance } from "@/components/distance";
 import { EmptyState } from "@/components/search/empty-state";
 import type { NearbyOfferCard } from "@/lib/geo";
 import { formatEur } from "@/lib/money";
+import { offerPath } from "@/lib/urls";
 
 type OffersMapProps = {
   offers: NearbyOfferCard[];
@@ -157,10 +158,18 @@ export function OffersMap({
 
         for (const offer of group.offers) {
           const row = document.createElement("a");
-          row.href = `/offre/${offer.productSlug}`;
+          row.href = offerPath(offer.productSlug, {
+            posSlug: offer.posSlug || undefined,
+          });
           row.className =
             "mt-2 block rounded-lg px-1 py-1 text-[#002642] underline-offset-2 hover:underline";
-          row.textContent = `${offer.productName} — ${formatEur(offer.priceRemise)} · ${formatDistance(offer.distanceM)}`;
+          const distanceLabel =
+            offer.distanceM != null
+              ? formatDistance(offer.distanceM)
+              : offer.city;
+          row.textContent = distanceLabel
+            ? `${offer.productName} — ${formatEur(offer.priceRemise)} · ${distanceLabel}`
+            : `${offer.productName} — ${formatEur(offer.priceRemise)}`;
           row.addEventListener("click", () => {
             selectOffer(offer.id);
           });
@@ -260,7 +269,9 @@ export function OffersMap({
         <p className="text-slate text-sm font-medium">
           Offre mise en avant :{" "}
           <a
-            href={`/offre/${selected.productSlug}`}
+            href={offerPath(selected.productSlug, {
+              posSlug: selected.posSlug || undefined,
+            })}
             className="text-navy font-semibold underline-offset-4 hover:underline"
           >
             {selected.productName}
