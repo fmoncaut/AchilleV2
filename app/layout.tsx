@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import type { ReactNode } from "react";
 
 import { SiteHeader } from "@/components/site-header";
 import { cn } from "@/lib/utils";
@@ -17,7 +18,11 @@ export const metadata: Metadata = {
     "Place de marché de bonnes affaires locales géolocalisées. Trouvez des produits en déstockage près de chez vous.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: ReactNode;
+}>) {
   return (
     <html
       lang="fr"
