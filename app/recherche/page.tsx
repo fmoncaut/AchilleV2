@@ -1,23 +1,29 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Breadcrumb } from "@/components/buyer/breadcrumb";
+import {
+  BuyerMain,
+  BuyerSection,
+  cityFromLieu,
+} from "@/components/buyer/shell";
 import { OffersMapLoader } from "@/components/map/offers-map-loader";
+import { MaterialIcon } from "@/components/material-icon";
 import { OfferCard } from "@/components/offer-card";
 import { EmptyState } from "@/components/search/empty-state";
 import { SearchForm } from "@/components/search/search-form";
 import { ViewToggle } from "@/components/search/view-toggle";
+import { Distance } from "@/components/distance";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { getFavoriteFlags } from "@/lib/favorites";
-import { findOffersNearby, toOfferCard } from "@/lib/geo";
+import { findOffersNearby, toOfferCard, type NearbyOfferCard } from "@/lib/geo";
 import { geocodeAddress } from "@/lib/geocode";
 import { getIgnMapConfig } from "@/lib/map-config";
-import {
-  parseSearchParams,
-  searchHref,
-  type SearchQuery,
-} from "@/lib/search";
-import { loginWithReturn } from "@/lib/urls";
+import { formatEur } from "@/lib/money";
+import { parseSearchParams, searchHref, type SearchQuery } from "@/lib/search";
+import { loginWithReturn, magasinPath, offerPath } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +44,32 @@ function formValues(query: SearchQuery) {
     sort: query.sort,
     vue: query.vue,
   };
+}
+
+function uniqueStores(offers: NearbyOfferCard[]): NearbyOfferCard[] {
+  const seen = new Set<string>();
+  const stores: NearbyOfferCard[] = [];
+  for (const offer of offers) {
+    if (seen.has(offer.posId)) {
+      continue;
+    }
+    seen.add(offer.posId);
+    stores.push(offer);
+  }
+  return stores;
+}
+
+function multiVendorGroups(offers: NearbyOfferCard[]): NearbyOfferCard[][] {
+  const byProduct = new Map<string, NearbyOfferCard[]>();
+  for (const offer of offers) {
+    const list = byProduct.get(offer.productId) ?? [];
+    list.push(offer);
+    byProduct.set(offer.productId, list);
+  }
+  return [...byProduct.values()].filter((group) => {
+    const posIds = new Set(group.map((offer) => offer.posId));
+    return posIds.size > 1;
+  });
 }
 
 export async function generateMetadata({
@@ -103,29 +135,55 @@ export default async function RecherchePage({
   const ign = getIgnMapConfig();
   const recherchePath = searchHref(query);
   const locationLabel = query.lieu || "votre position";
+  const city = cityFromLieu(query.lieu);
   const session = await auth();
   const favorites = await getFavoriteFlags(session?.user?.id);
   const loginHref = loginWithReturn(recherchePath);
+  const stores = uniqueStores(offers);
+  const vendorGroups = multiVendorGroups(offers);
 
   return (
-    <main className="bg-paper flex flex-1 flex-col">
-      <section className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-6 py-10">
-        <div>
-          <p className="text-orange text-sm font-semibold tracking-wide uppercase">
-            Recherche locale
-          </p>
-          <h1 className="text-navy mt-2 text-3xl">Offres autour de vous</h1>
-          <p className="text-slate mt-2 text-sm font-medium">
-            Géocodage via la Base Adresse Nationale. Aucune carte Google.
-          </p>
-        </div>
-
+    <BuyerMain>
+      <section className="border-outline-variant/40 bg-surface-container-lowest border-b">
+        <BuyerSection className="flex flex-col gap-5 py-6 lg:py-8">
+          <Breadcrumb
+            items={[
+              { href: "/", label: "Accueil" },
+              { label: "Offres autour de toi" },
+            ]}
+          />
+          <div>
+            <p className="font-label-xs text-label-xs text-secondary flex items-center gap-2 font-extrabold tracking-wider uppercase">
+              <span className="bg-secondary-container inline-flex size-2.5 rounded-full" />
+              Recherche locale
+            </p>
+            <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
+              Bonnes affaires près de chez toi
+              {city ? (
+                <>
+                  {" "}
+                  à{" "}
+                  <span className="text-secondary decoration-secondary-container underline decoration-wavy underline-offset-4">
+                    {city}
+                  </span>
+                </>
+              ) : null}
+            </h1>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
+              Géocodage via la Base Adresse Nationale. Carte IGN — aucune carte
+              Google.
+            </p>
+          </div>
           <SearchForm
             key={`${query.lat}-${query.lng}-${query.lieu}`}
+            variant="hero"
             values={formValues(query)}
             categories={categories}
           />
+        </BuyerSection>
+      </section>
 
+      <BuyerSection className="flex flex-1 flex-col gap-8 py-6 lg:py-8">
         {geocodeFailed ? (
           <EmptyState
             title="Lieu introuvable"
@@ -142,8 +200,8 @@ export default async function RecherchePage({
 
         {origin ? (
           <>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-navy text-sm font-semibold">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <p className="font-body-sm text-body-sm text-primary-container font-semibold">
                 {offers.length === 0
                   ? `Aucune offre dans un rayon de ${query.radiusKm} km autour de ${locationLabel}.`
                   : `${offers.length} offre${offers.length > 1 ? "s" : ""} dans un rayon de ${query.radiusKm} km autour de ${locationLabel}.`}
@@ -176,25 +234,133 @@ export default async function RecherchePage({
                 recherchePath={recherchePath}
               />
             ) : (
-              <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {offers.map((offer) => (
-                  <li key={offer.id}>
-                    <OfferCard
-                      offer={offer}
-                      selected={offer.id === query.offre}
-                      signedIn={favorites.signedIn}
-                      isProductFavorite={favorites.productIds.includes(
-                        offer.productId,
-                      )}
-                      loginHref={loginHref}
-                    />
-                  </li>
-                ))}
-              </ul>
+              <section className="flex flex-col gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="bg-secondary-container font-headline-sm text-primary-container flex size-7 items-center justify-center rounded-lg text-sm">
+                    🔥
+                  </span>
+                  <h2 className="font-headline-md text-headline-md text-primary-container">
+                    Déstockages à proximité
+                  </h2>
+                </div>
+                <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  {offers.map((offer) => (
+                    <li key={offer.id}>
+                      <OfferCard
+                        offer={offer}
+                        selected={offer.id === query.offre}
+                        signedIn={favorites.signedIn}
+                        isProductFavorite={favorites.productIds.includes(
+                          offer.productId,
+                        )}
+                        loginHref={loginHref}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </section>
             )}
+
+            {stores.length > 0 && query.vue === "liste" ? (
+              <section className="flex flex-col gap-4">
+                <h2 className="font-headline-sm text-headline-sm text-primary-container">
+                  Enseignes autour de toi
+                </h2>
+                <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {stores.slice(0, 8).map((store) => {
+                    const count = offers.filter(
+                      (offer) => offer.posId === store.posId,
+                    ).length;
+                    return (
+                      <li key={store.posId}>
+                        <Link
+                          href={magasinPath(
+                            store.posSlug,
+                            origin.lat,
+                            origin.lng,
+                          )}
+                          className="bg-surface-container-lowest shadow-navy-soft hover:shadow-navy flex items-center gap-3 rounded-xl p-3 transition-shadow"
+                        >
+                          <span className="bg-primary-fixed font-headline-sm text-primary-container flex size-10 shrink-0 items-center justify-center rounded-lg font-extrabold">
+                            {store.merchantName.slice(0, 1)}
+                          </span>
+                          <span className="min-w-0">
+                            <span className="font-label-md text-label-md text-primary-container block truncate font-bold">
+                              {store.posName}
+                            </span>
+                            <span className="font-label-xs text-label-xs text-on-surface-variant flex items-center gap-1">
+                              {store.distanceM != null ? (
+                                <Distance meters={store.distanceM} />
+                              ) : null}
+                              <span>
+                                {count} offre{count > 1 ? "s" : ""}
+                              </span>
+                            </span>
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            ) : null}
+
+            {vendorGroups.length > 0 && query.vue === "liste" ? (
+              <section className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5">
+                <h2 className="font-headline-sm text-headline-sm text-primary-container">
+                  Plusieurs vendeurs près de toi
+                </h2>
+                <ul className="mt-4 flex flex-col gap-4">
+                  {vendorGroups.slice(0, 3).map((group) => {
+                    const first = group[0];
+                    if (!first) {
+                      return null;
+                    }
+                    const cheapest = group.reduce((best, offer) =>
+                      Number(offer.priceRemise) < Number(best.priceRemise)
+                        ? offer
+                        : best,
+                    );
+                    const posCount = new Set(group.map((offer) => offer.posId))
+                      .size;
+                    return (
+                      <li
+                        key={first.productId}
+                        className="border-outline-variant/40 flex flex-col gap-2 border-t pt-4 first:border-t-0 first:pt-0 sm:flex-row sm:items-center sm:justify-between"
+                      >
+                        <div>
+                          <p className="font-headline-sm text-primary-container text-[16px]">
+                            {first.productName}
+                          </p>
+                          <p className="font-body-sm text-body-sm text-on-surface-variant">
+                            Chez {posCount} vendeurs · dès{" "}
+                            <span className="text-secondary-container font-bold">
+                              {formatEur(cheapest.priceRemise)}
+                            </span>
+                          </p>
+                        </div>
+                        <Link
+                          href={offerPath(first.productSlug, {
+                            lat: origin.lat,
+                            lng: origin.lng,
+                          })}
+                          className="font-label-md text-label-md bg-primary-container text-on-primary inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 font-bold"
+                        >
+                          Comparer
+                          <MaterialIcon
+                            name="arrow_forward"
+                            className="text-[16px]"
+                          />
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            ) : null}
           </>
         ) : null}
-      </section>
-    </main>
+      </BuyerSection>
+    </BuyerMain>
   );
 }

@@ -271,10 +271,15 @@
     letter-spacing: normal;
     text-transform: none;
     display: inline-block;
+    width: 1em;
+    height: 1em;
+    overflow: hidden;
     white-space: nowrap;
     word-wrap: normal;
     direction: ltr;
-    font-feature-settings: "liga";
+    font-feature-settings: "liga" 1;
+    -webkit-font-feature-settings: "liga" 1;
+    font-variant-ligatures: discretionary-ligatures;
     -webkit-font-smoothing: antialiased;
     font-variation-settings:
       "FILL" 0,
@@ -282,6 +287,7 @@
       "GRAD" 0,
       "opsz" 24;
     user-select: none;
+    flex-shrink: 0;
   }
 
   .material-symbols-filled {
@@ -290,6 +296,15 @@
       "wght" 400,
       "GRAD" 0,
       "opsz" 24;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 

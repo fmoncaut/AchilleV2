@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { signOutAction } from "@/app/compte/actions";
+import { UtilityCard } from "@/components/utility-page";
 import { Button } from "@/components/ui/button";
 import { getAdminActor } from "@/lib/admin/actor";
 
@@ -21,65 +22,50 @@ export default async function AccountPage() {
   const actor = await getAdminActor();
 
   return (
-    <main className="bg-paper flex flex-1 flex-col">
-      <section className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 py-16">
-        <div className="bg-card ring-border mx-auto w-full max-w-md rounded-2xl p-8 shadow-sm ring-1">
-          <p className="text-orange text-sm font-semibold tracking-wide uppercase">
-            Compte
-          </p>
-          <h1 className="text-navy mt-3 text-3xl">Bonjour</h1>
-          <dl className="mt-6 space-y-3 text-sm">
-            <div>
-              <dt className="text-slate font-medium">Nom</dt>
-              <dd className="text-navy font-semibold">
-                {user.name ?? "Non renseigné"}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-slate font-medium">E-mail</dt>
-              <dd className="text-navy font-semibold">
-                {user.email ?? "Non renseigné"}
-              </dd>
-            </div>
-          </dl>
-          <p className="mt-6">
-            <Link
-              href="/compte/favoris"
-              className="bg-orange text-navy inline-flex h-11 w-full items-center justify-center rounded-xl text-sm font-bold"
-            >
-              Mes favoris
-            </Link>
-          </p>
-          {actor ? (
-            <p className="mt-3">
-              <Link
-                href="/admin/offres"
-                className="text-navy ring-border inline-flex h-11 w-full items-center justify-center rounded-xl text-sm font-bold ring-1"
-              >
-                Back-office {actor.merchantName}
-              </Link>
-            </p>
-          ) : null}
-          <form action={signOutAction} className="mt-8">
-            <Button
-              type="submit"
-              variant="outline"
-              size="lg"
-              className="h-11 w-full rounded-xl font-semibold"
-            >
-              Se déconnecter
-            </Button>
-          </form>
-          <p className="mt-6 text-center text-sm">
-            <Link
-              href="/"
-              className="text-navy font-semibold underline-offset-4 hover:underline"
-            >
-              Retour à l&apos;accueil
-            </Link>
-          </p>
+    <UtilityCard kicker="Compte" title="Bonjour" icon="person">
+      <dl className="mt-6 space-y-3">
+        <div>
+          <dt className="font-label-md text-label-md text-on-surface-variant">
+            Nom
+          </dt>
+          <dd className="font-headline-sm text-primary-container text-[16px]">
+            {user.name ?? "Non renseigné"}
+          </dd>
         </div>
-      </section>
-    </main>
+        <div>
+          <dt className="font-label-md text-label-md text-on-surface-variant">
+            E-mail
+          </dt>
+          <dd className="font-headline-sm text-primary-container text-[16px]">
+            {user.email ?? "Non renseigné"}
+          </dd>
+        </div>
+      </dl>
+      <p className="mt-6">
+        <Button asChild className="w-full">
+          <Link href="/compte/favoris">Mes favoris</Link>
+        </Button>
+      </p>
+      {actor ? (
+        <p className="mt-3">
+          <Button asChild variant="outline" className="w-full">
+            <Link href="/admin/offres">Back-office {actor.merchantName}</Link>
+          </Button>
+        </p>
+      ) : null}
+      <form action={signOutAction} className="mt-8">
+        <Button type="submit" variant="outline" size="lg" className="w-full">
+          Se déconnecter
+        </Button>
+      </form>
+      <p className="mt-6 text-center">
+        <Link
+          href="/"
+          className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+        >
+          Retour à l&apos;accueil
+        </Link>
+      </p>
+    </UtilityCard>
   );
 }

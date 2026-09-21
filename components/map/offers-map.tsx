@@ -142,7 +142,7 @@ export function OffersMap({
         const element = document.createElement("button");
         element.type = "button";
         element.className =
-          "flex size-8 items-center justify-center rounded-full border-2 border-[#002642] bg-[#FF9900] text-xs font-bold text-[#002642] shadow";
+          "flex h-8 min-w-8 items-center justify-center rounded-full border-2 border-[#002642] bg-[#fe9800] px-1.5 text-xs font-extrabold text-[#002642] shadow-[0_2px_6px_rgba(0,38,66,0.15)]";
         element.textContent = String(group.offers.length);
         element.setAttribute(
           "aria-label",
@@ -150,7 +150,7 @@ export function OffersMap({
         );
 
         const popupNode = document.createElement("div");
-        popupNode.className = "min-w-48 max-w-64 text-sm";
+        popupNode.className = "min-w-48 max-w-64 text-sm text-[#191c1e]";
         const title = document.createElement("p");
         title.className = "font-bold text-[#002642]";
         title.textContent = group.posName;
@@ -162,7 +162,7 @@ export function OffersMap({
             posSlug: offer.posSlug || undefined,
           });
           row.className =
-            "mt-2 block rounded-lg px-1 py-1 text-[#002642] underline-offset-2 hover:underline";
+            "mt-2 block rounded-full px-2 py-1 text-[#002642] underline-offset-2 hover:bg-[#f2f4f7] hover:underline";
           const distanceLabel =
             offer.distanceM != null
               ? formatDistance(offer.distanceM)
@@ -176,9 +176,10 @@ export function OffersMap({
           popupNode.append(row);
         }
 
-        const popup = new Popup({ offset: 18, closeButton: true }).setDOMContent(
-          popupNode,
-        );
+        const popup = new Popup({
+          offset: 18,
+          closeButton: true,
+        }).setDOMContent(popupNode);
 
         const marker = new Marker({ element })
           .setLngLat([group.lng, group.lat])
@@ -263,16 +264,16 @@ export function OffersMap({
     <div className="flex flex-col gap-4">
       <div
         ref={containerRef}
-        className="ring-border h-[min(70vh,36rem)] min-h-80 w-full overflow-hidden rounded-2xl ring-1"
+        className="ring-outline-variant h-[min(70vh,36rem)] min-h-80 w-full overflow-hidden rounded-2xl ring-1"
       />
       {selected ? (
-        <p className="text-slate text-sm font-medium">
+        <p className="font-body-sm text-body-sm text-on-surface-variant">
           Offre mise en avant :{" "}
           <a
             href={offerPath(selected.productSlug, {
               posSlug: selected.posSlug || undefined,
             })}
-            className="text-navy font-semibold underline-offset-4 hover:underline"
+            className="text-primary-container font-semibold underline-offset-4 hover:underline"
           >
             {selected.productName}
           </a>{" "}

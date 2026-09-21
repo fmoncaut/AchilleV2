@@ -12,7 +12,9 @@ export default function ConfidentialitePage() {
         pas de profilage publicitaire. Les comptes vivent dans notre base
         PostgreSQL hébergée en UE.
       </p>
-      <h2 className="text-navy mt-2 text-xl font-bold">Données collectées</h2>
+      <h2 className="font-headline-sm text-headline-sm text-primary-container mt-2">
+        Données collectées
+      </h2>
       <ul className="list-disc space-y-1 pl-5">
         <li>Compte : e-mail, nom éventuel (Auth.js — e-mail magique, Apple ou Google Identity).</li>
         <li>Favoris : identifiants de produits et de magasins, liés à votre compte uniquement.</li>
@@ -23,7 +25,9 @@ export default function ConfidentialitePage() {
         </li>
         <li>Localisation approximative de recherche (lastLat / lastLng) si vous en indiquez une.</li>
       </ul>
-      <h2 className="text-navy mt-2 text-xl font-bold">Cookies</h2>
+      <h2 className="font-headline-sm text-headline-sm text-primary-container mt-2">
+        Cookies
+      </h2>
       <ul className="list-disc space-y-1 pl-5">
         <li>
           <strong>anonId</strong> : cookie technique httpOnly, SameSite=Lax, ~1

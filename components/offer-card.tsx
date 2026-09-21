@@ -5,6 +5,7 @@ import { Distance } from "@/components/distance";
 import { FavoriteButton } from "@/components/favorite-button";
 import { MaterialIcon } from "@/components/material-icon";
 import { OpenBadge } from "@/components/open-badge";
+import { ProductImage } from "@/components/product-image";
 import { cn } from "@/lib/utils";
 import type { NearbyOfferCard } from "@/lib/geo";
 import { discountPercent, formatEur } from "@/lib/money";
@@ -55,22 +56,12 @@ export function OfferCard({
         />
       </div>
       <Link href={destination} className="flex h-full flex-col outline-none">
-        <div className="bg-surface-container relative aspect-[4/3] overflow-hidden">
-          {offer.imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={offer.imageUrl}
-              alt=""
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div
-              className="bg-primary-container text-secondary-container font-display flex h-full w-full items-center justify-center text-3xl font-extrabold"
-              aria-hidden
-            >
-              {offer.productName.slice(0, 1)}
-            </div>
-          )}
+        <div className="relative">
+          <ProductImage
+            src={offer.imageUrl}
+            name={offer.productName}
+            variant="card"
+          />
           {discount != null ? (
             <span className="absolute top-3 left-3">
               <DiscountBadge percent={discount} />

@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+import { MaterialIcon } from "@/components/material-icon";
+import { Button } from "@/components/ui/button";
+
 type EmptyStateProps = {
   title: string;
   description: string;
@@ -14,17 +17,21 @@ export function EmptyState({
   actionLabel,
 }: EmptyStateProps) {
   return (
-    <div className="bg-card ring-border rounded-2xl p-8 text-center shadow-sm ring-1">
-      <h2 className="text-navy text-xl font-bold">{title}</h2>
-      <p className="text-slate mt-2 text-sm font-medium">{description}</p>
+    <div className="bg-surface-container-lowest shadow-navy-soft rounded-2xl px-6 py-10 text-center">
+      <div className="bg-secondary-fixed text-secondary-container mx-auto mb-4 flex size-12 items-center justify-center rounded-full">
+        <MaterialIcon name="search_off" className="text-[24px]" />
+      </div>
+      <h2 className="font-headline-sm text-headline-sm text-primary-container">
+        {title}
+      </h2>
+      <p className="font-body-sm text-body-sm text-on-surface-variant mx-auto mt-2 max-w-md">
+        {description}
+      </p>
       {actionHref && actionLabel ? (
         <p className="mt-6">
-          <Link
-            href={actionHref}
-            className="bg-orange text-navy inline-flex h-11 items-center rounded-xl px-6 text-sm font-bold"
-          >
-            {actionLabel}
-          </Link>
+          <Button asChild>
+            <Link href={actionHref}>{actionLabel}</Link>
+          </Button>
         </p>
       ) : null}
     </div>

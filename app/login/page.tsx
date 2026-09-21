@@ -5,6 +5,7 @@ import {
   signInWithEmail,
   signInWithGoogle,
 } from "@/app/login/actions";
+import { UtilityCard } from "@/components/utility-page";
 import { Button } from "@/components/ui/button";
 import {
   isAppleAuthEnabled,
@@ -33,97 +34,75 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       : "/compte";
 
   return (
-    <main className="bg-paper flex flex-1 flex-col">
-      <section className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 py-16">
-        <div className="bg-card ring-border mx-auto w-full max-w-md rounded-2xl p-8 shadow-sm ring-1">
-          <p className="text-orange text-sm font-semibold tracking-wide uppercase">
-            Espace acheteur
-          </p>
-          <h1 className="text-navy mt-3 text-3xl">Connexion</h1>
-          <p className="text-slate mt-3 text-sm font-medium">
-            Un lien magique par e-mail, sans mot de passe. Ou continuez sans
-            compte pour explorer Achille.
-          </p>
+    <UtilityCard kicker="Espace acheteur" title="Connexion" icon="login">
+      <p className="font-body-sm text-body-sm text-on-surface-variant mt-3">
+        Un lien magique par e-mail, sans mot de passe. Ou continuez sans
+        compte pour explorer Achille.
+      </p>
 
-          {emailError ? (
-            <p className="bg-destructive/10 text-destructive mt-4 rounded-xl px-3 py-2 text-sm">
-              Saisissez une adresse e-mail valide.
-            </p>
-          ) : null}
+      {emailError ? (
+        <p className="font-body-sm bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2">
+          Saisissez une adresse e-mail valide.
+        </p>
+      ) : null}
 
-          {isEmailAuthEnabled ? (
-            <form action={signInWithEmail} className="mt-8 flex flex-col gap-3">
+      {isEmailAuthEnabled ? (
+        <form action={signInWithEmail} className="mt-8 flex flex-col gap-3">
+          <input type="hidden" name="callbackUrl" value={callbackUrl} />
+          <label
+            htmlFor="email"
+            className="font-label-md text-label-md text-primary-container"
+          >
+            E-mail
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            placeholder="vous@exemple.fr"
+            className="bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline focus-visible:ring-secondary-container h-11 w-full rounded-full border-0 px-4 outline-none focus-visible:ring-2"
+          />
+          <Button type="submit" size="lg" className="w-full">
+            Recevoir un lien de connexion
+          </Button>
+        </form>
+      ) : (
+        <p className="font-body-sm text-body-sm text-on-surface-variant mt-8">
+          La connexion par e-mail n&apos;est pas disponible pour le moment.
+        </p>
+      )}
+
+      {isGoogleAuthEnabled || isAppleAuthEnabled ? (
+        <div className="mt-6 flex flex-col gap-2">
+          {isGoogleAuthEnabled ? (
+            <form action={signInWithGoogle}>
               <input type="hidden" name="callbackUrl" value={callbackUrl} />
-              <label
-                htmlFor="email"
-                className="text-navy text-sm font-semibold"
-              >
-                E-mail
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                placeholder="vous@exemple.fr"
-                className="border-border bg-paper text-navy focus-visible:ring-orange h-11 rounded-xl border px-3 text-sm font-medium outline-none focus-visible:ring-2"
-              />
-              <Button
-                type="submit"
-                size="lg"
-                className="h-11 rounded-xl px-6 text-base font-bold"
-              >
-                Recevoir un lien de connexion
+              <Button type="submit" variant="outline" size="lg" className="w-full">
+                Continuer avec Google
               </Button>
             </form>
-          ) : (
-            <p className="text-slate mt-8 text-sm">
-              La connexion par e-mail n&apos;est pas disponible pour le moment.
-            </p>
-          )}
-
-          {isGoogleAuthEnabled || isAppleAuthEnabled ? (
-            <div className="mt-6 flex flex-col gap-2">
-              {isGoogleAuthEnabled ? (
-                <form action={signInWithGoogle}>
-                  <input type="hidden" name="callbackUrl" value={callbackUrl} />
-                  <Button
-                    type="submit"
-                    variant="outline"
-                    size="lg"
-                    className="h-11 w-full rounded-xl font-semibold"
-                  >
-                    Continuer avec Google
-                  </Button>
-                </form>
-              ) : null}
-              {isAppleAuthEnabled ? (
-                <form action={signInWithApple}>
-                  <input type="hidden" name="callbackUrl" value={callbackUrl} />
-                  <Button
-                    type="submit"
-                    variant="outline"
-                    size="lg"
-                    className="h-11 w-full rounded-xl font-semibold"
-                  >
-                    Continuer avec Apple
-                  </Button>
-                </form>
-              ) : null}
-            </div>
           ) : null}
-
-          <p className="mt-8 text-center text-sm">
-            <Link
-              href="/"
-              className="text-navy font-semibold underline-offset-4 hover:underline"
-            >
-              Continuer sans compte
-            </Link>
-          </p>
+          {isAppleAuthEnabled ? (
+            <form action={signInWithApple}>
+              <input type="hidden" name="callbackUrl" value={callbackUrl} />
+              <Button type="submit" variant="outline" size="lg" className="w-full">
+                Continuer avec Apple
+              </Button>
+            </form>
+          ) : null}
         </div>
-      </section>
-    </main>
+      ) : null}
+
+      <p className="mt-8 text-center">
+        <Link
+          href="/"
+          className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+        >
+          Continuer sans compte
+        </Link>
+      </p>
+    </UtilityCard>
   );
 }

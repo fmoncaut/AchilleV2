@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
+import { Breadcrumb } from "@/components/buyer/breadcrumb";
+import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
 import { SortToggle } from "@/components/catalog/sort-toggle";
 import {
   EMPTY_CATALOG_QUERY,
@@ -12,21 +14,21 @@ import {
   withPosDistance,
   type CatalogQuery,
 } from "@/components/catalog/query";
+import { DiscountBadge } from "@/components/discount-badge";
 import { Distance } from "@/components/distance";
-import { MerchantCta } from "@/components/merchant-cta";
 import { FavoriteButton } from "@/components/favorite-button";
-import { OfferCard } from "@/components/offer-card";
+import { MaterialIcon } from "@/components/material-icon";
+import { MerchantCta } from "@/components/merchant-cta";
 import { OpeningHoursList } from "@/components/opening-hours";
-import { PriceTag } from "@/components/price-tag";
+import { ProductImage } from "@/components/product-image";
 import { EmptyState } from "@/components/search/empty-state";
 import { slugifyCity } from "@/lib/city";
 import {
   conditionLabel,
-  showcaseOfferToCard,
   type ShowcaseOffer,
   type ShowcaseProduct,
 } from "@/lib/catalog-view";
-import { discountPercent } from "@/lib/money";
+import { discountPercent, formatEur } from "@/lib/money";
 import type { FavoriteFlags } from "@/lib/favorites";
 import {
   loginWithReturn,
@@ -83,72 +85,70 @@ function OfferShowcaseView({
     query.tri,
   );
   const current = pickCurrentOffer(located, query.offre, query.pos);
-  const others = located.filter((offer) => offer.id !== current?.id);
   const { lat, lng, tri } = query;
   const description = product.description ?? product.shortDescription;
+  const currentDiscount = current
+    ? (current.discountPct ??
+      discountPercent(current.priceRemise, current.priceReference))
+    : null;
+  const citySlug = current?.pos.city ? slugifyCity(current.pos.city) : null;
 
   return (
-    <main className="bg-paper flex flex-1 flex-col">
-      <article className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-6 py-10">
-        <nav className="text-slate text-sm font-medium">
-          <Link
-            href="/"
-            className="hover:text-navy underline-offset-4 hover:underline"
-          >
-            Accueil
-          </Link>
-          {product.categoryName && product.categorySlug ? (
-            <>
-              <span aria-hidden> · </span>
-              {current?.pos.city ? (
-                <Link
-                  href={villeCategoriePath(
-                    slugifyCity(current.pos.city),
-                    product.categorySlug,
-                    lat,
-                    lng,
-                  )}
-                  className="hover:text-navy underline-offset-4 hover:underline"
-                >
-                  {product.categoryName} à {current.pos.city}
-                </Link>
-              ) : (
-                <span>{product.categoryName}</span>
-              )}
-            </>
-          ) : null}
-        </nav>
+    <BuyerMain>
+      <div className="bg-surface-container-low/60">
+        <BuyerSection className="py-3">
+          <Breadcrumb
+            items={[
+              { href: "/", label: "Accueil" },
+              ...(product.categoryName && product.categorySlug && citySlug
+                ? [
+                    {
+                      href: villeCategoriePath(
+                        citySlug,
+                        product.categorySlug,
+                        lat,
+                        lng,
+                      ),
+                      label: `${product.categoryName} à ${current?.pos.city}`,
+                    },
+                  ]
+                : product.categoryName
+                  ? [{ label: product.categoryName }]
+                  : []),
+              { label: product.name },
+            ]}
+          />
+        </BuyerSection>
+      </div>
 
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-          <div className="bg-muted relative aspect-[4/3] overflow-hidden rounded-2xl">
-            {product.imageUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+      <BuyerSection
+        as="article"
+        className="flex flex-1 flex-col gap-8 py-6 lg:py-8"
+      >
+        <div className="grid items-start gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <div className="bg-surface-container-lowest shadow-navy-soft relative overflow-hidden rounded-2xl">
+              <ProductImage
                 src={product.imageUrl}
-                alt=""
-                className="h-full w-full object-cover"
+                name={product.name}
+                variant="gallery"
               />
-            ) : (
-              <div className="bg-navy text-orange flex h-full w-full items-center justify-center text-6xl font-bold">
-                {product.name.slice(0, 1)}
-              </div>
-            )}
-            {current ? (
-              <span className="bg-orange text-navy absolute top-4 left-4 rounded-full px-2.5 py-1 text-sm font-bold">
-                −
-                {current.discountPct ??
-                  discountPercent(current.priceRemise, current.priceReference)}
-                &nbsp;%
-              </span>
-            ) : null}
+              {currentDiscount != null ? (
+                <span className="absolute top-4 left-4">
+                  <DiscountBadge percent={currentDiscount} />
+                </span>
+              ) : null}
+            </div>
           </div>
 
-          <div className="flex flex-col gap-4">
-            <p className="text-orange text-sm font-semibold tracking-wide uppercase">
+          <div className="flex flex-col gap-4 lg:col-span-7">
+            <p className="font-label-md text-label-md text-secondary font-bold tracking-wider uppercase">
               {product.brandName ?? "Bonne affaire locale"}
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <h1 className="text-navy text-3xl sm:text-4xl">{product.name}</h1>
+              <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary leading-tight">
+                {product.name}
+              </h1>
               <FavoriteButton
                 kind="product"
                 targetId={product.id}
@@ -159,65 +159,61 @@ function OfferShowcaseView({
               />
             </div>
             {product.ean ? (
-              <p className="text-slate text-sm font-medium">
+              <p className="font-body-sm text-body-sm text-on-surface-variant">
                 EAN {product.ean}
               </p>
             ) : null}
             {description ? (
-              <p className="text-slate text-base font-medium">{description}</p>
+              <p className="font-body-md text-body-md text-on-surface-variant">
+                {description}
+              </p>
             ) : null}
 
             {current ? (
-              <section className="bg-card ring-border rounded-2xl p-5 shadow-sm ring-1">
-                <PriceTag
-                  priceRemise={current.priceRemise}
-                  priceReference={current.priceReference}
-                  discountPct={
-                    current.discountPct ??
-                    discountPercent(current.priceRemise, current.priceReference)
-                  }
-                  size="lg"
+              <section className="bg-surface-container-lowest shadow-navy flex flex-col gap-4 rounded-2xl p-5 sm:p-6 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="font-label-md text-label-md text-on-surface-variant font-bold tracking-wider uppercase">
+                    Meilleur prix déstockage local
+                  </p>
+                  <p className="mt-1 flex flex-wrap items-baseline gap-2">
+                    <span className="font-price-hero text-price-hero text-secondary-container font-extrabold">
+                      {formatEur(current.priceRemise)}
+                    </span>
+                    {current.priceReference ? (
+                      <span className="font-body-md text-body-md text-outline line-through">
+                        {formatEur(current.priceReference)}
+                      </span>
+                    ) : null}
+                    {currentDiscount != null ? (
+                      <DiscountBadge percent={currentDiscount} />
+                    ) : null}
+                  </p>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 flex items-center gap-1">
+                    <MaterialIcon
+                      name="storefront"
+                      className="text-secondary-container text-[16px]"
+                    />
+                    Chez{" "}
+                    <Link
+                      href={magasinPath(current.pos.slug, lat, lng)}
+                      className="text-primary-container font-bold underline-offset-4 hover:underline"
+                    >
+                      {current.pos.name}
+                    </Link>
+                    {current.distanceM != null ? (
+                      <>
+                        {" "}
+                        (
+                        <Distance meters={current.distanceM} variant="plain" />)
+                      </>
+                    ) : null}
+                  </p>
+                </div>
+                <MerchantCta
+                  offerId={current.id}
+                  isOnline={current.isOnline}
+                  merchantUrl={current.merchantUrl}
                 />
-                <p className="text-navy mt-4 text-sm font-semibold">
-                  {current.merchantName}
-                  <span aria-hidden> · </span>
-                  <Link
-                    href={magasinPath(current.pos.slug, lat, lng)}
-                    className="underline-offset-4 hover:underline"
-                  >
-                    {current.pos.name}
-                  </Link>
-                </p>
-                {formatAddress(current.pos) ? (
-                  <p className="text-slate mt-1 text-sm font-medium">
-                    {formatAddress(current.pos)}
-                  </p>
-                ) : null}
-                {current.distanceM != null ? (
-                  <p className="text-slate mt-1 text-sm font-medium">
-                    À <Distance meters={current.distanceM} variant="plain" />
-                  </p>
-                ) : null}
-                <p className="text-slate mt-3 text-sm font-medium">
-                  {conditionLabel(current.condition)}
-                  {current.tvaRate
-                    ? ` · TVA ${Number(current.tvaRate).toFixed(0)} %`
-                    : null}
-                  {` · ${current.stock} en magasin`}
-                </p>
-                <div className="mt-4">
-                  <p className="text-navy mb-2 text-sm font-semibold">
-                    Horaires
-                  </p>
-                  <OpeningHoursList value={current.pos.openingHours} />
-                </div>
-                <div className="mt-6">
-                  <MerchantCta
-                    offerId={current.id}
-                    isOnline={current.isOnline}
-                    merchantUrl={current.merchantUrl}
-                  />
-                </div>
               </section>
             ) : (
               <EmptyState
@@ -227,17 +223,40 @@ function OfferShowcaseView({
                 actionLabel="Voir les autres offres"
               />
             )}
+
+            <div className="bg-primary-container text-on-primary shadow-navy-soft rounded-2xl p-4">
+              <p className="font-headline-sm text-headline-sm flex items-center gap-2 font-bold">
+                <MaterialIcon
+                  name="open_in_new"
+                  className="text-secondary-container text-[20px]"
+                />
+                Circuit affiliation
+              </p>
+              <p className="font-body-sm text-body-sm text-surface-variant mt-1">
+                Achille compare les offres locales puis vous renvoie vers le
+                site du marchand (lien sécurisé et tracké). Pas de panier ni de
+                paiement ici.
+              </p>
+            </div>
           </div>
         </div>
 
-        {current && others.length > 0 ? (
-          <section className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <h2 className="text-navy text-2xl">
-                {others.length} autre{others.length > 1 ? "s" : ""} offre
-                {others.length > 1 ? "s" : ""} disponible
-                {others.length > 1 ? "s" : ""}
-              </h2>
+        {current ? (
+          <section id="comparateur-marches" className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <h2 className="font-headline-lg text-headline-md sm:text-headline-lg text-primary flex items-center gap-2">
+                  <span className="bg-secondary-container size-3 rounded-full" />
+                  Comparateur d&apos;offres locales
+                </h2>
+                <p className="font-body-md text-body-md text-on-surface-variant mt-1">
+                  {located.length > 1
+                    ? `${located.length} commerçants proposent ce produit`
+                    : "1 commerçant propose ce produit"}
+                  {current.pos.city ? ` à ${current.pos.city} et environs` : ""}
+                  .
+                </p>
+              </div>
               <SortToggle
                 current={tri}
                 distanceDisabled={lat == null || lng == null}
@@ -255,34 +274,120 @@ function OfferShowcaseView({
                 })}
               />
             </div>
-            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {others.map((offer) => (
-                <li key={offer.id}>
-                  <OfferCard
-                    offer={showcaseOfferToCard(offer, product)}
-                    href={offerPath(product.slug, {
-                      posSlug: offer.pos.slug,
-                      lat,
-                      lng,
-                      tri,
-                    })}
-                    signedIn={favorites.signedIn}
-                    isProductFavorite={favorites.productIds.includes(
-                      product.id,
-                    )}
-                    loginHref={loginWithReturn(`/offre/${product.slug}`)}
-                  />
-                </li>
-              ))}
-            </ul>
+
+            <div className="bg-surface-container-lowest shadow-navy-soft overflow-hidden rounded-2xl">
+              <div className="font-label-md text-label-md bg-surface-container-high/60 text-on-surface-variant hidden px-6 py-3 tracking-wider uppercase lg:grid lg:grid-cols-12">
+                <div className="col-span-4">Vendeur &amp; localisation</div>
+                <div className="col-span-3">Disponibilité</div>
+                <div className="col-span-2">État</div>
+                <div className="col-span-3 text-right">Prix &amp; action</div>
+              </div>
+              <ul>
+                {located.map((offer) => {
+                  const selected = offer.id === current.id;
+                  const discount =
+                    offer.discountPct ??
+                    discountPercent(offer.priceRemise, offer.priceReference);
+                  return (
+                    <li
+                      key={offer.id}
+                      className="border-surface-container-high relative grid grid-cols-1 items-center gap-4 border-t p-5 first:border-t-0 lg:grid-cols-12 lg:px-6"
+                    >
+                      {selected ? (
+                        <span className="bg-secondary-container absolute top-0 bottom-0 left-0 w-1.5" />
+                      ) : null}
+                      <div className="flex items-center gap-3 lg:col-span-4">
+                        <span className="bg-surface-container font-headline-sm text-primary-container flex size-14 shrink-0 items-center justify-center rounded-2xl text-sm font-bold">
+                          {offer.merchantName.slice(0, 2).toUpperCase()}
+                        </span>
+                        <div className="min-w-0">
+                          <Link
+                            href={offerPath(product.slug, {
+                              posSlug: offer.pos.slug,
+                              lat,
+                              lng,
+                              tri,
+                            })}
+                            className="font-headline-sm text-primary text-[16px] font-bold hover:underline"
+                          >
+                            {offer.pos.name}
+                          </Link>
+                          <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 flex items-center gap-1">
+                            <MaterialIcon
+                              name="near_me"
+                              className="text-secondary-container text-[16px]"
+                            />
+                            {offer.distanceM != null ? (
+                              <Distance
+                                meters={offer.distanceM}
+                                variant="plain"
+                              />
+                            ) : (
+                              offer.pos.city
+                            )}
+                            {formatAddress(offer.pos)
+                              ? ` · ${formatAddress(offer.pos)}`
+                              : null}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="lg:col-span-3">
+                        <span className="font-label-xs text-label-xs bg-surface-container-high text-on-surface inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-bold">
+                          <MaterialIcon
+                            name="open_in_new"
+                            className="text-[14px]"
+                          />
+                          Site marchand (affiliation)
+                        </span>
+                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+                          {offer.stock} en magasin
+                        </p>
+                      </div>
+                      <div className="font-body-sm text-body-sm text-on-surface-variant lg:col-span-2">
+                        <p className="text-primary font-bold">
+                          {conditionLabel(offer.condition)}
+                        </p>
+                        {offer.tvaRate ? (
+                          <p>TVA {Number(offer.tvaRate).toFixed(0)} %</p>
+                        ) : null}
+                      </div>
+                      <div className="flex min-w-0 flex-col gap-2 lg:col-span-3 lg:items-end">
+                        <p className="flex items-baseline gap-1.5">
+                          <span className="font-price-hero text-headline-md text-secondary-container font-extrabold">
+                            {formatEur(offer.priceRemise)}
+                          </span>
+                          {offer.priceReference ? (
+                            <span className="font-body-sm text-body-sm text-outline line-through">
+                              {formatEur(offer.priceReference)}
+                            </span>
+                          ) : null}
+                        </p>
+                        {discount != null ? (
+                          <DiscountBadge percent={discount} />
+                        ) : null}
+                        <MerchantCta
+                          offerId={offer.id}
+                          isOnline={offer.isOnline}
+                          merchantUrl={offer.merchantUrl}
+                          compact
+                        />
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            <section className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5">
+              <h3 className="font-headline-sm text-headline-sm text-primary mb-3">
+                Horaires — {current.pos.name}
+              </h3>
+              <OpeningHoursList value={current.pos.openingHours} />
+            </section>
           </section>
-        ) : current ? (
-          <p className="text-slate text-sm font-medium">
-            Ce produit n&apos;est proposé que dans ce magasin pour le moment.
-          </p>
         ) : null}
-      </article>
-    </main>
+      </BuyerSection>
+    </BuyerMain>
   );
 }
 

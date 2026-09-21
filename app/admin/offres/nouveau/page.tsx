@@ -1,4 +1,9 @@
 import { OfferForm } from "@/components/admin/offer-form";
+import {
+  AdminCard,
+  AdminKicker,
+  AdminMain,
+} from "@/components/admin/admin-shell";
 import { requireAdminActor } from "@/lib/admin/actor";
 import { listCategories, listMerchantPos } from "@/lib/admin/offers";
 
@@ -14,18 +19,18 @@ export default async function NouvelleOffrePage() {
   ]);
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-6 py-8">
+    <AdminMain width="form">
       <div>
-        <p className="text-orange text-sm font-semibold tracking-wide uppercase">
-          {actor.merchantName}
-        </p>
-        <h1 className="text-navy mt-1 text-3xl">Nouvelle offre</h1>
-        <p className="text-slate mt-2 text-sm font-medium">
+        <AdminKicker>{actor.merchantName}</AdminKicker>
+        <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
+          Nouvelle offre
+        </h1>
+        <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
           Si l’EAN existe déjà, le produit est réutilisé. Le % de remise est
           calculé automatiquement.
         </p>
       </div>
-      <div className="bg-card ring-border rounded-2xl p-6 ring-1">
+      <AdminCard>
         <OfferForm
           mode="create"
           categories={categories.map((category) => ({
@@ -37,7 +42,7 @@ export default async function NouvelleOffrePage() {
             label: pos.city ? `${pos.name} (${pos.city})` : pos.name,
           }))}
         />
-      </div>
-    </main>
+      </AdminCard>
+    </AdminMain>
   );
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useSyncExternalStore } from "react";
 
+import { Button } from "@/components/ui/button";
 import type { AnalyticsConfig } from "@/lib/analytics";
 import {
   readConsentFromDocument,
@@ -109,12 +110,15 @@ export function ConsentBanner({ analytics }: ConsentBannerProps) {
         <div
           role="dialog"
           aria-labelledby="consent-title"
-          className="ring-border bg-card fixed inset-x-0 bottom-0 z-50 mx-auto max-w-3xl p-4 shadow-lg ring-1 sm:bottom-4 sm:rounded-2xl"
+          className="bg-surface-container-lowest shadow-navy fixed inset-x-0 bottom-0 z-50 mx-auto max-w-3xl p-4 sm:bottom-4 sm:rounded-2xl"
         >
-          <h2 id="consent-title" className="text-navy text-base font-bold">
+          <h2
+            id="consent-title"
+            className="font-headline-sm text-headline-sm text-primary-container"
+          >
             Cookies et mesure
           </h2>
-          <p className="text-slate mt-2 text-sm font-medium">
+          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
             Achille pose un cookie technique <strong>anonId</strong> (1 an,
             httpOnly) pour attribuer les renvois vers les marchands, sans vous
             identifier. Session de connexion : cookie Auth.js.
@@ -122,10 +126,10 @@ export function ConsentBanner({ analytics }: ConsentBannerProps) {
               ? " La mesure d’audience (Plausible ou Matomo, hébergée en UE) n’est chargée que si vous acceptez."
               : " Aucune mesure d’audience n’est configurée pour le moment."}
           </p>
-          <p className="mt-2 text-sm">
+          <p className="mt-2">
             <Link
               href="/confidentialite"
-              className="text-navy font-semibold underline-offset-4 hover:underline"
+              className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
             >
               Politique de confidentialité
             </Link>
@@ -133,29 +137,21 @@ export function ConsentBanner({ analytics }: ConsentBannerProps) {
           <div className="mt-4 flex flex-wrap gap-2">
             {analytics ? (
               <>
-                <button
-                  type="button"
-                  className="bg-orange text-navy inline-flex h-10 items-center rounded-xl px-4 text-sm font-bold"
-                  onClick={() => accept("all")}
-                >
+                <Button type="button" onClick={() => accept("all")}>
                   Accepter la mesure
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
-                  className="text-navy ring-border inline-flex h-10 items-center rounded-xl px-4 text-sm font-bold ring-1"
+                  variant="outline"
                   onClick={() => accept("essential")}
                 >
                   Cookies techniques seulement
-                </button>
+                </Button>
               </>
             ) : (
-              <button
-                type="button"
-                className="bg-orange text-navy inline-flex h-10 items-center rounded-xl px-4 text-sm font-bold"
-                onClick={() => accept("essential")}
-              >
+              <Button type="button" onClick={() => accept("essential")}>
                 J’ai compris
-              </button>
+              </Button>
             )}
           </div>
         </div>

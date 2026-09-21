@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
+import { Breadcrumb } from "@/components/buyer/breadcrumb";
+import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
 import { SortToggle } from "@/components/catalog/sort-toggle";
 import {
   EMPTY_CATALOG_QUERY,
@@ -38,32 +40,33 @@ function CityOffersView({
   query,
 }: CityOffersProps & { query: CatalogQuery }) {
   const { lat, lng, tri } = query;
-  const located = sortLocatedOffers(
-    locateByCoords(offers, lat, lng),
-    tri,
-  );
+  const located = sortLocatedOffers(locateByCoords(offers, lat, lng), tri);
   const loginHref = loginWithReturn(`/${villeSlug}/${categorySlug}`);
 
   return (
-    <main className="bg-paper flex flex-1 flex-col">
-      <section className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-6 py-10">
-        <nav className="text-slate text-sm font-medium">
-          <Link href="/" className="hover:text-navy underline-offset-4 hover:underline">
-            Accueil
-          </Link>
-          <span aria-hidden> · </span>
-          <span>{cityName}</span>
-        </nav>
+    <BuyerMain>
+      <div className="bg-surface-container-low/60">
+        <BuyerSection className="py-3">
+          <Breadcrumb
+            items={[
+              { href: "/", label: "Accueil" },
+              { label: cityName },
+              { label: categoryName },
+            ]}
+          />
+        </BuyerSection>
+      </div>
 
+      <BuyerSection className="flex flex-1 flex-col gap-6 py-6 lg:py-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-orange text-sm font-semibold tracking-wide uppercase">
+            <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
               {cityName}
             </p>
-            <h1 className="text-navy mt-1 text-3xl">
+            <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1">
               {categoryName} à {cityName}
             </h1>
-            <p className="text-slate mt-2 text-sm font-medium">
+            <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
               Offres en déstockage disponibles en magasin dans cette ville.
             </p>
           </div>
@@ -81,6 +84,18 @@ function CityOffersView({
           />
         </div>
 
+        <div className="no-scrollbar flex items-center gap-1.5 overflow-x-auto">
+          <span className="font-label-md text-label-md bg-primary-container text-on-primary shrink-0 rounded-full px-3.5 py-1.5 font-bold">
+            {categoryName}
+          </span>
+          <Link
+            href="/recherche"
+            className="font-label-md text-label-md bg-surface-container-low text-on-surface-variant hover:bg-surface-container shrink-0 rounded-full px-3.5 py-1.5"
+          >
+            Toutes les offres
+          </Link>
+        </div>
+
         {located.length === 0 ? (
           <EmptyState
             title="Aucune offre dans cette catégorie"
@@ -89,7 +104,7 @@ function CityOffersView({
             actionLabel="Élargir la recherche"
           />
         ) : (
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {located.map((offer) => (
               <li key={offer.id}>
                 <OfferCard
@@ -100,15 +115,17 @@ function CityOffersView({
                     lng,
                   })}
                   signedIn={signedIn}
-                  isProductFavorite={favoriteProductIds.includes(offer.productId)}
+                  isProductFavorite={favoriteProductIds.includes(
+                    offer.productId,
+                  )}
                   loginHref={loginHref}
                 />
               </li>
             ))}
           </ul>
         )}
-      </section>
-    </main>
+      </BuyerSection>
+    </BuyerMain>
   );
 }
 

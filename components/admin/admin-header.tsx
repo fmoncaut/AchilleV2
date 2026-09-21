@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import { signOutAction } from "@/app/compte/actions";
+import { MaterialIcon } from "@/components/material-icon";
+import { Button } from "@/components/ui/button";
 
 type AdminHeaderProps = {
   merchantName: string;
@@ -9,38 +11,33 @@ type AdminHeaderProps = {
 
 export function AdminHeader({ merchantName, showOffers }: AdminHeaderProps) {
   return (
-    <div className="bg-muted ring-border w-full ring-1 ring-inset">
-      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-navy text-sm font-semibold">
+    <div className="bg-surface-container-lowest shadow-navy-soft">
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <p className="font-headline-sm text-primary-container flex items-center gap-2 text-[16px] font-bold">
+          <MaterialIcon
+            name="storefront"
+            className="text-secondary-container text-[20px]"
+          />
           Back-office · {merchantName}
         </p>
-        <nav className="flex flex-wrap items-center gap-4 text-sm font-semibold">
+        <nav className="flex flex-wrap items-center gap-2">
           {showOffers ? (
             <>
-              <Link
-                href="/admin/offres"
-                className="text-navy underline-offset-4 hover:underline"
-              >
-                Offres
-              </Link>
-              <Link
-                href="/admin/offres/import"
-                className="text-navy underline-offset-4 hover:underline"
-              >
-                Import CSV
-              </Link>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/admin/offres">Offres</Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/admin/offres/import">Import CSV</Link>
+              </Button>
             </>
           ) : null}
-          <Link
-            href="/admin/renvois"
-            className="text-navy underline-offset-4 hover:underline"
-          >
-            Renvois
-          </Link>
+          <Button asChild variant="ghost" size="sm">
+            <Link href="/admin/renvois">Renvois</Link>
+          </Button>
           <form action={signOutAction}>
-            <button type="submit" className="text-navy underline-offset-4 hover:underline">
+            <Button type="submit" variant="outline" size="sm">
               Déconnexion
-            </button>
+            </Button>
           </form>
         </nav>
       </div>

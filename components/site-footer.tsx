@@ -3,7 +3,7 @@ import Link from "next/link";
 export function SiteFooter() {
   return (
     <footer className="bg-surface-container-low mt-auto w-full">
-      <div className="mx-auto flex max-w-5xl flex-col gap-4 px-6 py-8 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto flex max-w-[1680px] flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
         <p className="font-body-sm text-body-sm text-on-surface-variant">
           <span className="font-headline-sm text-headline-sm text-primary-container font-bold">
             Achille

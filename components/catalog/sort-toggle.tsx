@@ -19,20 +19,22 @@ export function SortToggle({
     <div
       role="group"
       aria-label="Trier les offres"
-      className="bg-muted ring-border inline-flex rounded-xl p-1 ring-1"
+      className="bg-surface-container-low inline-flex rounded-full p-1 shadow-inner"
     >
       <Link
         href={prixHref}
         className={cn(
-          "rounded-lg px-4 py-2 text-sm font-semibold",
-          current === "prix" ? "bg-navy text-paper" : "text-navy hover:bg-card",
+          "font-label-md text-label-md rounded-full px-3.5 py-1.5",
+          current === "prix"
+            ? "bg-primary-container text-on-primary shadow-navy-soft font-bold"
+            : "text-on-surface-variant hover:text-on-surface",
         )}
       >
         Prix
       </Link>
       {distanceDisabled ? (
         <span
-          className="text-slate cursor-not-allowed rounded-lg px-4 py-2 text-sm font-semibold"
+          className="font-label-md text-label-md text-outline cursor-not-allowed rounded-full px-3.5 py-1.5"
           title="Indiquez une localisation pour trier par distance"
         >
           Distance
@@ -41,10 +43,10 @@ export function SortToggle({
         <Link
           href={distanceHref}
           className={cn(
-            "rounded-lg px-4 py-2 text-sm font-semibold",
+            "font-label-md text-label-md rounded-full px-3.5 py-1.5",
             current === "distance"
-              ? "bg-navy text-paper"
-              : "text-navy hover:bg-card",
+              ? "bg-primary-container text-on-primary shadow-navy-soft font-bold"
+              : "text-on-surface-variant hover:text-on-surface",
           )}
         >
           Distance

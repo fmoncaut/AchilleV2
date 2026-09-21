@@ -1,10 +1,14 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
 import { FavoriteButton } from "@/components/favorite-button";
+import { ProductImage } from "@/components/product-image";
+import { EmptyState } from "@/components/search/empty-state";
 import { auth } from "@/auth";
 import { listFavoritesForUser } from "@/lib/favorites";
 import { loginWithReturn, magasinPath, offerPath } from "@/lib/urls";
+import { cn } from "@/lib/utils";
 
 export const metadata = {
   title: "Mes favoris — Achille",
@@ -32,21 +36,23 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
   const loginHref = loginWithReturn("/compte/favoris");
 
   return (
-    <main className="bg-paper flex flex-1 flex-col">
-      <section className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-6 py-10">
+    <BuyerMain>
+      <BuyerSection className="flex flex-1 flex-col gap-6 py-10">
         <div>
-          <p className="text-orange text-sm font-semibold tracking-wide uppercase">
+          <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
             Compte
           </p>
-          <h1 className="text-navy mt-2 text-3xl">Mes favoris</h1>
-          <p className="text-slate mt-2 text-sm font-medium">
+          <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-2 tracking-tight">
+            Mes favoris
+          </h1>
+          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
             Produits et magasins enregistrés sur votre compte — rien n’est
             partagé avec d’autres utilisateurs.
           </p>
         </div>
 
         <nav
-          className="bg-muted ring-border inline-flex w-fit rounded-xl p-1 ring-1"
+          className="bg-surface-container-low inline-flex w-fit rounded-full p-1"
           aria-label="Type de favoris"
         >
           <TabLink href="/compte/favoris" active={onglet === "produits"}>
@@ -62,15 +68,17 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
 
         {onglet === "produits" ? (
           products.length === 0 ? (
-            <EmptyFavorites
+            <EmptyState
               title="Aucun produit favori"
               description="Ajoutez une offre depuis une fiche ou une carte, après connexion."
+              actionHref="/recherche"
+              actionLabel="Voir les offres"
             />
           ) : (
             <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {products.map((product) => (
                 <li key={product.id}>
-                  <article className="bg-card ring-border relative overflow-hidden rounded-2xl shadow-sm ring-1">
+                  <article className="bg-surface-container-lowest shadow-navy-soft relative overflow-hidden rounded-2xl">
                     <div className="absolute top-3 right-3 z-10">
                       <FavoriteButton
                         kind="product"
@@ -85,25 +93,16 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
                       href={offerPath(product.slug)}
                       className="flex h-full flex-col outline-none"
                     >
-                      <div className="bg-muted aspect-[4/3] overflow-hidden">
-                        {product.imageUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={product.imageUrl}
-                            alt=""
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <div className="bg-navy text-orange flex h-full w-full items-center justify-center text-3xl font-bold">
-                            {product.name.slice(0, 1)}
-                          </div>
-                        )}
-                      </div>
+                      <ProductImage
+                        src={product.imageUrl}
+                        name={product.name}
+                        variant="card"
+                      />
                       <div className="flex flex-1 flex-col gap-1 p-4">
-                        <p className="text-orange text-xs font-semibold tracking-wide uppercase">
+                        <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
                           {product.brand?.name ?? "Produit"}
                         </p>
-                        <h2 className="text-navy text-base font-bold">
+                        <h2 className="font-headline-sm text-primary-container text-[16px] leading-tight">
                           {product.name}
                         </h2>
                       </div>
@@ -114,15 +113,17 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
             </ul>
           )
         ) : poses.length === 0 ? (
-          <EmptyFavorites
+          <EmptyState
             title="Aucun magasin favori"
             description="Enregistrez un point de vente depuis sa fiche magasin."
+            actionHref="/recherche"
+            actionLabel="Voir les offres"
           />
         ) : (
           <ul className="grid gap-4 sm:grid-cols-2">
             {poses.map((pos) => (
               <li key={pos.id}>
-                <article className="bg-card ring-border relative rounded-2xl p-5 shadow-sm ring-1">
+                <article className="bg-surface-container-lowest shadow-navy-soft relative rounded-2xl p-5">
                   <div className="absolute top-3 right-3">
                     <FavoriteButton
                       kind="pos"
@@ -133,11 +134,13 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
                       variant="icon"
                     />
                   </div>
-                  <p className="text-orange pr-12 text-sm font-semibold tracking-wide uppercase">
+                  <p className="font-label-xs text-label-xs text-secondary pr-12 font-extrabold tracking-wider uppercase">
                     {pos.merchant.name}
                   </p>
-                  <h2 className="text-navy mt-1 text-xl font-bold">{pos.name}</h2>
-                  <p className="text-slate mt-2 text-sm font-medium">
+                  <h2 className="font-headline-sm text-headline-sm text-primary-container mt-1">
+                    {pos.name}
+                  </h2>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
                     {[pos.address, [pos.postalCode, pos.city].filter(Boolean).join(" ")]
                       .filter(Boolean)
                       .join(", ") || "Adresse non renseignée"}
@@ -145,7 +148,7 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
                   <p className="mt-4">
                     <Link
                       href={magasinPath(pos.slug)}
-                      className="text-navy text-sm font-bold underline-offset-4 hover:underline"
+                      className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
                     >
                       Voir le magasin
                     </Link>
@@ -159,13 +162,13 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
         <p>
           <Link
             href="/compte"
-            className="text-navy text-sm font-semibold underline-offset-4 hover:underline"
+            className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
           >
             Retour au compte
           </Link>
         </p>
-      </section>
-    </main>
+      </BuyerSection>
+    </BuyerMain>
   );
 }
 
@@ -181,36 +184,14 @@ function TabLink({
   return (
     <Link
       href={href}
-      className={
+      className={cn(
+        "font-label-md text-label-md rounded-full px-4 py-2 font-bold",
         active
-          ? "bg-navy text-paper rounded-lg px-4 py-2 text-sm font-semibold"
-          : "text-navy rounded-lg px-4 py-2 text-sm font-semibold"
-      }
+          ? "bg-primary-container text-on-primary shadow-navy-soft"
+          : "text-primary-container",
+      )}
     >
       {children}
     </Link>
-  );
-}
-
-function EmptyFavorites({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="bg-card ring-border rounded-2xl p-8 text-center ring-1">
-      <h2 className="text-navy text-xl font-bold">{title}</h2>
-      <p className="text-slate mt-2 text-sm font-medium">{description}</p>
-      <p className="mt-6">
-        <Link
-          href="/recherche"
-          className="bg-orange text-navy inline-flex h-11 items-center rounded-xl px-6 text-sm font-bold"
-        >
-          Voir les offres
-        </Link>
-      </p>
-    </div>
   );
 }

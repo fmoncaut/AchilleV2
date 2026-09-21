@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 
 import { auth } from "@/auth";
 import { AdminHeader } from "@/components/admin/admin-header";
+import { Button } from "@/components/ui/button";
 import { canManageOffers, getDashboardActor } from "@/lib/admin/actor";
 
 export const dynamic = "force-dynamic";
@@ -26,23 +27,22 @@ export default async function AdminLayout({
   const actor = await getDashboardActor();
   if (!actor) {
     return (
-      <main className="bg-paper flex flex-1 flex-col">
+      <main className="bg-background flex flex-1 flex-col">
         <section className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center px-6 py-16 text-center">
-          <p className="text-orange text-sm font-semibold tracking-wide uppercase">
+          <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
             Accès restreint
           </p>
-          <h1 className="text-navy mt-3 text-3xl">Back-office enseigne</h1>
-          <p className="text-slate mt-4 text-base font-medium">
+          <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-3">
+            Back-office enseigne
+          </h1>
+          <p className="font-body-md text-body-md text-on-surface-variant mt-4">
             Ce compte n’est pas rattaché à une enseigne (rôle MERCHANT et
             merchantId). La vitrine reste accessible.
           </p>
           <p className="mt-8">
-            <Link
-              href="/compte"
-              className="bg-orange text-navy inline-flex h-11 items-center rounded-xl px-6 text-sm font-bold"
-            >
-              Retour au compte
-            </Link>
+            <Button asChild size="lg">
+              <Link href="/compte">Retour au compte</Link>
+            </Button>
           </p>
         </section>
       </main>
@@ -50,7 +50,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="bg-paper flex flex-1 flex-col">
+    <div className="bg-background flex flex-1 flex-col">
       <AdminHeader
         merchantName={actor.merchantName ?? "Administration"}
         showOffers={canManageOffers(actor)}

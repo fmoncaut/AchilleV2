@@ -19,8 +19,8 @@ export const manrope = Manrope({
 export const materialSymbols = localFont({
   src: "../app/fonts/material-symbols-outlined.woff2",
   variable: "--font-material-symbols",
-  display: "swap",
-  preload: false,
+  display: "block",
+  preload: true,
   adjustFontFallback: false,
   weight: "100 700",
 });

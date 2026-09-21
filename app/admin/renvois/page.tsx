@@ -1,10 +1,18 @@
 import Link from "next/link";
 
 import {
+  AdminCard,
+  AdminKicker,
+  AdminMain,
+  AdminTable,
+  AdminThead,
+} from "@/components/admin/admin-shell";
+import {
   clicksScopeMerchantId,
   requireDashboardActor,
 } from "@/lib/admin/actor";
 import { getClickDashboard, parseClickPeriod } from "@/lib/admin/clicks";
+import { cn } from "@/lib/utils";
 
 export const metadata = {
   title: "Renvois | Back-office Achille",
@@ -48,16 +56,18 @@ export default async function AdminRenvoisPage({
   const empty = dashboard.total === 0;
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-6 py-8">
+    <AdminMain>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-orange text-sm font-semibold tracking-wide uppercase">
+          <AdminKicker>
             {actor.role === "ADMIN"
               ? "Toutes les enseignes"
               : actor.merchantName}
-          </p>
-          <h1 className="text-navy mt-1 text-3xl">Renvois vers les marchands</h1>
-          <p className="text-slate mt-2 text-sm font-medium">
+          </AdminKicker>
+          <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
+            Renvois vers les marchands
+          </h1>
+          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
             Clics trackés sur « Voir l’offre chez le marchand » — {periodLabel}.
             Aucun paiement chez Achille.
           </p>
@@ -68,122 +78,133 @@ export default async function AdminRenvoisPage({
         </div>
       </div>
 
-      <section className="bg-card ring-border rounded-2xl p-6 ring-1">
-        <p className="text-slate text-sm font-semibold tracking-wide uppercase">
+      <AdminCard>
+        <p className="font-label-xs text-label-xs text-on-surface-variant font-extrabold tracking-wider uppercase">
           Total
         </p>
-        <p className="text-navy mt-1 text-4xl font-bold">
+        <p className="font-display text-primary-container mt-1 text-4xl font-extrabold">
           {formatCount(dashboard.total)}
         </p>
-        <p className="text-slate mt-1 text-sm font-medium">
+        <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
           renvoi{dashboard.total > 1 ? "s" : ""} sur la période
         </p>
-      </section>
+      </AdminCard>
 
       {empty ? (
-        <div className="bg-card ring-border rounded-2xl p-8 text-center ring-1">
-          <h2 className="text-navy text-xl font-bold">Aucun renvoi</h2>
-          <p className="text-slate mt-2 text-sm font-medium">
+        <AdminCard className="text-center">
+          <h2 className="font-headline-sm text-headline-sm text-primary-container">
+            Aucun renvoi
+          </h2>
+          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
             Aucun clic tracké sur cette période
-            {actor.role === "MERCHANT"
-              ? " pour votre enseigne"
-              : ""}
-            . Les renvois apparaissent après un clic sur le bouton marchand d’une
+            {actor.role === "MERCHANT" ? " pour votre enseigne" : ""}. Les
+            renvois apparaissent après un clic sur le bouton marchand d’une
             fiche offre.
           </p>
-        </div>
+        </AdminCard>
       ) : (
         <>
           <section className="flex flex-col gap-3">
-            <h2 className="text-navy text-xl font-bold">Par jour</h2>
-            <div className="bg-card ring-border overflow-x-auto rounded-2xl ring-1">
-              <table className="w-full min-w-[20rem] text-left text-sm">
-                <thead className="bg-muted text-navy">
-                  <tr>
-                    <th className="px-4 py-3 font-semibold">Jour</th>
-                    <th className="px-4 py-3 font-semibold">Renvois</th>
+            <h2 className="font-headline-sm text-headline-sm text-primary-container">
+              Par jour
+            </h2>
+            <AdminTable className="min-w-[20rem]">
+              <AdminThead>
+                <tr>
+                  <th className="px-4 py-3">Jour</th>
+                  <th className="px-4 py-3">Renvois</th>
+                </tr>
+              </AdminThead>
+              <tbody>
+                {dashboard.byDay.map((row) => (
+                  <tr
+                    key={String(row.day)}
+                    className="border-surface-container-high border-t"
+                  >
+                    <td className="font-body-sm text-primary-container px-4 py-3">
+                      {formatDay(row.day)}
+                    </td>
+                    <td className="font-headline-sm text-primary-container px-4 py-3 font-bold">
+                      {formatCount(row.count)}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {dashboard.byDay.map((row) => (
-                    <tr key={String(row.day)} className="border-border border-t">
-                      <td className="text-navy px-4 py-3 font-medium">
-                        {formatDay(row.day)}
-                      </td>
-                      <td className="text-navy px-4 py-3 font-bold">
-                        {formatCount(row.count)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </AdminTable>
           </section>
 
           <section className="flex flex-col gap-3">
-            <h2 className="text-navy text-xl font-bold">Par enseigne</h2>
-            <div className="bg-card ring-border overflow-x-auto rounded-2xl ring-1">
-              <table className="w-full min-w-[20rem] text-left text-sm">
-                <thead className="bg-muted text-navy">
-                  <tr>
-                    <th className="px-4 py-3 font-semibold">Enseigne</th>
-                    <th className="px-4 py-3 font-semibold">Renvois</th>
+            <h2 className="font-headline-sm text-headline-sm text-primary-container">
+              Par enseigne
+            </h2>
+            <AdminTable className="min-w-[20rem]">
+              <AdminThead>
+                <tr>
+                  <th className="px-4 py-3">Enseigne</th>
+                  <th className="px-4 py-3">Renvois</th>
+                </tr>
+              </AdminThead>
+              <tbody>
+                {dashboard.byMerchant.map((row) => (
+                  <tr
+                    key={row.merchantId}
+                    className="border-surface-container-high border-t"
+                  >
+                    <td className="font-body-sm text-primary-container px-4 py-3">
+                      {row.merchantName}
+                    </td>
+                    <td className="font-headline-sm text-primary-container px-4 py-3 font-bold">
+                      {formatCount(row.count)}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {dashboard.byMerchant.map((row) => (
-                    <tr key={row.merchantId} className="border-border border-t">
-                      <td className="text-navy px-4 py-3 font-medium">
+                ))}
+              </tbody>
+            </AdminTable>
+          </section>
+
+          <section className="flex flex-col gap-3">
+            <h2 className="font-headline-sm text-headline-sm text-primary-container">
+              Par offre
+            </h2>
+            <AdminTable className="min-w-[28rem]">
+              <AdminThead>
+                <tr>
+                  {actor.role === "ADMIN" ? (
+                    <th className="px-4 py-3">Enseigne</th>
+                  ) : null}
+                  <th className="px-4 py-3">Offre</th>
+                  <th className="px-4 py-3">Magasin</th>
+                  <th className="px-4 py-3">Renvois</th>
+                </tr>
+              </AdminThead>
+              <tbody>
+                {dashboard.byOffer.map((row) => (
+                  <tr
+                    key={row.offerId}
+                    className="border-surface-container-high border-t"
+                  >
+                    {actor.role === "ADMIN" ? (
+                      <td className="font-body-sm text-primary-container px-4 py-3">
                         {row.merchantName}
                       </td>
-                      <td className="text-navy px-4 py-3 font-bold">
-                        {formatCount(row.count)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <section className="flex flex-col gap-3">
-            <h2 className="text-navy text-xl font-bold">Par offre</h2>
-            <div className="bg-card ring-border overflow-x-auto rounded-2xl ring-1">
-              <table className="w-full min-w-[28rem] text-left text-sm">
-                <thead className="bg-muted text-navy">
-                  <tr>
-                    {actor.role === "ADMIN" ? (
-                      <th className="px-4 py-3 font-semibold">Enseigne</th>
                     ) : null}
-                    <th className="px-4 py-3 font-semibold">Offre</th>
-                    <th className="px-4 py-3 font-semibold">Magasin</th>
-                    <th className="px-4 py-3 font-semibold">Renvois</th>
+                    <td className="font-body-sm text-primary-container px-4 py-3">
+                      {row.productName}
+                    </td>
+                    <td className="font-body-sm text-on-surface-variant px-4 py-3">
+                      {row.posName}
+                    </td>
+                    <td className="font-headline-sm text-primary-container px-4 py-3 font-bold">
+                      {formatCount(row.count)}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {dashboard.byOffer.map((row) => (
-                    <tr key={row.offerId} className="border-border border-t">
-                      {actor.role === "ADMIN" ? (
-                        <td className="text-navy px-4 py-3 font-medium">
-                          {row.merchantName}
-                        </td>
-                      ) : null}
-                      <td className="text-navy px-4 py-3 font-medium">
-                        {row.productName}
-                      </td>
-                      <td className="text-slate px-4 py-3">{row.posName}</td>
-                      <td className="text-navy px-4 py-3 font-bold">
-                        {formatCount(row.count)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </AdminTable>
           </section>
         </>
       )}
-    </main>
+    </AdminMain>
   );
 }
 
@@ -198,11 +219,12 @@ function PeriodLink({
   return (
     <Link
       href={`/admin/renvois?jours=${days}`}
-      className={
+      className={cn(
+        "font-label-md text-label-md inline-flex h-11 items-center rounded-full px-5 font-bold",
         active
-          ? "bg-orange text-navy inline-flex h-11 items-center rounded-xl px-5 text-sm font-bold"
-          : "text-navy ring-border inline-flex h-11 items-center rounded-xl px-5 text-sm font-bold ring-1"
-      }
+          ? "bg-primary-container text-on-primary shadow-navy-soft"
+          : "bg-surface-container-lowest text-primary-container ring-outline-variant ring-1",
+      )}
     >
       {days} jours
     </Link>

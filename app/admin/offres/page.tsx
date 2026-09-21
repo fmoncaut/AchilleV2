@@ -1,6 +1,17 @@
 import Link from "next/link";
 
 import { DeleteOfferButton } from "@/components/admin/delete-offer-button";
+import {
+  AdminCard,
+  AdminKicker,
+  AdminMain,
+  AdminTable,
+  AdminThead,
+  adminFieldClass,
+  adminLabelClass,
+} from "@/components/admin/admin-shell";
+import { ProductImage } from "@/components/product-image";
+import { Button } from "@/components/ui/button";
 import { requireAdminActor } from "@/lib/admin/actor";
 import {
   listCategories,
@@ -45,172 +56,165 @@ export default async function AdminOffresPage({ searchParams }: OffresPageProps)
   ]);
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-6 py-8">
+    <AdminMain>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-orange text-sm font-semibold tracking-wide uppercase">
-            {actor.merchantName}
-          </p>
-          <h1 className="text-navy mt-1 text-3xl">Offres</h1>
+          <AdminKicker>{actor.merchantName}</AdminKicker>
+          <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
+            Offres
+          </h1>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Link
-            href="/admin/offres/nouveau"
-            className="bg-orange text-navy inline-flex h-11 items-center rounded-xl px-5 text-sm font-bold"
-          >
-            Nouvelle offre
-          </Link>
-          <Link
-            href="/admin/offres/import"
-            className="text-navy ring-border inline-flex h-11 items-center rounded-xl px-5 text-sm font-bold ring-1"
-          >
-            Import CSV
-          </Link>
+          <Button asChild>
+            <Link href="/admin/offres/nouveau">Nouvelle offre</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/admin/offres/import">Import CSV</Link>
+          </Button>
         </div>
       </div>
 
-      <form className="bg-card ring-border grid gap-3 rounded-2xl p-4 ring-1 sm:grid-cols-4">
-        <label className="text-navy flex flex-col gap-1 text-sm font-semibold">
-          Recherche
-          <input
-            name="q"
-            defaultValue={filters.q}
-            placeholder="Nom ou EAN"
-            className="border-border h-11 rounded-xl border px-3 font-medium"
-          />
-        </label>
-        <label className="text-navy flex flex-col gap-1 text-sm font-semibold">
-          Statut
-          <select
-            name="statut"
-            defaultValue={filters.statut}
-            className="border-border h-11 rounded-xl border px-3 font-medium"
-          >
-            <option value="tous">Tous</option>
-            <option value="actif">En ligne</option>
-            <option value="inactif">Hors ligne</option>
-          </select>
-        </label>
-        <label className="text-navy flex flex-col gap-1 text-sm font-semibold">
-          Catégorie
-          <select
-            name="cat"
-            defaultValue={filters.categoryId}
-            className="border-border h-11 rounded-xl border px-3 font-medium"
-          >
-            <option value="">Toutes</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <div className="flex items-end">
-          <button
-            type="submit"
-            className="bg-navy text-paper h-11 w-full rounded-xl px-4 text-sm font-bold"
-          >
-            Filtrer
-          </button>
-        </div>
-      </form>
+      <AdminCard>
+        <form className="grid gap-3 sm:grid-cols-4">
+          <label className={adminLabelClass}>
+            Recherche
+            <input
+              name="q"
+              defaultValue={filters.q}
+              placeholder="Nom ou EAN"
+              className={adminFieldClass}
+            />
+          </label>
+          <label className={adminLabelClass}>
+            Statut
+            <select
+              name="statut"
+              defaultValue={filters.statut}
+              className={adminFieldClass}
+            >
+              <option value="tous">Tous</option>
+              <option value="actif">En ligne</option>
+              <option value="inactif">Hors ligne</option>
+            </select>
+          </label>
+          <label className={adminLabelClass}>
+            Catégorie
+            <select
+              name="cat"
+              defaultValue={filters.categoryId}
+              className={adminFieldClass}
+            >
+              <option value="">Toutes</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="flex items-end">
+            <Button type="submit" variant="secondary" className="w-full">
+              Filtrer
+            </Button>
+          </div>
+        </form>
+      </AdminCard>
 
       {offers.length === 0 ? (
-        <p className="text-slate text-sm font-medium">
+        <p className="font-body-sm text-body-sm text-on-surface-variant">
           Aucune offre pour ces filtres. Créez-en une ou importez un CSV.
         </p>
       ) : (
-        <div className="ring-border overflow-x-auto rounded-2xl ring-1">
-          <table className="w-full min-w-[64rem] text-left text-sm">
-            <thead className="bg-muted text-navy">
-              <tr>
-                <th className="px-3 py-3">Image</th>
-                <th className="px-3 py-3">EAN</th>
-                <th className="px-3 py-3">Nom</th>
-                <th className="px-3 py-3">Prix remisé</th>
-                <th className="px-3 py-3">Référence</th>
-                <th className="px-3 py-3">Stock</th>
-                <th className="px-3 py-3">État</th>
-                <th className="px-3 py-3">Catégorie</th>
-                <th className="px-3 py-3">En ligne</th>
-                <th className="px-3 py-3">Modifié</th>
-                <th className="px-3 py-3">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {offers.map((offer) => (
-                <tr key={offer.id} className="border-border border-t">
-                  <td className="px-3 py-2">
-                    {offer.productImageUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={offer.productImageUrl}
-                        alt=""
-                        className="size-12 rounded-lg object-cover"
-                      />
-                    ) : (
-                      <span className="bg-navy text-orange flex size-12 items-center justify-center rounded-lg font-bold">
-                        {offer.productName.slice(0, 1)}
-                      </span>
-                    )}
-                  </td>
-                  <td className="text-slate px-3 py-2 font-medium">
-                    {offer.productEan ?? "—"}
-                  </td>
-                  <td className="text-navy px-3 py-2 font-semibold">
+        <AdminTable className="min-w-[64rem]">
+          <AdminThead>
+            <tr>
+              <th className="px-3 py-3">Image</th>
+              <th className="px-3 py-3">EAN</th>
+              <th className="px-3 py-3">Nom</th>
+              <th className="px-3 py-3">Prix remisé</th>
+              <th className="px-3 py-3">Référence</th>
+              <th className="px-3 py-3">Stock</th>
+              <th className="px-3 py-3">État</th>
+              <th className="px-3 py-3">Catégorie</th>
+              <th className="px-3 py-3">En ligne</th>
+              <th className="px-3 py-3">Modifié</th>
+              <th className="px-3 py-3">Actions</th>
+            </tr>
+          </AdminThead>
+          <tbody>
+            {offers.map((offer) => (
+              <tr
+                key={offer.id}
+                className="border-surface-container-high border-t"
+              >
+                <td className="px-3 py-2">
+                  <ProductImage
+                    src={offer.productImageUrl}
+                    name={offer.productName}
+                    variant="thumb"
+                  />
+                </td>
+                <td className="font-body-sm text-on-surface-variant px-3 py-2">
+                  {offer.productEan ?? "—"}
+                </td>
+                <td className="px-3 py-2">
+                  <Link
+                    href={`/admin/offres/${offer.id}`}
+                    className="font-headline-sm text-primary-container text-[15px] underline-offset-4 hover:underline"
+                  >
+                    {offer.productName}
+                  </Link>
+                  <p className="font-body-sm text-on-surface-variant text-xs">
+                    {offer.posName}
+                  </p>
+                </td>
+                <td className="font-headline-sm text-secondary-container px-3 py-2 font-extrabold">
+                  {formatEur(offer.priceRemise)}
+                </td>
+                <td className="font-body-sm text-on-surface-variant px-3 py-2 line-through">
+                  {offer.priceReference ? formatEur(offer.priceReference) : "—"}
+                </td>
+                <td className="font-body-sm px-3 py-2">{offer.stock}</td>
+                <td className="font-body-sm px-3 py-2">
+                  {conditionLabel(offer.condition)}
+                </td>
+                <td className="font-body-sm px-3 py-2">
+                  {offer.categoryName ?? "—"}
+                </td>
+                <td className="px-3 py-2">
+                  <form action={toggleOfferAction}>
+                    <input type="hidden" name="id" value={offer.id} />
+                    <button
+                      type="submit"
+                      className={
+                        offer.isOnline
+                          ? "font-label-xs text-label-xs bg-tertiary-fixed text-on-tertiary-container rounded-full px-2.5 py-1 font-bold"
+                          : "font-label-xs text-label-xs bg-surface-container text-on-surface-variant rounded-full px-2.5 py-1 font-bold"
+                      }
+                    >
+                      {offer.isOnline ? "Oui" : "Non"}
+                    </button>
+                  </form>
+                </td>
+                <td className="font-body-sm text-on-surface-variant px-3 py-2 whitespace-nowrap">
+                  {formatUpdatedAt(offer.updatedAt)}
+                </td>
+                <td className="px-3 py-2">
+                  <div className="flex flex-col items-start gap-2">
                     <Link
                       href={`/admin/offres/${offer.id}`}
-                      className="underline-offset-4 hover:underline"
+                      className="font-label-md text-primary-container text-xs font-bold underline-offset-4 hover:underline"
                     >
-                      {offer.productName}
+                      Éditer
                     </Link>
-                    <p className="text-slate text-xs font-medium">{offer.posName}</p>
-                  </td>
-                  <td className="text-orange px-3 py-2 font-bold">
-                    {formatEur(offer.priceRemise)}
-                  </td>
-                  <td className="text-slate px-3 py-2 line-through">
-                    {offer.priceReference ? formatEur(offer.priceReference) : "—"}
-                  </td>
-                  <td className="px-3 py-2">{offer.stock}</td>
-                  <td className="px-3 py-2">{conditionLabel(offer.condition)}</td>
-                  <td className="px-3 py-2">{offer.categoryName ?? "—"}</td>
-                  <td className="px-3 py-2">
-                    <form action={toggleOfferAction}>
-                      <input type="hidden" name="id" value={offer.id} />
-                      <button
-                        type="submit"
-                        className={
-                          offer.isOnline
-                            ? "bg-orange text-navy rounded-full px-2.5 py-1 text-xs font-bold"
-                            : "bg-muted text-slate rounded-full px-2.5 py-1 text-xs font-bold"
-                        }
-                      >
-                        {offer.isOnline ? "Oui" : "Non"}
-                      </button>
-                    </form>
-                  </td>
-                  <td className="text-slate px-3 py-2 whitespace-nowrap">
-                    {formatUpdatedAt(offer.updatedAt)}
-                  </td>
-                  <td className="px-3 py-2">
-                    <div className="flex flex-col gap-2">
-                      <Link
-                        href={`/admin/offres/${offer.id}`}
-                        className="text-navy text-xs font-semibold underline-offset-4 hover:underline"
-                      >
-                        Éditer
-                      </Link>
-                      <DeleteOfferButton offerId={offer.id} />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    <DeleteOfferButton offerId={offer.id} />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </AdminTable>
       )}
-    </main>
+    </AdminMain>
   );
 }

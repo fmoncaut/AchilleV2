@@ -2,6 +2,11 @@ import { notFound } from "next/navigation";
 
 import { DeleteOfferButton } from "@/components/admin/delete-offer-button";
 import { OfferForm } from "@/components/admin/offer-form";
+import {
+  AdminCard,
+  AdminKicker,
+  AdminMain,
+} from "@/components/admin/admin-shell";
 import { requireAdminActor } from "@/lib/admin/actor";
 import {
   getOfferForMerchant,
@@ -38,22 +43,22 @@ export default async function EditOffrePage({
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-6 py-8">
+    <AdminMain width="form">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-orange text-sm font-semibold tracking-wide uppercase">
-            {actor.merchantName}
-          </p>
-          <h1 className="text-navy mt-1 text-3xl">Éditer l’offre</h1>
+          <AdminKicker>{actor.merchantName}</AdminKicker>
+          <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
+            Éditer l’offre
+          </h1>
         </div>
         <DeleteOfferButton offerId={offer.id} />
       </div>
       {saved ? (
-        <p className="bg-orange/15 text-navy rounded-xl px-3 py-2 text-sm font-medium">
+        <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
           Offre enregistrée. Remise {offer.discountPct ?? "—"}&nbsp;%.
         </p>
       ) : null}
-      <div className="bg-card ring-border rounded-2xl p-6 ring-1">
+      <AdminCard>
         <OfferForm
           mode="edit"
           offerId={offer.id}
@@ -80,7 +85,7 @@ export default async function EditOffrePage({
             description: offer.product.description ?? "",
           }}
         />
-      </div>
-    </main>
+      </AdminCard>
+    </AdminMain>
   );
 }

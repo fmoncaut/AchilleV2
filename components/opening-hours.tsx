@@ -8,16 +8,18 @@ export function OpeningHoursList({ value }: OpeningHoursListProps) {
   const rows = parseOpeningHours(value);
   if (rows.length === 0) {
     return (
-      <p className="text-slate text-sm font-medium">Horaires non renseignés.</p>
+      <p className="font-body-sm text-body-sm text-on-surface-variant">
+        Horaires non renseignés.
+      </p>
     );
   }
 
   return (
-    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
+    <dl className="font-body-sm text-body-sm grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
       {rows.map((row) => (
         <div key={row.label} className="contents">
-          <dt className="text-navy font-semibold">{row.label}</dt>
-          <dd className="text-slate font-medium">{row.value}</dd>
+          <dt className="text-primary-container font-semibold">{row.label}</dt>
+          <dd className="text-on-surface-variant">{row.value}</dd>
         </div>
       ))}
     </dl>

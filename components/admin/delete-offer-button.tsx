@@ -14,7 +14,7 @@ export function DeleteOfferButton({ offerId }: { offerId: string }) {
       }}
     >
       <input type="hidden" name="id" value={offerId} />
-      <Button type="submit" variant="destructive" className="rounded-xl">
+      <Button type="submit" variant="destructive" size="sm">
         Retirer l’offre
       </Button>
     </form>

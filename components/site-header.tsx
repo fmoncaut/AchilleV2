@@ -13,7 +13,7 @@ export async function SiteHeader() {
 
   return (
     <header className="bg-surface-container-lowest/95 shadow-navy-soft sticky top-0 z-50 w-full backdrop-blur-md">
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-3">
+      <div className="mx-auto flex max-w-[1680px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-4">
           <Link
             href="/"
