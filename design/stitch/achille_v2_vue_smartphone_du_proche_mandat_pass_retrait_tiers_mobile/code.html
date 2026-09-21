@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-fixed-dim": "#abc9ed", "on-secondary-fixed": "#2c1600", "secondary-container": "#fe9800", "on-primary": "#ffffff", "primary-fixed": "#d0e4ff", "secondary-fixed": "#ffdcbd", "error-container": "#ffdad6", "on-background": "#191c1e", "primary-container": "#002642", "tertiary-container": "#002b1a", "secondary-fixed-dim": "#ffb86f", "on-secondary-container": "#643900", "tertiary-fixed-dim": "#72daa8", "inverse-primary": "#abc9ed", "primary": "#001020", "surface-container-low": "#f2f4f7", "on-error": "#ffffff", "surface-bright": "#f8f9fc", "on-secondary-fixed-variant": "#693c00", "on-tertiary-fixed-variant": "#005235", "on-error-container": "#93000a", "secondary": "#8a5100", "on-secondary": "#ffffff", "on-primary-fixed": "#001d34", "surface-container-highest": "#e0e3e6", "surface-tint": "#436180", "background": "#f8f9fc", "tertiary": "#001309", "inverse-on-surface": "#eff1f4", "surface-variant": "#e0e3e6", "on-tertiary": "#ffffff", "on-tertiary-fixed": "#002113", "tertiary-fixed": "#8ef7c2", "outline-variant": "#c3c7ce", "surface-dim": "#d8dadd", "surface": "#f8f9fc", "on-primary-fixed-variant": "#2a4967", "inverse-surface": "#2d3133", "outline": "#73777e", "on-surface": "#191c1e", "on-tertiary-container": "#2f9d70", "surface-container-high": "#e6e8eb", "surface-container": "#eceef1", "surface-container-lowest": "#ffffff", "error": "#ba1a1a", "on-surface-variant": "#43474d", "on-primary-container": "#708eaf" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-sm": "0.5rem", "space-md": "1rem", "space-xs": "0.25rem", "gutter-desktop": "1.5rem", "margin-desktop": "2rem", "space-lg": "1.5rem", "margin": "1rem", "gutter": "1rem", "space-xl": "2rem", "margin-tablet": "1.5rem" }, fontFamily: { "headline-lg-mobile": ["Bricolage Grotesque"], "headline-md": ["Bricolage Grotesque"], "body-md": ["Manrope"], "body-sm": ["Manrope"], "display-mobile": ["Bricolage Grotesque"], "label-xs": ["Manrope"], "label-lg": ["Manrope"], "display": ["Bricolage Grotesque"], "headline-sm": ["Bricolage Grotesque"], "price-hero": ["Bricolage Grotesque"], "price-card": ["Bricolage Grotesque"], "label-md": ["Manrope"], "headline-lg": ["Bricolage Grotesque"], "body-lg": ["Manrope"] }, fontSize: { "headline-lg-mobile": ["26px", { lineHeight: "32px", fontWeight: "700" }], "headline-md": ["24px", { lineHeight: "30px", fontWeight: "700" }], "body-md": ["15px", { lineHeight: "22px", fontWeight: "500" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "500" }], "display-mobile": ["34px", { lineHeight: "40px", fontWeight: "800" }], "label-xs": ["10px", { lineHeight: "12px", fontWeight: "800" }], "label-lg": ["14px", { lineHeight: "20px", fontWeight: "700" }], "display": ["48px", { lineHeight: "56px", fontWeight: "800" }], "headline-sm": ["20px", { lineHeight: "26px", fontWeight: "600" }], "price-hero": ["28px", { lineHeight: "32px", fontWeight: "800" }], "price-card": ["20px", { lineHeight: "24px", fontWeight: "800" }], "label-md": ["12px", { lineHeight: "16px", fontWeight: "700" }], "headline-lg": ["32px", { lineHeight: "38px", fontWeight: "700" }], "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-secondary-container text-[24px]">local_mall</span><span class="font-headline-sm text-headline-sm text-primary tracking-tight">Achille</span></div><div class="inline-flex items-center gap-1 bg-tertiary-container text-on-tertiary-container px-2.5 py-1 rounded-full"><span class="material-symbols-outlined text-[14px]">verified_user</span><span class="font-label-xs text-label-xs tracking-wider uppercase">Pass Tiers Sécurisé</span></div></div><div class="flex items-center gap-space-sm"><a aria-label="Assistance Magasin" class="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary" href="tel:"><span class="material-symbols-outlined text-[20px]">support_agent</span></a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-safe bg-surface min-h-screen"><div class="flex flex-col w-full pb-12">
+<!-- Top Trust & Handover Banner -->
+<div class="px-margin pt-space-md">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="inline-flex items-center gap-1.5 bg-tertiary-container text-on-tertiary-container px-2.5 py-1 rounded-full">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-xs text-label-xs uppercase tracking-wider">Mandat certifié conforme</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-xs text-label-xs">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+<span>Chiffrement SHA-256</span>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-secondary-fixed text-[22px]">assignment_turned_in</span>
+</div>
+<div class="flex flex-col">
+<p class="font-body-md text-body-md text-on-surface font-semibold">
+            Alexandre vous délègue son retrait
+          </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Commande déstockage chez <span class="font-semibold text-primary">Bricomarché Nice Ouest</span>.
+          </p>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[18px]">check_circle</span>
+<span class="font-label-sm text-on-surface font-medium">Solde à régler sur place</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-price-card text-price-card text-on-surface">0,00 €</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">(Déjà payé)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Hero Pass Ticket (Navy Container #002642) -->
+<div class="px-margin pt-space-md">
+<div class="bg-primary-container text-on-primary rounded-xl shadow-lg overflow-hidden relative">
+<!-- Decorative background watermark -->
+<div class="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-surface-tint/10 pointer-events-none"></div>
+<!-- Ticket Header -->
+<div class="p-space-md flex flex-col gap-space-sm relative z-10">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary-container text-[20px]">local_activity</span>
+<span class="font-label-xs text-label-xs uppercase tracking-widest text-primary-fixed-dim">Pass Retrait Délégué</span>
+</div>
+<span class="inline-flex items-center gap-1 bg-tertiary text-tertiary-fixed-dim px-2.5 py-0.5 rounded-full font-label-xs text-label-xs tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed animate-pulse"></span>
+            PROCURATION ACTIVE
+          </span>
+</div>
+<div class="pt-space-xs">
+<p class="font-label-xs text-label-xs uppercase tracking-wider text-primary-fixed-dim">Bénéficiaire désignée</p>
+<div class="flex items-center justify-between mt-0.5">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary">Camille Rochefort</h1>
+<div class="w-7 h-7 rounded-full bg-surface-container-lowest/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-fixed-dim text-[18px]">badge</span>
+</div>
+</div>
+<div class="inline-flex items-center gap-1.5 text-secondary-fixed text-label-xs font-label-xs mt-1 bg-on-secondary-container/40 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px]">id_card</span>
+<span>Pièce d’identité obligatoire au guichet</span>
+</div>
+</div>
+</div>
+<!-- Ticket Notch Divider -->
+<div class="relative flex items-center justify-between px-3">
+<div class="w-4 h-8 bg-surface rounded-r-full -ml-3"></div>
+<div class="flex-1 border-t-2 border-dashed border-primary-fixed-dim/30 mx-2"></div>
+<div class="w-4 h-8 bg-surface rounded-l-full -mr-3"></div>
+</div>
+<!-- Codes and Scannable Area -->
+<div class="p-space-md flex flex-col items-center gap-space-md relative z-10">
+<!-- Order info pill -->
+<div class="w-full flex items-center justify-between bg-primary/40 rounded-lg p-space-sm">
+<div>
+<span class="block font-label-xs text-label-xs text-primary-fixed-dim">Commande Achille</span>
+<span class="font-headline-sm text-headline-sm text-on-primary font-bold tracking-wide">#ACH-88492</span>
+</div>
+<div class="text-right">
+<span class="block font-label-xs text-label-xs text-secondary-fixed-dim">Code PIN Retrait</span>
+<span class="font-price-hero text-price-hero text-secondary-container tracking-widest">9243</span>
+</div>
+</div>
+<!-- High contrast white barcode/QR box for cashier laser gun -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-4 flex flex-col items-center gap-3 shadow-inner">
+<div class="flex items-center justify-between w-full px-1">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[16px]">qr_code_scanner</span>
+<span class="font-label-xs text-label-xs uppercase font-bold tracking-wider">Scanner Caisse</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-xs text-label-xs">
+<span class="material-symbols-outlined text-[14px] text-secondary-container">brightness_high</span>
+<span>Luminosité optimisée</span>
+</div>
+</div>
+<!-- Scalable Vector QR Code -->
+<div class="p-2 bg-surface-container-lowest rounded-lg shadow-sm">
+<svg class="w-44 h-44" fill="none" viewbox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#ffffff" height="140" width="140"></rect>
+<!-- Top-left finder -->
+<rect fill="#001020" height="36" rx="3" width="36" x="10" y="10"></rect>
+<rect fill="#ffffff" height="26" rx="1" width="26" x="15" y="15"></rect>
+<rect fill="#001020" height="16" rx="1" width="16" x="20" y="20"></rect>
+<!-- Top-right finder -->
+<rect fill="#001020" height="36" rx="3" width="36" x="94" y="10"></rect>
+<rect fill="#ffffff" height="26" rx="1" width="26" x="99" y="15"></rect>
+<rect fill="#001020" height="16" rx="1" width="16" x="104" y="20"></rect>
+<!-- Bottom-left finder -->
+<rect fill="#001020" height="36" rx="3" width="36" x="10" y="94"></rect>
+<rect fill="#ffffff" height="26" rx="1" width="26" x="15" y="99"></rect>
+<rect fill="#001020" height="16" rx="1" width="16" x="20" y="104"></rect>
+<!-- Custom Stylized Achille Data pattern -->
+<rect fill="#001020" height="12" width="6" x="52" y="12"></rect>
+<rect fill="#001020" height="6" width="6" x="64" y="12"></rect>
+<rect fill="#001020" height="6" width="12" x="76" y="12"></rect>
+<rect fill="#001020" height="6" width="12" x="52" y="30"></rect>
+<rect fill="#001020" height="6" width="18" x="70" y="24"></rect>
+<rect fill="#001020" height="12" width="6" x="76" y="36"></rect>
+<rect fill="#001020" height="6" width="12" x="12" y="52"></rect>
+<rect fill="#001020" height="18" width="6" x="30" y="52"></rect>
+<rect fill="#001020" height="18" width="6" x="12" y="64"></rect>
+<rect fill="#001020" height="6" width="12" x="24" y="70"></rect>
+<!-- Center branded node -->
+<rect fill="#fe9800" height="24" rx="4" width="24" x="58" y="58"></rect>
+<circle cx="70" cy="70" fill="#001020" r="6"></circle>
+<!-- Right data grid -->
+<rect fill="#001020" height="6" width="12" x="94" y="52"></rect>
+<rect fill="#001020" height="6" width="18" x="112" y="52"></rect>
+<rect fill="#001020" height="12" width="6" x="100" y="64"></rect>
+<rect fill="#001020" height="18" width="12" x="118" y="64"></rect>
+<rect fill="#001020" height="6" width="18" x="94" y="82"></rect>
+<!-- Bottom data grid -->
+<rect fill="#001020" height="18" width="6" x="52" y="94"></rect>
+<rect fill="#001020" height="6" width="18" x="64" y="100"></rect>
+<rect fill="#001020" height="18" width="12" x="70" y="112"></rect>
+<rect fill="#001020" height="6" width="12" x="52" y="124"></rect>
+<rect fill="#001020" height="12" width="12" x="94" y="94"></rect>
+<rect fill="#001020" height="6" width="18" x="112" y="100"></rect>
+<rect fill="#001020" height="6" width="24" x="94" y="118"></rect>
+<rect fill="#001020" height="18" width="6" x="124" y="112"></rect>
+</svg>
+</div>
+<!-- Barcode 128 graphic simulation -->
+<div class="w-full flex flex-col items-center gap-1 pt-1">
+<div class="h-10 w-full flex items-stretch justify-center gap-[2px]">
+<div class="w-[3px] bg-primary"></div>
+<div class="w-[1px] bg-transparent"></div>
+<div class="w-[2px] bg-primary"></div>
+<div class="w-[4px] bg-primary"></div>
+<div class="w-[2px] bg-transparent"></div>
+<div class="w-[1px] bg-primary"></div>
+<div class="w-[3px] bg-primary"></div>
+<div class="w-[1px] bg-transparent"></div>
+<div class="w-[4px] bg-primary"></div>
+<div class="w-[2px] bg-primary"></div>
+<div class="w-[2px] bg-transparent"></div>
+<div class="w-[3px] bg-primary"></div>
+<div class="w-[1px] bg-primary"></div>
+<div class="w-[2px] bg-transparent"></div>
+<div class="w-[4px] bg-primary"></div>
+<div class="w-[1px] bg-primary"></div>
+<div class="w-[3px] bg-transparent"></div>
+<div class="w-[2px] bg-primary"></div>
+<div class="w-[3px] bg-primary"></div>
+<div class="w-[2px] bg-transparent"></div>
+<div class="w-[4px] bg-primary"></div>
+<div class="w-[2px] bg-primary"></div>
+<div class="w-[1px] bg-transparent"></div>
+<div class="w-[3px] bg-primary"></div>
+<div class="w-[1px] bg-primary"></div>
+<div class="w-[2px] bg-transparent"></div>
+<div class="w-[3px] bg-primary"></div>
+<div class="w-[4px] bg-primary"></div>
+<div class="w-[1px] bg-transparent"></div>
+<div class="w-[2px] bg-primary"></div>
+<div class="w-[3px] bg-primary"></div>
+<div class="w-[2px] bg-transparent"></div>
+<div class="w-[1px] bg-primary"></div>
+<div class="w-[4px] bg-primary"></div>
+</div>
+<span class="font-mono text-[11px] text-on-surface-variant tracking-widest">ACH-88492-9243-FR</span>
+</div>
+</div>
+<!-- Expiration reminder pill -->
+<div class="w-full flex items-center justify-center gap-2 text-primary-fixed text-label-sm font-label-sm py-1">
+<span class="material-symbols-outlined text-secondary-container text-[18px]">timer</span>
+<span>Valable encore <strong>47h 55min</strong> (Jusqu’au 26 Oct. à 19h00)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Guidance & Steps for Camille -->
+<div class="px-margin pt-space-lg">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md">
+<div class="flex items-center gap-2 mb-space-md">
+<span class="material-symbols-outlined text-secondary text-[22px]">how_to_reg</span>
+<h2 class="font-headline-sm text-headline-sm text-primary">Comment récupérer la commande</h2>
+</div>
+<div class="space-y-space-md">
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 font-label-xs text-label-xs font-bold mt-0.5">
+            1
+          </div>
+<div class="flex-1">
+<p class="font-body-md text-body-md font-semibold text-on-surface">
+              Présentez-vous au Guichet Express N°2
+            </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              File prioritaire « Click &amp; Collect Achille » située à l’accueil principal.
+            </p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 font-label-xs text-label-xs font-bold mt-0.5">
+            2
+          </div>
+<div class="flex-1">
+<p class="font-body-md text-body-md font-semibold text-on-surface">
+              Montrez le QR Code ou dictez le code PIN
+            </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Donnez le code <span class="bg-secondary-fixed text-on-secondary-fixed px-1.5 py-0.5 rounded font-bold font-mono">9243</span> si le scanner rencontre un reflet.
+            </p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 font-label-xs text-label-xs font-bold mt-0.5">
+            3
+          </div>
+<div class="flex-1">
+<p class="font-body-md text-body-md font-semibold text-on-surface">
+              Présentez votre pièce d’identité
+            </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              CNI, Passeport ou Permis de conduire physique au nom de <strong class="text-on-surface">Camille Rochefort</strong>.
+            </p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 font-label-xs text-label-xs font-bold mt-0.5">
+            4
+          </div>
+<div class="flex-1">
+<p class="font-body-md text-body-md font-semibold text-on-surface">
+              Émargez sur le terminal du vendeur
+            </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Une signature numérique déverrouille la libération du colis scellé.
+            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Store & Location Card with Map Pin -->
+<div class="px-margin pt-space-md">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Location Map Header Preview -->
+<div class="w-full h-36 bg-cover bg-center relative" data-location="Boulevard Simone Veil, 06200 Nice, France" style="">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent flex items-end p-space-md">
+<div class="flex items-center gap-2">
+<span class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">store</span>
+</span>
+<div>
+<span class="font-label-xs text-label-xs uppercase tracking-wider text-secondary-fixed">Retrait Click &amp; Collect</span>
+<h3 class="font-headline-sm text-headline-sm text-on-primary">Bricomarché Nice Ouest</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Address details & navigation -->
+<div class="p-space-md flex flex-col gap-space-sm">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold">Boulevard Simone Veil, 06200 Nice</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">À 1,8 km de votre position estimée</span>
+</div>
+<span class="inline-flex items-center gap-1 bg-surface-container-low px-2.5 py-1 rounded-full text-on-surface font-label-xs text-label-xs font-semibold">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+            Ouvert · 19h00
+          </span>
+</div>
+<!-- Amenities Info -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1 text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-container text-[18px]">local_parking</span>
+<span>Parking gratuit dédié 150 places (Accès direct zone chargement)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-container text-[18px]">door_front</span>
+<span>Entrée B · Guichet N°2 Achille Express</span>
+</div>
+</div>
+<!-- GPS Action Buttons -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs">
+<a class="flex items-center justify-center gap-2 bg-primary text-on-primary rounded-full py-2.5 px-3 font-label-md text-label-md hover:opacity-90 active:scale-95 transition-transform" href="https://waze.com" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[18px]">navigation</span>
+<span>Itinéraire Waze</span>
+</a>
+<a class="flex items-center justify-center gap-2 bg-surface-container-high text-on-surface rounded-full py-2.5 px-3 font-label-md text-label-md hover:bg-surface-container-highest active:scale-95 transition-transform" href="https://maps.google.com" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[18px]">map</span>
+<span>Google Maps</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Equipment Summary (What Camille is picking up) -->
+<div class="px-margin pt-space-lg">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[22px]">inventory_2</span>
+<h2 class="font-headline-sm text-headline-sm text-primary">Matériel à retirer</h2>
+</div>
+<span class="font-label-xs text-label-xs bg-surface-container-low text-on-surface px-2 py-0.5 rounded-full font-bold">2 articles</span>
+</div>
+<!-- Item 1 -->
+<div class="flex items-center gap-3 bg-surface-container-low p-space-sm rounded-lg">
+<img class="w-16 h-16 object-cover rounded-lg shrink-0 bg-surface-container-highest" data-alt="Close up studio shot of a professional cordless hammer drill Bosch Professional 18V with battery pack attached, clean industrial hardware look with blue and dark accents, bright studio lighting on white surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP7gxMPnBb3UZ8tj2cGtmVKr3VxJucmEKCozg59Nuqaf9lYXuY2iFXr2tUiqhIOPzYKSc8lW9XNv7pspD_e5LJpfXswoow3IIUhCqhPgkRAFIOKwB1whp9wnPxpzRPL7vSOzJIatFvIqJwUl4ucORLc1FhuQ9RRu_T4srtISPA-kP6wnGSgipxlJEKBoSjgek41-su0FXrJTidTm7dJPSPnLbPZVn_nR2rkGIK94g"/>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-xs text-label-xs font-bold text-secondary-container uppercase">Déstockage -45%</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant font-mono">Réf 884-01</span>
+</div>
+<p class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Perceuse percussion sans fil 18V</p>
+<p class="font-label-xs text-label-xs text-on-surface-variant">Bosch Professional · 1 colis cerclé (3,2 kg)</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center gap-3 bg-surface-container-low p-space-sm rounded-lg">
+<img class="w-16 h-16 object-cover rounded-lg shrink-0 bg-surface-container-highest" data-alt="High quality product photo of a 125mm angle grinder Einhell Power X-Change in red and black composite finish, heavy duty construction, pristine industrial presentation on neutral workshop table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdrrPfK8piLJ7lMK8oPqrKv_TXNio67FSWbnQ5Dgz73dpi6c-bwmbk3RH7dd-EM1ns5V-rRAB9dj031HpycTPfxD9EkXwkBcwKu7d555sPpbmLdKlszxAoXo-S7mMhf6UQ5lf0bFDfdWpwayKbArQR4oCyvrJX9UT9eRFIvrpn2Gi0J28izZiiyU0bL41MxtRIW8YA2h4rVe6fQ4WkR_ZN43wmRYSr8ZRVBUpJ1jY"/>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-xs text-label-xs font-bold text-secondary-container uppercase">Déstockage -50%</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant font-mono">Réf 884-02</span>
+</div>
+<p class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Meuleuse d’angle 125mm Power X</p>
+<p class="font-label-xs text-label-xs text-on-surface-variant">Einhell · 1 colis boîte coffret (2,8 kg)</p>
+</div>
+</div>
+<!-- Volume & Transport Advice -->
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm pt-1">
+<span class="material-symbols-outlined text-secondary text-[18px]">directions_car</span>
+<span>Encombrement compact : tient dans un coffre ou sur banquette arrière.</span>
+</div>
+</div>
+</div>
+<!-- Wallet & Handover Actions -->
+<div class="px-margin pt-space-lg flex flex-col gap-space-sm">
+<!-- Apple / Google Wallet Button -->
+<button class="w-full bg-secondary-container text-on-primary-container rounded-full py-3.5 px-space-md flex items-center justify-center gap-2.5 shadow-md active:scale-[0.98] transition-all" id="walletBtn" type="button">
+<span class="material-symbols-outlined text-primary text-[22px]">wallet</span>
+<span class="font-label-lg text-label-lg text-primary font-bold">Ajouter à Apple / Google Wallet</span>
+</button>
+<!-- Share or Save pass action -->
+<button class="w-full bg-surface-container-lowest text-primary rounded-full py-3 px-space-md flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition-all" id="shareBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">share</span>
+<span class="font-label-md text-label-md">Partager la fiche ou enregistrer l’accès</span>
+</button>
+<!-- Direct Assistance Call / Support -->
+<div class="bg-surface-container-low rounded-xl p-space-md mt-space-xs flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-on-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">call</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">Un doute au guichet ?</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">Appelez Alexandre ou le magasin en 1 clic</span>
+</div>
+</div>
+<a aria-label="Appeler l'assistance" class="bg-surface-container-highest text-primary p-2.5 rounded-full hover:bg-primary-fixed transition-colors" href="tel:+33493000000">
+<span class="material-symbols-outlined text-[20px]">contact_phone</span>
+</a>
+</div>
+<!-- Legal disclaimer footer -->
+<div class="text-center pt-space-md pb-space-sm flex flex-col items-center gap-1 text-outline">
+<div class="flex items-center gap-1 font-label-xs text-label-xs uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+<span>Achille Click &amp; Collect Sécurisé</span>
+</div>
+<p class="font-label-xs text-label-xs text-on-surface-variant max-w-xs">
+        Mandat électronique nominatif horodaté révocable à tout instant par Alexandre de Rochefort depuis son compte client.
+      </p>
+</div>
+</div>
+</div>
+<script>
+  // Micro-interaction: Wallet addition toast simulation
+  document.getElementById('walletBtn')?.addEventListener('click', () => {
+    const btn = document.getElementById('walletBtn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = `
+      <span class="material-symbols-outlined text-primary text-[22px] animate-spin">sync</span>
+      <span class="font-label-lg text-label-lg text-primary font-bold">Pass synchronis&eacute; !</span>
+    `;
+    setTimeout(() => {
+      btn.innerHTML = `
+        <span class="material-symbols-outlined text-primary text-[22px]">check</span>
+        <span class="font-label-lg text-label-lg text-primary font-bold">Ajout&eacute; au Wallet</span>
+      `;
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+      }, 2500);
+    }, 700);
+  });
+
+  // Micro-interaction: Web Share API fallback
+  document.getElementById('shareBtn')?.addEventListener('click', async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Pass Retrait Achille - Camille Rochefort',
+          text: 'Pass de procuration Click & Collect Achille pour retrait Bricomarché Nice Ouest (Commande #ACH-88492).',
+          url: window.location.href,
+        });
+      } catch (err) {
+        // Share cancelled
+      }
+    } else {
+      navigator.clipboard?.writeText(window.location.href);
+      const shareBtn = document.getElementById('shareBtn');
+      const prev = shareBtn.innerHTML;
+      shareBtn.innerHTML = `
+        <span class="material-symbols-outlined text-[20px]">content_copy</span>
+        <span class="font-label-md text-label-md">Lien du pass copi&eacute; !</span>
+      `;
+      setTimeout(() => { shareBtn.innerHTML = prev; }, 2000);
+    }
+  });
+</script></main></body></html>

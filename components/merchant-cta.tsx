@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { isAbsoluteHttpUrl } from "@/lib/merchant-url";
 import { outboundPath } from "@/lib/urls";
 
@@ -17,14 +18,15 @@ export function MerchantCta({
   if (!enabled) {
     return (
       <div className="flex flex-col gap-2">
-        <button
+        <Button
           type="button"
+          size="lg"
           disabled
-          className="bg-orange text-navy inline-flex h-12 cursor-not-allowed items-center justify-center rounded-xl px-6 text-base font-bold opacity-60"
+          className="h-12 px-6 text-base"
         >
           Voir l&apos;offre chez le marchand
-        </button>
-        <p className="text-slate text-sm font-medium">
+        </Button>
+        <p className="font-body-sm text-body-sm text-on-surface-variant">
           Cette offre n’est pas renvoyable vers le marchand pour le moment (hors
           ligne ou sans lien). Achille ne vend pas : pas de panier ici.
         </p>
@@ -34,15 +36,16 @@ export function MerchantCta({
 
   return (
     <div className="flex flex-col gap-2">
-      <a
-        href={outboundPath(offerId)}
-        rel="nofollow sponsored noopener noreferrer"
-        target="_blank"
-        className="bg-orange text-navy inline-flex h-12 items-center justify-center rounded-xl px-6 text-base font-bold"
-      >
-        Voir l&apos;offre chez le marchand
-      </a>
-      <p className="text-slate text-sm font-medium">
+      <Button asChild size="lg" className="h-12 px-6 text-base">
+        <a
+          href={outboundPath(offerId)}
+          rel="nofollow sponsored noopener noreferrer"
+          target="_blank"
+        >
+          Voir l&apos;offre chez le marchand
+        </a>
+      </Button>
+      <p className="font-body-sm text-body-sm text-on-surface-variant">
         Vous serez redirigé vers le site du marchand pour finaliser. Achille ne
         prend ni panier ni paiement.
       </p>

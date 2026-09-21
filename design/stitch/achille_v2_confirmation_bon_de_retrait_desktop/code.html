@@ -1,0 +1,323 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><title>Achille V2 - Marketplace Géolocalisée</title><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; } .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "secondary-container": "#fe9800", "tertiary-fixed-dim": "#72daa8", "secondary-fixed-dim": "#ffb86f", "on-tertiary-fixed": "#002113", "on-primary": "#ffffff", "surface-bright": "#f8f9fc", "error": "#ba1a1a", "secondary-fixed": "#ffdcbd", "outline": "#73777e", "primary-fixed-dim": "#abc9ed", "on-secondary-container": "#643900", "tertiary-fixed": "#8ef7c2", "surface": "#f8f9fc", "surface-dim": "#d8dadd", "surface-container-lowest": "#ffffff", "tertiary": "#001309", "on-tertiary": "#ffffff", "surface-container-low": "#f2f4f7", "primary": "#001020", "inverse-surface": "#2d3133", "inverse-primary": "#abc9ed", "on-secondary-fixed": "#2c1600", "on-background": "#191c1e", "secondary": "#8a5100", "on-tertiary-fixed-variant": "#005235", "tertiary-container": "#002b1a", "surface-container": "#eceef1", "primary-container": "#002642", "surface-variant": "#e0e3e6", "on-tertiary-container": "#2f9d70", "on-primary-container": "#708eaf", "inverse-on-surface": "#eff1f4", "on-primary-fixed": "#001d34", "primary-fixed": "#d0e4ff", "on-primary-fixed-variant": "#2a4967", "background": "#f8f9fc", "outline-variant": "#c3c7ce", "on-surface-variant": "#43474d", "surface-container-high": "#e6e8eb", "on-surface": "#191c1e", "surface-container-highest": "#e0e3e6", "on-error": "#ffffff", "on-error-container": "#93000a", "error-container": "#ffdad6", "on-secondary": "#ffffff", "surface-tint": "#436180", "on-secondary-fixed-variant": "#693c00" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "space-md": "1rem", "space-lg": "1.5rem", "space-xl": "2rem", "gutter": "1rem", "margin-desktop": "2rem", "margin": "1rem", "margin-tablet": "1.5rem", "gutter-desktop": "1.5rem", "space-xs": "0.25rem" }, "fontFamily": { "headline-lg-mobile": [ "Bricolage Grotesque" ], "display-mobile": [ "Bricolage Grotesque" ], "label-md": [ "Manrope" ], "headline-sm": [ "Bricolage Grotesque" ], "price-card": [ "Bricolage Grotesque" ], "display": [ "Bricolage Grotesque" ], "label-xs": [ "Manrope" ], "body-lg": [ "Manrope" ], "price-hero": [ "Bricolage Grotesque" ], "body-sm": [ "Manrope" ], "headline-md": [ "Bricolage Grotesque" ], "body-md": [ "Manrope" ], "label-lg": [ "Manrope" ], "headline-lg": [ "Bricolage Grotesque" ] }, "fontSize": { "headline-lg-mobile": [ "26px", { "lineHeight": "32px", "fontWeight": "700" } ], "display-mobile": [ "34px", { "lineHeight": "40px", "fontWeight": "800" } ], "label-md": [ "12px", { "lineHeight": "16px", "fontWeight": "700" } ], "headline-sm": [ "20px", { "lineHeight": "26px", "fontWeight": "600" } ], "price-card": [ "20px", { "lineHeight": "24px", "fontWeight": "800" } ], "display": [ "48px", { "lineHeight": "56px", "fontWeight": "800" } ], "label-xs": [ "10px", { "lineHeight": "12px", "fontWeight": "800" } ], "body-lg": [ "18px", { "lineHeight": "28px", "fontWeight": "400" } ], "price-hero": [ "28px", { "lineHeight": "32px", "fontWeight": "800" } ], "body-sm": [ "13px", { "lineHeight": "18px", "fontWeight": "500" } ], "headline-md": [ "24px", { "lineHeight": "30px", "fontWeight": "700" } ], "body-md": [ "15px", { "lineHeight": "22px", "fontWeight": "500" } ], "label-lg": [ "14px", { "lineHeight": "20px", "fontWeight": "700" } ], "headline-lg": [ "32px", { "lineHeight": "38px", "fontWeight": "700" } ] } } } };</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,38,66,0.06)]"><div class="h-28 w-full px-gutter-desktop flex flex-col justify-between pt-space-xs pb-space-xs"><div class="flex items-center justify-between gap-space-md w-full"><div class="flex items-center gap-space-lg shrink-0"><a class="flex items-center gap-space-sm" data-path="explore-map" href="#"><img alt="Achille Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VMURyTyMAACweLNa8pYhaBIFyjJQBV0W_4UAimQ9ysoyr8VSPgjQ6u1l0vT8pJc5Ye_XpsxBleODDNjR9NJnjfZulCGOqjU3wSlwoHrRyeVATY4XkBwNXqiuwg7xXBsbF2DU2ih-HuwqlnmXUoUYC_rrC876KPLE3UOKDLCVdB-7K_hJc7JFazVKrlmbmlHX7wUFB0Z2-755mtKQulyjKSQCp5KwB9mm6JVqKOmGzK"><span class="font-headline-md text-headline-md tracking-tight text-primary-container hidden xl:inline-block">Achille</span></a><button class="flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-secondary-container text-[18px]">location_on</span><span class="font-label-md text-label-md text-primary-container font-bold">1 rue du Soleil, 06000 Nice</span><span class="w-1 h-1 rounded-full bg-outline-variant"></span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Rayon 5 km</span><span class="material-symbols-outlined text-on-surface-variant text-[16px]">keyboard_arrow_down</span></button></div><div class="flex-1 max-w-2xl mx-space-md"><div class="relative flex items-center w-full bg-surface-container-low rounded-full px-space-md py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]"><span class="material-symbols-outlined text-outline mr-space-xs text-[20px]">search</span><input class="w-full bg-transparent border-0 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-0" placeholder="Rechercher une perceuse, un canapé, une enseigne..." type="text"><button class="flex items-center gap-1 px-space-sm py-1 mr-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface text-[11px] font-label-md transition-colors" type="button"><span class="material-symbols-outlined text-[14px]">map</span><span class="hidden sm:inline">Carte</span></button><button class="w-8 h-8 rounded-full bg-secondary-container text-primary-container flex items-center justify-center shrink-0 hover:brightness-105 transition-transform active:scale-95" type="button"><span class="material-symbols-outlined text-[18px]">search</span></button></div></div><div class="flex items-center gap-space-sm shrink-0"><a class="hidden lg:flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all shadow-[0_2px_6px_rgba(0,38,66,0.15)]" data-path="explore-map" href="#"><span class="material-symbols-outlined text-[16px] text-secondary-container">explore</span><span class="">Explorer la carte</span><span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span></a><div class="h-6 w-px bg-surface-variant mx-space-xs hidden md:block"></div><a class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="saved-deals" href="#"><span class="material-symbols-outlined text-[22px]">favorite</span><span class="absolute top-1 right-1 w-4 h-4 rounded-full bg-primary-container text-on-primary font-label-xs text-label-xs flex items-center justify-center">3</span></a><a class="flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-primary-container transition-colors" data-path="click-collect-cart" href="#"><div class="relative"><span class="material-symbols-outlined text-[20px]">shopping_bag</span><span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-secondary-container"></span></div><div class="hidden xl:flex flex-col text-left leading-none"><span class="font-label-md text-label-md font-bold text-primary-container">Panier (1)</span><span class="font-label-xs text-label-xs text-on-surface-variant truncate max-w-[110px]">Bricomarché Nice</span></div></a><div class="flex items-center gap-space-xs pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="font-label-md text-label-md text-on-surface hidden md:inline font-bold">Alexandre</span></div></div></div><nav class="flex items-center gap-space-xs overflow-x-auto no-scrollbar w-full pt-1" data-active-classes="bg-primary-container text-on-primary font-bold rounded-full"><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Toutes les offres</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Bricolage &amp; Outillage</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Jardin &amp; Plein air</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Maison &amp; Déco</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Électroménager</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Multimédia &amp; High-Tech</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Mode &amp; Sport</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Déstockage massif (-50% et +)</a></nav></div></header><main class="w-full pt-28 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Dynamic celebratory header banner with receipt tear aesthetic -->
+<section class="w-full bg-surface-container-low px-gutter-desktop py-space-lg">
+<div class="max-w-6xl mx-auto flex flex-col gap-space-md">
+<!-- Stepper Component -->
+<nav aria-label="Progression de la commande" class="w-full">
+<div class="flex items-center justify-between relative max-w-2xl mx-auto">
+<div class="absolute left-8 right-8 top-1/2 -translate-y-1/2 h-1 bg-tertiary-fixed-dim z-0"></div>
+<!-- Step 1 (Done) -->
+<div class="flex items-center gap-space-xs z-10 bg-surface-container-low px-space-xs">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-label-md text-label-md shadow-sm">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<span class="font-label-md text-label-md text-primary-container hidden sm:inline">1. Panier</span>
+</div>
+<!-- Step 2 (Done) -->
+<div class="flex items-center gap-space-xs z-10 bg-surface-container-low px-space-xs">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-label-md text-label-md shadow-sm">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<span class="font-label-md text-label-md text-primary-container hidden sm:inline">2. Retrait &amp; Paiement</span>
+</div>
+<!-- Step 3 (Active) -->
+<div class="flex items-center gap-space-xs z-10 bg-surface-container-low px-space-xs">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed-dim text-on-tertiary-fixed flex items-center justify-center font-label-md text-label-md shadow-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+</div>
+<span class="font-label-md text-label-md text-primary-container font-bold">3. Bon de retrait</span>
+</div>
+</div>
+</nav>
+<!-- Main Headline Announcement -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md pt-space-xs">
+<div class="flex flex-col gap-1">
+<div class="inline-flex items-center gap-space-xs bg-tertiary-container text-on-tertiary-container px-space-md py-1 rounded-full w-fit">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed animate-ping"></span>
+<span class="font-label-xs text-label-xs uppercase tracking-wider font-bold">Confirmation instantanée</span>
+</div>
+<h1 class="font-display text-display text-primary-container tracking-tight">Commande validée &amp; Stock réservé !</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Votre matériel est sécurisé en rayon. Il vous attend au comptoir express Bricomarché Nice Ouest.
+          </p>
+</div>
+<div class="flex flex-col items-start md:items-end bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<span class="font-label-xs text-label-xs text-outline uppercase tracking-wider">Référence commande</span>
+<span class="font-headline-sm text-headline-sm text-primary-container tracking-wide font-bold">#ACH-2024-88412</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Two-Column Asymmetric Canvas (Ticket on Left / Logistics & Details on Right) -->
+<section class="w-full px-gutter-desktop py-space-xl">
+<div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT COLUMN: Physical Click & Collect Pass Ticket (5 cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<!-- Pass Card with Notch Details -->
+<div class="relative bg-surface-container-lowest rounded-xl shadow-xl overflow-hidden flex flex-col">
+<!-- Top Accent Band -->
+<div class="bg-primary-container text-on-primary p-space-md flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary-container text-[24px]">storefront</span>
+<span class="font-label-lg text-label-lg tracking-wide uppercase">Bon de Retrait Express</span>
+</div>
+<span class="bg-secondary-container text-on-secondary-container font-label-xs text-label-xs px-space-sm py-0.5 rounded-full font-bold">Prioritaire</span>
+</div>
+<!-- Status Alert Pill in Ticket -->
+<div class="p-space-md bg-surface-container-low flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-secondary-container/20 text-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">bolt</span>
+</div>
+<div class="flex flex-col min-w-0"><span class="font-label-md text-label-md text-primary-container font-bold">Disponible sur votre créneau : Aujourd'hui entre 14h00 et 17h00</span><span class="font-body-sm text-body-sm text-on-surface-variant truncate">Préparation en cours par l'équipe rayon</span></div>
+</div>
+<!-- QR Code & Barcode Canvas -->
+<div class="p-space-lg flex flex-col items-center justify-center text-center bg-surface-container-lowest">
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs mb-space-md">
+              Présentez ce QR code ou code-barres au comptoir <strong>Click &amp; Collect Achille</strong>
+</p>
+<!-- Inline Stylized QR Code SVG -->
+<div class="p-space-sm bg-surface-container-lowest rounded-xl shadow-md inline-block">
+<svg class="w-48 h-48 text-primary-container" fill="currentColor" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+<!-- Outer Corners -->
+<rect fill="currentColor" height="40" rx="6" width="40" x="10" y="10"></rect>
+<rect fill="#ffffff" height="24" rx="2" width="24" x="18" y="18"></rect>
+<rect fill="currentColor" height="12" rx="2" width="12" x="24" y="24"></rect>
+<rect fill="currentColor" height="40" rx="6" width="40" x="110" y="10"></rect>
+<rect fill="#ffffff" height="24" rx="2" width="24" x="118" y="18"></rect>
+<rect fill="currentColor" height="12" rx="2" width="12" x="124" y="24"></rect>
+<rect fill="currentColor" height="40" rx="6" width="40" x="10" y="110"></rect>
+<rect fill="#ffffff" height="24" rx="2" width="24" x="18" y="118"></rect>
+<rect fill="currentColor" height="12" rx="2" width="12" x="124" y="124"></rect>
+<!-- Achille signature center orange anchor -->
+<rect fill="#fe9800" height="28" rx="6" width="28" x="66" y="66"></rect>
+<circle cx="80" cy="80" fill="#002642" r="6"></circle>
+<!-- Data Matrix Blocks -->
+<rect fill="currentColor" height="10" width="10" x="58" y="16"></rect>
+<rect fill="currentColor" height="8" width="8" x="74" y="22"></rect>
+<rect fill="currentColor" height="6" width="12" x="90" y="14"></rect>
+<rect fill="currentColor" height="6" width="14" x="62" y="38"></rect>
+<rect fill="currentColor" height="12" width="8" x="84" y="44"></rect>
+<rect fill="currentColor" height="16" width="8" x="18" y="58"></rect>
+<rect fill="currentColor" height="8" width="16" x="36" y="70"></rect>
+<rect fill="currentColor" height="12" width="12" x="14" y="86"></rect>
+<rect fill="currentColor" height="10" width="14" x="104" y="60"></rect>
+<rect fill="currentColor" height="8" width="18" x="130" y="72"></rect>
+<rect fill="currentColor" height="14" width="8" x="112" y="88"></rect>
+<rect fill="currentColor" height="6" width="16" x="132" y="96"></rect>
+<rect fill="currentColor" height="8" width="16" x="58" y="104"></rect>
+<rect fill="currentColor" height="16" width="10" x="80" y="118"></rect>
+<rect fill="currentColor" height="12" width="18" x="64" y="134"></rect>
+<rect fill="currentColor" height="18" width="14" x="102" y="128"></rect>
+<rect fill="currentColor" height="10" width="22" x="126" y="120"></rect>
+</svg>
+</div>
+<!-- Stylized Barcode 128 -->
+<div class="mt-space-md w-full px-space-md flex flex-col items-center">
+<div class="h-12 w-full max-w-xs flex items-stretch justify-between gap-[2px] bg-surface-container-lowest">
+<!-- Barcode vertical stripes -->
+<div class="w-1 bg-primary-container"></div>
+<div class="w-2 bg-primary-container"></div>
+<div class="w-1 bg-transparent"></div>
+<div class="w-3 bg-primary-container"></div>
+<div class="w-1 bg-transparent"></div>
+<div class="w-1 bg-primary-container"></div>
+<div class="w-2 bg-transparent"></div>
+<div class="w-4 bg-primary-container"></div>
+<div class="w-1 bg-transparent"></div>
+<div class="w-2 bg-primary-container"></div>
+<div class="w-3 bg-transparent"></div>
+<div class="w-2 bg-primary-container"></div>
+<div class="w-1 bg-transparent"></div>
+<div class="w-3 bg-primary-container"></div>
+<div class="w-1 bg-transparent"></div>
+<div class="w-4 bg-primary-container"></div>
+<div class="w-2 bg-transparent"></div>
+<div class="w-1 bg-primary-container"></div>
+<div class="w-3 bg-transparent"></div>
+<div class="w-2 bg-primary-container"></div>
+<div class="w-1 bg-transparent"></div>
+<div class="w-3 bg-primary-container"></div>
+<div class="w-1 bg-transparent"></div>
+<div class="w-2 bg-primary-container"></div>
+<div class="w-2 bg-transparent"></div>
+<div class="w-3 bg-primary-container"></div>
+<div class="w-1 bg-primary-container"></div>
+</div>
+<span class="font-label-md text-label-md text-outline tracking-widest mt-1 font-mono">8841-2904-7125-9932</span>
+</div>
+</div>
+<!-- Digital Wallet & Download Utilities -->
+<div class="p-space-md bg-surface-container flex flex-col gap-space-xs">
+<button class="w-full flex items-center justify-center gap-space-xs py-2.5 px-space-md rounded-full bg-primary-container text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary transition-all active:scale-[0.99]" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span class="">Télécharger le bon de retrait (PDF)</span>
+</button>
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="flex items-center justify-center gap-1.5 py-2 px-space-sm rounded-full bg-surface-container-lowest text-primary-container font-label-md text-label-md shadow-sm hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary-container">wallet</span>
+<span class="">Apple / Google Wallet</span>
+</button>
+<button class="flex items-center justify-center gap-1.5 py-2 px-space-sm rounded-full bg-surface-container-lowest text-primary-container font-label-md text-label-md shadow-sm hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-outline">receipt_long</span>
+<span class="">Facture TVA</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Notification channels status card -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-primary-container font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px] text-secondary-container">notifications_active</span>
+<span class="">Confirmations transmises</span>
+</div>
+<div class="text-body-sm text-body-sm text-on-surface-variant space-y-1">
+<div class="flex items-center justify-between">
+<span class="">SMS de disponibilité :</span>
+<strong class="text-on-surface font-mono">06 12 34 56 78</strong>
+</div>
+<div class="flex items-center justify-between">
+<span class="">E-mail &amp; justificatif :</span>
+<strong class="text-on-surface font-mono truncate max-w-[190px]">alexandre.derochefort@email.com</strong>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Store Pickup Location + Items + Circular Eco Impact (7 cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-lg">
+<!-- Physical Location & Access Strategy Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md overflow-hidden">
+<div class="p-space-lg flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm">
+<div class="flex items-start gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[26px]">apartment</span>
+</div>
+<div>
+<div class="flex items-center gap-space-xs">
+<h2 class="font-headline-md text-headline-md text-primary-container">Bricomarché Nice Ouest</h2>
+<span class="bg-surface-container-high text-primary-container font-label-xs text-label-xs px-2 py-0.5 rounded-full font-bold">1,8 km</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Avenue Simone Veil, 06200 Nice</p>
+<p class="font-body-sm text-body-sm text-on-tertiary-container font-bold flex items-center gap-1 mt-0.5">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+                    Ouvert aujourd'hui en continu jusqu'à 19h30
+                  </p>
+</div>
+</div>
+<!-- Contact Direct Rayon -->
+<a class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-full bg-surface-container-low text-primary-container font-label-md text-label-md hover:bg-surface-container transition-colors w-fit" href="tel:0493182000">
+<span class="material-symbols-outlined text-[16px]">call</span>
+<span class="">Rayon Outillage : 04 93 18 20 XX</span>
+</a>
+</div>
+<!-- Instructions de Retrait Guidé -->
+<div class="p-space-md bg-primary-fixed/30 rounded-lg flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary-container text-[22px] shrink-0 mt-0.5">info</span>
+<p class="font-body-sm text-body-sm text-on-primary-fixed-variant">
+<strong>Accès Coupe-File :</strong> Présentez-vous directement au comptoir d'accueil &amp; Guichet Achille Express situé à l'entrée principale, <strong>sans passer par les caisses traditionnelles</strong>. Une pièce d'identité peut être requise.
+              </p>
+</div>
+<!-- Mini Map Integration with Data Location -->
+<div class="relative w-full h-48 rounded-xl overflow-hidden bg-surface-container-high shadow-inner">
+<div class="w-full h-full bg-cover bg-center" data-location="Avenue Simone Veil, 06200 Nice" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCC_HjvqBqvh9CafLBuoC578aba0TdniO_j8tFhDFJsJ0u3r69Ln1CTIEdZu6Shoco1t2DDr_FLIttSF3Hmikv3-oRwpc8BHhghPHReud0I05jLcBI6SbWL8FtAT2Yavn21Yg3jmSQ3AGbsnwAybQQ7rBgPS_Rj0elQZWxKYSgz2OT1gL-ruVJrDcMmCzcPtwG_gVVK70oX0fcmAm5srbso8Zfic6De3s8vJhJLFDE')"></div>
+<!-- Floating Overlaid Map Overlay Elements -->
+<div class="absolute top-3 left-3 bg-surface-container-lowest/95 backdrop-blur-md px-space-md py-1.5 rounded-full shadow-md flex items-center gap-space-xs text-primary-container font-label-md text-label-md">
+<span class="material-symbols-outlined text-secondary-container text-[18px]">local_parking</span>
+<span class="">Parking gratuit réservé (150 places)</span>
+</div>
+<!-- Itinerary Action Buttons Overlaid Bottom Right -->
+<div class="absolute bottom-3 right-3 flex items-center gap-space-xs">
+<a class="flex items-center gap-1 px-space-md py-1.5 rounded-full bg-primary-container text-on-primary font-label-md text-label-md shadow-lg hover:bg-primary transition-transform active:scale-95" href="https://waze.com" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">navigation</span>
+<span class="">Waze (6 min)</span>
+</a>
+<a class="flex items-center gap-1 px-space-md py-1.5 rounded-full bg-surface-container-lowest text-primary-container font-label-md text-label-md shadow-lg hover:bg-surface-container transition-transform active:scale-95" href="https://maps.google.com" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[16px]">map</span>
+<span class="">Google Maps</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Purchased Items Breakdown & Pricing Details -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-primary-container">Articles réservés en déstockage</h3>
+<span class="font-label-md text-label-md text-outline">2 articles · Mono-magasin</span>
+</div>
+<!-- Product Item 1 -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-md bg-surface-container-low/50 p-space-md rounded-xl">
+<div class="flex items-center gap-space-md">
+<img class="w-16 h-16 rounded-lg object-cover shrink-0 bg-surface-container" data-alt="Perceuse visseuse à percussion sans fil Bosch Professional bleue posée avec sa batterie 18V sur établi d'atelier en bois clair, éclairage net et contrasté aux teintes industrielles navy et ambrées" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVxOReh3foLJtUjgqHxMeYTHcU3vtrUhH5hxvBWJ2itXT4pIWUKwk6AUsXW1TZEXhtVBcZWzvGC8Fjrbvwco5iZ597-XQkrmeMRq_yyLK-7fxkXY4-Tvxi2hDe9KmeuIyq84ulKeBgW2RR3uCdk2oBtpKSBDVZjBH71iG084jTs5EXYk4syKjSpGkzhgxG70ziI-LTNfI2cj16WP4BpT9adIM1zpgW9EdR7YXAgwg">
+<div class="flex flex-col">
+<span class="bg-secondary-container/20 text-on-secondary-container font-label-xs text-label-xs px-2 py-0.5 rounded-full w-fit font-bold mb-1">Neuf déstocké (-62%)</span>
+<span class="font-label-lg text-label-lg text-primary-container font-bold">Perceuse à percussion sans fil Bosch Pro GSB 18V-21</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Quantité : 1 · Garantie constructeur 3 ans conservée</span>
+</div>
+</div>
+<div class="flex sm:flex-col items-baseline sm:items-end justify-between gap-1 shrink-0">
+<span class="font-price-card text-price-card text-primary-container">69,90 €</span>
+<span class="font-body-sm text-body-sm text-outline line-through">184,00 €</span>
+</div>
+</div>
+<!-- Product Item 2 -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-md bg-surface-container-low/50 p-space-md rounded-xl">
+<div class="flex items-center gap-space-md">
+<img class="w-16 h-16 rounded-lg object-cover shrink-0 bg-surface-container" data-alt="Boîtier rigide transparent d embouts de vissage Bosch Extra Hard disposés impeccablement sur fond gris technique minimaliste avec touches d accents orange et bleu marine" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9hf5kVHsNKVrK3HbFXdvNOLvrq5OaD5lv_RqmxThcL9SHK184P83L3G3evjHL2XRy5HGTo5VcvlsGHrx59s0iKwYlLYRnMOV6SDoPVvzhWCw083V_qifPJKhqwbLHg_2LVVU_OgCCUdxZiwUz4T4TemOz_izEoDV1s5UG6-7CwaHOSnnvXOTSGQjm3gV9lG6Xeqy89TC3gSXKVgAT4sDFiWc9gX8t0Ow2MFFhOC0">
+<div class="flex flex-col">
+<span class="bg-secondary-container/20 text-on-secondary-container font-label-xs text-label-xs px-2 py-0.5 rounded-full w-fit font-bold mb-1">Boîte scellée (-65%)</span>
+<span class="font-label-lg text-label-lg text-primary-container font-bold">Coffret 43 embouts Bosch Extra Hard</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Quantité : 1 · Embouts acier haute résistance</span>
+</div>
+</div>
+<div class="flex sm:flex-col items-baseline sm:items-end justify-between gap-1 shrink-0">
+<span class="font-price-card text-price-card text-primary-container">14,90 €</span>
+<span class="font-body-sm text-body-sm text-outline line-through">42,00 €</span>
+</div>
+</div>
+<!-- Total Calculation & Payment Method -->
+<div class="pt-space-xs flex flex-col gap-space-xs"><div class="flex flex-col sm:flex-row sm:items-center justify-between font-body-sm text-body-sm text-on-surface-variant gap-1"><span class="">Créneau choisi au comptoir Achille Express :</span><span class="font-label-md text-label-md text-primary-container font-bold">Aujourd'hui 14h00 - 17h00</span></div><div class="flex flex-col sm:flex-row sm:items-center justify-between font-body-sm text-body-sm text-on-surface-variant gap-1"><span class="">Mode de paiement utilisé</span><span class="flex items-center gap-1 font-label-md text-label-md text-primary-container font-bold"><span class="material-symbols-outlined text-[16px]">credit_card</span>Carte Bancaire •••• 8821 (Empreinte 3D Secure validée - Débit au retrait)</span></div><div class="flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant"><span class="">Frais de réservation Click &amp; Collect</span><span class="font-label-md text-label-md text-on-tertiary-container font-bold uppercase">Gratuit</span></div><div class="flex items-center justify-between pt-space-xs"><span class="font-headline-sm text-headline-sm text-primary-container">Total réglé</span><span class="font-price-hero text-price-hero text-primary-container">84,80 €</span></div></div>
+<!-- Proud Circular Economic & Ecological Savings Pill -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm mt-space-xs">
+<div class="p-space-md rounded-xl bg-secondary-fixed/50 flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[20px]">savings</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-secondary-fixed font-bold">126,20 € économisés</span>
+<span class="font-body-sm text-body-sm text-on-secondary-fixed-variant">-60% sur le tarif neuf magasin</span>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-tertiary-container text-on-tertiary flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed-dim text-on-tertiary-fixed flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[20px]">eco</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-tertiary-fixed">4,2 kg CO₂ évités</span>
+<span class="font-body-sm text-body-sm text-tertiary-fixed-dim">vs. fret et livraison e-commerce</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Next Step Secondary Actions -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-md pt-space-xs">
+<a class="w-full sm:w-auto inline-flex items-center justify-center gap-space-xs px-space-xl py-3 rounded-full bg-secondary-container text-primary-container font-label-lg text-label-lg shadow-md hover:brightness-105 transition-all" data-path="explore-map" href="#">
+<span class="material-symbols-outlined text-[20px]">travel_explore</span>
+<span class="">Continuer mes découvertes locales</span>
+</a>
+<a class="w-full sm:w-auto inline-flex items-center justify-center gap-space-xs px-space-lg py-3 rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md" data-path="account-orders" href="#">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+<span class="">Voir toutes mes commandes</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+</div></main><footer class="w-full bg-surface-container-low mt-auto"><div class="w-full px-gutter-desktop py-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><span class="font-headline-sm text-headline-sm text-primary-container font-bold">Achille</span><span class="text-body-sm text-on-surface-variant">Plateforme d'économie circulaire et déstockage de proximité.</span></div><div class="flex items-center gap-space-lg font-label-md text-label-md text-on-surface-variant"><a class="hover:text-on-surface transition-colors" data-path="about" href="#">Commerçants Partenaires</a><a class="hover:text-on-surface transition-colors" data-path="about" href="#">Engagement Anti-Gaspillage</a><a class="hover:text-on-surface transition-colors" data-path="about" href="#">Aide &amp; FAQ</a></div><div class="text-body-sm text-outline">© 2024 Achille Technologies. Tous droits réservés.</div></div></footer>
+
+</body></html>

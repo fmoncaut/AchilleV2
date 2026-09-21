@@ -1,7 +1,10 @@
 import Link from "next/link";
 
+import { DiscountBadge } from "@/components/discount-badge";
 import { Distance } from "@/components/distance";
 import { FavoriteButton } from "@/components/favorite-button";
+import { MaterialIcon } from "@/components/material-icon";
+import { OpenBadge } from "@/components/open-badge";
 import { cn } from "@/lib/utils";
 import type { NearbyOfferCard } from "@/lib/geo";
 import { discountPercent, formatEur } from "@/lib/money";
@@ -14,6 +17,7 @@ type OfferCardProps = {
   signedIn?: boolean;
   isProductFavorite?: boolean;
   loginHref?: string;
+  isOpen?: boolean;
 };
 
 export function OfferCard({
@@ -23,19 +27,21 @@ export function OfferCard({
   signedIn = false,
   isProductFavorite = false,
   loginHref = loginWithReturn("/compte/favoris"),
+  isOpen,
 }: OfferCardProps) {
   const discount =
     offer.discountPct ??
     discountPercent(offer.priceRemise, offer.priceReference);
   const destination =
-    href ?? offerPath(offer.productSlug, { posSlug: offer.posSlug || undefined });
+    href ??
+    offerPath(offer.productSlug, { posSlug: offer.posSlug || undefined });
 
   return (
     <article
       id={`offre-${offer.id}`}
       className={cn(
-        "bg-card ring-border relative overflow-hidden rounded-2xl shadow-sm ring-1 transition-shadow",
-        selected && "ring-orange ring-2 shadow-md",
+        "bg-surface-container-lowest shadow-navy-soft hover:shadow-navy relative overflow-hidden rounded-xl transition-shadow",
+        selected && "ring-secondary-container shadow-navy ring-2",
       )}
     >
       <div className="absolute top-3 right-3 z-10">
@@ -49,7 +55,7 @@ export function OfferCard({
         />
       </div>
       <Link href={destination} className="flex h-full flex-col outline-none">
-        <div className="bg-muted relative aspect-[4/3] overflow-hidden">
+        <div className="bg-surface-container relative aspect-[4/3] overflow-hidden">
           {offer.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -59,44 +65,47 @@ export function OfferCard({
             />
           ) : (
             <div
-              className="bg-navy text-orange flex h-full w-full items-center justify-center text-3xl font-bold"
+              className="bg-primary-container text-secondary-container font-display flex h-full w-full items-center justify-center text-3xl font-extrabold"
               aria-hidden
             >
               {offer.productName.slice(0, 1)}
             </div>
           )}
           {discount != null ? (
-            <span className="bg-orange text-navy absolute top-3 left-3 rounded-full px-2.5 py-1 text-sm font-bold">
-              −{discount}&nbsp;%
+            <span className="absolute top-3 left-3">
+              <DiscountBadge percent={discount} />
             </span>
           ) : null}
         </div>
         <div className="flex flex-1 flex-col gap-2 p-4">
-          <h2 className="text-navy text-base leading-snug font-bold">
+          <div className="font-label-xs text-label-xs text-on-surface-variant flex items-center justify-between gap-2">
+            <span className="text-primary-container flex min-w-0 items-center gap-1 truncate font-bold">
+              <MaterialIcon
+                name="storefront"
+                className="text-secondary-container text-[14px]"
+              />
+              {offer.merchantName}
+            </span>
+            {offer.distanceM != null ? (
+              <Distance meters={offer.distanceM} />
+            ) : offer.city ? (
+              <span className="bg-surface-container shrink-0 rounded-full px-2 py-0.5 font-bold">
+                {offer.city}
+              </span>
+            ) : null}
+          </div>
+          {isOpen ? <OpenBadge /> : null}
+          <h2 className="font-headline-sm text-primary-container text-[16px] leading-tight">
             {offer.productName}
           </h2>
-          <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-            <span className="text-orange text-xl font-bold">
+          <p className="mt-auto flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <span className="font-price-card text-price-card text-secondary-container font-extrabold">
               {formatEur(offer.priceRemise)}
             </span>
             {offer.priceReference ? (
-              <span className="text-slate text-sm font-medium line-through">
+              <span className="font-body-sm text-body-sm text-on-surface-variant line-through">
                 {formatEur(offer.priceReference)}
               </span>
-            ) : null}
-          </p>
-          <p className="text-slate mt-auto text-sm font-medium">
-            {offer.merchantName}
-            {offer.distanceM != null ? (
-              <>
-                <span aria-hidden> · </span>
-                <Distance meters={offer.distanceM} />
-              </>
-            ) : offer.city ? (
-              <>
-                <span aria-hidden> · </span>
-                {offer.city}
-              </>
             ) : null}
           </p>
         </div>

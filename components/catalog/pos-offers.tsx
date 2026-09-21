@@ -23,7 +23,11 @@ function PosDistanceInner({ posLat, posLng }: PosDistanceProps) {
 
   return (
     <p className="text-slate mt-1 text-sm font-medium">
-      À <Distance meters={haversineMeters(lat, lng, posLat, posLng)} />
+      À{" "}
+      <Distance
+        meters={haversineMeters(lat, lng, posLat, posLng)}
+        variant="plain"
+      />
     </p>
   );
 }

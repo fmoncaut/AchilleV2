@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&family=Manrope:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@100..900&family=Manrope:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-bright": "#f8f9fc", "on-surface": "#191c1e", "secondary-fixed-dim": "#ffb86f", "on-tertiary-fixed-variant": "#005235", "on-primary": "#ffffff", "tertiary": "#001309", "on-primary-container": "#708eaf", "on-secondary-fixed": "#2c1600", "inverse-surface": "#2d3133", "surface-container-lowest": "#ffffff", "primary-container": "#002642", "on-tertiary-fixed": "#002113", "background": "#f8f9fc", "tertiary-fixed-dim": "#72daa8", "surface-dim": "#d8dadd", "surface-container-high": "#e6e8eb", "tertiary-fixed": "#8ef7c2", "error": "#ba1a1a", "on-primary-fixed": "#001d34", "on-error": "#ffffff", "primary-fixed-dim": "#abc9ed", "on-tertiary-container": "#2f9d70", "on-secondary-fixed-variant": "#693c00", "on-error-container": "#93000a", "on-primary-fixed-variant": "#2a4967", "on-background": "#191c1e", "secondary": "#8a5100", "secondary-container": "#fe9800", "surface-container-low": "#f2f4f7", "inverse-on-surface": "#eff1f4", "inverse-primary": "#abc9ed", "tertiary-container": "#002b1a", "surface-container": "#eceef1", "surface-variant": "#e0e3e6", "primary": "#001020", "outline-variant": "#c3c7ce", "on-surface-variant": "#43474d", "on-secondary-container": "#643900", "secondary-fixed": "#ffdcbd", "on-secondary": "#ffffff", "primary-fixed": "#d0e4ff", "surface": "#f8f9fc", "error-container": "#ffdad6", "on-tertiary": "#ffffff", "outline": "#73777e", "surface-tint": "#436180", "surface-container-highest": "#e0e3e6" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter-desktop": "1.5rem", "space-sm": "0.5rem", "space-xs": "0.25rem", "space-md": "1rem", "space-xl": "2rem", "margin-desktop": "2rem", "gutter": "1rem", "margin-tablet": "1.5rem", "space-lg": "1.5rem", "margin": "1rem" }, "fontFamily": { "body-sm": ["Manrope"], "price-card": ["Bricolage Grotesque"], "display-mobile": ["Bricolage Grotesque"], "label-xs": ["Manrope"], "label-lg": ["Manrope"], "body-md": ["Manrope"], "headline-lg-mobile": ["Bricolage Grotesque"], "headline-md": ["Bricolage Grotesque"], "display": ["Bricolage Grotesque"], "headline-sm": ["Bricolage Grotesque"], "price-hero": ["Bricolage Grotesque"], "headline-lg": ["Bricolage Grotesque"], "label-md": ["Manrope"], "body-lg": ["Manrope"] }, "fontSize": { "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "500" }], "price-card": ["20px", { "lineHeight": "24px", "fontWeight": "800" }], "display-mobile": ["34px", { "lineHeight": "40px", "fontWeight": "800" }], "label-xs": ["10px", { "lineHeight": "12px", "fontWeight": "800" }], "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "700" }], "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "500" }], "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }], "headline-md": ["24px", { "lineHeight": "30px", "fontWeight": "700" }], "display": ["48px", { "lineHeight": "56px", "fontWeight": "800" }], "headline-sm": ["20px", { "lineHeight": "26px", "fontWeight": "600" }], "price-hero": ["28px", { "lineHeight": "32px", "fontWeight": "800" }], "headline-lg": ["32px", { "lineHeight": "38px", "fontWeight": "700" }], "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "700" }], "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface-container-lowest/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs"><img alt="Brand logo. - Primary color: #002642
+- Font: bricolageGrotesque
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VMURyTyMAACweLNa8pYhaBIFyjJQBV0W_4UAimQ9ysoyr8VSPgjQ6u1l0vT8pJc5Ye_XpsxBleODDNjR9NJnjfZulCGOqjU3wSlwoHrRyeVATY4XkBwNXqiuwg7xXBsbF2DU2ih-HuwqlnmXUoUYC_rrC876KPLE3UOKDLCVdB-7K_hJc7JFazVKrlmbmlHX7wUFB0Z2-755mtKQulyjKSQCp5KwB9mm6JVqKOmGzK"/><span class="font-headline-sm text-headline-sm text-primary tracking-tight">Achille</span><div class="hidden sm:flex items-center gap-space-xs ml-space-xs px-space-sm py-1 bg-surface-container-low rounded-full text-on-surface-variant font-label-md text-label-md"><span class="material-symbols-outlined text-[16px] text-secondary-container">location_on</span><span>Decouverte Carte</span></div></div><div class="flex items-center gap-space-xs"><button class="min-w-[44px] min-h-[44px] px-space-sm rounded-full bg-surface-container-low text-on-surface flex items-center gap-space-xs font-label-md text-label-md" type="button"><span class="material-symbols-outlined text-[18px] text-secondary-container">near_me</span><span class="font-label-md text-label-md font-bold">Nice • 5 km</span></button><a class="relative min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-low transition-colors" data-path="panier" href="#"><span class="material-symbols-outlined text-[24px]">shopping_bag</span><span class="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 bg-secondary-container text-primary font-label-xs text-label-xs font-extrabold rounded-full flex items-center justify-center">3</span></a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-20 pb-20 bg-surface min-h-screen"><div class="flex flex-col w-full relative select-none">
+<!-- Interactive Map Canvas Container (Mobile 390px Viewport Core) -->
+<div class="relative w-full h-[520px] overflow-hidden bg-surface-container-high">
+<!-- Stylized Map Texture & Roads (Nice / Baie des Anges / Lingostière / Arénas aesthetic) -->
+<div class="absolute inset-0 w-full h-full bg-cover bg-center filter saturate-125 contrast-105" data-location="Nice, France" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBKmo9XIAtWg2DSAZHiUqHyCb_CpzW_4o7m_s2aXxtItzmvuyJ8gQ45O-T2zY89JlRckMPHnVQuZnG9lZ5wdo1_xQ-JTqLHvv6KTitovqnbzImTSLn64V_3-an1JcXHOJht1JUSFdkG7RUVZoOEkBDN8aKTmEm7cM1AEwrSBUZF4szjfxlPKI6uRNBAL0pdCX_bGmrCnld-HBemIgoG9bnddoHWZ2wSRver08Nf2WA')"></div>
+<div class="absolute inset-0 bg-primary/10 pointer-events-none"></div>
+<!-- Floating Top Utility & Search Controls Over Map -->
+<div class="absolute top-0 left-0 right-0 z-20 px-space-md pt-space-sm flex flex-col gap-space-xs">
+<!-- Search Input Container -->
+<div class="w-full bg-surface-container-lowest/95 backdrop-blur-md rounded-full shadow-md px-space-md py-space-xs flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">search</span>
+<input class="flex-1 bg-transparent text-on-surface font-body-sm text-body-sm focus:outline-none placeholder:text-outline" placeholder="Magasin, rayon, marque (Bosch, Kärcher...)" type="text" value="Nice Ouest • Bricolage & Jardin"/>
+<button class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+<!-- Quick Geolocation & Active Radius Indicator Pill -->
+<div class="flex items-center justify-between">
+<button class="inline-flex items-center gap-space-xs bg-surface-container-lowest/90 backdrop-blur-md px-space-md py-1 rounded-full shadow-sm text-on-surface hover:bg-surface-container-lowest transition-all" type="button">
+<span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span>
+<span class="font-label-md text-label-md text-primary font-bold">Nice (06200)</span>
+<span class="text-outline font-label-xs">•</span>
+<span class="font-label-md text-label-md text-secondary font-bold">Rayon 5 km</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">keyboard_arrow_down</span>
+</button>
+<!-- Fresh Area Re-scan Indicator (Appears when map dragged) -->
+<button class="inline-flex items-center gap-space-xs bg-primary text-on-primary px-space-md py-1 rounded-full shadow-md text-label-md font-label-md active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[14px] text-secondary-container">refresh</span>
+<span>Actualiser la zone</span>
+</button>
+</div>
+<!-- Horizontal Quick Filter Chips Carousel -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 -mx-space-md px-space-md no-scrollbar">
+<!-- Active Chip -->
+<button class="flex-shrink-0 flex items-center gap-1.5 px-space-md py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-sm" type="button">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+<span>Tous (18)</span>
+</button>
+<button class="flex-shrink-0 flex items-center gap-1 px-space-md py-1.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-md text-label-md shadow-sm hover:bg-surface-container-lowest" type="button">
+<span>🔨 Bricolage</span>
+<span class="text-on-surface-variant font-normal">(8)</span>
+</button>
+<button class="flex-shrink-0 flex items-center gap-1 px-space-md py-1.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-md text-label-md shadow-sm hover:bg-surface-container-lowest" type="button">
+<span>🌿 Jardin & Plein Air</span>
+<span class="text-on-surface-variant font-normal">(4)</span>
+</button>
+<button class="flex-shrink-0 flex items-center gap-1 px-space-md py-1.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-md text-label-md shadow-sm hover:bg-surface-container-lowest" type="button">
+<span>⚡ Électro & Tech</span>
+<span class="text-on-surface-variant font-normal">(3)</span>
+</button>
+<button class="flex-shrink-0 flex items-center gap-1 px-space-md py-1.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-md text-label-md shadow-sm hover:bg-surface-container-lowest" type="button">
+<span>🛋️ Maison & Déco</span>
+<span class="text-on-surface-variant font-normal">(3)</span>
+</button>
+</div>
+</div>
+<!-- Live Geographic Pins Layer -->
+<!-- User GPS Location Marker (Magnan / Promenade) -->
+<div class="absolute left-1/3 top-[54%] -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center">
+<div class="relative flex items-center justify-center">
+<span class="absolute w-10 h-10 rounded-full bg-secondary-container/30 animate-ping"></span>
+<div class="w-6 h-6 rounded-full bg-secondary-container flex items-center justify-center shadow-lg">
+<div class="w-2.5 h-2.5 rounded-full bg-surface-container-lowest"></div>
+</div>
+</div>
+<div class="mt-1 px-space-xs py-0.5 rounded-md bg-primary/80 backdrop-blur-xs text-on-primary font-label-xs text-label-xs whitespace-nowrap shadow-sm">
+        Vous êtes ici (Magnan)
+      </div>
+</div>
+<!-- PIN 1: Featured Store (Bricomarché Nice Ouest) -->
+<div class="absolute left-[46%] top-[34%] -translate-x-1/2 -translate-y-full z-20 flex flex-col items-center cursor-pointer group">
+<!-- Active Deal Bubble Callout -->
+<div class="bg-primary text-on-primary rounded-xl px-space-sm py-1 shadow-xl flex items-center gap-1.5 transform hover:scale-105 transition-transform">
+<div class="bg-secondary-container text-on-secondary-container px-1 py-0.5 rounded font-price-card text-[12px] font-extrabold leading-none">
+          -62%
+        </div>
+<div class="flex flex-col">
+<span class="font-label-xs text-[11px] font-extrabold text-on-primary leading-tight">Bricomarché Ouest</span>
+<span class="font-label-xs text-[9px] text-tertiary-fixed-dim leading-none">24 offres • 1,8 km</span>
+</div>
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed">store</span>
+</div>
+<!-- Triangle Pin Pointer -->
+<div class="w-0 h-0 border-x-4 border-x-transparent border-t-[6px] border-t-primary"></div>
+<!-- Base Point Dot -->
+<div class="w-2.5 h-2.5 rounded-full bg-secondary-container shadow-md -mt-0.5"></div>
+</div>
+<!-- PIN 2: Mr. Bricolage Lingostière -->
+<div class="absolute left-[18%] top-[24%] -translate-x-1/2 -translate-y-full z-10 flex flex-col items-center cursor-pointer">
+<div class="bg-surface-container-lowest text-on-surface rounded-full px-space-xs py-0.5 shadow-md flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+<span class="font-label-xs text-[10px] font-bold text-primary">Mr. Brico</span>
+<span class="bg-primary-container text-on-primary px-1 rounded-full font-label-xs text-[9px]">-54%</span>
+</div>
+<div class="w-0 h-0 border-x-[3px] border-x-transparent border-t-[4px] border-t-surface-container-lowest"></div>
+</div>
+<!-- PIN 3: Boulanger Cap 3000 -->
+<div class="absolute left-[72%] top-[62%] -translate-x-1/2 -translate-y-full z-10 flex flex-col items-center cursor-pointer">
+<div class="bg-surface-container-lowest text-on-surface rounded-full px-space-xs py-0.5 shadow-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary-container">devices</span>
+<span class="font-label-xs text-[10px] font-bold text-primary">Boulanger Cap</span>
+<span class="bg-secondary-container text-on-secondary-container px-1 rounded-full font-label-xs text-[9px] font-extrabold">-50%</span>
+</div>
+<div class="w-0 h-0 border-x-[3px] border-x-transparent border-t-[4px] border-t-surface-container-lowest"></div>
+</div>
+<!-- PIN 4: Leroy Merlin Vallon -->
+<div class="absolute right-[8%] top-[28%] -translate-x-1/2 -translate-y-full z-10 flex flex-col items-center cursor-pointer">
+<div class="bg-surface-container-lowest text-on-surface rounded-full px-space-xs py-0.5 shadow-md flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+<span class="font-label-xs text-[10px] font-bold text-primary">Leroy Merlin</span>
+<span class="bg-surface-container text-on-surface px-1 rounded font-label-xs text-[9px]">-40%</span>
+</div>
+<div class="w-0 h-0 border-x-[3px] border-x-transparent border-t-[4px] border-t-surface-container-lowest"></div>
+</div>
+<!-- Floating Right Action Buttons on Map -->
+<div class="absolute right-space-md bottom-28 z-20 flex flex-col gap-space-xs">
+<!-- Recenter Position Button -->
+<button aria-label="Recentrer la carte" class="w-11 h-11 rounded-full bg-surface-container-lowest text-primary shadow-lg flex items-center justify-center active:scale-95 transition-transform hover:bg-surface-container-low" type="button">
+<span class="material-symbols-outlined text-[22px] text-secondary-container">my_location</span>
+</button>
+<!-- Layer View Toggler (Satellite / Plan) -->
+<button aria-label="Type de carte" class="w-11 h-11 rounded-full bg-surface-container-lowest text-on-surface-variant shadow-lg flex items-center justify-center active:scale-95 transition-transform hover:bg-surface-container-low" type="button">
+<span class="material-symbols-outlined text-[20px]">layers</span>
+</button>
+</div>
+<!-- Quick Floating "Vue Liste" Switcher Pill -->
+<div class="absolute left-1/2 -translate-x-1/2 bottom-20 z-20">
+<button class="flex items-center gap-space-xs px-space-lg py-2 rounded-full bg-primary text-on-primary shadow-xl font-label-md text-label-md active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[18px] text-secondary-container">view_agenda</span>
+<span>Afficher 18 magasins</span>
+</button>
+</div>
+</div>
+<!-- Interactive Bottom Drawer Sheet (Local Commerce & Deals Feed) -->
+<div class="relative -mt-16 z-30 w-full bg-surface rounded-t-[28px] shadow-[0_-8px_30px_rgba(0,38,66,0.12)] pt-3 pb-8 px-space-md flex flex-col gap-space-md">
+<!-- Drawer Drag Indicator Bar -->
+<div class="w-12 h-1.5 rounded-full bg-surface-variant self-center mb-1"></div>
+<!-- Drawer Summary & Quick Availability Filter Header -->
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-primary tracking-tight">Commerces à Nice</h2>
+<span class="px-2 py-0.5 rounded-full bg-primary-container text-on-primary font-label-xs text-label-xs font-bold">18</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Déstockage certifié & retrait direct comptoir</p>
+</div>
+<!-- Quick Toggle: Ouverts maintenant -->
+<button class="flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors" type="button">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span>
+<span class="font-bold text-on-tertiary-container">14 ouverts</span>
+</button>
+</div>
+<!-- STORE CARD 1: VEDETTE (Bricomarché Nice Ouest) -->
+<article class="w-full bg-surface-container-lowest rounded-2xl p-space-md shadow-md flex flex-col gap-space-sm relative overflow-hidden">
+<!-- Top Store Info Row -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<!-- Retailer Emblem -->
+<div class="w-11 h-11 rounded-xl bg-primary flex items-center justify-center text-on-primary font-headline-sm text-headline-sm flex-shrink-0">
+            B
+          </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<h3 class="font-headline-sm text-[16px] text-primary font-bold truncate">Bricomarché Nice Ouest</h3>
+<span class="material-symbols-outlined text-[16px] text-secondary-container flex-shrink-0" title="Partenaire vérifié">verified</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+<span class="flex items-center text-primary font-semibold">
+<span class="material-symbols-outlined text-[14px] mr-0.5 text-secondary-container">navigation</span>
+                1,8 km
+              </span>
+<span>•</span>
+<span class="text-on-tertiary-container font-semibold">Ouvert jusqu'à 19h30</span>
+</div>
+</div>
+</div>
+<button aria-label="Mettre en favori" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">bookmark_border</span>
+</button>
+</div>
+<!-- Express Click & Collect Promise Badge -->
+<div class="flex items-center gap-1.5 px-space-sm py-1 rounded-lg bg-surface-container-low text-on-tertiary-fixed-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-on-tertiary-container">bolt</span>
+<span class="font-bold">Retrait Click & Collect 2h</span>
+<span class="text-outline font-normal">• Guichet dédié Achille</span>
+</div>
+<!-- Live Deals Mini-Carousel Inside This Specific Store -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between text-label-xs font-label-xs text-on-surface-variant px-0.5">
+<span class="font-bold uppercase tracking-wider text-primary">24 produits en déstockage immédiat</span>
+<span class="text-secondary font-bold">Voir tout</span>
+</div>
+<!-- 2 Mini Deal Cards Grid -->
+<div class="grid grid-cols-2 gap-space-xs">
+<!-- Mini Product 1 -->
+<div class="bg-surface-container-low rounded-xl p-space-xs flex flex-col gap-1">
+<div class="relative w-full h-24 rounded-lg overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Professional cordless drill driver tool kit on a workshop bench, blue industrial finish with battery pack, clean studio lighting, high contrast commercial product photo." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWhQO5uToBYnnV575lblDpGyhaCxRdh2QUA51YlkrC2-_-2aVrC94HQyw-fC1HGTofpVi9xoXTRuK1iWzuic2yKPXnrZA949aTEQXke23oXtExDfFFLKIjHtF1UHO_OSg9RitkDEiDZ4brPb9Nmr9Nz8qsmzJnjJbmSfXds4oYxxIXda_9xVhQRkQZ5nwjYEYMg2wrEuAx_51dc0rUNbG_kMGcqVRktX538O_PsaY"/>
+<span class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-primary text-secondary-container font-label-xs text-[10px] font-extrabold leading-none">
+                -62%
+              </span>
+<span class="absolute bottom-1 right-1 px-1 rounded bg-surface-container-lowest/90 font-label-xs text-[9px] font-bold text-primary">
+                1 en rayon
+              </span>
+</div>
+<div class="flex flex-col px-0.5">
+<h4 class="font-label-md text-label-md text-on-surface font-semibold line-clamp-1">Perceuse Bosch Pro 18V</h4>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-price-card text-[15px] font-extrabold text-primary">69,90 €</span>
+<span class="line-through text-outline font-label-xs text-[11px]">184 €</span>
+</div>
+</div>
+</div>
+<!-- Mini Product 2 -->
+<div class="bg-surface-container-low rounded-xl p-space-xs flex flex-col gap-1">
+<div class="relative w-full h-24 rounded-lg overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Durable screwdriver bits case with professional ratchet heads in compact plastic container, vibrant orange and teal accents, modern DIY tool hardware photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCA5t2d3VOaMB9lwCCtS6G16wQL8GysuJLMUCOkQMrpwciuBo-rlYhnk_LTcGjSJaBG8k1OCuVE5a93QIYQnjM5Hki4xTfaBzB-stn18hDcyVm9g7uxEU_Rfj53GMQhFSZDMCQu8qzDpfIdvdUn1QVeQAeHXzc3DZpA9YnFkAzwZRDr7gne6GL--xMiHqzsXLYLDYXkbUcL9XDYpmiqutQUJwX8KAeTo1gou3l6a_Q"/>
+<span class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-primary text-secondary-container font-label-xs text-[10px] font-extrabold leading-none">
+                -45%
+              </span>
+<span class="absolute bottom-1 right-1 px-1 rounded bg-surface-container-lowest/90 font-label-xs text-[9px] font-bold text-primary">
+                3 dispo
+              </span>
+</div>
+<div class="flex flex-col px-0.5">
+<h4 class="font-label-md text-label-md text-on-surface font-semibold line-clamp-1">Coffret 43 Embouts</h4>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-price-card text-[15px] font-extrabold text-primary">14,90 €</span>
+<span class="line-through text-outline font-label-xs text-[11px]">27 €</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Footer for Store 1 -->
+<div class="flex items-center gap-space-xs pt-1">
+<a class="flex-1 min-h-[42px] px-space-md rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center gap-1 font-label-lg text-label-lg font-extrabold active:scale-98 transition-transform shadow-sm" href="#">
+<span>Découvrir le rayon (24)</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+<button class="min-w-[42px] min-h-[42px] rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-surface-container transition-colors" title="Itinéraire Waze (6 min)" type="button">
+<span class="material-symbols-outlined text-[20px]">directions_car</span>
+</button>
+</div>
+</article>
+<!-- STORE CARD 2: Mr. Bricolage Lingostière -->
+<article class="w-full bg-surface-container-lowest rounded-2xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-11 h-11 rounded-xl bg-surface-container-high flex items-center justify-center text-primary font-headline-sm text-headline-sm flex-shrink-0">
+            M
+          </div>
+<div class="flex flex-col min-w-0">
+<h3 class="font-headline-sm text-[16px] text-primary font-bold truncate">Mr. Bricolage Lingostière</h3>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+<span class="text-primary font-semibold">4,2 km</span>
+<span>•</span>
+<span class="text-on-tertiary-container font-semibold">Ouvert jusqu'à 20h00</span>
+</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-primary font-label-xs text-label-xs font-bold whitespace-nowrap">
+          16 déstockages
+        </span>
+</div>
+<!-- Featured Deal Preview Strip -->
+<div class="flex items-center gap-space-sm bg-surface-container-low p-space-xs rounded-xl">
+<div class="relative w-16 h-16 rounded-lg overflow-hidden bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Modern petrol lawnmower standing on trimmed green garden grass, high end garden equipment, sunny daylight, commercial lifestyle framing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1mnUV3sZK3FKLOk6Zb5PIF0n8KYTvAUdcY7hlKL8ATXY2RELiL0Hhp8z6vePruRBBNqvYiRqP6pnTSRDtuFY5HaIhMJmr-4bPHuZ1jG4IWwqqtKGscvt3LYUvgZVb4sUso6VI8ROvy5KxHEUyLFtN1pd65dpRu237U8cN3kVIXai3KJnUKyM5y3iBKyJGwT-oZORaqaDwobjrDtpsM2kF2v94loWY_VqWqRGybSQ"/>
+<span class="absolute top-0.5 left-0.5 px-1 rounded bg-primary text-secondary-container font-label-xs text-[9px] font-black">
+            -45%
+          </span>
+</div>
+<div class="flex-1 min-w-0">
+<span class="font-label-xs text-secondary font-bold uppercase tracking-wider">Top Affaire Jardin</span>
+<p class="font-label-md text-label-md text-primary font-bold truncate">Tondeuse thermique tractée 46cm</p>
+<div class="flex items-baseline gap-1.5 mt-0.5">
+<span class="font-price-card text-[16px] font-extrabold text-primary">179,00 €</span>
+<span class="line-through text-outline font-label-xs text-label-xs">329 €</span>
+</div>
+</div>
+<a class="w-9 h-9 rounded-full bg-surface-container-lowest text-primary flex items-center justify-center shadow-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</a>
+</div>
+</article>
+<!-- STORE CARD 3: Boulanger Nice Cap 3000 -->
+<article class="w-full bg-surface-container-lowest rounded-2xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-11 h-11 rounded-xl bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-headline-sm text-headline-sm flex-shrink-0">
+            B
+          </div>
+<div class="flex flex-col min-w-0">
+<h3 class="font-headline-sm text-[16px] text-primary font-bold truncate">Boulanger Cap 3000</h3>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+<span class="text-primary font-semibold">3,8 km</span>
+<span>•</span>
+<span class="text-on-tertiary-container font-semibold">Ouvert jusqu'à 20h30</span>
+</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface font-label-xs text-label-xs font-bold whitespace-nowrap">
+          9 fins de série
+        </span>
+</div>
+<!-- Featured Deal Preview Strip -->
+<div class="flex items-center gap-space-sm bg-surface-container-low p-space-xs rounded-xl">
+<div class="relative w-16 h-16 rounded-lg overflow-hidden bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Stainless steel premium food processor blender standing on minimalist modern kitchen marble counter, culinary appliance product design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYAS5VFx5BAWBc76cOfafdMjLGfn0J5gbnHf4cDausUIyopfBc3dxx-nmtft04QyWJEnsEGjTI55mDIg4HTffYqrQh97KOtFmgFaRS7BhZ--Je6p3rKvbcLhn1T7eM_z7F_uJof2vsvcKxX1ZlKeCUv1AcqXbk6HqXLjhYTlAbHSD6s_1JUW-pPco9YlBS4yLVUH9X3yL-BgRov7WPS5Tk8Yxj9XWvABqnljFogew"/>
+<span class="absolute top-0.5 left-0.5 px-1 rounded bg-secondary-container text-on-secondary-container font-label-xs text-[9px] font-black">
+            -50%
+          </span>
+</div>
+<div class="flex-1 min-w-0">
+<span class="font-label-xs text-tertiary-fixed-variant font-bold uppercase tracking-wider">Reconditionné Magasin</span>
+<p class="font-label-md text-label-md text-primary font-bold truncate">Robot cuiseur multifonction</p>
+<div class="flex items-baseline gap-1.5 mt-0.5">
+<span class="font-price-card text-[16px] font-extrabold text-primary">199,00 €</span>
+<span class="line-through text-outline font-label-xs text-label-xs">399 €</span>
+</div>
+</div>
+<a class="w-9 h-9 rounded-full bg-surface-container-lowest text-primary flex items-center justify-center shadow-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</a>
+</div>
+</article>
+<!-- Bottom Action Teaser Card -->
+<div class="w-full bg-primary text-on-primary rounded-2xl p-space-md flex items-center justify-between shadow-lg">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">notifications_active</span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-label-md text-label-md font-bold">Alerte Bricolage Nice</h4>
+<p class="font-body-sm text-[12px] text-on-primary-container">Soyez notifié dès qu'un stock arrive à -50%</p>
+</div>
+</div>
+<button class="px-space-md py-1.5 rounded-full bg-surface-container-lowest text-primary font-label-md text-label-md font-extrabold hover:bg-surface-container-low transition-colors whitespace-nowrap" type="button">
+        Activer
+      </button>
+</div>
+</div>
+</div>
+<script>
+  // Micro-interaction: Dynamic chip selection and drawer scroll feel
+  document.addEventListener('DOMContentLoaded', () => {
+    const chips = document.querySelectorAll('.no-scrollbar button');
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => {
+          c.classList.remove('bg-primary', 'text-on-primary');
+          c.classList.add('bg-surface-container-lowest/90', 'text-on-surface');
+        });
+        chip.classList.remove('bg-surface-container-lowest/90', 'text-on-surface');
+        chip.classList.add('bg-primary', 'text-on-primary');
+      });
+    });
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,38,66,0.06)]" data-active-classes="text-secondary font-bold"><div class="flex justify-around items-center h-16 px-space-xs"><a aria-current="page" class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] transition-colors text-secondary font-bold" data-path="decouverte-carte" href="#"><span class="material-symbols-outlined text-[24px]">map</span><span class="font-label-xs text-label-xs">Carte</span></a><a class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant transition-colors" data-path="bons-plans" href="#"><span class="material-symbols-outlined text-[24px]">local_offer</span><span class="font-label-xs text-label-xs">Bons Plans</span></a><a class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant transition-colors" data-path="commerces" href="#"><span class="material-symbols-outlined text-[24px]">storefront</span><span class="font-label-xs text-label-xs">Commerces</span></a><a class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant transition-colors" data-path="enregistres" href="#"><span class="material-symbols-outlined text-[24px]">bookmark_border</span><span class="font-label-xs text-label-xs">Favoris</span></a><a class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant transition-colors" data-path="compte-profil" href="#"><span class="material-symbols-outlined text-[24px]">account_circle</span><span class="font-label-xs text-label-xs">Profil</span></a></div></nav></body></html>

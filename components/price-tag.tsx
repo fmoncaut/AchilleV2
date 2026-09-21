@@ -1,4 +1,6 @@
+import { DiscountBadge } from "@/components/discount-badge";
 import { discountPercent, formatEur } from "@/lib/money";
+import { cn } from "@/lib/utils";
 
 type PriceTagProps = {
   priceRemise: string;
@@ -13,25 +15,22 @@ export function PriceTag({
   discountPct,
   size = "md",
 }: PriceTagProps) {
-  const discount =
-    discountPct ?? discountPercent(priceRemise, priceReference);
+  const discount = discountPct ?? discountPercent(priceRemise, priceReference);
   const priceClass =
-    size === "lg" ? "text-orange text-3xl font-bold" : "text-orange text-xl font-bold";
+    size === "lg"
+      ? "font-price-hero text-price-hero font-extrabold text-secondary-container"
+      : "font-price-card text-price-card font-extrabold text-secondary-container";
   const refClass =
     size === "lg"
-      ? "text-slate text-base font-medium line-through"
-      : "text-slate text-sm font-medium line-through";
+      ? "font-body-md text-body-md text-on-surface-variant line-through"
+      : "font-body-sm text-body-sm text-on-surface-variant line-through";
 
   return (
     <p className="flex flex-wrap items-center gap-x-3 gap-y-2">
-      {discount != null ? (
-        <span className="bg-orange text-navy rounded-full px-2.5 py-1 text-sm font-bold">
-          −{discount}&nbsp;%
-        </span>
-      ) : null}
+      {discount != null ? <DiscountBadge percent={discount} /> : null}
       <span className={priceClass}>{formatEur(priceRemise)}</span>
       {priceReference ? (
-        <span className={refClass}>{formatEur(priceReference)}</span>
+        <span className={cn(refClass)}>{formatEur(priceReference)}</span>
       ) : null}
     </p>
   );

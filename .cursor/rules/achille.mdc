@@ -56,11 +56,14 @@ Ne propose pas d'autre framework, ORM, fournisseur d'auth ou de carte sans qu'on
 - Valide et échappe toute entrée externe ; requêtes paramétrées (pas de SQL concaténé).
 - CI/CD via GitHub Actions + **OIDC** (aucune clé statique).
 
-## Identité visuelle (source : Figma Achille)
+## Identité visuelle (source : `docs/design-system.md`)
 
-- Navy `#002642` (fond d'en-têtes, texte fort) ; Orange `#FF9900` (CTA, prix, badges remise).
-- Fond clair, cartes arrondies, sans-serif gras, hiérarchie nette. Badge remise `-XX%` orange ; prix remisé + prix barré ; enseigne + distance sur chaque carte offre.
-- Reproduis les écrans du Figma (`docs/` référence les flux : Home, Search, Product, Magasin, Onboarding, Profil). Mets ces tokens dans `tailwind.config`.
+Tokens Material 3, à câbler dans Tailwind v4 (`@theme` dans `app/globals.css`) — **pas** de CDN Tailwind, **pas** de `tailwind.config` inline des maquettes Stitch.
+
+- **Polices** : Bricolage Grotesque (600/700/800) = display / titres / prix (`--font-display`) ; Manrope (400–800) = corps / labels (`--font-body`). Icônes : Material Symbols Outlined (police auto-hébergée).
+- **Navy** = `primary-container` `#002642` (pills actives, CTA navy, texte fort). **Orange** = `secondary-container` `#fe9800` (CTA, prix remisé, badges remise). **Vert tertiaire** = `on-tertiary-container` `#2f9d70` (ouvert / éco / vérifié).
+- Fond `background` `#f8f9fc`, texte `on-surface`. **Pills partout** (`rounded-full`). Ombres douces teintées navy. Badge `-XX%` orange ; prix remisé orange + barré ; enseigne + chip distance sur chaque carte offre.
+- Maquettes de référence : `design/stitch/` (`code.html` + `screen.png`). Ne pas copier le panier / paiement des maquettes en phase affiliation.
 
 ## Accessibilité & qualité
 

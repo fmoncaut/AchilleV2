@@ -1,6 +1,9 @@
+import { cn } from "@/lib/utils";
+
 type DistanceProps = {
   meters: number;
   className?: string;
+  variant?: "plain" | "chip";
 };
 
 export function formatDistance(meters: number): string {
@@ -18,6 +21,25 @@ export function formatDistance(meters: number): string {
   return `${Math.round(km)} km`;
 }
 
-export function Distance({ meters, className }: DistanceProps) {
-  return <span className={className}>{formatDistance(meters)}</span>;
+export function Distance({
+  meters,
+  className,
+  variant = "chip",
+}: DistanceProps) {
+  const label = formatDistance(meters);
+
+  if (variant === "plain") {
+    return <span className={className}>{label}</span>;
+  }
+
+  return (
+    <span
+      className={cn(
+        "bg-surface-container font-label-xs text-on-surface-variant inline-flex items-center rounded-full px-2 py-0.5 font-bold",
+        className,
+      )}
+    >
+      {label}
+    </span>
+  );
 }

@@ -1,0 +1,398 @@
+<!DOCTYPE html><html lang="fr" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><title>Achille V2 - Marketplace Géolocalisée</title><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; } .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "secondary-container": "#fe9800", "tertiary-fixed-dim": "#72daa8", "secondary-fixed-dim": "#ffb86f", "on-tertiary-fixed": "#002113", "on-primary": "#ffffff", "surface-bright": "#f8f9fc", "error": "#ba1a1a", "secondary-fixed": "#ffdcbd", "outline": "#73777e", "primary-fixed-dim": "#abc9ed", "on-secondary-container": "#643900", "tertiary-fixed": "#8ef7c2", "surface": "#f8f9fc", "surface-dim": "#d8dadd", "surface-container-lowest": "#ffffff", "tertiary": "#001309", "on-tertiary": "#ffffff", "surface-container-low": "#f2f4f7", "primary": "#001020", "inverse-surface": "#2d3133", "inverse-primary": "#abc9ed", "on-secondary-fixed": "#2c1600", "on-background": "#191c1e", "secondary": "#8a5100", "on-tertiary-fixed-variant": "#005235", "tertiary-container": "#002b1a", "surface-container": "#eceef1", "primary-container": "#002642", "surface-variant": "#e0e3e6", "on-tertiary-container": "#2f9d70", "on-primary-container": "#708eaf", "inverse-on-surface": "#eff1f4", "on-primary-fixed": "#001d34", "primary-fixed": "#d0e4ff", "on-primary-fixed-variant": "#2a4967", "background": "#f8f9fc", "outline-variant": "#c3c7ce", "on-surface-variant": "#43474d", "surface-container-high": "#e6e8eb", "on-surface": "#191c1e", "surface-container-highest": "#e0e3e6", "on-error": "#ffffff", "on-error-container": "#93000a", "error-container": "#ffdad6", "on-secondary": "#ffffff", "surface-tint": "#436180", "on-secondary-fixed-variant": "#693c00" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "space-md": "1rem", "space-lg": "1.5rem", "space-xl": "2rem", "gutter": "1rem", "margin-desktop": "2rem", "margin": "1rem", "margin-tablet": "1.5rem", "gutter-desktop": "1.5rem", "space-xs": "0.25rem" }, "fontFamily": { "headline-lg-mobile": [ "Bricolage Grotesque" ], "display-mobile": [ "Bricolage Grotesque" ], "label-md": [ "Manrope" ], "headline-sm": [ "Bricolage Grotesque" ], "price-card": [ "Bricolage Grotesque" ], "display": [ "Bricolage Grotesque" ], "label-xs": [ "Manrope" ], "body-lg": [ "Manrope" ], "price-hero": [ "Bricolage Grotesque" ], "body-sm": [ "Manrope" ], "headline-md": [ "Bricolage Grotesque" ], "body-md": [ "Manrope" ], "label-lg": [ "Manrope" ], "headline-lg": [ "Bricolage Grotesque" ] }, "fontSize": { "headline-lg-mobile": [ "26px", { "lineHeight": "32px", "fontWeight": "700" } ], "display-mobile": [ "34px", { "lineHeight": "40px", "fontWeight": "800" } ], "label-md": [ "12px", { "lineHeight": "16px", "fontWeight": "700" } ], "headline-sm": [ "20px", { "lineHeight": "26px", "fontWeight": "600" } ], "price-card": [ "20px", { "lineHeight": "24px", "fontWeight": "800" } ], "display": [ "48px", { "lineHeight": "56px", "fontWeight": "800" } ], "label-xs": [ "10px", { "lineHeight": "12px", "fontWeight": "800" } ], "body-lg": [ "18px", { "lineHeight": "28px", "fontWeight": "400" } ], "price-hero": [ "28px", { "lineHeight": "32px", "fontWeight": "800" } ], "body-sm": [ "13px", { "lineHeight": "18px", "fontWeight": "500" } ], "headline-md": [ "24px", { "lineHeight": "30px", "fontWeight": "700" } ], "body-md": [ "15px", { "lineHeight": "22px", "fontWeight": "500" } ], "label-lg": [ "14px", { "lineHeight": "20px", "fontWeight": "700" } ], "headline-lg": [ "32px", { "lineHeight": "38px", "fontWeight": "700" } ] } } } };</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,38,66,0.06)]"><div class="h-28 w-full px-gutter-desktop flex flex-col justify-between pt-space-xs pb-space-xs"><div class="flex items-center justify-between gap-space-md w-full"><div class="flex items-center gap-space-lg shrink-0"><a class="flex items-center gap-space-sm" data-path="explore-map" href="#"><img alt="Achille Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VMURyTyMAACweLNa8pYhaBIFyjJQBV0W_4UAimQ9ysoyr8VSPgjQ6u1l0vT8pJc5Ye_XpsxBleODDNjR9NJnjfZulCGOqjU3wSlwoHrRyeVATY4XkBwNXqiuwg7xXBsbF2DU2ih-HuwqlnmXUoUYC_rrC876KPLE3UOKDLCVdB-7K_hJc7JFazVKrlmbmlHX7wUFB0Z2-755mtKQulyjKSQCp5KwB9mm6JVqKOmGzK"><span class="font-headline-md text-headline-md tracking-tight text-primary-container hidden xl:inline-block">Achille</span></a><button class="flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-secondary-container text-[18px]">location_on</span><span class="font-label-md text-label-md text-primary-container font-bold">1 rue du Soleil, 06000 Nice</span><span class="w-1 h-1 rounded-full bg-outline-variant"></span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Rayon 5 km</span><span class="material-symbols-outlined text-on-surface-variant text-[16px]">keyboard_arrow_down</span></button></div><div class="flex-1 max-w-2xl mx-space-md"><div class="relative flex items-center w-full bg-surface-container-low rounded-full px-space-md py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]"><span class="material-symbols-outlined text-outline mr-space-xs text-[20px]">search</span><input class="w-full bg-transparent border-0 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-0" placeholder="Rechercher une perceuse, un canapé, une enseigne..." type="text"><button class="flex items-center gap-1 px-space-sm py-1 mr-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface text-[11px] font-label-md transition-colors" type="button"><span class="material-symbols-outlined text-[14px]">map</span><span class="hidden sm:inline">Carte</span></button><button class="w-8 h-8 rounded-full bg-secondary-container text-primary-container flex items-center justify-center shrink-0 hover:brightness-105 transition-transform active:scale-95" type="button"><span class="material-symbols-outlined text-[18px]">search</span></button></div></div><div class="flex items-center gap-space-sm shrink-0"><a class="hidden lg:flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all shadow-[0_2px_6px_rgba(0,38,66,0.15)]" data-path="explore-map" href="#"><span class="material-symbols-outlined text-[16px] text-secondary-container">explore</span><span class="">Explorer la carte</span><span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span></a><div class="h-6 w-px bg-surface-variant mx-space-xs hidden md:block"></div><a class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="saved-deals" href="#"><span class="material-symbols-outlined text-[22px]">favorite</span><span class="absolute top-1 right-1 w-4 h-4 rounded-full bg-primary-container text-on-primary font-label-xs text-label-xs flex items-center justify-center">3</span></a><a class="flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-primary-container transition-colors" data-path="click-collect-cart" href="#"><div class="relative"><span class="material-symbols-outlined text-[20px]">shopping_bag</span><span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-secondary-container"></span></div><div class="hidden xl:flex flex-col text-left leading-none"><span class="font-label-md text-label-md font-bold text-primary-container">Panier (1)</span><span class="font-label-xs text-label-xs text-on-surface-variant truncate max-w-[110px]">Bricomarché Nice</span></div></a><div class="flex items-center gap-space-xs pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="font-label-md text-label-md text-on-surface hidden md:inline font-bold">Alexandre</span></div></div></div><nav class="flex items-center gap-space-xs overflow-x-auto no-scrollbar w-full pt-1" data-active-classes="bg-primary-container text-on-primary font-bold rounded-full"><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Toutes les offres</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Bricolage &amp; Outillage</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Jardin &amp; Plein air</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Maison &amp; Déco</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Électroménager</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Multimédia &amp; High-Tech</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Mode &amp; Sport</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Déstockage massif (-50% et +)</a></nav></div></header><main class="w-full pt-28 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Progress Header & Breadcrumb -->
+<div class="w-full bg-surface-container-low py-space-md px-margin-desktop">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<!-- Breadcrumbs & Status -->
+<div class="flex items-center gap-space-sm text-body-sm text-on-surface-variant font-body-sm">
+<a class="hover:text-primary transition-colors flex items-center gap-1 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+          Panier
+        </a>
+<span class="">/</span>
+<span class="text-primary font-bold">Paiement &amp; Retrait</span>
+<span class="">/</span>
+<span class="text-outline">Confirmation</span>
+</div>
+<!-- Stepper Indicator -->
+<div class="flex items-center gap-space-sm">
+<!-- Step 1: Done -->
+<div class="flex items-center gap-1.5">
+<div class="w-6 h-6 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center font-label-xs text-label-xs font-bold">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant hidden sm:inline">Panier</span>
+</div>
+<div class="w-6 h-0.5 bg-tertiary-fixed"></div>
+<!-- Step 2 & 3: Active Combined Flow -->
+<div class="flex items-center gap-1.5">
+<div class="w-6 h-6 rounded-full bg-primary-container text-secondary-container flex items-center justify-center font-label-xs text-label-xs font-bold ring-4 ring-secondary-container/20">
+            2
+          </div>
+<span class="font-label-md text-label-md text-primary font-bold">Retrait &amp; Paiement</span>
+</div>
+<div class="w-6 h-0.5 bg-surface-container-highest"></div>
+<!-- Step 4: Next -->
+<div class="flex items-center gap-1.5 opacity-60">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-label-xs text-label-xs">
+            3
+          </div>
+<span class="font-label-md text-label-md text-on-surface-variant hidden sm:inline">Bon de retrait</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Countdown Stock Reservation Banner -->
+<div class="w-full bg-primary-container text-on-primary py-space-sm px-margin-desktop shadow-sm">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px] animate-pulse">timer</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg font-bold text-secondary-container tracking-wide uppercase">Stock physique réservé</span>
+<span class="text-label-xs font-label-xs bg-surface-container-lowest/10 px-2 py-0.5 rounded-full font-bold text-on-primary">Comptoir prioritaire</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-primary-container">
+            Vos 2 articles sont bloqués en rayon chez <strong class="text-on-primary">Bricomarché Nice Ouest</strong>. Finalisez pour garantir votre déstockage.
+          </p>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-primary/60 px-4 py-1.5 rounded-full shrink-0">
+<span class="text-body-sm font-body-sm text-on-primary-container">Temps restant :</span>
+<span class="font-headline-sm text-headline-sm text-secondary-container tracking-wider font-bold" id="countdown-timer">10:11</span>
+</div>
+</div>
+</div>
+<!-- Main Content Layout (Split View Desktop) -->
+<div class="max-w-7xl w-full mx-auto px-margin-desktop py-space-xl">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+<!-- LEFT COLUMN: Form Steps (8 Cols) -->
+<div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-space-lg">
+<!-- BLOC A: Choix du Créneau de Retrait -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_2px_12px_rgba(0,38,66,0.06)] p-space-lg flex flex-col gap-space-md">
+<!-- Section Title -->
+<div class="flex items-start justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-primary-fixed flex items-center justify-center text-primary-container font-bold text-label-lg">
+                1
+              </div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary-container">Créneau de retrait express</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">store</span>
+<span class="">Bricomarché Nice Ouest · Avenue Simone Veil · Ouvert jusqu'à 19h30</span>
+</p>
+</div>
+</div>
+<span class="px-space-sm py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-xs text-label-xs uppercase tracking-wider flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-fixed animate-ping"></span>
+              Prêt sous 2h
+            </span>
+</div>
+<!-- Timeslot Selector Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm pt-space-xs" id="slot-container">
+<!-- Option 1: Express Selected -->
+<button class="slot-option text-left p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container transition-all relative flex flex-col justify-between h-28 cursor-pointer" data-slot="today-express" type="button"><div class="flex items-center justify-between w-full"><span class="font-label-md text-label-md font-bold text-on-surface">Aujourd'hui dès 11h30</span><span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-xs text-label-xs font-extrabold">Le plus rapide</span></div><div class="flex flex-col"><span class="text-body-sm font-body-sm text-on-surface-variant">Mise de côté express garantie</span><span class="text-label-xs font-label-xs text-outline font-medium">Créneau prioritaire au guichet</span></div></button>
+<!-- Option 2 -->
+<button class="slot-option active-slot text-left p-space-md rounded-lg bg-surface-container-low transition-all relative flex flex-col justify-between h-28 cursor-pointer ring-2 ring-secondary-container" data-slot="today-afternoon" type="button"><div class="flex items-center justify-between w-full"><span class="font-label-md text-label-md font-bold text-primary-container">Aujourd'hui 14h00 - 17h00</span><span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-xs text-label-xs font-extrabold flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">check</span>Sélectionné</span></div><div class="flex flex-col"><span class="text-body-sm font-body-sm text-on-surface">Casier réservé pendant 48h</span><span class="text-label-xs font-label-xs text-on-surface-variant font-medium">Sans attente · Cet après-midi</span></div><div class="slot-radio absolute top-3 right-3 hidden"><span class="material-symbols-outlined text-secondary-container text-[18px]">check_circle</span></div></button>
+<!-- Option 3 -->
+<button class="slot-option text-left p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container transition-all relative flex flex-col justify-between h-28 cursor-pointer" data-slot="today-evening" type="button">
+<div class="flex items-center justify-between w-full">
+<span class="font-label-md text-label-md font-bold text-on-surface">Aujourd'hui 17h00 - 19h30</span>
+<span class="text-label-xs font-label-xs text-on-surface-variant font-bold">Fin de journée</span>
+</div>
+<div class="flex flex-col">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Idéal sortie de bureau</span>
+<span class="text-label-xs font-label-xs text-outline">Fermeture à 19h30</span>
+</div>
+</button>
+<!-- Option 4 -->
+<button class="slot-option text-left p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container transition-all relative flex flex-col justify-between h-28 cursor-pointer" data-slot="tomorrow-morning" type="button">
+<div class="flex items-center justify-between w-full">
+<span class="font-label-md text-label-md font-bold text-on-surface">Demain dès 09h00</span>
+<span class="text-label-xs font-label-xs text-outline font-bold">Matinée</span>
+</div>
+<div class="flex flex-col">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Prêt dès l'ouverture magasin</span>
+<span class="text-label-xs font-label-xs text-outline">Conservé jusqu'à J+3</span>
+</div>
+</button>
+</div>
+<!-- Pick-up Directives Box -->
+<div class="rounded-lg bg-surface-container-low p-space-md flex flex-col gap-space-sm">
+<div class="flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary-container text-[20px] mt-0.5">verified_user</span>
+<div class="flex flex-col text-body-sm font-body-sm text-on-surface">
+<span class="font-bold">Modalités de retrait au guichet Achille Express :</span>
+<span class="text-on-surface-variant">Présentez simplement le QR Code généré ou votre pièce d'identité au comptoir Déstockage à l'entrée.</span>
+</div>
+</div>
+<!-- Third Party Delegation Checkbox -->
+<div class="pt-space-xs flex flex-col gap-space-xs">
+<label class="flex items-center gap-space-sm cursor-pointer select-none">
+<input class="w-4 h-4 rounded text-secondary-container focus:ring-0 cursor-pointer" id="delegation-toggle" type="checkbox">
+<span class="font-label-md text-label-md text-on-surface">Je mandate un proche pour récupérer la commande à ma place</span>
+</label>
+<!-- Dynamic Delegation Inputs (hidden by default) -->
+<div class="hidden grid-cols-1 sm:grid-cols-2 gap-space-sm pl-6 pt-space-xs" id="delegation-fields">
+<input class="w-full bg-surface-container-lowest rounded-full px-space-md py-2 font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none" placeholder="Prénom du mandataire" type="text">
+<input class="w-full bg-surface-container-lowest rounded-full px-space-md py-2 font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none" placeholder="Nom de famille" type="text">
+</div>
+</div>
+<!-- SMS Notification Bar -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs pt-space-xs bg-surface-container-lowest p-space-sm rounded-lg">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[18px]">sms</span>
+<span class="text-body-sm font-body-sm text-on-surface">Alerte SMS de mise à disposition : <strong class="text-primary font-bold">06 12 34 56 78</strong></span>
+</div>
+<button class="text-left font-label-md text-label-md text-secondary-container hover:underline self-end sm:self-auto" type="button">Modifier le numéro</button>
+</div>
+</div>
+</section>
+<!-- BLOC B: Moyen de Paiement Sécurisé -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_2px_12px_rgba(0,38,66,0.06)] p-space-lg flex flex-col gap-space-lg">
+<!-- Section Title -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-primary-fixed flex items-center justify-center text-primary-container font-bold text-label-lg">
+                2
+              </div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary-container">Paiement 100% sécurisé</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Transaction cryptée de bout en bout · Débit uniquement à la confirmation de préparation</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary-container text-[24px]">lock</span>
+</div>
+<!-- Express One-Click: Apple Pay / Google Pay -->
+<div class="flex flex-col gap-space-xs">
+<button class="w-full h-12 rounded-full bg-primary text-on-primary font-headline-sm text-headline-sm flex items-center justify-center gap-2 hover:bg-black transition-all active:scale-[0.99] shadow-sm" type="button">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 170 170">
+<path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.67-7.81-11.96-14.34-6.3-9.58-11.08-20.78-14.34-33.6-3.26-12.82-4.9-24.81-4.9-35.98 0-14.24 3.73-25.96 11.19-35.18 7.46-9.22 16.73-13.88 27.81-13.99 5.86 0 12.16 1.63 18.91 4.89 6.74 3.26 10.74 4.89 12 4.89 1.09 0 5.43-1.74 13.04-5.21 7.6-3.48 14.12-4.94 19.55-4.4 14.45 1.19 25.53 6.84 33.24 16.94-12.82 7.71-19.12 18.24-18.9 31.59.22 10.43 4.13 19.12 11.73 26.07 7.6 6.95 16.62 10.97 27.05 12.06-2.17 6.74-4.89 13.91-8.15 21.51zM119.22 31.59c0-7.71 2.82-14.88 8.47-21.51 5.65-6.63 12.71-10.43 21.18-11.41.22 1.09.33 2.17.33 3.26 0 7.6-2.93 14.77-8.8 21.51-5.87 6.74-13.04 10.54-21.51 11.41.11-1.09.33-2.18.33-3.26z"></path>
+</svg>
+<span class="">Payer 84,80 € avec Apple Pay</span>
+</button>
+<span class="text-center font-label-xs text-label-xs text-outline">Validation biométrique Face ID instantanée</span>
+</div>
+<!-- Divider -->
+<div class="relative flex items-center justify-center">
+<div class="w-full h-px bg-surface-variant"></div>
+<span class="bg-surface-container-lowest px-space-md text-label-md font-label-md text-outline uppercase tracking-wider">ou par carte bancaire</span>
+</div>
+<!-- Card Payment Form Container -->
+<div class="flex flex-col gap-space-md">
+<!-- Card Option Active Tab -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<label class="flex items-center gap-space-sm cursor-pointer">
+<input checked="" class="w-4 h-4 text-secondary-container focus:ring-0 cursor-pointer" name="payment_method" type="radio">
+<span class="font-label-lg text-label-lg font-bold text-primary-container">Carte bancaire (Débit/Crédit)</span>
+<span class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-xs text-label-xs font-bold"><span class="material-symbols-outlined text-[14px]">verified</span>Carte vérifiée 3D Secure</span></label>
+<!-- Card Network Logos -->
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-primary font-bold text-[10px] tracking-wider">CB</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-[#1A1F71] font-extrabold text-[10px] tracking-wider">VISA</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-[#EB001B] font-extrabold text-[10px] tracking-wider">MC</span>
+</div>
+</div>
+<!-- Input Form -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md"><div class="sm:col-span-2 flex flex-col gap-1"><div class="flex items-center justify-between"><label class="font-label-md text-label-md text-on-surface">Numéro de carte</label><span class="flex items-center gap-1 font-label-xs text-label-xs text-on-tertiary-container font-bold"><span class="material-symbols-outlined text-[14px]">check_circle</span>Valide</span></div><div class="relative flex items-center"><input class="w-full bg-surface-container-lowest rounded-lg px-space-md py-2.5 font-body-md text-body-md text-primary font-semibold focus:outline-none shadow-sm ring-2 ring-tertiary-fixed" readonly="" type="text" value="4974 •••• •••• 8821"><div class="absolute right-3 flex items-center gap-1.5"><span class="material-symbols-outlined text-on-tertiary-container text-[20px]">check_circle</span><span class="material-symbols-outlined text-outline text-[20px]">credit_card</span></div></div></div><div class="flex flex-col gap-1"><div class="flex items-center justify-between"><label class="font-label-md text-label-md text-on-surface">Date d'expiration</label><span class="material-symbols-outlined text-on-tertiary-container text-[14px]">check_circle</span></div><input class="w-full bg-surface-container-lowest rounded-lg px-space-md py-2.5 font-body-md text-body-md text-primary font-semibold focus:outline-none shadow-sm ring-2 ring-tertiary-fixed" placeholder="MM / AA" readonly="" type="text" value="08 / 27"></div><div class="flex flex-col gap-1"><div class="flex items-center justify-between"><label class="font-label-md text-label-md text-on-surface">Cryptogramme (CVC)</label><span class="material-symbols-outlined text-on-tertiary-container text-[14px]">check_circle</span></div><div class="relative flex items-center"><input class="w-full bg-surface-container-lowest rounded-lg px-space-md py-2.5 font-body-md text-body-md text-primary font-semibold focus:outline-none shadow-sm tracking-widest ring-2 ring-tertiary-fixed" maxlength="3" readonly="" type="password" value="419"><span class="absolute right-3 material-symbols-outlined text-on-tertiary-container text-[18px]">verified_user</span></div></div><div class="sm:col-span-2 flex flex-col gap-1"><div class="flex items-center justify-between"><label class="font-label-md text-label-md text-on-surface">Nom du titulaire de la carte</label><span class="material-symbols-outlined text-on-tertiary-container text-[14px]">check_circle</span></div><input class="w-full bg-surface-container-lowest rounded-lg px-space-md py-2.5 font-body-md text-body-md text-primary font-semibold focus:outline-none shadow-sm uppercase ring-2 ring-tertiary-fixed" readonly="" type="text" value="ALEXANDRE DE ROCHEFORT"></div></div>
+<!-- Remember Card Checkbox -->
+<label class="flex items-center gap-space-sm cursor-pointer select-none pt-1">
+<input checked="" class="w-4 h-4 rounded text-secondary-container focus:ring-0 cursor-pointer" type="checkbox">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Enregistrer cette carte en toute sécurité pour mes prochains déstockages</span>
+</label><div class="p-space-sm bg-surface-container-lowest rounded-xl flex items-start gap-space-sm shadow-sm ring-1 ring-tertiary-fixed"><span class="material-symbols-outlined text-on-tertiary-container text-[22px] shrink-0 mt-0.5">verified_user</span><div class="text-body-sm font-body-sm text-on-surface flex flex-col gap-0.5"><span class="font-bold text-primary-container flex items-center gap-1.5">Empreinte bancaire validée avec succès <span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed animate-ping"></span></span><span class="text-on-surface-variant text-[12px] leading-tight">Aucun débit immédiat. Le montant de <strong class="text-primary">84,80 €</strong> ne sera prélevé qu'une fois votre commande préparée et remise au comptoir Bricomarché Nice Ouest.</span></div></div>
+</div>
+<!-- Alternative 3x Alma Option -->
+<div class="p-space-md rounded-xl bg-surface-container hover:bg-surface-variant transition-colors flex items-center justify-between cursor-pointer">
+<label class="flex items-center gap-space-sm cursor-pointer">
+<input class="w-4 h-4 text-secondary-container focus:ring-0 cursor-pointer" name="payment_method" type="radio">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg font-bold text-primary-container">Payer en 3x sans frais dès 50 € avec Alma</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">3 mensualités de <strong class="text-primary">28,27 €</strong> sans intérêt supplémentaire</span>
+</div>
+</label>
+<span class="px-2 py-1 rounded bg-surface-container-highest text-primary font-bold text-label-xs font-label-xs">0% FRAIS</span>
+</div>
+</div>
+<!-- Trust & Legal Badges -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-sm pt-space-xs text-on-surface-variant">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[18px]">lock_clock</span>
+<span class="text-body-sm font-body-sm">Cryptage TLS 256 bits</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[18px]">verified</span>
+<span class="text-body-sm font-body-sm">Norme bancaire DSP2</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[18px]">receipt_long</span>
+<span class="text-body-sm font-body-sm">Facture TVA éditée</span>
+</div>
+</div>
+</section>
+</div>
+<!-- RIGHT COLUMN: Order Summary Sticky Sidebar (4-5 Cols) -->
+<div class="lg:col-span-5 xl:col-span-4 sticky top-32 flex flex-col gap-space-md">
+<!-- Summary Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(0,38,66,0.08)] p-space-lg flex flex-col gap-space-md">
+<!-- Card Header & Badge -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-primary-container">Récapitulatif commande</h3>
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-xs text-label-xs font-bold uppercase tracking-wider">
+                Mono-Magasin
+              </span>
+</div>
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-on-surface-variant"><span class="material-symbols-outlined text-[16px] text-secondary-container">apartment</span><span class="">Retrait : <strong>Bricomarché Nice Ouest</strong> (14h - 17h · 1,8 km)</span></div>
+</div>
+<!-- Items Mini List -->
+<div class="flex flex-col gap-space-sm py-space-xs">
+<!-- Item 1: Bosch Drill -->
+<div class="flex items-center gap-space-sm p-space-xs rounded-lg bg-surface-container-low">
+<img class="w-14 h-14 object-cover rounded-lg shrink-0" data-alt="Compact professional blue cordless power drill with 18V battery pack on a clean workshop surface, vibrant lighting showcasing high quality tool details in navy and orange aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKaj3Pt4FlBb3tv3JJAj5sQy7t24r7JUFfOdbz5YEQ-QO-1_3ZglitBH1fHTdLhJ3BH_F-VD7rTC-gcgKJ6Iw4r1cSRm57NmUTYLm-soOO1OTdhRJI7-B99QnHa9eYB9ICFK8Wt3606dAvHHVUskAKdAL5QSEz8-JDGMCkC34L62VPQD8k6B1WFCFMfcEEiB-3NYdNDMLnDXA6xbt8SYjjiOnq__zHn9CPRX5UAeA">
+<div class="flex-1 min-w-0 flex flex-col justify-between">
+<div class="flex items-start justify-between gap-1">
+<span class="font-label-md text-label-md text-primary truncate font-bold">Perceuse Bosch GSB 18V-21</span>
+<span class="font-price-card text-price-card text-primary-container shrink-0">69,90 €</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-outline">Qté: 1 · Neuf déstocké</span>
+<span class="text-label-xs font-label-xs line-through text-outline">169,00 €</span>
+</div>
+</div>
+</div>
+<!-- Item 2: Drill bits set -->
+<div class="flex items-center gap-space-sm p-space-xs rounded-lg bg-surface-container-low">
+<img class="w-14 h-14 object-cover rounded-lg shrink-0" data-alt="Rugged grey and red Bosch tool accessory case with assorted 43 screwdriving bits and quick change magnetic holder neatly organized" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfXMvCudRkvV7JTCFdTH0EkE7u4_bNo6tYWqDFcljW91b7ZlajSeSQRmxg06AXITwLuiUXxCcoQ8sMd9VEfNkxvpnkAcURfMWDxASAR6rKdxH0C-D_ij6JZt1-xnXVsAE8qLzQNK2RlMweLhgK1uwIJmxKT4Fmx7vTWEJrxeiFEJ-OqT_R15cXDokAQTcmbmCoFDxkLn6hZyrA1OCPXe9pPqrW_5m2HoCdM6tOlLM">
+<div class="flex-1 min-w-0 flex flex-col justify-between">
+<div class="flex items-start justify-between gap-1">
+<span class="font-label-md text-label-md text-primary truncate font-bold">Coffret 43 embouts Bosch</span>
+<span class="font-price-card text-price-card text-primary-container shrink-0">14,90 €</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-outline">Qté: 1 · Boîte scellée</span>
+<span class="text-label-xs font-label-xs line-through text-outline">42,00 €</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Price Breakdown Table -->
+<div class="flex flex-col gap-2 pt-space-xs">
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span class="">Prix magasin initial (hors Achille)</span>
+<span class="line-through">211,00 €</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-tertiary-container font-bold">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">savings</span>
+                Économie locale déstockage
+              </span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed text-label-xs font-label-xs">-126,20 € (-60%)</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span class="">Préparation express comptoir</span>
+<span class="text-on-tertiary-container font-bold">Offert <span class="line-through text-outline text-[11px] font-normal">4,90 €</span></span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span class="">Frais de plateforme Achille</span>
+<span class="text-on-tertiary-container font-bold">0,00 € (Gratuit)</span>
+</div>
+<div class="h-px bg-surface-variant my-1"></div>
+<!-- Grand Total -->
+<div class="flex items-baseline justify-between pt-1">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-primary-container">Total à régler</span>
+<span class="text-label-xs font-label-xs text-outline">TVA 20% incluse (14,13 €)</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-price-hero text-price-hero text-secondary-container">84,80 €</span>
+<span class="text-label-xs font-label-xs text-on-tertiary-container font-bold">Vous gagnez 126,20 €</span>
+</div>
+</div>
+</div>
+<!-- Big Main Action CTA Button -->
+<div class="flex flex-col gap-2 w-full"><div class="flex items-center justify-center gap-1.5 py-1 px-3 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-xs text-label-xs font-bold mx-auto"><span class="material-symbols-outlined text-[14px]">verified</span>Moyen de paiement vérifié ✓</div><button class="w-full py-3.5 px-space-md rounded-full bg-secondary-container text-primary-container font-headline-sm text-headline-sm font-bold flex items-center justify-center gap-space-sm hover:brightness-105 active:scale-[0.98] transition-all shadow-[0_4px_16px_rgba(254,152,0,0.3)]" type="button"><span class="material-symbols-outlined text-[20px]">lock</span><span class="">Valider ma réservation &amp; Empreinte (84,80 €)</span><span class="material-symbols-outlined text-[20px]">arrow_forward</span></button></div>
+<!-- Under Button Micro-Reassurance -->
+<p class="text-center text-body-sm font-body-sm text-outline text-[12px] leading-tight">
+            Débit différé : Vous ne réglez que lorsque votre colis est vérifié et prêt au guichet de Nice Ouest. Annulation sans frais en 1 clic.
+          </p>
+<!-- Store Access & Pickup Instructions Widget -->
+<div class="p-space-sm rounded-lg bg-surface-container flex flex-col gap-2">
+<div class="flex items-center gap-space-xs text-label-md font-label-md text-primary">
+<span class="material-symbols-outlined text-secondary-container text-[18px]">directions_car</span>
+<span class="">Accès &amp; Praticité magasin :</span>
+</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant flex flex-col gap-1 pl-6">
+<span class="">• Parking gratuit 150 places (bornes recharge dispo)</span>
+<span class="">• Comptoir Click &amp; Collect situé à l'accueil principal</span>
+<span class="">• Présenter le code SMS reçu dans 2h</span>
+</div>
+</div>
+</div>
+<!-- Geo Map Preview -->
+<div class="w-full h-32 rounded-xl bg-surface-container-high shadow-inner overflow-hidden relative group" data-location="Avenue Simone Veil, Nice, France">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent z-10"></div>
+<div class="absolute bottom-2 left-3 z-20 flex items-center gap-1.5 text-on-primary"><span class="material-symbols-outlined text-[16px] text-secondary-container">apartment</span><span class="">Retrait : <strong>Bricomarché Nice Ouest</strong> (14h - 17h · 1,8 km)</span></div>
+<a class="absolute top-2 right-2 z-20 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 text-primary-container font-label-xs text-label-xs font-bold hover:bg-surface-container-lowest transition-colors flex items-center gap-1" href="#">
+<span class="">Itinéraire Waze</span>
+<span class="material-symbols-outlined text-[12px]">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Dynamic slot selection toggler
+  document.querySelectorAll('.slot-option').forEach(option => {
+    option.addEventListener('click', () => {
+      document.querySelectorAll('.slot-option').forEach(el => {
+        el.classList.remove('ring-2', 'ring-secondary-container');
+        const radio = el.querySelector('.slot-radio');
+        if (radio) radio.classList.add('hidden');
+      });
+      option.classList.add('ring-2', 'ring-secondary-container');
+      const activeRadio = option.querySelector('.slot-radio');
+      if (activeRadio) activeRadio.classList.remove('hidden');
+    });
+  });
+
+  // Delegation toggle display
+  const delegationToggle = document.getElementById('delegation-toggle');
+  const delegationFields = document.getElementById('delegation-fields');
+  if (delegationToggle && delegationFields) {
+    delegationToggle.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        delegationFields.classList.remove('hidden');
+        delegationFields.classList.add('grid');
+      } else {
+        delegationFields.classList.add('hidden');
+        delegationFields.classList.remove('grid');
+      }
+    });
+  }
+
+  // Active Reservation Countdown Timer simulation
+  let duration = 11 * 60 + 42;
+  const timerDisplay = document.getElementById('countdown-timer');
+  if (timerDisplay) {
+    setInterval(() => {
+      if (duration > 0) {
+        duration--;
+        const mins = Math.floor(duration / 60);
+        const secs = duration % 60;
+        timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      }
+    }, 1000);
+  }
+</script></main><footer class="w-full bg-surface-container-low mt-auto"><div class="w-full px-gutter-desktop py-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><span class="font-headline-sm text-headline-sm text-primary-container font-bold">Achille</span><span class="text-body-sm text-on-surface-variant">Plateforme d'économie circulaire et déstockage de proximité.</span></div><div class="flex items-center gap-space-lg font-label-md text-label-md text-on-surface-variant"><a class="hover:text-on-surface transition-colors" data-path="about" href="#">Commerçants Partenaires</a><a class="hover:text-on-surface transition-colors" data-path="about" href="#">Engagement Anti-Gaspillage</a><a class="hover:text-on-surface transition-colors" data-path="about" href="#">Aide &amp; FAQ</a></div><div class="text-body-sm text-outline">© 2024 Achille Technologies. Tous droits réservés.</div></div></footer>
+
+
+
+</body></html>

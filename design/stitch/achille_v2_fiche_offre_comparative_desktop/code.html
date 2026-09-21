@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>Achille V2 - Marketplace Géolocalisée</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; } .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "secondary-container": "#fe9800", "tertiary-fixed-dim": "#72daa8", "secondary-fixed-dim": "#ffb86f", "on-tertiary-fixed": "#002113", "on-primary": "#ffffff", "surface-bright": "#f8f9fc", "error": "#ba1a1a", "secondary-fixed": "#ffdcbd", "outline": "#73777e", "primary-fixed-dim": "#abc9ed", "on-secondary-container": "#643900", "tertiary-fixed": "#8ef7c2", "surface": "#f8f9fc", "surface-dim": "#d8dadd", "surface-container-lowest": "#ffffff", "tertiary": "#001309", "on-tertiary": "#ffffff", "surface-container-low": "#f2f4f7", "primary": "#001020", "inverse-surface": "#2d3133", "inverse-primary": "#abc9ed", "on-secondary-fixed": "#2c1600", "on-background": "#191c1e", "secondary": "#8a5100", "on-tertiary-fixed-variant": "#005235", "tertiary-container": "#002b1a", "surface-container": "#eceef1", "primary-container": "#002642", "surface-variant": "#e0e3e6", "on-tertiary-container": "#2f9d70", "on-primary-container": "#708eaf", "inverse-on-surface": "#eff1f4", "on-primary-fixed": "#001d34", "primary-fixed": "#d0e4ff", "on-primary-fixed-variant": "#2a4967", "background": "#f8f9fc", "outline-variant": "#c3c7ce", "on-surface-variant": "#43474d", "surface-container-high": "#e6e8eb", "on-surface": "#191c1e", "surface-container-highest": "#e0e3e6", "on-error": "#ffffff", "on-error-container": "#93000a", "error-container": "#ffdad6", "on-secondary": "#ffffff", "surface-tint": "#436180", "on-secondary-fixed-variant": "#693c00" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "space-md": "1rem", "space-lg": "1.5rem", "space-xl": "2rem", "gutter": "1rem", "margin-desktop": "2rem", "margin": "1rem", "margin-tablet": "1.5rem", "gutter-desktop": "1.5rem", "space-xs": "0.25rem" }, "fontFamily": { "headline-lg-mobile": [ "Bricolage Grotesque" ], "display-mobile": [ "Bricolage Grotesque" ], "label-md": [ "Manrope" ], "headline-sm": [ "Bricolage Grotesque" ], "price-card": [ "Bricolage Grotesque" ], "display": [ "Bricolage Grotesque" ], "label-xs": [ "Manrope" ], "body-lg": [ "Manrope" ], "price-hero": [ "Bricolage Grotesque" ], "body-sm": [ "Manrope" ], "headline-md": [ "Bricolage Grotesque" ], "body-md": [ "Manrope" ], "label-lg": [ "Manrope" ], "headline-lg": [ "Bricolage Grotesque" ] }, "fontSize": { "headline-lg-mobile": [ "26px", { "lineHeight": "32px", "fontWeight": "700" } ], "display-mobile": [ "34px", { "lineHeight": "40px", "fontWeight": "800" } ], "label-md": [ "12px", { "lineHeight": "16px", "fontWeight": "700" } ], "headline-sm": [ "20px", { "lineHeight": "26px", "fontWeight": "600" } ], "price-card": [ "20px", { "lineHeight": "24px", "fontWeight": "800" } ], "display": [ "48px", { "lineHeight": "56px", "fontWeight": "800" } ], "label-xs": [ "10px", { "lineHeight": "12px", "fontWeight": "800" } ], "body-lg": [ "18px", { "lineHeight": "28px", "fontWeight": "400" } ], "price-hero": [ "28px", { "lineHeight": "32px", "fontWeight": "800" } ], "body-sm": [ "13px", { "lineHeight": "18px", "fontWeight": "500" } ], "headline-md": [ "24px", { "lineHeight": "30px", "fontWeight": "700" } ], "body-md": [ "15px", { "lineHeight": "22px", "fontWeight": "500" } ], "label-lg": [ "14px", { "lineHeight": "20px", "fontWeight": "700" } ], "headline-lg": [ "32px", { "lineHeight": "38px", "fontWeight": "700" } ] } } } };</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,38,66,0.06)]"><div class="h-28 w-full px-gutter-desktop flex flex-col justify-between pt-space-xs pb-space-xs"><div class="flex items-center justify-between gap-space-md w-full"><div class="flex items-center gap-space-lg shrink-0"><a class="flex items-center gap-space-sm" data-path="explore-map" href="#"><img alt="Achille Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VMURyTyMAACweLNa8pYhaBIFyjJQBV0W_4UAimQ9ysoyr8VSPgjQ6u1l0vT8pJc5Ye_XpsxBleODDNjR9NJnjfZulCGOqjU3wSlwoHrRyeVATY4XkBwNXqiuwg7xXBsbF2DU2ih-HuwqlnmXUoUYC_rrC876KPLE3UOKDLCVdB-7K_hJc7JFazVKrlmbmlHX7wUFB0Z2-755mtKQulyjKSQCp5KwB9mm6JVqKOmGzK"/><span class="font-headline-md text-headline-md tracking-tight text-primary-container hidden xl:inline-block">Achille</span></a><button class="flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-secondary-container text-[18px]">location_on</span><span class="font-label-md text-label-md text-primary-container font-bold">1 rue du Soleil, 06000 Nice</span><span class="w-1 h-1 rounded-full bg-outline-variant"></span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Rayon 5 km</span><span class="material-symbols-outlined text-on-surface-variant text-[16px]">keyboard_arrow_down</span></button></div><div class="flex-1 max-w-2xl mx-space-md"><div class="relative flex items-center w-full bg-surface-container-low rounded-full px-space-md py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]"><span class="material-symbols-outlined text-outline mr-space-xs text-[20px]">search</span><input class="w-full bg-transparent border-0 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-0" placeholder="Rechercher une perceuse, un canapé, une enseigne..." type="text"/><button class="flex items-center gap-1 px-space-sm py-1 mr-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface text-[11px] font-label-md transition-colors" type="button"><span class="material-symbols-outlined text-[14px]">map</span><span class="hidden sm:inline">Carte</span></button><button class="w-8 h-8 rounded-full bg-secondary-container text-primary-container flex items-center justify-center shrink-0 hover:brightness-105 transition-transform active:scale-95" type="button"><span class="material-symbols-outlined text-[18px]">search</span></button></div></div><div class="flex items-center gap-space-sm shrink-0"><a class="hidden lg:flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all shadow-[0_2px_6px_rgba(0,38,66,0.15)]" data-path="explore-map" href="#"><span class="material-symbols-outlined text-[16px] text-secondary-container">explore</span><span>Explorer la carte</span><span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span></a><div class="h-6 w-px bg-surface-variant mx-space-xs hidden md:block"></div><a class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="saved-deals" href="#"><span class="material-symbols-outlined text-[22px]">favorite</span><span class="absolute top-1 right-1 w-4 h-4 rounded-full bg-primary-container text-on-primary font-label-xs text-label-xs flex items-center justify-center">3</span></a><a class="flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-primary-container transition-colors" data-path="click-collect-cart" href="#"><div class="relative"><span class="material-symbols-outlined text-[20px]">shopping_bag</span><span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-secondary-container"></span></div><div class="hidden xl:flex flex-col text-left leading-none"><span class="font-label-md text-label-md font-bold text-primary-container">Panier (1)</span><span class="font-label-xs text-label-xs text-on-surface-variant truncate max-w-[110px]">Bricomarché Nice</span></div></a><div class="flex items-center gap-space-xs pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="font-label-md text-label-md text-on-surface hidden md:inline font-bold">Alexandre</span></div></div></div><nav class="flex items-center gap-space-xs overflow-x-auto no-scrollbar w-full pt-1" data-active-classes="bg-primary-container text-on-primary font-bold rounded-full"><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Toutes les offres</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Bricolage &amp; Outillage</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Jardin &amp; Plein air</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Maison &amp; Déco</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Électroménager</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Multimédia &amp; High-Tech</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Mode &amp; Sport</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="deals-feed" href="#">Déstockage massif (-50% et +)</a></nav></div></header><main class="w-full pt-28 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Breadcrumb Navigation Bar -->
+<div class="w-full px-gutter-desktop py-space-sm bg-surface-container-low/60">
+<div class="max-w-7xl mx-auto flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md overflow-x-auto no-scrollbar">
+<a class="hover:text-primary transition-colors" href="#">Accueil</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Bricolage &amp; Outillage</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Outillage électroportatif</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Perceuses &amp; Visseuses</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-on-surface font-bold truncate">Bosch Professional GSB 18V-21</span>
+</div>
+</div>
+<!-- Main Product Container -->
+<div class="w-full px-gutter-desktop py-space-lg">
+<div class="max-w-7xl mx-auto flex flex-col gap-space-xl">
+<!-- Top Section: Visual Gallery + Hero Product Metadata Bento -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Left: Image Gallery (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<div class="relative bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm overflow-hidden flex items-center justify-center min-h-[380px] group">
+<img class="w-full h-80 object-contain transition-transform duration-300 group-hover:scale-105" data-alt="Professional blue cordless combi drill Bosch GSB 18V-21 with two black Li-Ion battery packs, high-speed charger, and rugged L-BOXX carrying case on a minimalist warm wooden workbench with natural workshop lighting." id="main-product-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnY180NqA4g9x3qpGvBnEUmdwmDbaN-CSic7UA3ILku8B69tHHtUE3J6i05RSgWRRXt6NKb5wV56UaXvDWm8FvyGfIH1nCvFX8rCDMg-MxLTJjsJPG6AZCrEmEHpFsEOyEbS0QLw49Tg7BG080IYkR6jwTudGrnzvFqZGoABJYNBkVC0jru5QGraL0VBvmTcujMRJ82_5T0JxPdd4yBfM4vD3jm1INYOMX2c8WBlY"/>
+<!-- Badges Floating Over Image -->
+<div class="absolute top-4 left-4 flex flex-col gap-1.5 items-start">
+<span class="px-space-md py-1 rounded-full bg-secondary-container text-on-secondary-container font-headline-sm text-label-md uppercase tracking-wider shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">local_fire_department</span>
+                Déstockage Local -62%
+              </span>
+<span class="px-space-sm py-0.5 rounded-full bg-primary-container text-on-primary font-label-xs text-label-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-tertiary-fixed">verified</span>
+                Neuf • Garantie constructeur 3 ans
+              </span>
+</div>
+<button class="absolute bottom-4 right-4 w-9 h-9 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">zoom_in</span>
+</button>
+</div>
+<!-- Thumbnails Selector -->
+<div class="grid grid-cols-4 gap-space-sm">
+<button class="p-1 rounded-xl bg-surface-container-lowest ring-2 ring-secondary-container shadow-sm hover:opacity-90 transition-all" onclick="swapThumb(this)" type="button">
+<img class="w-full h-16 object-contain rounded-lg" data-alt="Bosch Professional combi drill front angle with battery mounted in clean studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk_O_ur3gyYbjHhpXvNJ273qJFwnghQJVdmp5gOtu5UkDz6DQRaCdL6XxH4fsZrEn_dIk6ipINq5DbZ2IYxu9E0oeUevgT6HunsYOw1_cpyeUukorfmEpdMatKk4eiOm9l6OHEz4hzdzFDnad4edRVvCUROCh5BYARm_tfBb-4E23c_9Z31r0Az6JA1PmO5R3-9nYvrT2B5S14nCdAOV6rwrlRES8e5EVv434H0W4"/>
+</button>
+<button class="p-1 rounded-xl bg-surface-container-lowest shadow-sm hover:opacity-90 transition-all opacity-70" onclick="swapThumb(this)" type="button">
+<img class="w-full h-16 object-contain rounded-lg" data-alt="L-BOXX industrial tough storage case open with foam interior housing Bosch 18V drill and charger." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRtf_XxkrIl-dhdsXHI8OwCkRghfnqeKtHwCBnuD41jUvULy7e57-uz4jPhVCFr6I1MLZ2neQ9jPHfXyxkdmDXPDrYjRHspwZQKzs5JZzYECxubC8xl7-_CEWnBTx06SIyTy2eNa6UHEsmTvg-1vsgKrtCUWKFbcpcRC24ar58asmJhjUzs6XTgZKHSO42_lxNL_gtDs_oAUQ9qhKSae1R1-35HzAWBkCL1skk-M8"/>
+</button>
+<button class="p-1 rounded-xl bg-surface-container-lowest shadow-sm hover:opacity-90 transition-all opacity-70" onclick="swapThumb(this)" type="button">
+<img class="w-full h-16 object-contain rounded-lg" data-alt="Close up of the 13mm all-metal ratcheting chuck and dual-speed torque selection collar of Bosch drill." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6h1lI5_Xe55DWuM2lzlVNjftlGx1gRfGR8BmNQXND6FEZI2Fip5QvckGXK7HG0QrZwdmP1MmN5UjbBsbh8RrEinqeDDAGhgpPePELwiTp5pnSEX9toORyh-AjNGxYvsE8MKK4FRd5DKGzIMkJCFX-clp39JwHSIPWy6EXl1rzGpNdesQ9aTgMK0TFxhlFL1dr5UgYqiEVqw3snceGii_lrVjuWibCzr2iVxNz2LQ"/>
+</button>
+<button class="p-1 rounded-xl bg-surface-container-lowest shadow-sm hover:opacity-90 transition-all opacity-70" onclick="swapThumb(this)" type="button">
+<img class="w-full h-16 object-contain rounded-lg" data-alt="Craftsman hand holding the ergonomic Bosch GSB 18V-21 drill drilling into hardwood in a workshop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0jqVc2UObIsOPDxtf0cbt6Eq18NhrBrBREy_Q2xzlyplO3MktZF6hcLJzDVGKL1sLb-ghbCibg6lRsIFfRe_QEDBprVSv4AERVMptmxQmMIW0uWSZRza8mzBVurNO6JesTUR3omhhvF_W29GpFogiJhIwpKcO1DsVsPOrJ1NVKWHgjigURiX-er2ICtd1wLdBp_F89f0trGuIO78ge-Al5iZGYET-IL-bvfKpPBc"/>
+</button>
+</div>
+<!-- Direct Store Assurance Strip -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-secondary-container text-[18px]">verified_user</span>
+<span>Stock vérifié par puce RFID</span>
+</div>
+<div class="h-3 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-tertiary-container text-[18px]">cached</span>
+<span>Retour 14j au comptoir</span>
+</div>
+</div>
+</div>
+<!-- Right: Primary Product Info & Local Deal Banner (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="px-space-md py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-md text-label-md flex items-center gap-1 font-bold">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-fixed animate-ping"></span>
+              3 STOCKS EN RAYON PROCHES
+            </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Réf fabricant : 06019H1108</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">•</span>
+<div class="flex items-center gap-1">
+<div class="flex text-secondary-container">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-primary">4.8</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant underline cursor-pointer">(124 avis vérifiés)</span>
+</div>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-primary leading-tight">
+            Perceuse à percussion sans fil Bosch Professional GSB 18V-21
+          </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Pack complet atelier : Livrée avec 2 batteries 18V 2.0Ah Li-Ion CoolPack, 1 chargeur rapide GAL 18V-20 et coffret de transport haute résistance L-BOXX 136. Mandrin métallique 13 mm, couple max 55 Nm.
+          </p>
+<!-- Highlight Local Price Box -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-md flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant font-bold uppercase tracking-wider">
+                Meilleur prix déstockage local
+              </span>
+<div class="flex items-baseline gap-space-sm mt-1">
+<span class="font-price-hero text-display text-secondary leading-none">69,90 €</span>
+<span class="font-body-md text-body-md text-outline line-through">184,00 €</span>
+<span class="px-space-sm py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-md text-label-md font-bold">
+                  -114,10 € (-62%)
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary-container text-[16px]">storefront</span>
+                Disponible en rayon chez <strong class="text-primary font-bold">Bricomarché Nice Ouest</strong> (1,8 km)
+              </p>
+</div>
+<div class="flex flex-col gap-2 shrink-0">
+<a class="px-space-lg py-3 rounded-full bg-secondary-container hover:brightness-105 active:scale-95 text-on-secondary-container font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-sm transition-all font-bold" href="#comparateur-marches">
+<span class="material-symbols-outlined text-[20px]">shopping_basket</span>
+<span>Bloquer &amp; Retirer (69,90 €)</span>
+</a>
+<div class="flex items-center justify-center gap-1 text-[11px] font-label-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px] text-tertiary-container">timer</span>
+<span>Hold 15 min garanti sans débit immédiat</span>
+</div>
+</div>
+</div>
+<!-- Dual Circuit Explanation Banner (The Core Achille Concept) -->
+<div class="bg-primary-container text-on-primary rounded-2xl p-space-md shadow-sm">
+<div class="flex items-center gap-space-sm mb-space-xs">
+<span class="material-symbols-outlined text-secondary-container text-[20px]">sync_alt</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-primary">
+                Comprendre les 2 modes d'achat sur cette fiche
+              </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-sm mt-space-sm text-on-primary">
+<div class="bg-primary/50 p-space-sm rounded-xl">
+<div class="flex items-center gap-1.5 font-label-md text-label-md text-tertiary-fixed font-bold">
+<span class="material-symbols-outlined text-[16px]">store</span>
+<span>Circuit ① : Direct Click &amp; Collect</span>
+</div>
+<p class="font-body-sm text-body-sm text-surface-variant mt-1 leading-snug">
+                  Achat/réservation direct dans l'app Achille avec stock physique mis de côté en rayon sous 2h et bon de retrait QR code immédiat.
+                </p>
+</div>
+<div class="bg-primary/50 p-space-sm rounded-xl">
+<div class="flex items-center gap-1.5 font-label-md text-label-md text-primary-fixed font-bold">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+<span>Circuit ② : Affiliation Partenaire Web</span>
+</div>
+<p class="font-body-sm text-body-sm text-surface-variant mt-1 leading-snug">
+                  Renvoi sécurisé vers l'e-commerce officiel du marchand national pour profiter de la réduction avec livraison ou point relais.
+                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Real-Time Multi-Vendor Table Section -->
+<section class="flex flex-col gap-space-md pt-space-md" id="comparateur-marches">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-sm">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-secondary-container animate-pulse"></span>
+<h2 class="font-headline-lg text-headline-lg text-primary">
+                Comparateur d'offres locales en temps réel
+              </h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              3 commerçants proposent ce produit à Nice (06000) et environs • Vérification automatique des stocks à 11:42
+            </p>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-body-sm text-on-surface-variant">Trier par :</span>
+<div class="bg-surface-container-low px-space-md py-1.5 rounded-full font-label-md text-label-md text-primary font-bold flex items-center gap-2 cursor-pointer shadow-sm">
+<span>Prix le plus bas + Proximité</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Multi-Vendor Table Container -->
+<div class="w-full bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden flex flex-col">
+<!-- Table Header (Hidden on small screens) -->
+<div class="hidden lg:grid lg:grid-cols-12 px-space-lg py-space-sm bg-surface-container-high/60 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">
+<div class="col-span-4">Vendeur &amp; Localisation</div>
+<div class="col-span-3">Disponibilité &amp; Retrait</div>
+<div class="col-span-2">Garantie &amp; État</div>
+<div class="col-span-3 text-right">Prix &amp; Action</div>
+</div>
+<!-- ROW 1 : MEILLEURE OFFRE LOCALE - CLICK & COLLECT DIRECT ACHILLE -->
+<div class="grid grid-cols-1 lg:grid-cols-12 p-space-lg gap-space-md items-center bg-surface-container-lowest transition-colors relative">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-secondary-container"></div>
+<!-- Col 1: Seller Details -->
+<div class="lg:col-span-4 flex items-center gap-space-md">
+<div class="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center p-2 shrink-0 shadow-sm">
+<span class="font-headline-sm text-primary font-bold text-[13px] tracking-tight text-center leading-tight">BRICO<br/><span class="text-secondary-container">MARCHÉ</span></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-headline-sm text-headline-sm text-primary font-bold">Bricomarché Nice Ouest</span>
+<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-tertiary-fixed text-on-tertiary-fixed font-label-xs text-label-xs font-bold">
+<span class="material-symbols-outlined text-[12px]">verified</span> Certifié Achille
+                  </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-secondary-container text-[16px]">near_me</span>
+                  1,8 km • Avenue Simone Veil (6 min en voiture)
+                </span>
+<span class="font-label-xs text-label-xs text-on-tertiary-container font-bold flex items-center gap-1 mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+                  Ouvert aujourd'hui jusqu'à 19h30
+                </span>
+</div>
+</div>
+<!-- Col 2: Circuit & Fulfillment Mode -->
+<div class="lg:col-span-3 flex flex-col gap-1">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-container text-on-primary font-label-xs text-label-xs font-bold w-fit">
+<span class="material-symbols-outlined text-secondary-container text-[14px]">shopping_cart_checkout</span>
+                CIRCUIT DIRECT CLICK &amp; COLLECT
+              </div>
+<div class="flex items-center gap-1 text-primary font-bold font-label-md text-label-md mt-1">
+<span class="material-symbols-outlined text-tertiary-container text-[18px]">bolt</span>
+<span>Retrait express en 2h en magasin</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+<strong class="text-secondary font-bold">2 exemplaires neufs</strong> en rayon outillage
+              </span>
+<span class="font-label-xs text-label-xs text-on-secondary-container bg-secondary-fixed/50 px-2 py-0.5 rounded w-fit">
+                Hold 15 min garanti dès l'ajout au panier
+              </span>
+</div>
+<!-- Col 3: Condition & Warranty -->
+<div class="lg:col-span-2 flex flex-col text-on-surface-variant font-body-sm text-body-sm">
+<span class="text-primary font-bold">Neuf scellé en boîte</span>
+<span>Garantie 3 ans Bosch France</span>
+<span class="text-[11px] text-outline mt-0.5">Facture magasin remise au retrait</span>
+</div>
+<!-- Col 4: Pricing & Primary Call-to-Action -->
+<div class="lg:col-span-3 flex flex-col lg:items-end justify-center gap-2">
+<div class="flex lg:flex-col items-baseline lg:items-end gap-2 lg:gap-0">
+<div class="flex items-baseline gap-1.5">
+<span class="font-price-hero text-price-hero text-secondary font-bold">69,90 €</span>
+<span class="font-body-sm text-body-sm text-outline line-through">184,00 €</span>
+</div>
+<span class="font-label-xs text-label-xs font-bold text-on-secondary-fixed bg-secondary-fixed px-1.5 py-0.5 rounded">
+                  Économie de 114,10 € (-62%)
+                </span>
+</div>
+<!-- Button Direct Click & Collect -->
+<button class="w-full lg:w-auto px-space-lg py-2.5 rounded-full bg-secondary-container hover:brightness-105 active:scale-95 text-on-secondary-container font-label-md text-label-md flex items-center justify-center gap-2 shadow-sm font-bold transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+<span>Réserver &amp; Retirer (Panier)</span>
+<span class="material-symbols-outlined text-[14px] text-on-secondary-container">lock</span>
+</button>
+</div>
+</div>
+<!-- Divider -->
+<div class="w-full h-px bg-surface-container-high"></div>
+<!-- ROW 2 : ENSEIGNE LOCALE PARTENAIRE - CLICK & COLLECT DIRECT ACHILLE -->
+<div class="grid grid-cols-1 lg:grid-cols-12 p-space-lg gap-space-md items-center bg-surface-container-lowest hover:bg-surface-container-low/40 transition-colors">
+<!-- Col 1: Seller Details -->
+<div class="lg:col-span-4 flex items-center gap-space-md">
+<div class="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center p-2 shrink-0 shadow-sm">
+<span class="font-headline-sm text-primary font-bold text-[12px] tracking-tight text-center leading-tight">Mr.<br/><span class="text-primary-container">BRICOLAGE</span></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-primary font-bold">Mr. Bricolage Lingostière</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-secondary-container text-[16px]">near_me</span>
+                  4,2 km • Forum Lingostière (12 min en voiture)
+                </span>
+<span class="font-label-xs text-label-xs text-on-tertiary-container font-bold flex items-center gap-1 mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+                  Ouvert aujourd'hui jusqu'à 20h00
+                </span>
+</div>
+</div>
+<!-- Col 2: Circuit & Fulfillment Mode -->
+<div class="lg:col-span-3 flex flex-col gap-1">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-container text-on-primary font-label-xs text-label-xs font-bold w-fit">
+<span class="material-symbols-outlined text-secondary-container text-[14px]">storefront</span>
+                CIRCUIT DIRECT CLICK &amp; COLLECT
+              </div>
+<div class="flex items-center gap-1 text-primary font-bold font-label-md text-label-md mt-1">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">schedule</span>
+<span>Retrait en rayon sous 4h (dès 15h)</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                1 exemplaire en vitrine déstockage
+              </span>
+</div>
+<!-- Col 3: Condition & Warranty -->
+<div class="lg:col-span-2 flex flex-col text-on-surface-variant font-body-sm text-body-sm">
+<span class="text-primary font-bold">Neuf (Modèle expo testé)</span>
+<span>Garantie 2 ans magasin</span>
+<span class="text-[11px] text-outline mt-0.5">Complet avec ses accessoires</span>
+</div>
+<!-- Col 4: Pricing & Action -->
+<div class="lg:col-span-3 flex flex-col lg:items-end justify-center gap-2">
+<div class="flex lg:flex-col items-baseline lg:items-end gap-2 lg:gap-0">
+<div class="flex items-baseline gap-1.5">
+<span class="font-price-hero text-headline-lg text-primary font-bold">84,50 €</span>
+<span class="font-body-sm text-body-sm text-outline line-through">184,00 €</span>
+</div>
+<span class="font-label-xs text-label-xs font-bold text-on-secondary-fixed-variant bg-secondary-fixed/70 px-1.5 py-0.5 rounded">
+                  Économie de 99,50 € (-54%)
+                </span>
+</div>
+<!-- Button Secondary Circuit Direct -->
+<button class="w-full lg:w-auto px-space-lg py-2 rounded-full bg-primary-container hover:bg-primary active:scale-95 text-on-primary font-label-md text-label-md flex items-center justify-center gap-2 transition-all font-bold" type="button">
+<span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+<span>Réserver &amp; Retirer</span>
+</button>
+</div>
+</div>
+<!-- Divider -->
+<div class="w-full h-px bg-surface-container-high"></div>
+<!-- ROW 3 : CIRCUIT AFFILIATION - PARTENAIRE E-COMMERCE NATIONAL -->
+<div class="grid grid-cols-1 lg:grid-cols-12 p-space-lg gap-space-md items-center bg-surface-container-low/20 hover:bg-surface-container-low/40 transition-colors">
+<!-- Col 1: Seller Details -->
+<div class="lg:col-span-4 flex items-center gap-space-md">
+<div class="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center p-2 shrink-0 shadow-sm">
+<span class="font-headline-sm text-primary font-bold text-[11px] tracking-tight text-center leading-tight">MANOMANO<br/><span class="text-on-surface-variant font-normal">Officiel</span></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-primary font-bold">ManoMano • Partenaire Web</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-outline text-[16px]">public</span>
+                  Boutique en ligne nationale certifiée
+                </span>
+<span class="font-label-xs text-label-xs text-on-surface-variant flex items-center gap-1 mt-1">
+                  Expédié sous 24-48h depuis l'entrepôt France
+                </span>
+</div>
+</div>
+<!-- Col 2: Circuit & Fulfillment Mode -->
+<div class="lg:col-span-3 flex flex-col gap-1">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface font-label-xs text-label-xs font-bold w-fit">
+<span class="material-symbols-outlined text-primary text-[14px]">open_in_new</span>
+                SITE MARCHAND (AFFILIATION)
+              </div>
+<div class="flex items-center gap-1 text-primary font-medium font-label-md text-label-md mt-1">
+<span class="material-symbols-outlined text-outline text-[18px]">local_shipping</span>
+<span>Livraison domicile ou Point Relais</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                Paiement direct sur le site officiel partenaire
+              </span>
+</div>
+<!-- Col 3: Condition & Warranty -->
+<div class="lg:col-span-2 flex flex-col text-on-surface-variant font-body-sm text-body-sm">
+<span class="text-primary font-bold">Neuf constructeur</span>
+<span>Garantie 3 ans Bosch Web</span>
+<span class="text-[11px] text-outline mt-0.5">SAV géré par ManoMano</span>
+</div>
+<!-- Col 4: Pricing & Action (Affiliation CTA) -->
+<div class="lg:col-span-3 flex flex-col lg:items-end justify-center gap-2">
+<div class="flex lg:flex-col items-baseline lg:items-end gap-2 lg:gap-0">
+<div class="flex items-baseline gap-1.5">
+<span class="font-price-hero text-headline-lg text-primary font-bold">119,00 €</span>
+<span class="font-body-sm text-body-sm text-outline line-through">184,00 €</span>
+</div>
+<span class="font-label-xs text-label-xs font-bold text-on-surface-variant bg-surface-container-high px-1.5 py-0.5 rounded">
+                  Économie de 65,00 € (-35%)
+                </span>
+</div>
+<!-- Button Affiliation Outbound Link -->
+<a class="w-full lg:w-auto px-space-lg py-2 rounded-full bg-surface-container-high hover:bg-surface-variant active:scale-95 text-primary font-label-md text-label-md flex items-center justify-center gap-2 transition-all font-bold" href="https://example.com" rel="noopener noreferrer" target="_blank">
+<span>Voir sur ManoMano</span>
+<span class="material-symbols-outlined text-[16px]">arrow_outward</span>
+</a>
+<span class="text-[10px] font-label-xs text-outline text-right">Lien sécurisé et tracké Achille</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Interactive Grid: Pickup Info & Map (Left) + Technical Specs & Accessories (Right) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Left Pane (7 Cols): Store Pickup & Navigation Map Details -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Point de retrait recommandé</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Bricomarché Nice Ouest • 1,8 km de votre position</p>
+</div>
+</div>
+<span class="px-space-md py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-xs text-label-xs font-bold">
+                Prêt en 2 heures
+              </span>
+</div>
+<!-- Static Map Container -->
+<div class="w-full h-56 rounded-xl bg-cover bg-center relative overflow-hidden flex flex-col justify-end p-space-md shadow-inner" data-location="Avenue Simone Veil, 06200 Nice, France" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAireM4sxqFow68tJ54uXhZfN-Ov-YKZ4lGpxZWEH9clzfq7SqxvJS6m7NgPdkfQsQmkbesZ1X7bgeuYScvRGQDMeab_AIPMFDwM2nvSx9nwFCjpId5paO9dh5kKJGo4Jc6TpYm1YCkndpySwar3oWsJvM8UEw3VkUvO4Y2fk0hBi7_tyuOK2yBcLT8MMZonydOTeA0gP3pqPaAorcwEDWhzh6kcpfst1OkHGuMi6I')">
+<div class="bg-surface-container-lowest/95 backdrop-blur-md p-space-md rounded-xl max-w-sm shadow-md flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-primary">Itinéraire le plus rapide</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Depuis 1 rue du Soleil : 6 min via Voie Mathis</span>
+</div>
+<button class="w-9 h-9 rounded-full bg-primary-container text-on-primary flex items-center justify-center hover:bg-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">directions_car</span>
+</button>
+</div>
+</div>
+<!-- Pickup Procedure Details -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-sm pt-space-xs">
+<div class="p-space-sm rounded-xl bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-center gap-1 text-primary font-bold font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px] text-secondary-container">pin</span>
+<span>1. Réservation</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+                  Bloquez l'article 15 min sans prélever votre carte. Le vendeur met le carton de côté.
+                </p>
+</div>
+<div class="p-space-sm rounded-xl bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-center gap-1 text-primary font-bold font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px] text-secondary-container">qr_code_2</span>
+<span>2. Notification SMS</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+                  Vous recevez votre bon de retrait avec code-barres dès que le colis est emballé.
+                </p>
+</div>
+<div class="p-space-sm rounded-xl bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-center gap-1 text-primary font-bold font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px] text-secondary-container">store</span>
+<span>3. Retrait comptoir</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+                  Présentation du QR code au guichet Achille Express dédié. Aucun passage en caisse.
+                </p>
+</div>
+</div>
+<!-- Address & Opening Times Strip -->
+<div class="flex flex-wrap items-center justify-between text-on-surface-variant font-body-sm text-body-sm pt-space-xs">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">home_pin</span>
+<span>Avenue Simone Veil, 06200 Nice</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">call</span>
+<span>Rayon outillage : 04 93 18 20 XX</span>
+</div>
+</div>
+</div>
+<!-- Cross-sell in the same physical store for single-trip shopping -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Complétez votre retrait chez Bricomarché Nice Ouest</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Produits compatibles en déstockage dans le même magasin physique</p>
+</div>
+<span class="px-space-sm py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-xs text-label-xs font-bold">
+                1 seul trajet
+              </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md pt-space-xs">
+<!-- Cross-sell 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<img class="w-16 h-16 object-contain rounded-lg bg-surface-container-lowest p-1" data-alt="Bosch 43-piece screwdriver bit and nutsetter set in clear plastic case on clean surface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlc14Z4zc19yp9jfOGgko_G6NgF0rjFkEtDr8QGtD77Qv0g1dBR_uHSwzp9LESdF1ZvitfqGgfLRgI82C5XZrBluGC0ohV5TZjVIlPI9oOmWe8cU6HHes1WBJeQNQ2i8Y1zpowWHssToJBTPjfhMM8qhrZFQBd8WdeDL2f_YnkpjZMTVOEz9I3Y5qFVWoVvhVSBjSS5Laedt1FPM98ex-v7R6ri9H5Uqm096ecde4"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-primary line-clamp-1">Coffret 43 embouts de vissage Bosch</span>
+<span class="font-label-xs text-label-xs text-secondary-container font-bold">-45% Déstockage</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-sm text-headline-sm text-secondary font-bold">14,90 €</span>
+<span class="font-body-sm text-body-sm text-outline line-through">27,00 €</span>
+</div>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center hover:bg-primary shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<!-- Cross-sell 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<img class="w-16 h-16 object-contain rounded-lg bg-surface-container-lowest p-1" data-alt="Bosch Professional 18V angle grinder bare tool in deep blue with safety guard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG6brbx8Fm0FsQJ10P-sNVEzfjdVHvcuKkBAGsuN5epX4BSBeqhf-6IG27jDuoRluCjccuLj7jxbOEL5Iqr61c6Hcb_XgqtAWFpxIFp3oI81uc--Zf2QG4Fa1_7HoDn6eZSZchN6UG5NGhKMFd0wjzFLxKnYY9amjm2qHayuSwLKR2b7o_A8-7UX_y2Pg_JGrXG_RqibPF_9lyNlLCHB_cUQyRk6YePxnyNujhoO4"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-primary line-clamp-1">Meuleuse d'angle 18V GWS solo</span>
+<span class="font-label-xs text-label-xs text-secondary-container font-bold">-50% Fin de série</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-sm text-headline-sm text-secondary font-bold">59,00 €</span>
+<span class="font-body-sm text-body-sm text-outline line-through">119,00 €</span>
+</div>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center hover:bg-primary shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Pane (5 Cols): Technical Specifications Bento -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<h3 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-secondary-container">tune</span>
+              Fiche technique détaillée
+            </h3>
+<div class="flex flex-col gap-space-xs font-body-sm text-body-sm">
+<div class="flex justify-between py-2 bg-surface-container-low px-3 rounded-lg">
+<span class="text-on-surface-variant font-medium">Tension de batterie</span>
+<span class="font-bold text-primary">18 Volts (Système Professional)</span>
+</div>
+<div class="flex justify-between py-2 px-3">
+<span class="text-on-surface-variant font-medium">Couple max (dur / souple)</span>
+<span class="font-bold text-primary">55 Nm / 21 Nm</span>
+</div>
+<div class="flex justify-between py-2 bg-surface-container-low px-3 rounded-lg">
+<span class="text-on-surface-variant font-medium">Régime à vide</span>
+<span class="font-bold text-primary">0-480 / 0-1800 tr/min</span>
+</div>
+<div class="flex justify-between py-2 px-3">
+<span class="text-on-surface-variant font-medium">Fréquence de frappe max</span>
+<span class="font-bold text-primary">27 000 coups/min</span>
+</div>
+<div class="flex justify-between py-2 bg-surface-container-low px-3 rounded-lg">
+<span class="text-on-surface-variant font-medium">Mandrin automatique</span>
+<span class="font-bold text-primary">13 mm Métal (Auto-lock)</span>
+</div>
+<div class="flex justify-between py-2 px-3">
+<span class="text-on-surface-variant font-medium">Batteries incluses</span>
+<span class="font-bold text-primary">2x 2.0 Ah Li-Ion CoolPack</span>
+</div>
+<div class="flex justify-between py-2 bg-surface-container-low px-3 rounded-lg">
+<span class="text-on-surface-variant font-medium">Poids avec batterie</span>
+<span class="font-bold text-primary">1,6 kg</span>
+</div>
+<div class="flex justify-between py-2 px-3">
+<span class="text-on-surface-variant font-medium">Mallette de transport</span>
+<span class="font-bold text-primary">L-BOXX 136 empilable</span>
+</div>
+</div>
+<!-- Eco-circularity badge -->
+<div class="p-space-md rounded-xl bg-tertiary-fixed/30 flex items-start gap-space-sm mt-space-xs">
+<span class="material-symbols-outlined text-on-tertiary-fixed text-[22px] shrink-0 mt-0.5">recycling</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-tertiary-fixed">Indice d'impact Achille Proximité</span>
+<span class="font-body-sm text-body-sm text-on-tertiary-fixed-variant leading-tight">
+                  En récupérant ce produit déstocké à 1,8 km en magasin plutôt qu'en livraison express nationale, vous évitez 4,2 kg d'émissions CO₂ et soutenez le commerce de proximité niçois.
+                </span>
+</div>
+</div>
+</div>
+<!-- Customer Review Snapshot -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col gap-space-sm">
+<h4 class="font-headline-sm text-headline-sm text-primary">Dernier avis vérifié Achille</h4>
+<div class="flex items-center gap-1 text-secondary-container">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface italic">
+              « Réservé à 10h sur Achille, retiré à 11h30 au Bricomarché Simone Veil. Mallette impeccable, neuve avec pastille de garantie. 69 € pour une perceuse Bosch Pro 18V avec deux batteries, c'est introuvable ailleurs ! »
+            </p>
+<div class="flex items-center justify-between text-on-surface-variant font-label-xs text-label-xs">
+<span class="font-bold text-primary">Marc D. (Nice Ouest)</span>
+<span>Achat vérifié Click &amp; Collect • Il y a 3 jours</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive JavaScript for micro-interactions -->
+<script>
+    function swapThumb(btn) {
+      const container = btn.parentElement;
+      const allBtns = container.querySelectorAll('button');
+      allBtns.forEach(b => {
+        b.classList.remove('ring-2', 'ring-secondary-container');
+        b.classList.add('opacity-70');
+      });
+      btn.classList.add('ring-2', 'ring-secondary-container');
+      btn.classList.remove('opacity-70');
+      
+      const thumbImg = btn.querySelector('img');
+      const mainImg = document.getElementById('main-product-img');
+      if (thumbImg && mainImg) {
+        mainImg.src = thumbImg.src;
+        if (thumbImg.dataset.alt) {
+          mainImg.dataset.alt = thumbImg.dataset.alt;
+        }
+      }
+    }
+  </script>
+</div></main><footer class="w-full bg-surface-container-low mt-auto"><div class="w-full px-gutter-desktop py-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><span class="font-headline-sm text-headline-sm text-primary-container font-bold">Achille</span><span class="text-body-sm text-on-surface-variant">Plateforme d'économie circulaire et déstockage de proximité.</span></div><div class="flex items-center gap-space-lg font-label-md text-label-md text-on-surface-variant"><a class="hover:text-on-surface transition-colors" data-path="about" href="#">Commerçants Partenaires</a><a class="hover:text-on-surface transition-colors" data-path="about" href="#">Engagement Anti-Gaspillage</a><a class="hover:text-on-surface transition-colors" data-path="about" href="#">Aide &amp; FAQ</a></div><div class="text-body-sm text-outline">© 2024 Achille Technologies. Tous droits réservés.</div></div></footer></body></html>

@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useFormStatus } from "react-dom";
-import { Heart } from "lucide-react";
 
 import { toggleFavoriteAction } from "@/app/compte/favorites-actions";
+import { MaterialIcon } from "@/components/material-icon";
 import { cn } from "@/lib/utils";
 
 type FavoriteButtonProps = {
@@ -34,16 +34,16 @@ function HeartSubmit({
         disabled={pending}
         aria-pressed={isFavorite}
         className={cn(
-          "inline-flex h-11 items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold ring-1",
+          "font-label-md text-label-md inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 font-bold",
           isFavorite
-            ? "bg-orange text-navy ring-orange"
-            : "text-navy ring-border bg-card",
+            ? "bg-secondary-container text-on-secondary-container shadow-navy"
+            : "bg-surface-container-lowest text-primary-container ring-outline-variant ring-1",
         )}
       >
-        <Heart
-          className="size-4"
-          fill={isFavorite ? "currentColor" : "none"}
-          aria-hidden
+        <MaterialIcon
+          name="favorite"
+          filled={isFavorite}
+          className="text-[18px]"
         />
         {pending ? "…" : label}
       </button>
@@ -57,16 +57,16 @@ function HeartSubmit({
       aria-label={label}
       aria-pressed={isFavorite}
       className={cn(
-        "inline-flex size-10 items-center justify-center rounded-full shadow-sm ring-1",
+        "shadow-navy-soft inline-flex size-10 items-center justify-center rounded-full ring-1",
         isFavorite
-          ? "bg-orange text-navy ring-orange"
-          : "bg-card/95 text-navy ring-border",
+          ? "bg-secondary-container text-on-secondary-container ring-secondary-container"
+          : "bg-surface-container-lowest/95 text-primary-container ring-outline-variant",
       )}
     >
-      <Heart
-        className="size-5"
-        fill={isFavorite ? "currentColor" : "none"}
-        aria-hidden
+      <MaterialIcon
+        name="favorite"
+        filled={isFavorite}
+        className="text-[20px]"
       />
     </button>
   );
@@ -88,11 +88,11 @@ export function FavoriteButton({
         <Link
           href={loginHref}
           className={cn(
-            "text-navy ring-border bg-card inline-flex h-11 items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold ring-1",
+            "bg-surface-container-lowest font-label-md text-label-md text-primary-container ring-outline-variant inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 font-bold ring-1",
             className,
           )}
         >
-          <Heart className="size-4" aria-hidden />
+          <MaterialIcon name="favorite" className="text-[18px]" />
           Ajouter aux favoris
         </Link>
       );
@@ -104,11 +104,11 @@ export function FavoriteButton({
         aria-label={label}
         title={label}
         className={cn(
-          "bg-card/95 text-navy ring-border inline-flex size-10 items-center justify-center rounded-full shadow-sm ring-1",
+          "bg-surface-container-lowest/95 text-primary-container shadow-navy-soft ring-outline-variant inline-flex size-10 items-center justify-center rounded-full ring-1",
           className,
         )}
       >
-        <Heart className="size-5" aria-hidden />
+        <MaterialIcon name="favorite" className="text-[20px]" />
       </Link>
     );
   }

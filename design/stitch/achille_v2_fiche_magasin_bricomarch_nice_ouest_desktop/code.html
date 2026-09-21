@@ -1,0 +1,831 @@
+<!DOCTYPE html><html lang="fr" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><title>Achille V2 - Marketplace Géolocalisée</title><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; } .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "secondary-container": "#fe9800", "tertiary-fixed-dim": "#72daa8", "secondary-fixed-dim": "#ffb86f", "on-tertiary-fixed": "#002113", "on-primary": "#ffffff", "surface-bright": "#f8f9fc", "error": "#ba1a1a", "secondary-fixed": "#ffdcbd", "outline": "#73777e", "primary-fixed-dim": "#abc9ed", "on-secondary-container": "#643900", "tertiary-fixed": "#8ef7c2", "surface": "#f8f9fc", "surface-dim": "#d8dadd", "surface-container-lowest": "#ffffff", "tertiary": "#001309", "on-tertiary": "#ffffff", "surface-container-low": "#f2f4f7", "primary": "#001020", "inverse-surface": "#2d3133", "inverse-primary": "#abc9ed", "on-secondary-fixed": "#2c1600", "on-background": "#191c1e", "secondary": "#8a5100", "on-tertiary-fixed-variant": "#005235", "tertiary-container": "#002b1a", "surface-container": "#eceef1", "primary-container": "#002642", "surface-variant": "#e0e3e6", "on-tertiary-container": "#2f9d70", "on-primary-container": "#708eaf", "inverse-on-surface": "#eff1f4", "on-primary-fixed": "#001d34", "primary-fixed": "#d0e4ff", "on-primary-fixed-variant": "#2a4967", "background": "#f8f9fc", "outline-variant": "#c3c7ce", "on-surface-variant": "#43474d", "surface-container-high": "#e6e8eb", "on-surface": "#191c1e", "surface-container-highest": "#e0e3e6", "on-error": "#ffffff", "on-error-container": "#93000a", "error-container": "#ffdad6", "on-secondary": "#ffffff", "surface-tint": "#436180", "on-secondary-fixed-variant": "#693c00" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "space-md": "1rem", "space-lg": "1.5rem", "space-xl": "2rem", "gutter": "1rem", "margin-desktop": "2rem", "margin": "1rem", "margin-tablet": "1.5rem", "gutter-desktop": "1.5rem", "space-xs": "0.25rem" }, "fontFamily": { "headline-lg-mobile": [ "Bricolage Grotesque" ], "display-mobile": [ "Bricolage Grotesque" ], "label-md": [ "Manrope" ], "headline-sm": [ "Bricolage Grotesque" ], "price-card": [ "Bricolage Grotesque" ], "display": [ "Bricolage Grotesque" ], "label-xs": [ "Manrope" ], "body-lg": [ "Manrope" ], "price-hero": [ "Bricolage Grotesque" ], "body-sm": [ "Manrope" ], "headline-md": [ "Bricolage Grotesque" ], "body-md": [ "Manrope" ], "label-lg": [ "Manrope" ], "headline-lg": [ "Bricolage Grotesque" ] }, "fontSize": { "headline-lg-mobile": [ "26px", { "lineHeight": "32px", "fontWeight": "700" } ], "display-mobile": [ "34px", { "lineHeight": "40px", "fontWeight": "800" } ], "label-md": [ "12px", { "lineHeight": "16px", "fontWeight": "700" } ], "headline-sm": [ "20px", { "lineHeight": "26px", "fontWeight": "600" } ], "price-card": [ "20px", { "lineHeight": "24px", "fontWeight": "800" } ], "display": [ "48px", { "lineHeight": "56px", "fontWeight": "800" } ], "label-xs": [ "10px", { "lineHeight": "12px", "fontWeight": "800" } ], "body-lg": [ "18px", { "lineHeight": "28px", "fontWeight": "400" } ], "price-hero": [ "28px", { "lineHeight": "32px", "fontWeight": "800" } ], "body-sm": [ "13px", { "lineHeight": "18px", "fontWeight": "500" } ], "headline-md": [ "24px", { "lineHeight": "30px", "fontWeight": "700" } ], "body-md": [ "15px", { "lineHeight": "22px", "fontWeight": "500" } ], "label-lg": [ "14px", { "lineHeight": "20px", "fontWeight": "700" } ], "headline-lg": [ "32px", { "lineHeight": "38px", "fontWeight": "700" } ] } } } };</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,38,66,0.06)]"><div class="h-28 w-full px-gutter-desktop flex flex-col justify-between pt-space-xs pb-space-xs"><div class="flex items-center justify-between gap-space-md w-full"><div class="flex items-center gap-space-lg shrink-0"><a class="flex items-center gap-space-sm" data-path="achille-v2-home-carte-first-desktop" href="#"><img alt="Achille Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VMURyTyMAACweLNa8pYhaBIFyjJQBV0W_4UAimQ9ysoyr8VSPgjQ6u1l0vT8pJc5Ye_XpsxBleODDNjR9NJnjfZulCGOqjU3wSlwoHrRyeVATY4XkBwNXqiuwg7xXBsbF2DU2ih-HuwqlnmXUoUYC_rrC876KPLE3UOKDLCVdB-7K_hJc7JFazVKrlmbmlHX7wUFB0Z2-755mtKQulyjKSQCp5KwB9mm6JVqKOmGzK"><span class="font-headline-md text-headline-md tracking-tight text-primary-container hidden xl:inline-block">Achille</span></a><button class="flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-secondary-container text-[18px]">location_on</span><span class="font-label-md text-label-md text-primary-container font-bold">1 rue du Soleil, 06000 Nice</span><span class="w-1 h-1 rounded-full bg-outline-variant"></span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Rayon 5 km</span><span class="material-symbols-outlined text-on-surface-variant text-[16px]">keyboard_arrow_down</span></button></div><div class="flex-1 max-w-2xl mx-space-md"><div class="relative flex items-center w-full bg-surface-container-low rounded-full px-space-md py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]"><span class="material-symbols-outlined text-outline mr-space-xs text-[20px]">search</span><input class="w-full bg-transparent border-0 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-0" placeholder="Rechercher un produit, une marque, un rayon..." type="text"><button class="flex items-center gap-1 px-space-sm py-1 mr-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface text-[11px] font-label-md transition-colors" type="button"><span class="material-symbols-outlined text-[14px]">store</span><span class="hidden sm:inline">Magasins</span></button><button class="w-8 h-8 rounded-full bg-secondary-container text-primary-container flex items-center justify-center shrink-0 hover:brightness-105 transition-transform active:scale-95" type="button"><span class="material-symbols-outlined text-[18px]">search</span></button></div></div><div class="flex items-center gap-space-sm shrink-0"><a class="hidden lg:flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all shadow-[0_2px_6px_rgba(0,38,66,0.15)]" data-path="fiche-magasin-desktop-bricomarche-nice-ouest" href="#"><span class="material-symbols-outlined text-[16px] text-secondary-container">storefront</span><span class="">Bricomarché Nice</span><span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span></a><div class="h-6 w-px bg-surface-variant mx-space-xs hidden md:block"></div><a class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="achille-v2-home-carte-first-desktop" href="#"><span class="material-symbols-outlined text-[22px]">favorite</span><span class="absolute top-1 right-1 w-4 h-4 rounded-full bg-primary-container text-on-primary font-label-xs text-label-xs flex items-center justify-center">3</span></a><a class="flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-primary-container transition-colors" data-path="achille-v2-home-carte-first-desktop" href="#"><div class="relative"><span class="material-symbols-outlined text-[20px]">shopping_bag</span><span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-secondary-container"></span></div><div class="hidden xl:flex flex-col text-left leading-none"><span class="font-label-md text-label-md font-bold text-primary-container">Panier (1)</span><span class="font-label-xs text-label-xs text-on-surface-variant truncate max-w-[110px]">Bricomarché Nice</span></div></a><div class="flex items-center gap-space-xs pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="font-label-md text-label-md text-on-surface hidden md:inline font-bold">Alexandre</span></div></div></div><nav class="flex items-center gap-space-xs overflow-x-auto no-scrollbar w-full pt-1" data-active-classes="bg-primary-container text-on-primary font-bold rounded-full"><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="achille-v2-home-carte-first-desktop" href="#">Toutes les offres</a><a aria-current="page" class="px-space-md py-1 whitespace-nowrap transition-colors shrink-0 bg-primary-container text-on-primary font-bold rounded-full" data-path="fiche-magasin-desktop-bricomarche-nice-ouest" href="#">Bricomarché Nice Ouest</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="achille-v2-home-carte-first-desktop" href="#">Bricolage &amp; Outillage</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="achille-v2-home-carte-first-desktop" href="#">Jardin &amp; Plein air</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="achille-v2-home-carte-first-desktop" href="#">Maison &amp; Déco</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="achille-v2-home-carte-first-desktop" href="#">Électroménager</a><a class="px-space-md py-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container whitespace-nowrap font-label-md text-label-md transition-colors shrink-0" data-path="achille-v2-home-carte-first-desktop" href="#">Déstockage massif (-50% et +)</a></nav></div></header><main class="w-full pt-28 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- FIL D'ARIANE -->
+<div class="w-full bg-surface-container-low px-gutter-desktop py-space-sm">
+<nav class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+<a class="hover:text-primary-container transition-colors" data-path="achille-v2-home-carte-first-desktop" href="#">Accueil</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary-container transition-colors" href="#">Commerces à Nice</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary-container transition-colors" href="#">Bricolage &amp; Jardin</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-on-surface font-bold">Bricomarché Nice Ouest</span>
+</nav>
+</div>
+<!-- 1. HERO MAGASIN & CARTE D'IDENTITÉ -->
+<section class="w-full px-gutter-desktop pt-space-md pb-space-lg">
+<div class="relative w-full rounded-2xl overflow-hidden bg-primary shadow-xl">
+<!-- Image Bannière Panorama -->
+<div class="relative h-72 md:h-80 w-full overflow-hidden">
+<div class="w-full h-full bg-cover bg-center" data-alt="Vue extérieure moderne et lumineuse de la façade d'un magasin de bricolage Bricomarché à Nice bordé de palmiers et sous un ciel bleu azur avec baies vitrées et stationnement aménagé" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAcT10BcOj4QgGEl7tRd3gi4hKs4s4t_wNVSKXmUidrqyv038RoXM6y9fNjHz_K5KP5OIhZ5cBWPBpyuRFZfRw0TIW6MVMXYFc2aYZ-jE3HMkG4zJTF5SZxywdHufaRZrxf4Si_KJnBJAaiyWeLvCS4og7eLMm7fqTNciujmJnbIAChKAx5p7pwqJicmoAwW3Xfyl4tW_QScq7amMuym8svh1hnncOzAK3fl0Vn8LE')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/70 to-transparent"></div>
+<!-- Badges Flottants en overlay -->
+<div class="absolute top-space-md left-space-md right-space-md flex flex-wrap items-center justify-between gap-space-sm z-10">
+<div class="flex flex-wrap items-center gap-space-sm">
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-tertiary-container/90 backdrop-blur-md text-tertiary-fixed font-label-md text-label-md shadow-md">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed animate-pulse"></span>
+              Magasin Partenaire Certifié Achille
+            </span>
+<span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface font-label-md text-label-md shadow-md">
+<span class="material-symbols-outlined text-secondary-container text-[16px]">near_me</span>
+              1,8 km (Nice Magnan - Grand Éco-Parc)
+            </span>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface font-label-md text-label-md shadow-md">
+<div class="flex text-secondary-container">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-bold font-price-card text-body-sm">4.7</span>
+<span class="text-on-surface-variant font-body-sm">(318 avis vérifiés)</span>
+</div>
+</div>
+</div>
+<!-- Carte d'identité et contenu principal du store -->
+<div class="relative z-10 px-space-lg pb-space-lg pt-space-md -mt-16 bg-gradient-to-b from-transparent to-primary">
+<div class="flex flex-col xl:flex-row xl:items-end justify-between gap-space-lg">
+<!-- Logo & Titre Magasin -->
+<div class="flex items-start gap-space-md">
+<div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl bg-surface-container-lowest shadow-2xl flex flex-col items-center justify-center p-space-sm shrink-0 border-4 border-primary">
+<span class="font-headline-md text-primary font-extrabold tracking-tighter text-center leading-tight">BRICO</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-primary font-label-xs font-bold tracking-wider uppercase mt-1">marché</span>
+</div>
+<div class="flex flex-col">
+<div class="flex flex-wrap items-center gap-space-sm mb-1">
+<h1 class="font-display text-headline-lg md:text-display text-on-primary tracking-tight">Bricomarché Nice Ouest</h1>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary-container text-tertiary-fixed text-[11px] font-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span>
+                  Rayons Directs
+                </span>
+</div>
+<p class="text-on-primary-container font-body-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px] text-secondary-container">location_on</span>
+                Avenue Simone Veil, 06200 Nice • Grand Éco-Parc Méridia
+              </p>
+<!-- Statut temps réel -->
+<div class="mt-2 flex items-center gap-2">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-tertiary-fixed"></span>
+</span>
+<span class="font-label-md text-label-md text-tertiary-fixed font-bold">Ouvert aujourd'hui jusqu'à 19h30</span>
+<span class="text-on-primary-container text-body-sm">• Guichet Click &amp; Collect actif</span>
+</div>
+</div>
+</div>
+<!-- Boutons d'actions rapides Desktop -->
+<div class="flex flex-wrap items-center gap-space-xs shrink-0">
+<a class="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-secondary-container hover:bg-secondary-fixed text-primary font-label-lg font-extrabold shadow-lg transition-transform active:scale-95" href="https://waze.com" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[20px]">navigation</span>
+<span class="">Itinéraire Waze</span>
+</a>
+<a class="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-surface-container-lowest/15 hover:bg-surface-container-lowest/25 text-on-primary font-label-lg font-bold backdrop-blur-md transition-colors" href="https://maps.google.com" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[20px] text-primary-fixed-dim">map</span>
+<span class="">Google Maps</span>
+</a>
+<a class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-full bg-surface-container-lowest/15 hover:bg-surface-container-lowest/25 text-on-primary font-label-md font-medium backdrop-blur-md transition-colors" href="tel:0493182000">
+<span class="material-symbols-outlined text-[18px]">call</span>
+<span class="hidden lg:inline">04 93 18 20 00</span>
+</a>
+<button class="p-2.5 rounded-full bg-surface-container-lowest/15 hover:bg-surface-container-lowest/25 text-on-primary backdrop-blur-md transition-colors" title="Partager la fiche" type="button">
+<span class="material-symbols-outlined text-[20px]">share</span>
+</button>
+<button class="p-2.5 rounded-full bg-surface-container-lowest/15 hover:bg-secondary-container hover:text-primary text-on-primary backdrop-blur-md transition-colors" title="Suivre ce magasin" type="button">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+</div>
+<!-- Encadré express Guichet Achille Quai n°1 -->
+<div class="mt-space-md p-space-md rounded-xl bg-surface-container-lowest/10 backdrop-blur-md flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">bolt</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-primary font-extrabold flex items-center gap-1.5">
+                Retrait Click &amp; Collect 2h garanti au Guichet Déstockage Achille
+                <span class="px-2 py-0.5 rounded-full bg-tertiary text-tertiary-fixed text-[10px] font-bold uppercase">Prioritaire</span>
+</p>
+<p class="font-body-sm text-body-sm text-on-primary-container">
+                Emplacement : Quai direct n°1 à droite sans passer par les caisses centrales. Présentez votre QR Code de réservation.
+              </p>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm text-on-primary font-label-md text-label-md shrink-0">
+<span class="flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container-lowest/10">
+<span class="material-symbols-outlined text-secondary-container text-[16px]">local_parking</span>
+              Parking gratuit 150 pl.
+            </span>
+<span class="flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container-lowest/10">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[16px]">electric_bolt</span>
+              Bornes recharge EV
+            </span>
+<span class="flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container-lowest/10">
+<span class="material-symbols-outlined text-primary-fixed text-[16px]">verified_user</span>
+              Garantie 2 ans
+            </span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. BARRE D'OUTILS IN-STORE & RAYONS -->
+<section class="sticky top-28 z-40 bg-surface-container-lowest shadow-sm px-gutter-desktop py-space-sm">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-sm">
+<!-- Search in inventory -->
+<div class="relative flex-1 max-w-xl">
+<div class="relative flex items-center w-full bg-surface-container-low rounded-full px-space-md py-1.5 shadow-inner">
+<span class="material-symbols-outlined text-outline mr-space-xs text-[20px]">search</span>
+<input class="w-full bg-transparent border-0 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none" placeholder="Rechercher parmi les 142 déstockages en rayon..." type="text">
+<kbd class="hidden md:inline-flex items-center gap-0.5 px-2 py-0.5 text-[11px] font-label-xs text-on-surface-variant bg-surface-container rounded font-mono">⌘K</kbd>
+</div>
+</div>
+<!-- Quick filters / Counts -->
+<div class="flex items-center gap-space-xs overflow-x-auto no-scrollbar py-0.5">
+<button class="px-3.5 py-1.5 rounded-full bg-primary-container text-on-primary font-label-md text-label-md shrink-0 flex items-center gap-1.5 shadow-sm" type="button">
+<span class="">Tous les rayons</span>
+<span class="px-1.5 py-0.2 rounded-full bg-secondary-container text-primary font-price-card text-[11px]">142</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-label-md text-label-md shrink-0 flex items-center gap-1.5 transition-colors" type="button">
+<span class="">Outillage &amp; Électroportatif</span>
+<span class="text-on-surface-variant font-bold text-[11px]">38</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-label-md text-label-md shrink-0 flex items-center gap-1.5 transition-colors" type="button">
+<span class="">Jardin &amp; Plein Air</span>
+<span class="text-on-surface-variant font-bold text-[11px]">27</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-label-md text-label-md shrink-0 flex items-center gap-1.5 transition-colors" type="button">
+<span class="">Quincaillerie &amp; Fixations</span>
+<span class="text-on-surface-variant font-bold text-[11px]">31</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-label-md text-label-md shrink-0 flex items-center gap-1.5 transition-colors" type="button">
+<span class="">Plomberie &amp; Chauffage</span>
+<span class="text-on-surface-variant font-bold text-[11px]">24</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-label-md text-label-md shrink-0 flex items-center gap-1.5 transition-colors" type="button">
+<span class="">Électricité &amp; Éclairage</span>
+<span class="text-on-surface-variant font-bold text-[11px]">22</span>
+</button>
+</div>
+</div>
+<!-- Second row : Sorting and condition filter chips -->
+<div class="flex items-center gap-space-xs overflow-x-auto no-scrollbar pt-space-xs pb-0.5 border-t border-surface-variant/30 mt-space-xs text-label-md"><span class="text-on-surface-variant font-label-md shrink-0 flex items-center gap-1 mr-space-xs"><span class="material-symbols-outlined text-[16px] text-secondary-container">loyalty</span><span class="">Marques :</span></span><div class="flex items-center gap-space-xs overflow-x-auto no-scrollbar"><button type="button" class="px-3 py-1 rounded-full bg-primary text-on-primary font-label-md text-[12px] shadow-sm shrink-0 font-bold transition-colors">Toutes les marques</button><button type="button" class="px-2.5 py-1 rounded-full bg-surface-container hover:bg-surface-variant text-primary font-label-md text-[12px] shrink-0 transition-colors flex items-center gap-1 font-medium"><span class="">Bosch</span><span class="text-outline font-bold text-[10px]">(42)</span></button><button type="button" class="px-2.5 py-1 rounded-full bg-surface-container hover:bg-surface-variant text-primary font-label-md text-[12px] shrink-0 transition-colors flex items-center gap-1 font-medium"><span class="">Einhell</span><span class="text-outline font-bold text-[10px]">(28)</span></button><button type="button" class="px-2.5 py-1 rounded-full bg-surface-container hover:bg-surface-variant text-primary font-label-md text-[12px] shrink-0 transition-colors flex items-center gap-1 font-medium"><span class="">Ryobi</span><span class="text-outline font-bold text-[10px]">(19)</span></button><button type="button" class="px-2.5 py-1 rounded-full bg-surface-container hover:bg-surface-variant text-primary font-label-md text-[12px] shrink-0 transition-colors flex items-center gap-1 font-medium"><span class="">Makita</span><span class="text-outline font-bold text-[10px]">(14)</span></button></div></div><div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs border-t border-surface-variant/30 mt-space-xs">
+<div class="flex items-center gap-space-xs text-body-sm text-on-surface-variant">
+<span class="font-bold text-primary">142 pépites</span> en direct des rayons de Nice Ouest
+        <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="text-tertiary-container font-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">inventory_2</span>
+          Mise à jour inventaire : il y a 14 min
+        </span>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs">
+<div class="flex items-center gap-1 text-label-md">
+<span class="text-on-surface-variant">État :</span>
+<button class="px-2.5 py-1 rounded-full bg-surface-container text-primary font-label-md text-[12px] hover:bg-surface-variant" type="button">Fin de série (68)</button>
+<button class="px-2.5 py-1 rounded-full bg-surface-container text-primary font-label-md text-[12px] hover:bg-surface-variant" type="button">Modèle expo testé (34)</button>
+<button class="px-2.5 py-1 rounded-full bg-surface-container text-primary font-label-md text-[12px] hover:bg-surface-variant" type="button">Emballage abîmé (40)</button>
+</div>
+<div class="flex items-center gap-1 pl-space-xs">
+<button class="flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container-high text-primary font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span class="">Tri : Plus fortes remises (-40% à -70%)</span>
+<span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. SECTION VEDETTE : LES IMMANQUABLES DU MOMENT -->
+<section class="w-full px-gutter-desktop py-space-xl">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">local_fire_department</span>
+</div>
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary tracking-tight">Les Immanquables du Moment</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">4 affaires exceptionnelles prêtes à être retirées sous 2h</p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-md text-label-md font-bold">
+        Flash Déstockage Nice
+      </span>
+</div>
+<!-- Grille 4 cartes pépites -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- Card 1 -->
+<div class="group flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-200">
+<div class="relative h-56 w-full bg-surface-container-low overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="Perceuse visseuse à percussion Bosch Professionnel bleue posée sur établi en bois avec deux batteries lithium et mallette noire d'origine" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAa40bGASGLf6yz7KRvk49k8wFaLA6iTGrtVBsm0iMCK4py8mCc4m8yfNMQnlFiiMUuGOSetK-BsL1gDa3Kg7uR5QCCdP6fZ-k_b7PD4XwdO2KjoUpTZBBuy_KBiNFzb0_gHvzdXwNoHVdX_fXrFzC5PPySqa6Mt0pbQ87Rpk3naGgGRBZxG_icuMGYiL5sWLK0DQ5XulMi6bD3Wx_ioLml7oBABBroy1-r5TxL2Fg')"></div>
+<div class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full bg-primary-container text-secondary-container font-price-card text-price-card shadow-md">
+            -62%
+          </div>
+<div class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-label-xs text-label-xs uppercase tracking-wider font-bold">
+            Neuf déstocké scellé
+          </div>
+<div class="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/80 backdrop-blur-sm text-on-primary text-[11px] font-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary-container">shelves</span>
+            Allée 4 • Rayon Outillage
+          </div><div class="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-tertiary-container text-[11px] font-bold border border-tertiary-fixed-dim/40 shadow-sm"><span class="material-symbols-outlined text-[13px] text-secondary-container">bolt</span>Prêt en 2h</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between">
+<div>
+<div class="flex items-center justify-between gap-1 mb-1">
+<span class="font-label-md text-label-md text-outline">BOSCH PROFESSIONAL</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-error font-label-xs text-label-xs font-extrabold flex items-center gap-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                Reste 2 ex.
+              </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary-container transition-colors line-clamp-2 leading-snug">
+              Perceuse à percussion sans fil Bosch Pro GSB 18V-21
+            </h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Moteur Brushless 55Nm, 2 batteries 2.0Ah + chargeur rapide L-BOXX.</p>
+</div>
+<div class="pt-space-md mt-space-sm border-t border-surface-variant/40">
+<div class="flex items-baseline justify-between mb-space-sm">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-primary font-extrabold">69,90 €</span>
+<span class="text-outline text-body-sm line-through">184,00 €</span>
+</div>
+<span class="font-label-xs text-label-xs text-tertiary-container font-bold bg-tertiary-fixed-dim/30 px-2 py-0.5 rounded">Économie 114,10 €</span>
+</div>
+<button class="w-full py-2.5 px-space-md rounded-full bg-secondary-container hover:bg-secondary-fixed text-primary font-label-lg text-label-lg font-extrabold shadow-md flex items-center justify-center gap-2 transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">lock_clock</span>
+<span class="">Bloquer 15 min au magasin</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-200">
+<div class="relative h-56 w-full bg-surface-container-low overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="Tondeuse à gazon thermique rouge vif Einhell autotractée avec bac de ramassage rigide exposée dans la cour jardin du magasin de bricolage" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCl4SRyauSnze4W_xr00dP-0BojpmVQBYrfL0UpVV34lpmYwp9437q7WJ_WewvGfmf8fD12gY4L4iM4MZmJ-3tYBBgEZqFX8XfstRe07BQPB5pT4q6kFrsJlpFLCerDfZjekvWH_qjW0g4TqwubEr1382XjGJWmitw4R-klDw4evHbgY2QzpT5aw2zPD-ERT1o8A141GiGbyXmPGJZsOExxH7yxzFIuqXgJRdWnGcQ')"></div>
+<div class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full bg-primary-container text-secondary-container font-price-card text-price-card shadow-md">
+            -46%
+          </div>
+<div class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-label-xs text-label-xs uppercase tracking-wider font-bold">
+            Modèle expo vérifié
+          </div>
+<div class="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/80 backdrop-blur-sm text-on-primary text-[11px] font-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary-container">yard</span>
+            Allée Jardin Extérieur • Îlot 2
+          </div><div class="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-tertiary-container text-[11px] font-bold border border-tertiary-fixed-dim/40 shadow-sm"><span class="material-symbols-outlined text-[13px] text-secondary-container">bolt</span>Prêt en 2h</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between">
+<div>
+<div class="flex items-center justify-between gap-1 mb-1">
+<span class="font-label-md text-label-md text-outline">EINHELL EXPERT</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-error font-label-xs text-label-xs font-extrabold flex items-center gap-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                Dernier exemplaire !
+              </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary-container transition-colors line-clamp-2 leading-snug">
+              Tondeuse thermique tractée Einhell 46cm GC-PM
+            </h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Moteur 4 temps 139 cm³, bac 50L avec témoin, carter acier anti-choc.</p>
+</div>
+<div class="pt-space-md mt-space-sm border-t border-surface-variant/40">
+<div class="flex items-baseline justify-between mb-space-sm">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-primary font-extrabold">189,00 €</span>
+<span class="text-outline text-body-sm line-through">349,00 €</span>
+</div>
+<span class="font-label-xs text-label-xs text-tertiary-container font-bold bg-tertiary-fixed-dim/30 px-2 py-0.5 rounded">Économie 160 €</span>
+</div>
+<button class="w-full py-2.5 px-space-md rounded-full bg-secondary-container hover:bg-secondary-fixed text-primary font-label-lg text-label-lg font-extrabold shadow-md flex items-center justify-center gap-2 transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">lock_clock</span>
+<span class="">Bloquer 15 min au magasin</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-200">
+<div class="relative h-56 w-full bg-surface-container-low overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="Meuleuse angulaire sans fil Bosch Professional 18V bleue avec disque 125mm et carter de sécurité sur fond clair atelier" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDpPtljzdcTuKHMw67t3YrOcEpL-kveya7W6TtXvTCZu3zdTs3fJ4CbIjtl6b2UBedHPb3qx-y0C4ZakLXqxiGdRwO9YtVDQPcUCGW0RXBel8Cx7SG-S4FL8V1Li9WlSFuVSF6GVXWQBM7k38a2nz4blntu-RaRyGaVaHPQuVSAPZcL_3_xf-wWxxZj6PafDwcIdVHubm-9sck9kpOLqos2MAYGBar888ZTNurNnSk')"></div>
+<div class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full bg-primary-container text-secondary-container font-price-card text-price-card shadow-md">
+            -50%
+          </div>
+<div class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-label-xs text-label-xs uppercase tracking-wider font-bold">
+            Fin de série neuve
+          </div>
+<div class="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/80 backdrop-blur-sm text-on-primary text-[11px] font-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary-container">shelves</span>
+            Allée 4 • Rayon Outillage
+          </div><div class="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-tertiary-container text-[11px] font-bold border border-tertiary-fixed-dim/40 shadow-sm"><span class="material-symbols-outlined text-[13px] text-secondary-container">bolt</span>Prêt en 2h</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between">
+<div>
+<div class="flex items-center justify-between gap-1 mb-1">
+<span class="font-label-md text-label-md text-outline">BOSCH PROFESSIONAL</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-error font-label-xs text-label-xs font-extrabold flex items-center gap-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                Reste 2 ex.
+              </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary-container transition-colors line-clamp-2 leading-snug">
+              Meuleuse d'angle 18V Bosch GWS 18-125 V-LI Solo
+            </h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Disque 125 mm, moteur 4 pôles compact, poignée anti-vibration latérale.</p>
+</div>
+<div class="pt-space-md mt-space-sm border-t border-surface-variant/40">
+<div class="flex items-baseline justify-between mb-space-sm">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-primary font-extrabold">59,00 €</span>
+<span class="text-outline text-body-sm line-through">118,00 €</span>
+</div>
+<span class="font-label-xs text-label-xs text-tertiary-container font-bold bg-tertiary-fixed-dim/30 px-2 py-0.5 rounded">Économie 59,00 €</span>
+</div>
+<button class="w-full py-2.5 px-space-md rounded-full bg-secondary-container hover:bg-secondary-fixed text-primary font-label-lg text-label-lg font-extrabold shadow-md flex items-center justify-center gap-2 transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">lock_clock</span>
+<span class="">Bloquer 15 min au magasin</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-200">
+<div class="relative h-56 w-full bg-surface-container-low overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="Coffret rigide de 43 pièces embouts de vissage Bosch Extra Hard avec porte-embout magnétique et douilles dorées" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD82bahv5dK9HcU2oapfP1L-v5UJeZeth6zqu4lCjppchYzD4vAM7dxwNFgnLGMh5Cv3ovFQnT-UccFNmrnf5FX6lyQfwFGMxcYlngamtK9urWDjod4zAaV9-Z8TwLEA07zIqfnlxbXs7_e4pwvE6gkaiRTj6QA_hZmdM9oksAHh0JQS0c_qMeKwPPyZEr9fn3tSP3s4L8nhcsR7eG8Dn5oBOTGZeJuvLxKiVTjhTc')"></div>
+<div class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full bg-primary-container text-secondary-container font-price-card text-price-card shadow-md">
+            -45%
+          </div>
+<div class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-label-xs text-label-xs uppercase tracking-wider font-bold">
+            Neuf sous blister
+          </div>
+<div class="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/80 backdrop-blur-sm text-on-primary text-[11px] font-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary-container">shelves</span>
+            Allée 3 • Tête de gondole
+          </div><div class="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-tertiary-container text-[11px] font-bold border border-tertiary-fixed-dim/40 shadow-sm"><span class="material-symbols-outlined text-[13px] text-secondary-container">bolt</span>Prêt en 2h</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between">
+<div>
+<div class="flex items-center justify-between gap-1 mb-1">
+<span class="font-label-md text-label-md text-outline">BOSCH ACCESSORIES</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-xs text-label-xs font-bold">
+                Reste 3 ex.
+              </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary-container transition-colors line-clamp-2 leading-snug">
+              Coffret 43 pièces embouts de vissage Extra Hard
+            </h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Acier S2 haute résistance avec code couleur, porte-embout Quick-Change.</p>
+</div>
+<div class="pt-space-md mt-space-sm border-t border-surface-variant/40">
+<div class="flex items-baseline justify-between mb-space-sm">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-primary font-extrabold">14,90 €</span>
+<span class="text-outline text-body-sm line-through">27,00 €</span>
+</div>
+<span class="font-label-xs text-label-xs text-tertiary-container font-bold bg-tertiary-fixed-dim/30 px-2 py-0.5 rounded">Économie 12,10 €</span>
+</div>
+<button class="w-full py-2.5 px-space-md rounded-full bg-secondary-container hover:bg-secondary-fixed text-primary font-label-lg text-label-lg font-extrabold shadow-md flex items-center justify-center gap-2 transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">lock_clock</span>
+<span class="">Bloquer 15 min au magasin</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. SECTIONS DÉTAILLÉES PAR RAYONS -->
+<section class="w-full px-gutter-desktop pb-space-xl">
+<div class="space-y-space-xl">
+<!-- Univers 1 : Outillage & Électroportatif -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-space-md border-b border-surface-variant/40 gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary-container text-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">construction</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary font-bold">Outillage &amp; Électroportatif</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">38 références en direct du magasin Nice Ouest</p>
+</div>
+</div>
+<button class="text-secondary font-label-md text-label-md font-bold hover:underline flex items-center gap-1" type="button">
+            Voir les 38 déstockages outillage
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md mt-space-md">
+<!-- Item 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex gap-space-md">
+<div class="w-24 h-24 rounded-lg bg-surface-container-lowest shrink-0 overflow-hidden relative">
+<div class="w-full h-full bg-cover bg-center" data-alt="Scie sauteuse pendulaire sans fil 18V posée avec lame métal apparente" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAn9LXVIr3UCqYS0nigDWZas7HTRQZDV2KtFiKqdhzySxSBkxqUpPoVcxSwrC6n3CKB1szWQq7pLnSOsPyMR9EZXsK_KQuuIZsxOW4ql2rBiRQaFYl1oL7m4C8j53MjUTwIqgA1iqjve3fgXfcBYOm_LaqYfwom7cXK9qbtDL3GSki5HuUIcSqroS1JCTCV_bBRzvCI4l9d_4bPAuiaWSCZfSFoUAWP6P_TYH7K4es')"></div>
+<span class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-primary text-secondary-container font-price-card text-[11px]">-55%</span>
+</div>
+<div>
+<span class="text-outline font-label-xs text-label-xs uppercase">Allée 4 • Box 3</span>
+<h4 class="font-headline-sm text-body-lg text-primary font-bold line-clamp-2">Scie sauteuse pendulaire 18V sans fil</h4>
+<p class="font-body-sm text-on-surface-variant text-[12px] mt-0.5">Semelle alu orientable 45°</p>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="font-price-card text-price-card text-primary font-extrabold">49,00 €</span>
+<span class="text-outline text-body-sm line-through">109,00 €</span>
+</div>
+</div>
+</div>
+<button class="mt-space-sm w-full py-2 px-space-md rounded-full bg-primary-container text-on-primary font-label-md text-label-md font-bold hover:bg-primary transition-colors flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">shopping_bag</span>
+              Réserver • Retrait 2h
+            </button>
+</div>
+<!-- Item 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex gap-space-md">
+<div class="w-24 h-24 rounded-lg bg-surface-container-lowest shrink-0 overflow-hidden relative">
+<div class="w-full h-full bg-cover bg-center" data-alt="Coffret valise à cliquet mécanique avec 94 douilles en chrome vanadium ouvertes" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBGixf8S9qvdrHnig6ViKbwY78wFEyR-b-GDFKlZeh7JtHAStiwSDAlzbn2ZFWjDMCq7wsdKMYKZSbuOtZwELMQzP1WaN-_cdrCTcRGDxePRrZfkpgm95-Gpxtuh0D9BHN7Tq1_Z2qwoebcpgyCU4gybfzTLZEjPMrzbzLI-na6XYV5pB5Ul6MbaiQZvN1hHzq0OV_aZCCC-1C1l-7c0R7Rq7wOI23Zex29ZoDksvo')"></div>
+<span class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-primary text-secondary-container font-price-card text-[11px]">-40%</span>
+</div>
+<div>
+<span class="text-outline font-label-xs text-label-xs uppercase">Allée 5 • Tête 1</span>
+<h4 class="font-headline-sm text-body-lg text-primary font-bold line-clamp-2">Coffret cliquet 94 pièces chrome vanadium</h4>
+<p class="font-body-sm text-on-surface-variant text-[12px] mt-0.5">Douilles 1/4" et 1/2" garanties à vie</p>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="font-price-card text-price-card text-primary font-extrabold">29,90 €</span>
+<span class="text-outline text-body-sm line-through">49,90 €</span>
+</div>
+</div>
+</div>
+<button class="mt-space-sm w-full py-2 px-space-md rounded-full bg-primary-container text-on-primary font-label-md text-label-md font-bold hover:bg-primary transition-colors flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">shopping_bag</span>
+              Réserver • Retrait 2h
+            </button>
+</div>
+<!-- Item 3 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex gap-space-md">
+<div class="w-24 h-24 rounded-lg bg-surface-container-lowest shrink-0 overflow-hidden relative">
+<div class="w-full h-full bg-cover bg-center" data-alt="Perforateur burineur SDS Plus lourd avec mandrin interchangeable dans sa mallette" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDyFVtjwv5zt9PL-9B4-ttUOzFh6bmOZTmELoknyjzF_akrWjbGO6TOzfOe4EyqFD0ErhA-BcrYblEa6NSLEPt_dgrYlDzBmblaeIr1Due5F4uzxg1rV2pIsA_SQ0CAK0Q24OyoLEcbCdHGjGyZuz14Xx2BWXRoazkVahwem0sTGacWJz6CTzTbCPxJQ6BE_cBTTXsAVQol6_lNRIpW03c4xQrXWNdAKXuj4oFq5kE')"></div>
+<span class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-primary text-secondary-container font-price-card text-[11px]">-47%</span>
+</div>
+<div>
+<span class="text-outline font-label-xs text-label-xs uppercase">Allée 4 • Quai Outil</span>
+<h4 class="font-headline-sm text-body-lg text-primary font-bold line-clamp-2">Perforateur burineur SDS Plus 800W</h4>
+<p class="font-body-sm text-on-surface-variant text-[12px] mt-0.5">Force d'impact 3 Joules, 3 fonctions</p>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="font-price-card text-price-card text-primary font-extrabold">89,00 €</span>
+<span class="text-outline text-body-sm line-through">169,00 €</span>
+</div>
+</div>
+</div>
+<button class="mt-space-sm w-full py-2 px-space-md rounded-full bg-primary-container text-on-primary font-label-md text-label-md font-bold hover:bg-primary transition-colors flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">shopping_bag</span>
+              Réserver • Retrait 2h
+            </button>
+</div>
+</div>
+</div>
+<!-- Univers 2 : Jardin & Plein Air -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-space-md border-b border-surface-variant/40 gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-tertiary-container text-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">potted_plant</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary font-bold">Jardin &amp; Plein Air</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">27 références déstockées en cour des matériaux et pépinière</p>
+</div>
+</div>
+<button class="text-secondary font-label-md text-label-md font-bold hover:underline flex items-center gap-1" type="button">
+            Voir les 27 déstockages jardin
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md mt-space-md">
+<!-- Item Jardin 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex gap-space-md">
+<div class="w-24 h-24 rounded-lg bg-surface-container-lowest shrink-0 overflow-hidden relative">
+<div class="w-full h-full bg-cover bg-center" data-alt="Coupe-bordure sans fil à batterie lithium vert et noir avec tête de coupe inclinable pour pelouse" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDnX6SojIsjK1OZwf_8S-1JF4mIj1sPx9WDbilTlbYjIX5GTpMOjqDojHxPgGOWifoQGJspm8WbFx6deRJVFvUBX4avIhmnnZSgjYyw2gJxFHG3imUYEnrM7MOng7oIjAbQXgAw3_wQqpSFuXJfF0WKrEnztMo4Rsr4JEetpVMNkarBsLAswKLlzZBFdqqCVnjtdVViIpZ5gFuLDHmGZ7wm8RwW3Onl3GFzkMiHuDo')"></div>
+<span class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-primary text-secondary-container font-price-card text-[11px]">-50%</span>
+</div>
+<div>
+<span class="text-outline font-label-xs text-label-xs uppercase">Jardin • Allée J1</span>
+<h4 class="font-headline-sm text-body-lg text-primary font-bold line-clamp-2">Coupe-bordures sans fil + batterie</h4>
+<p class="font-body-sm text-on-surface-variant text-[12px] mt-0.5">Diamètre coupe 28cm télescopique</p>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="font-price-card text-price-card text-primary font-extrabold">45,00 €</span>
+<span class="text-outline text-body-sm line-through">90,00 €</span>
+</div>
+</div>
+</div>
+<button class="mt-space-sm w-full py-2 px-space-md rounded-full bg-primary-container text-on-primary font-label-md text-label-md font-bold hover:bg-primary transition-colors flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">shopping_bag</span>
+              Réserver • Retrait 2h
+            </button>
+</div>
+<!-- Item Jardin 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex gap-space-md">
+<div class="w-24 h-24 rounded-lg bg-surface-container-lowest shrink-0 overflow-hidden relative">
+<div class="w-full h-full bg-cover bg-center" data-alt="Tuyau d'arrosage rétractable et extensible vert avec pistolet 8 jets en boîte scellée" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCBkdBPFQ22_bnSJYdLZt4HPikTOcKTfiJPGFdDVNxxLqVbYjC0mvyS_kzJiOWIS9Dh36skJnb2fLZxb7KF1rIwddAkmdNoF5Y7p4cIbNqON1WdyRdghizDQCNvlpVy9XeSNnZIWrM4-L2fWUgN36PegUXaZBD2PSTPa5qngSY3lAUxvd6xP02G0JtDcR-TxQxWsWt8wJDHgL9SPOjuVevUWkTpXeffahDxDyjEhco')"></div>
+<span class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-primary text-secondary-container font-price-card text-[11px]">-48%</span>
+</div>
+<div>
+<span class="text-outline font-label-xs text-label-xs uppercase">Jardin • Allée J3</span>
+<h4 class="font-headline-sm text-body-lg text-primary font-bold line-clamp-2">Tuyau extensible 25m haute pression</h4>
+<p class="font-body-sm text-on-surface-variant text-[12px] mt-0.5">Triple couche latex + pistolet 8 jets</p>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="font-price-card text-price-card text-primary font-extrabold">19,90 €</span>
+<span class="text-outline text-body-sm line-through">38,50 €</span>
+</div>
+</div>
+</div>
+<button class="mt-space-sm w-full py-2 px-space-md rounded-full bg-primary-container text-on-primary font-label-md text-label-md font-bold hover:bg-primary transition-colors flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">shopping_bag</span>
+              Réserver • Retrait 2h
+            </button>
+</div>
+<!-- Item Jardin 3 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex gap-space-md">
+<div class="w-24 h-24 rounded-lg bg-surface-container-lowest shrink-0 overflow-hidden relative">
+<div class="w-full h-full bg-cover bg-center" data-alt="Barbecue à charbon nomade noir rond avec cuve émaillée et aération réglable pour terrasse" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBkwRdHeTKkjVdDu99W9aABR41IodUtsBXzorTBss0pUOl2g_vodVQrUmFidSKZ7ae95XzptA_7SR6mjqU5Ag7YqjIB6vCjXevOaDU2apgVTbYgfWuFxnVSdPhA33rxDpKV9gX1UfBNtl30yyErvuUHSlpZKtjtDj_GTWY8xnpg2Qta_gM16-3xwHkCp01S3yvVF2g5lgC01xvqmm-XfrRCvgYLey5SaKzz-rt22bk')"></div>
+<span class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-primary text-secondary-container font-price-card text-[11px]">-51%</span>
+</div>
+<div>
+<span class="text-outline font-label-xs text-label-xs uppercase">Jardin • Cour Extérieure</span>
+<h4 class="font-headline-sm text-body-lg text-primary font-bold line-clamp-2">Barbecue charbon nomade émaillé</h4>
+<p class="font-body-sm text-on-surface-variant text-[12px] mt-0.5">Diamètre 47cm, grille chromée</p>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="font-price-card text-price-card text-primary font-extrabold">34,00 €</span>
+<span class="text-outline text-body-sm line-through">69,00 €</span>
+</div>
+</div>
+</div>
+<button class="mt-space-sm w-full py-2 px-space-md rounded-full bg-primary-container text-on-primary font-label-md text-label-md font-bold hover:bg-primary transition-colors flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">shopping_bag</span>
+              Réserver • Retrait 2h
+            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. VOLET D'INFORMATIONS MAGASIN & PLAN INTÉRIEUR (SPLIT 2 COLONNES) -->
+<section class="w-full px-gutter-desktop pb-space-xl">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Colonne gauche : Plan Schématique Intérieur (7 cols) -->
+<div class="lg:col-span-7 bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm flex flex-col justify-between"><div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary-container text-[24px]">distance</span>
+<h3 class="font-headline-md text-headline-md text-primary">Plan d'accès routier &amp; Localisation</h3>
+</div>
+<span class="text-primary font-label-md text-label-md flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-fixed/50 font-bold">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+              Sortie A8 • Éco-Vallée Nice Méridia
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+            Accès direct via l'A8 (Sortie 51 - Nice Saint-Augustin / Lingostière) ou par le Tramway Ligne 3 (Arrêt Méridia). Entrée véhicules et stationnement dédié retrait devant le Quai Achille.
+          </p>
+<div class="w-full bg-surface-container-low rounded-xl p-space-md relative overflow-hidden">
+<svg class="w-full h-72 text-on-surface select-none" viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg">
+<!-- Fond Carte / Relief Côte d'Azur -->
+<rect fill="#eceef1" height="320" rx="8" width="700" x="0" y="0"></rect>
+<!-- Fleuve Var (Berges du Var M6202) à l'ouest -->
+<path d="M 40 0 C 45 90, 30 200, 50 320" fill="none" stroke="#abc9ed" stroke-width="46"></path>
+<text fill="#002642" font-family="Manrope" font-size="10" font-weight="800" letter-spacing="2" text-anchor="middle" transform="rotate(86 45 160)" x="45" y="160">LE FLEUVE VAR</text>
+<!-- Voie rapide M6202 le long du Var -->
+<path d="M 72 0 C 78 100, 65 210, 80 320" fill="none" stroke="#c3c7ce" stroke-width="10"></path>
+<path d="M 72 0 C 78 100, 65 210, 80 320" fill="none" stroke="#ffffff" stroke-dasharray="6,6" stroke-width="2"></path>
+<text fill="#43474d" font-family="Manrope" font-size="9" font-weight="700" x="90" y="40">M6202 (Route de Grenoble)</text>
+<!-- Quartier Nice Méridia Urban Grid -->
+<rect fill="#ffffff" height="90" opacity="0.9" rx="6" width="130" x="140" y="50"></rect>
+<text fill="#73777e" font-family="Manrope" font-size="9" font-weight="700" x="150" y="72">Grand Arénas / Éco-Parc</text>
+<rect fill="#ffffff" height="80" opacity="0.9" rx="6" width="140" x="490" y="40"></rect>
+<text fill="#73777e" font-family="Manrope" font-size="9" font-weight="700" x="500" y="62">Parc d'Activités Méridia</text>
+<!-- Autoroute A8 La Provençale traverse horizontalement -->
+<path d="M 0 115 Q 350 145, 700 95" fill="none" stroke="#002642" stroke-width="16"></path>
+<path d="M 0 115 Q 350 145, 700 95" fill="none" stroke="#fe9800" stroke-dasharray="10,10" stroke-width="2.5"></path>
+<!-- Panneau Sortie A8 n°51 -->
+<rect fill="#002642" height="24" rx="4" stroke="#fe9800" stroke-width="1" width="145" x="170" y="145"></rect>
+<text fill="#fe9800" font-family="Bricolage Grotesque" font-size="10" font-weight="800" x="178" y="161">SORTIE 51</text>
+<text fill="#ffffff" font-family="Manrope" font-size="9" font-weight="700" x="235" y="161">Nice St-Augustin</text>
+<!-- Boulevard Simone Veil / D6202 Bis -->
+<path d="M 380 0 L 375 320" fill="none" stroke="#ffffff" stroke-width="14"></path>
+<path d="M 380 0 L 375 320" fill="none" stroke="#73777e" stroke-dasharray="8,8" stroke-width="1.5"></path>
+<text fill="#191c1e" font-family="Manrope" font-size="10" font-weight="800" letter-spacing="1" text-anchor="middle" transform="rotate(90 395 240)" x="395" y="240">AVENUE SIMONE VEIL</text>
+<!-- Ligne Tramway 3 (Verte) -->
+<path d="M 358 0 L 354 320" fill="none" stroke="#005235" stroke-dasharray="4,4" stroke-width="3.5"></path>
+<!-- Station Tram 3 Méridia -->
+<g transform="translate(340, 185)">
+<circle cx="14" cy="14" fill="#8ef7c2" r="8" stroke="#002b1a" stroke-width="2"></circle>
+<text fill="#002b1a" font-family="Manrope" font-size="9" font-weight="800" x="-65" y="18">Tram 3 • Méridia</text>
+</g>
+<!-- Repères géographiques de quartier -->
+<!-- Stade Allianz Riviera -->
+<g transform="translate(510, 150)">
+<rect fill="#ffffff" height="22" rx="4" stroke="#c3c7ce" width="155" x="0" y="0"></rect>
+<circle cx="12" cy="11" fill="#fe9800" r="4"></circle>
+<text fill="#43474d" font-family="Manrope" font-size="9" font-weight="700" x="22" y="15">Allianz Riviera (2,4 km)</text>
+</g>
+<!-- Gare Nice Saint-Augustin -->
+<g transform="translate(140, 260)">
+<rect fill="#ffffff" height="22" rx="4" stroke="#c3c7ce" width="160" x="0" y="0"></rect>
+<circle cx="12" cy="11" fill="#002642" r="4"></circle>
+<text fill="#43474d" font-family="Manrope" font-size="9" font-weight="700" x="22" y="15">Gare St-Augustin (2,1 km)</text>
+</g>
+<!-- Aéroport Nice Côte d'Azur -->
+<g transform="translate(490, 260)">
+<rect fill="#ffffff" height="22" rx="4" stroke="#c3c7ce" width="170" x="0" y="0"></rect>
+<circle cx="12" cy="11" fill="#002642" r="4"></circle>
+<text fill="#43474d" font-family="Manrope" font-size="9" font-weight="700" x="22" y="15">Aéroport Côte d'Azur (3,8 km)</text>
+</g>
+<!-- EMPLACEMENT BRICOMARCHÉ NICE OUEST (PIN MAJEUR) -->
+<g transform="translate(390, 160)">
+<!-- Zone d'enceinte magasin & parking -->
+<rect fill="#ffffff" height="85" rx="8" stroke="#fe9800" stroke-width="2" width="180" x="-10" y="-10"></rect>
+<!-- Badge Achille Quai n°1 -->
+<rect fill="#002642" height="24" rx="4" width="160" x="0" y="0"></rect>
+<circle cx="12" cy="12" fill="#fe9800" r="7"></circle>
+<text fill="#002642" font-family="Bricolage Grotesque" font-size="10" font-weight="800" text-anchor="middle" x="12" y="15">A</text>
+<text fill="#ffffff" font-family="Manrope" font-size="10" font-weight="800" x="26" y="16">Bricomarché Nice Ouest</text>
+<rect fill="#fe9800" height="16" rx="3" width="135" x="0" y="29"></rect>
+<text fill="#001020" font-family="Manrope" font-size="9" font-weight="800" x="6" y="41">QUAI RETRAIT ACHILLE N°1</text>
+<!-- Parking direct -->
+<text fill="#643900" font-family="Manrope" font-size="9" font-weight="700" x="0" y="62">Parking gratuit Click &amp; Collect 150 pl.</text>
+<!-- Pulse animation pin -->
+<circle cx="-20" cy="20" fill="#fe9800" opacity="0.4" r="14"></circle>
+<circle cx="-20" cy="20" fill="#fe9800" r="8"></circle>
+<circle cx="-20" cy="20" fill="#ffffff" r="3"></circle>
+</g>
+</svg>
+</div>
+</div>
+<div class="mt-space-md flex flex-col gap-space-sm pt-space-sm border-t border-surface-variant/40">
+<div class="flex flex-wrap items-center justify-between gap-space-sm text-body-sm text-on-surface-variant">
+<div class="flex flex-wrap items-center gap-space-md font-label-md text-label-md">
+<a class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container hover:bg-secondary-fixed text-primary font-bold transition-all shadow-sm" href="https://waze.com" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[16px]">navigation</span>
+<span class="">Itinéraire direct Waze</span>
+</a>
+<a class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container hover:bg-surface-variant text-primary font-bold transition-colors" href="https://maps.google.com" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">near_me</span>
+<span class="">Google Maps GPS</span>
+</a>
+<span class="text-tertiary-container font-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">timelapse</span>
+                ~6 min depuis Promenade / Centre
+              </span>
+</div>
+<button class="text-primary font-label-md text-label-md font-bold flex items-center gap-1 hover:text-secondary transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">download</span>
+            Télécharger la fiche d'accès routier &amp; parking (PDF)
+          </button>
+</div>
+</div></div>
+<!-- Colonne droite : Horaires, Accès & Contact (5 cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<!-- Tableau des horaires -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<h4 class="font-headline-sm text-headline-sm text-primary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[20px] text-secondary-container">schedule</span>
+              Horaires d'Ouverture
+            </h4>
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary-container text-tertiary-fixed text-[11px] font-label-md font-bold">
+              Semaine en cours
+            </span>
+</div>
+<div class="space-y-1.5 font-body-sm">
+<div class="flex items-center justify-between py-1 px-2 rounded">
+<span class="text-on-surface-variant">Lundi</span>
+<span class="text-on-surface font-semibold">08:00 – 19:30</span>
+</div>
+<div class="flex items-center justify-between py-1 px-2 rounded">
+<span class="text-on-surface-variant">Mardi</span>
+<span class="text-on-surface font-semibold">08:00 – 19:30</span>
+</div>
+<div class="flex items-center justify-between py-1 px-2 rounded">
+<span class="text-on-surface-variant">Mercredi</span>
+<span class="text-on-surface font-semibold">08:00 – 19:30</span>
+</div>
+<!-- Jour actuel mis en exergue -->
+<div class="flex items-center justify-between py-1.5 px-2 rounded-lg bg-secondary-fixed/50 font-bold">
+<div class="flex items-center gap-1.5 text-primary">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+<span class="">Jeudi (Aujourd'hui)</span>
+</div>
+<span class="text-primary font-price-card">08:00 – 19:30</span>
+</div>
+<div class="flex items-center justify-between py-1 px-2 rounded">
+<span class="text-on-surface-variant">Vendredi</span>
+<span class="text-on-surface font-semibold">08:00 – 19:30</span>
+</div>
+<div class="flex items-center justify-between py-1 px-2 rounded">
+<span class="text-on-surface-variant">Samedi</span>
+<span class="text-on-surface font-semibold">08:00 – 20:00 (Journée continue)</span>
+</div>
+<div class="flex items-center justify-between py-1 px-2 rounded text-outline">
+<span class="">Dimanche</span>
+<span class="">09:00 – 13:00 (Matinée uniquement)</span>
+</div>
+</div>
+</div>
+<!-- Accès, Parking et Équipe Déstockage -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm flex-1 flex flex-col justify-between">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-space-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[20px] text-secondary-container">local_shipping</span>
+              Accès &amp; Facilités de Retrait
+            </h4>
+<div class="space-y-space-sm text-body-sm">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary-container text-[20px] shrink-0">local_parking</span>
+<div>
+<p class="font-bold text-on-surface">Grand Parking Gratuit 150 places</p>
+<p class="text-on-surface-variant text-[12px]">Zones de stationnement réservées Click &amp; Collect directement devant le Quai 1.</p>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-tertiary-container text-[20px] shrink-0">ev_station</span>
+<div>
+<p class="font-bold text-on-surface">4 Bornes de Recharge Rapide (22 kW)</p>
+<p class="text-on-surface-variant text-[12px]">Recharge offerte pendant vos 45 premières minutes d'achat en magasin.</p>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-outline text-[20px] shrink-0">accessible</span>
+<div>
+<p class="font-bold text-on-surface">Accès PMR Intégral de plain-pied</p>
+<p class="text-on-surface-variant text-[12px]">Allées élargies et chariots adaptés mis à disposition à l'accueil.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Contact comptoir -->
+<div class="mt-space-md pt-space-md border-t border-surface-variant/40 flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold">
+                BM
+              </div>
+<div>
+<p class="font-label-md text-label-md text-primary font-bold">Comptoir Achille Nice Ouest</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Responsable rayon : Maxime</p>
+</div>
+</div>
+<a class="px-3.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-variant text-primary font-label-md text-label-md font-bold transition-colors" href="tel:0493182000">
+              Ligne directe
+            </a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. WIDGET FLOTTANT DOCK PANIER LOCAL ACTIF -->
+<aside aria-label="Panier en cours" class="fixed bottom-6 right-8 z-50 animate-bounce-short">
+<div class="bg-primary-container text-on-primary px-space-lg py-space-sm rounded-2xl shadow-2xl flex items-center gap-space-md">
+<!-- Icon with active indicator -->
+<div class="relative w-12 h-12 rounded-xl bg-secondary-container text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[26px]">shopping_cart</span>
+<span class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary text-on-primary font-price-card text-[11px] flex items-center justify-center">2</span>
+</div>
+<!-- Content -->
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-xs text-secondary-container uppercase tracking-wider font-extrabold">Panier en cours • Nice Ouest</span>
+<span class="inline-flex items-center gap-1 text-[11px] text-tertiary-fixed font-mono font-bold bg-tertiary-container/80 px-2 py-0.2 rounded-full">
+<span class="material-symbols-outlined text-[12px]">timer</span>
+<span id="reservation-timer" class="">12:07</span>
+</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-price-card text-price-hero text-on-primary">84,80 €</span>
+<span class="text-on-primary-container font-body-sm text-[12px]">(2 articles réservés)</span>
+</div>
+</div>
+<!-- Action -->
+<button class="ml-space-sm py-2 px-space-md rounded-full bg-secondary-container hover:bg-secondary-fixed text-primary font-label-md text-label-md font-extrabold shadow-lg transition-transform active:scale-95 whitespace-nowrap" type="button">
+        Finaliser mon retrait
+      </button>
+</div>
+</aside>
+<script>
+    (function() {
+      // Countdown micro-interaction for the active reserved cart timer
+      let secondsLeft = 14 * 60 + 25;
+      const timerElement = document.getElementById('reservation-timer');
+      if (timerElement) {
+        setInterval(() => {
+          if (secondsLeft > 0) {
+            secondsLeft--;
+            const mins = Math.floor(secondsLeft / 60).toString().padStart(2, '0');
+            const secs = (secondsLeft % 60).toString().padStart(2, '0');
+            timerElement.textContent = `${mins}:${secs}`;
+          }
+        }, 1000);
+      }
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low border-t border-surface-variant/40 mt-auto"><div class="w-full px-gutter-desktop py-space-xl"><div class="grid grid-cols-1 md:grid-cols-4 gap-space-lg pb-space-lg border-b border-surface-variant/50"><div class="flex items-center gap-space-md"><div class="w-10 h-10 rounded-full bg-secondary-container/15 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-secondary text-[22px]">local_shipping</span></div><div><p class="font-label-lg text-label-lg text-on-surface font-bold">Click &amp; Collect 2h</p><p class="font-body-sm text-body-sm text-on-surface-variant">Retrait express en magasin de proximité</p></div></div><div class="flex items-center gap-space-md"><div class="w-10 h-10 rounded-full bg-tertiary-fixed-dim/20 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-tertiary-container text-[22px]">eco</span></div><div><p class="font-label-lg text-label-lg text-on-surface font-bold">Économie Circulaire</p><p class="font-body-sm text-body-sm text-on-surface-variant">Déstockage et surplus sauvés du rebut</p></div></div><div class="flex items-center gap-space-md"><div class="w-10 h-10 rounded-full bg-primary-fixed-dim/25 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-primary-container text-[22px]">verified</span></div><div><p class="font-label-lg text-label-lg text-on-surface font-bold">Commerçants Agréés</p><p class="font-body-sm text-body-sm text-on-surface-variant">Garantie légale 2 ans &amp; SAV magasin direct</p></div></div><div class="flex items-center gap-space-md"><div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-primary text-[22px]">lock</span></div><div><p class="font-label-lg text-label-lg text-on-surface font-bold">Paiement Sécurisé</p><p class="font-body-sm text-body-sm text-on-surface-variant">Réservation sans débit anticipé abusif</p></div></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><span class="font-headline-sm text-headline-sm text-primary-container font-bold">Achille</span><span class="text-body-sm text-on-surface-variant">Plateforme d'économie circulaire et déstockage de proximité.</span></div><div class="flex items-center gap-space-lg font-label-md text-label-md text-on-surface-variant"><a class="hover:text-on-surface transition-colors" data-path="fiche-magasin-desktop-bricomarche-nice-ouest" href="#">Commerçants Partenaires</a><a class="hover:text-on-surface transition-colors" data-path="achille-v2-home-carte-first-desktop" href="#">Engagement Anti-Gaspillage</a><a class="hover:text-on-surface transition-colors" data-path="achille-v2-home-carte-first-desktop" href="#">Aide &amp; FAQ</a></div><div class="text-body-sm text-outline">© 2024 Achille Technologies. Tous droits réservés.</div></div></div></footer>
+
+
+
+</body></html>

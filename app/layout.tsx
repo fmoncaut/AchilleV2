@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
 import type { ReactNode } from "react";
 
 import { ConsentBanner } from "@/components/consent-banner";
@@ -7,15 +6,11 @@ import { PwaRegister } from "@/components/pwa-register";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getAnalyticsConfig } from "@/lib/analytics";
+import { bricolage, manrope, materialSymbols } from "@/lib/fonts";
 import { getSiteUrl } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
-
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
@@ -54,9 +49,14 @@ export default function RootLayout({
     <html
       lang="fr"
       data-scroll-behavior="smooth"
-      className={cn("h-full font-sans", geist.variable)}
+      className={cn(
+        "h-full",
+        bricolage.variable,
+        manrope.variable,
+        materialSymbols.variable,
+      )}
     >
-      <body className="flex min-h-svh w-full flex-col">
+      <body className="bg-background font-body text-body-md text-on-surface flex min-h-svh w-full flex-col antialiased">
         <SiteHeader />
         {children}
         <SiteFooter />

@@ -28,7 +28,12 @@ import {
 } from "@/lib/catalog-view";
 import { discountPercent } from "@/lib/money";
 import type { FavoriteFlags } from "@/lib/favorites";
-import { loginWithReturn, magasinPath, offerPath, villeCategoriePath } from "@/lib/urls";
+import {
+  loginWithReturn,
+  magasinPath,
+  offerPath,
+  villeCategoriePath,
+} from "@/lib/urls";
 
 type LocatedOffer = ShowcaseOffer & { distanceM: number | null };
 
@@ -86,7 +91,10 @@ function OfferShowcaseView({
     <main className="bg-paper flex flex-1 flex-col">
       <article className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-6 py-10">
         <nav className="text-slate text-sm font-medium">
-          <Link href="/" className="hover:text-navy underline-offset-4 hover:underline">
+          <Link
+            href="/"
+            className="hover:text-navy underline-offset-4 hover:underline"
+          >
             Accueil
           </Link>
           {product.categoryName && product.categorySlug ? (
@@ -151,7 +159,9 @@ function OfferShowcaseView({
               />
             </div>
             {product.ean ? (
-              <p className="text-slate text-sm font-medium">EAN {product.ean}</p>
+              <p className="text-slate text-sm font-medium">
+                EAN {product.ean}
+              </p>
             ) : null}
             {description ? (
               <p className="text-slate text-base font-medium">{description}</p>
@@ -185,7 +195,7 @@ function OfferShowcaseView({
                 ) : null}
                 {current.distanceM != null ? (
                   <p className="text-slate mt-1 text-sm font-medium">
-                    À <Distance meters={current.distanceM} />
+                    À <Distance meters={current.distanceM} variant="plain" />
                   </p>
                 ) : null}
                 <p className="text-slate mt-3 text-sm font-medium">
@@ -196,7 +206,9 @@ function OfferShowcaseView({
                   {` · ${current.stock} en magasin`}
                 </p>
                 <div className="mt-4">
-                  <p className="text-navy mb-2 text-sm font-semibold">Horaires</p>
+                  <p className="text-navy mb-2 text-sm font-semibold">
+                    Horaires
+                  </p>
                   <OpeningHoursList value={current.pos.openingHours} />
                 </div>
                 <div className="mt-6">
@@ -255,7 +267,9 @@ function OfferShowcaseView({
                       tri,
                     })}
                     signedIn={favorites.signedIn}
-                    isProductFavorite={favorites.productIds.includes(product.id)}
+                    isProductFavorite={favorites.productIds.includes(
+                      product.id,
+                    )}
                     loginHref={loginWithReturn(`/offre/${product.slug}`)}
                   />
                 </li>
@@ -274,9 +288,7 @@ function OfferShowcaseView({
 
 function OfferShowcaseFromQuery(props: OfferShowcaseProps) {
   const params = useSearchParams();
-  return (
-    <OfferShowcaseView {...props} query={parseCatalogQuery(params)} />
-  );
+  return <OfferShowcaseView {...props} query={parseCatalogQuery(params)} />;
 }
 
 export function OfferShowcase(props: OfferShowcaseProps) {

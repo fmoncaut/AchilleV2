@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f8f9fc;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#001020", "inverse-surface": "#2d3133", "on-tertiary-fixed-variant": "#005235", "surface-dim": "#d8dadd", "background": "#f8f9fc", "surface-container": "#eceef1", "on-background": "#191c1e", "on-secondary": "#ffffff", "on-primary-fixed": "#001d34", "outline-variant": "#c3c7ce", "surface-variant": "#e0e3e6", "on-tertiary-fixed": "#002113", "primary-fixed": "#d0e4ff", "on-primary-fixed-variant": "#2a4967", "error-container": "#ffdad6", "on-error": "#ffffff", "tertiary": "#001309", "on-primary": "#ffffff", "on-tertiary-container": "#2f9d70", "inverse-on-surface": "#eff1f4", "tertiary-container": "#002b1a", "surface": "#f8f9fc", "secondary-fixed-dim": "#ffb86f", "secondary-container": "#fe9800", "on-secondary-fixed-variant": "#693c00", "on-primary-container": "#708eaf", "on-secondary-fixed": "#2c1600", "secondary": "#8a5100", "surface-container-lowest": "#ffffff", "surface-container-highest": "#e0e3e6", "tertiary-fixed-dim": "#72daa8", "on-tertiary": "#ffffff", "surface-container-high": "#e6e8eb", "on-surface": "#191c1e", "primary-fixed-dim": "#abc9ed", "surface-bright": "#f8f9fc", "secondary-fixed": "#ffdcbd", "tertiary-fixed": "#8ef7c2", "inverse-primary": "#abc9ed", "error": "#ba1a1a", "on-secondary-container": "#643900", "surface-tint": "#436180", "on-surface-variant": "#43474d", "on-error-container": "#93000a", "outline": "#73777e", "primary-container": "#002642", "surface-container-low": "#f2f4f7" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "margin": "1rem", "margin-desktop": "2rem", "gutter-desktop": "1.5rem", "space-md": "1rem", "space-xs": "0.25rem", "gutter": "1rem", "space-xl": "2rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "margin-tablet": "1.5rem" }, fontFamily: { "headline-md": ["Bricolage Grotesque"], "headline-lg": ["Bricolage Grotesque"], "display": ["Bricolage Grotesque"], "price-card": ["Bricolage Grotesque"], "body-lg": ["Manrope"], "display-mobile": ["Bricolage Grotesque"], "body-sm": ["Manrope"], "label-lg": ["Manrope"], "label-md": ["Manrope"], "price-hero": ["Bricolage Grotesque"], "headline-sm": ["Bricolage Grotesque"], "body-md": ["Manrope"], "headline-lg-mobile": ["Bricolage Grotesque"], "label-xs": ["Manrope"] }, fontSize: { "headline-md": ["24px", { "lineHeight": "30px", "fontWeight": "700" }], "headline-lg": ["32px", { "lineHeight": "38px", "fontWeight": "700" }], "display": ["48px", { "lineHeight": "56px", "fontWeight": "800" }], "price-card": ["20px", { "lineHeight": "24px", "fontWeight": "800" }], "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }], "display-mobile": ["34px", { "lineHeight": "40px", "fontWeight": "800" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "500" }], "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "700" }], "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "700" }], "price-hero": ["28px", { "lineHeight": "32px", "fontWeight": "800" }], "headline-sm": ["20px", { "lineHeight": "26px", "fontWeight": "600" }], "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "500" }], "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }], "label-xs": ["10px", { "lineHeight": "12px", "fontWeight": "800" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-space-md flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="Brand logo. - Primary color: #002642
+- Font: bricolageGrotesque
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1WeW9itNWPqLrCKP7ORkIHy8WEUKqKS19C_quIbkXj2PMxoq6b78y_zegB0NJhzWqY38755YEACDqoBTllzubbVilkEzbPRTzGmlVatZBjKJCVtvRQFphq2L4-EQKe1RxqnMKP1yvrX-te9-rqWmsqCigswynG-gCRBZsi2JAtGwhiD2Zl2s2AMp1ExW43Yv2xTWlfsvce9WCcYOOMWG9R3FKtuJE0zU12qbDNPeDK9"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm text-primary tracking-tight truncate">Achille</span><span class="font-label-xs text-label-xs text-on-surface-variant truncate uppercase tracking-wider">Émargement &amp; Remise Matériel</span></div></div><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><button aria-label="Fermer ou annuler" class="min-h-[44px] min-w-[44px] h-11 w-11 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-variant active:scale-95 transition-all" onclick="history.back()"><span class="material-symbols-outlined text-[20px]">close</span></button></div></div></header><main class="flex flex-col relative w-full pt-16 bg-surface flex-grow"><div class="flex flex-col w-full px-space-md pb-space-xl gap-space-md">
+<!-- Guichet Status & Agent Badge -->
+<div class="flex items-center justify-between bg-surface-container-low rounded-full px-space-md py-space-xs">
+<div class="flex items-center gap-space-xs min-w-0">
+<span class="w-2.5 h-2.5 rounded-full bg-on-tertiary-container animate-pulse flex-shrink-0"></span>
+<span class="font-label-md text-label-md text-on-surface truncate">Guichet N°2 · Conseiller : <strong class="font-bold text-primary">Marc L.</strong></span>
+</div>
+<span class="inline-flex items-center gap-1 bg-surface-container-highest text-on-tertiary-fixed-variant font-label-xs text-label-xs px-2 py-0.5 rounded-full uppercase tracking-wider flex-shrink-0">
+      Session active
+    </span>
+</div>
+<!-- Hero Titles -->
+<div class="flex flex-col gap-1">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">
+      Émargement &amp; Remise du matériel
+    </h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+      Vérifiez la conformité des articles avant de signer. Votre signature déverrouille le bon de sortie scellé.
+    </p>
+</div>
+<!-- Mandate & Identity Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary-container text-[20px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Mandat de retrait express</span>
+</div>
+<span class="font-label-xs text-label-xs text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full">ACH-88492</span>
+</div>
+<!-- Participants Grid -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs">
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col">
+<span class="font-label-xs text-label-xs text-on-surface-variant">Titulaire commande</span>
+<span class="font-label-lg text-label-lg text-primary truncate mt-0.5">Alexandre de Rochefort</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Commande #ACH-88492</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-on-surface-variant">Tiers mandatée</span>
+<span class="material-symbols-outlined text-on-tertiary-container text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="font-label-lg text-label-lg text-primary truncate mt-0.5">Camille Rochefort</span>
+<span class="font-body-sm text-[11px] text-on-tertiary-container font-semibold">CNI vérifiée au guichet</span>
+</div>
+</div>
+<!-- Settlement Pill -->
+<div class="flex items-center justify-between bg-surface-container px-space-md py-space-xs rounded-lg mt-1">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-on-tertiary-container text-[18px]">check</span>
+<span class="font-body-sm text-body-sm text-on-surface">Solde commande : <strong class="font-bold text-primary">84,80 €</strong></span>
+</div>
+<span class="font-label-md text-label-md text-on-tertiary-container font-bold">0,00 € à régler</span>
+</div>
+</div>
+<!-- Physical Goods Checklist Section -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">inventory_2</span>
+<h2 class="font-headline-sm text-headline-sm text-primary">Articles remis en main propre</h2>
+</div>
+<span class="bg-primary text-on-primary font-label-md text-label-md px-2.5 py-0.5 rounded-full">2 colis</span>
+</div>
+<!-- Item 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center flex-shrink-0 text-primary">
+<span class="material-symbols-outlined text-[24px]">construction</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-primary leading-tight line-clamp-2">Perceuse à percussion sans fil 18V Bosch Pro</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-xs text-label-xs text-on-surface-variant">Réf 884-01</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">1 colis scellé (3,2 kg)</span>
+</div>
+</div>
+</div>
+</div>
+<label class="flex items-center gap-space-sm pt-space-xs cursor-pointer select-none">
+<input checked="" class="w-5 h-5 rounded accent-secondary-container text-white cursor-pointer" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">Colis inspecté, intact et scellé d'origine</span>
+</label>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center flex-shrink-0 text-primary">
+<span class="material-symbols-outlined text-[24px]">handyman</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-primary leading-tight line-clamp-2">Meuleuse d'angle 125mm Einhell Power X</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-xs text-label-xs text-on-surface-variant">Réf 884-02</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">1 coffret intact (2,8 kg)</span>
+</div>
+</div>
+</div>
+</div>
+<label class="flex items-center gap-space-sm pt-space-xs cursor-pointer select-none">
+<input checked="" class="w-5 h-5 rounded accent-secondary-container text-white cursor-pointer" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">Colis inspecté, intact et scellé d'origine</span>
+</label>
+</div>
+<!-- Legal Guarantee Notice -->
+<div class="flex items-start gap-space-xs bg-surface-container-low rounded-lg p-space-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-secondary-container text-[18px] flex-shrink-0 mt-0.5">verified</span>
+<p class="font-body-sm text-[12px] leading-snug">
+        Garantie légale de conformité 2 ans et droit de retour 14 jours activés immédiatement dès validation de l'émargement.
+      </p>
+</div>
+</div>
+<!-- Digital Signature Canvas Frame -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-primary">Signature du tiers récepteur</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Camille Rochefort (mandataire)</span>
+</div>
+<button class="inline-flex items-center gap-1 bg-surface-container px-3 py-1.5 rounded-full text-on-surface hover:bg-surface-variant active:scale-95 transition-all" id="clear-sig-btn" type="button">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+<span class="font-label-md text-label-md">Effacer</span>
+</button>
+</div>
+<!-- Drawing Pad Container with grid watermark -->
+<div class="relative w-full h-44 bg-surface-bright rounded-xl overflow-hidden shadow-inner flex flex-col justify-end p-space-md">
+<!-- Watermark background texture -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#002642 1px, transparent 1px); background-size: 16px 16px;"></div>
+<!-- Interactive HTML Canvas for live touch drawing -->
+<canvas class="absolute inset-0 w-full h-full cursor-crosshair z-10 touch-none" id="signature-pad"></canvas>
+<!-- Signature Guide Line & Indicator -->
+<div class="relative z-0 flex items-center justify-between pointer-events-none pb-1">
+<div class="flex items-center gap-1 text-outline-variant">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span class="font-label-xs text-label-xs tracking-wider uppercase">Signez ici avec votre doigt ou stylet</span>
+</div>
+<span class="font-label-xs text-label-xs text-outline-variant font-mono">X ___________________</span>
+</div>
+</div>
+<!-- Cryptographic Timestamp eIDAS Info -->
+<div class="flex items-center justify-between bg-surface-container-low px-space-sm py-1.5 rounded-md">
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-on-surface-variant text-[14px]">lock</span>
+<span class="font-label-xs text-[10px] text-on-surface-variant truncate font-mono">
+          SHA-256 : d4a7...99bf · eIDAS Niveau 2
+        </span>
+</div>
+<span class="font-label-xs text-[10px] text-on-surface-variant font-mono flex-shrink-0">
+        24/10/2024 · 14:28
+      </span>
+</div>
+</div>
+<!-- Mandatory Legal Acknowledgment -->
+<label class="flex items-start gap-space-sm px-1 cursor-pointer select-none">
+<input checked="" class="w-5 h-5 rounded mt-0.5 accent-secondary-container cursor-pointer flex-shrink-0" id="legal-agreement" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface leading-snug">
+      Je certifie sur l'honneur avoir réceptionné l'intégralité des 2 articles vérifiés en parfait état apparent pour le compte et mandat d'Alexandre de Rochefort.
+    </span>
+</label>
+<!-- Primary Action & Security Badges -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<button class="w-full bg-secondary-container hover:opacity-95 text-on-secondary-container font-headline-sm text-headline-sm py-4 rounded-full shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-space-sm" id="submit-signature-btn">
+<span class="material-symbols-outlined text-[24px]">task_alt</span>
+<span>Valider l'émargement &amp; Obtenir le reçu</span>
+</button>
+<!-- eIDAS Legal Disclaimer Note -->
+<div class="flex items-start gap-2 px-space-sm text-center justify-center">
+<span class="material-symbols-outlined text-outline text-[16px] flex-shrink-0 mt-0.5">security</span>
+<p class="font-body-sm text-[11px] text-on-surface-variant leading-tight max-w-sm">
+        Signature électronique qualifiée conforme au règlement européen eIDAS. Un récépissé d'émargement scellé (PDF) est immédiatement transmis au titulaire et à la personne mandatée.
+      </p>
+</div>
+<!-- Anomaly Reporting Action -->
+<div class="text-center pt-space-xs">
+<button class="font-label-md text-label-md text-secondary hover:underline inline-flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">report_problem</span>
+<span>Signaler une anomalie ou émettre une réserve au conseiller Marc L.</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  (function initSignatureModule() {
+    const canvas = document.getElementById('signature-pad');
+    const clearBtn = document.getElementById('clear-sig-btn');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let hasCustomStroke = false;
+
+    // Responsive canvas resizing
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      if (!hasCustomStroke) {
+        drawPreloadedSignature(rect.width, rect.height);
+      }
+    }
+
+    // Realistic prefilled cursive signature for Camille Rochefort
+    function drawPreloadedSignature(width, height) {
+      ctx.save();
+      ctx.strokeStyle = '#002642';
+      ctx.lineWidth = 2.4;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      const scale = Math.min(width / 340, 1.1);
+      const startX = 35 * scale;
+      const startY = height * 0.58;
+
+      ctx.beginPath();
+      // Capital 'C'
+      ctx.moveTo(startX + 30 * scale, startY - 25 * scale);
+      ctx.bezierCurveTo(startX + 5 * scale, startY - 30 * scale, startX - 10 * scale, startY + 5 * scale, startX + 15 * scale, startY + 10 * scale);
+      ctx.bezierCurveTo(startX + 35 * scale, startY + 12 * scale, startX + 45 * scale, startY - 10 * scale, startX + 50 * scale, startY);
+      
+      // 'amille'
+      ctx.quadraticCurveTo(startX + 60 * scale, startY + 6 * scale, startX + 75 * scale, startY - 4 * scale);
+      ctx.quadraticCurveTo(startX + 90 * scale, startY + 8 * scale, startX + 105 * scale, startY - 2 * scale);
+      ctx.lineTo(startX + 120 * scale, startY - 20 * scale); // 'l'
+      ctx.lineTo(startX + 125 * scale, startY + 5 * scale);
+      ctx.lineTo(startX + 135 * scale, startY - 20 * scale); // second 'l'
+      ctx.lineTo(startX + 140 * scale, startY + 5 * scale);
+      ctx.quadraticCurveTo(startX + 150 * scale, startY - 2 * scale, startX + 160 * scale, startY + 2 * scale);
+
+      // 'Rochefort' flourish
+      const rX = startX + 175 * scale;
+      ctx.moveTo(rX, startY + 8 * scale);
+      ctx.lineTo(rX + 4 * scale, startY - 28 * scale); // R stem
+      ctx.bezierCurveTo(rX + 22 * scale, startY - 30 * scale, rX + 24 * scale, startY - 14 * scale, rX + 4 * scale, startY - 12 * scale);
+      ctx.lineTo(rX + 20 * scale, startY + 8 * scale);
+      ctx.quadraticCurveTo(rX + 35 * scale, startY - 6 * scale, rX + 50 * scale, startY + 2 * scale);
+      ctx.quadraticCurveTo(rX + 65 * scale, startY - 15 * scale, rX + 80 * scale, startY + 4 * scale);
+      
+      // Flowing terminal underline
+      ctx.bezierCurveTo(rX + 95 * scale, startY + 15 * scale, startX + 120 * scale, startY + 22 * scale, startX + 40 * scale, startY + 20 * scale);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    setTimeout(resizeCanvas, 50);
+
+    function getCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
+    }
+
+    function startDrawing(e) {
+      isDrawing = true;
+      hasCustomStroke = true;
+      const coords = getCoords(e);
+      ctx.beginPath();
+      ctx.moveTo(coords.x, coords.y);
+      ctx.strokeStyle = '#002642';
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+      e.preventDefault();
+      const coords = getCoords(e);
+      ctx.lineTo(coords.x, coords.y);
+      ctx.stroke();
+    }
+
+    function stopDrawing() {
+      if (!isDrawing) return;
+      isDrawing = false;
+      ctx.closePath();
+    }
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    window.addEventListener('mouseup', stopDrawing);
+
+    canvas.addEventListener('touchstart', startDrawing, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    window.addEventListener('touchend', stopDrawing);
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        const rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        hasCustomStroke = true;
+      });
+    }
+
+    const submitBtn = document.getElementById('submit-signature-btn');
+    if (submitBtn) {
+      submitBtn.addEventListener('click', () => {
+        submitBtn.innerHTML = `
+          <span class="material-symbols-outlined animate-spin text-[24px]">progress_activity</span>
+          <span>Scellement cryptographique en cours...</span>
+        `;
+        submitBtn.setAttribute('disabled', 'true');
+        setTimeout(() => {
+          submitBtn.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+          submitBtn.classList.add('bg-on-tertiary-container', 'text-white');
+          submitBtn.innerHTML = `
+            <span class="material-symbols-outlined text-[24px]">check_circle</span>
+            <span>Émargement scellé avec succès !</span>
+          `;
+        }, 1200);
+      });
+    }
+  })();
+</script></main></body></html>
