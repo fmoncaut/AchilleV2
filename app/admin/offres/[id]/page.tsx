@@ -8,6 +8,7 @@ import {
   AdminMain,
 } from "@/components/admin/admin-shell";
 import { requireAdminActor } from "@/lib/admin/actor";
+import { listBrokerOptions } from "@/lib/admin/brokers";
 import {
   getOfferForMerchant,
   listCategories,
@@ -32,10 +33,11 @@ export default async function EditOffrePage({
   const query = await searchParams;
   const saved = query.ok === "1";
 
-  const [offer, categories, poses] = await Promise.all([
+  const [offer, categories, poses, brokers] = await Promise.all([
     getOfferForMerchant(actor.merchantId, id),
     listCategories(),
     listMerchantPos(actor.merchantId),
+    listBrokerOptions(),
   ]);
 
   if (!offer) {
@@ -70,11 +72,20 @@ export default async function EditOffrePage({
             id: pos.id,
             label: pos.city ? `${pos.name} (${pos.city})` : pos.name,
           }))}
+          brokers={brokers.map((broker) => ({
+            id: broker.id,
+            label: `${broker.name} (${broker.billingType})`,
+          }))}
           defaults={{
             ean: offer.product.ean ?? "",
             name: offer.product.name,
             categoryId: offer.product.categoryId ?? "",
-            posId: offer.posId,
+            kind: offer.kind,
+            scope: offer.scope,
+            posId: offer.posId ?? "",
+            posIds: offer.targetedPos.map((link) => link.posId),
+            brokerId: offer.brokerId ?? "",
+            brokerRate: offer.brokerRate?.toFixed(2) ?? "",
             priceRemise: offer.priceRemise.toFixed(2),
             priceReference: offer.priceReference?.toFixed(2) ?? "",
             tvaRate: offer.tvaRate?.toFixed(2) ?? "20",

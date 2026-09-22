@@ -90,6 +90,9 @@ async function main() {
       },
     });
     offerId = offer.id;
+    await prisma.offerPos.create({
+      data: { offerId: offer.id, posId: pos.id },
+    });
 
     const nearby = await findOffersNearby(LYON.lat, LYON.lng, 20_000, {
       limit: 50,

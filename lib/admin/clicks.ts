@@ -41,6 +41,13 @@ export type ClicksByMerchantRow = {
   count: number;
 };
 
+export type ClicksByBrokerRow = {
+  brokerId: string | null;
+  brokerName: string;
+  billingType: string | null;
+  count: number;
+};
+
 export type ClickDashboard = {
   days: ClickPeriodDays;
   from: Date;
@@ -48,6 +55,7 @@ export type ClickDashboard = {
   byDay: ClicksByDayRow[];
   byOffer: ClicksByOfferRow[];
   byMerchant: ClicksByMerchantRow[];
+  byBroker: ClicksByBrokerRow[];
 };
 
 function toInt(value: unknown): number {
@@ -71,7 +79,8 @@ export async function getClickDashboard(
   const from = periodStart(days);
   const scope = merchantScopeSql(merchantId);
 
-  const [totalRows, byDayRows, byOfferRows, byMerchantRows] = await Promise.all([
+  const [totalRows, byDayRows, byOfferRows, byMerchantRows, byBrokerRows] =
+    await Promise.all([
     prisma.$queryRaw<Array<{ count: unknown }>>`
       SELECT COUNT(*)::int AS count
       FROM "OfferClick" oc
@@ -102,13 +111,16 @@ export async function getClickDashboard(
       SELECT
         o.id AS "offerId",
         p.name AS "productName",
-        pos.name AS "posName",
+        CASE
+          WHEN o.kind = 'AFFILIATION' AND o.scope = 'ENSEIGNE' THEN 'Toute l’enseigne'
+          ELSE COALESCE(pos.name, '—')
+        END AS "posName",
         m.name AS "merchantName",
         COUNT(*)::int AS count
       FROM "OfferClick" oc
       INNER JOIN "Offer" o ON o.id = oc."offerId"
       INNER JOIN "Product" p ON p.id = o."productId"
-      INNER JOIN "Pos" pos ON pos.id = o."posId"
+      LEFT JOIN "Pos" pos ON pos.id = o."posId"
       INNER JOIN "Merchant" m ON m.id = o."merchantId"
       WHERE oc."createdAt" >= ${from}
       ${scope}
@@ -131,6 +143,27 @@ export async function getClickDashboard(
       GROUP BY m.id, m.name
       ORDER BY count DESC, m.name ASC
     `,
+    prisma.$queryRaw<
+      Array<{
+        brokerId: string | null;
+        brokerName: string;
+        billingType: string | null;
+        count: unknown;
+      }>
+    >`
+      SELECT
+        br.id AS "brokerId",
+        COALESCE(br.name, 'Sans broker') AS "brokerName",
+        br."billingType"::text AS "billingType",
+        COUNT(*)::int AS count
+      FROM "OfferClick" oc
+      INNER JOIN "Offer" o ON o.id = oc."offerId"
+      LEFT JOIN "Broker" br ON br.id = o."brokerId"
+      WHERE oc."createdAt" >= ${from}
+      ${scope}
+      GROUP BY br.id, br.name, br."billingType"
+      ORDER BY count DESC, "brokerName" ASC
+    `,
   ]);
 
   return {
@@ -151,6 +184,12 @@ export async function getClickDashboard(
     byMerchant: byMerchantRows.map((row) => ({
       merchantId: row.merchantId,
       merchantName: row.merchantName,
+      count: toInt(row.count),
+    })),
+    byBroker: byBrokerRows.map((row) => ({
+      brokerId: row.brokerId,
+      brokerName: row.brokerName,
+      billingType: row.billingType,
       count: toInt(row.count),
     })),
   };

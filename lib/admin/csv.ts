@@ -1,8 +1,9 @@
-import type { ProductCondition } from "@prisma/client";
+import type { OfferScope, ProductCondition } from "@prisma/client";
 
 import type { AdminActor } from "@/lib/admin/actor";
 import { parseCondition } from "@/lib/admin/schemas";
 import { listCategories, listMerchantPos, saveOfferForMerchant } from "@/lib/admin/offers";
+import { prisma } from "@/lib/db";
 import { toDecimal } from "@/lib/money";
 
 export const CSV_COLUMNS = [
@@ -16,7 +17,21 @@ export const CSV_COLUMNS = [
   "condition",
   "pos",
   "merchant_url",
+  "broker",
+  "scope",
+  "pos_cibles",
+  "broker_rate",
 ] as const;
+
+const OPTIONAL_COLUMNS = new Set<CsvColumn>([
+  "tva",
+  "condition",
+  "merchant_url",
+  "broker",
+  "scope",
+  "pos_cibles",
+  "broker_rate",
+]);
 
 export type CsvColumn = (typeof CSV_COLUMNS)[number];
 
@@ -94,11 +109,7 @@ export function previewCsv(text: string): {
 
   const headers = records[0].map(normalizeHeader);
   const missingHeaders = CSV_COLUMNS.filter(
-    (column) =>
-      column !== "tva" &&
-      column !== "condition" &&
-      column !== "merchant_url" &&
-      !headers.includes(column),
+    (column) => !OPTIONAL_COLUMNS.has(column) && !headers.includes(column),
   );
   const rows: CsvPreviewRow[] = records.slice(1).map((cells, index) => {
     const raw: Record<string, string> = {};
@@ -122,13 +133,32 @@ function moneyOrError(value: string, label: string): { ok: true; value: string }
   return { ok: true, value: cleaned };
 }
 
+function parseScope(raw: string | undefined): OfferScope | null {
+  const value = (raw ?? "").trim().toLowerCase().replace(/[\s-]+/g, "_");
+  if (!value || value === "pos" || value === "pos_cibles" || value === "cibles") {
+    return "POS_CIBLES";
+  }
+  if (value === "enseigne") {
+    return "ENSEIGNE";
+  }
+  return null;
+}
+
+function splitPosList(raw: string | undefined): string[] {
+  return (raw ?? "")
+    .split(/[|;]/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 export async function validateCsvRows(
   actor: AdminActor,
   rows: CsvPreviewRow[],
 ): Promise<CsvPreviewRow[]> {
-  const [poses, categories] = await Promise.all([
+  const [poses, categories, brokers] = await Promise.all([
     listMerchantPos(actor.merchantId),
     listCategories(),
+    prisma.broker.findMany({ select: { id: true, slug: true, name: true } }),
   ]);
 
   return rows.map((row) => {
@@ -150,13 +180,46 @@ export async function validateCsvRows(
       errors.push("Catégorie inconnue");
     }
 
-    const posNeedle = (row.raw.pos ?? "").trim().toLowerCase();
-    const pos = poses.find(
-      (item) =>
-        item.slug === posNeedle || item.name.toLowerCase() === posNeedle,
-    );
-    if (!pos) {
+    const scope = parseScope(row.raw.scope);
+    if (!scope) {
+      errors.push("Scope inconnu (enseigne ou pos_cibles)");
+    }
+
+    const posNeedles = [
+      ...splitPosList(row.raw.pos_cibles),
+      (row.raw.pos ?? "").trim(),
+    ].filter(Boolean);
+    const matchedPos = posNeedles.flatMap((needle) => {
+      const key = needle.toLowerCase();
+      const pos = poses.find(
+        (item) => item.slug === key || item.name.toLowerCase() === key,
+      );
+      return pos ? [pos] : [];
+    });
+    if (scope === "POS_CIBLES" && matchedPos.length !== posNeedles.length) {
       errors.push("Magasin inconnu pour votre enseigne");
+    }
+    if (scope === "POS_CIBLES" && posNeedles.length === 0) {
+      errors.push("Magasin obligatoire (pos ou pos_cibles)");
+    }
+
+    const brokerNeedle = (row.raw.broker ?? "").trim().toLowerCase();
+    if (brokerNeedle) {
+      const broker = brokers.find(
+        (item) =>
+          item.slug === brokerNeedle || item.name.toLowerCase() === brokerNeedle,
+      );
+      if (!broker) {
+        errors.push("Broker inconnu");
+      }
+    }
+
+    const rateRaw = (row.raw.broker_rate ?? "").trim();
+    if (rateRaw) {
+      const rate = moneyOrError(rateRaw, "Tarif broker");
+      if (!rate.ok) {
+        errors.push(rate.error);
+      }
     }
 
     const remise = moneyOrError(row.raw.prix_remise ?? "", "Prix remisé");
@@ -210,9 +273,10 @@ export async function importValidCsvRows(
   rows: CsvPreviewRow[],
 ): Promise<{ imported: number; skipped: number; errors: CsvPreviewRow[] }> {
   const validated = await validateCsvRows(actor, rows);
-  const [poses, categories] = await Promise.all([
+  const [poses, categories, brokers] = await Promise.all([
     listMerchantPos(actor.merchantId),
     listCategories(),
+    prisma.broker.findMany({ select: { id: true, slug: true, name: true } }),
   ]);
 
   let imported = 0;
@@ -229,12 +293,30 @@ export async function importValidCsvRows(
       (item) =>
         item.slug === categoryNeedle || item.name.toLowerCase() === categoryNeedle,
     );
-    const posNeedle = row.raw.pos.trim().toLowerCase();
-    const pos = poses.find(
-      (item) =>
-        item.slug === posNeedle || item.name.toLowerCase() === posNeedle,
-    );
-    if (!category || !pos) {
+    const scope = parseScope(row.raw.scope) ?? "POS_CIBLES";
+    const posNeedles = [
+      ...splitPosList(row.raw.pos_cibles),
+      row.raw.pos?.trim() ?? "",
+    ].filter(Boolean);
+    const matchedPos = [
+      ...new Map(
+        posNeedles.flatMap((needle) => {
+          const key = needle.toLowerCase();
+          const pos = poses.find(
+            (item) => item.slug === key || item.name.toLowerCase() === key,
+          );
+          return pos ? [[pos.id, pos] as const] : [];
+        }),
+      ).values(),
+    ];
+    const brokerNeedle = (row.raw.broker ?? "").trim().toLowerCase();
+    const broker = brokerNeedle
+      ? brokers.find(
+          (item) =>
+            item.slug === brokerNeedle || item.name.toLowerCase() === brokerNeedle,
+        )
+      : undefined;
+    if (!category || (scope === "POS_CIBLES" && matchedPos.length === 0)) {
       errors.push({ ...row, ok: false, errors: ["Données de référence introuvables"] });
       continue;
     }
@@ -247,7 +329,12 @@ export async function importValidCsvRows(
         ean: row.raw.ean.trim(),
         name: row.raw.nom.trim(),
         categoryId: category.id,
-        posId: pos.id,
+        kind: "AFFILIATION",
+        scope,
+        posId: matchedPos[0]?.id ?? "",
+        posIds: matchedPos.map((pos) => pos.id),
+        brokerId: broker?.id ?? "",
+        brokerRate: (row.raw.broker_rate ?? "").replace(",", "."),
         priceRemise: row.raw.prix_remise.replace(",", "."),
         priceReference: row.raw.prix_reference.replace(",", "."),
         tvaRate: (row.raw.tva || "20").replace(",", "."),

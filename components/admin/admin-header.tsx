@@ -40,6 +40,9 @@ export function AdminHeader({
               <Button asChild variant="ghost" size="sm">
                 <Link href="/admin/vendeurs">Vendeurs</Link>
               </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/admin/brokers">Brokers</Link>
+              </Button>
             </>
           ) : null}
           {showOffers ? (

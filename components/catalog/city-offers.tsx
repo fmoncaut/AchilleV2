@@ -106,7 +106,7 @@ function CityOffersView({
         ) : (
           <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {located.map((offer) => (
-              <li key={offer.id}>
+              <li key={`${offer.id}-${offer.posId}`}>
                 <OfferCard
                   offer={offer}
                   href={offerPath(offer.productSlug, {

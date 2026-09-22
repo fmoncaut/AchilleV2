@@ -165,7 +165,7 @@ export default async function AdminOffresPage({ searchParams }: OffresPageProps)
                     {offer.productName}
                   </Link>
                   <p className="font-body-sm text-on-surface-variant text-xs">
-                    {offer.posName}
+                    {offer.scopeLabel} · {offer.posName}
                   </p>
                 </td>
                 <td className="font-headline-sm text-secondary-container px-3 py-2 font-extrabold">

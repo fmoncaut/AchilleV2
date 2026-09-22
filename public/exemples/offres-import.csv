@@ -1,7 +1,8 @@
-ean,nom,categorie,prix_remise,prix_reference,tva,stock,condition,pos,merchant_url
-3165140794211,Perceuse visseuse Bosch 18V,brico,119.90,189.90,20,12,NEUF,bricomarche-lyon-8e,https://www.bricomarche.com/p/perceuse-visseuse-bosch-18v
-3165140551023,Scie sauteuse Bosch PST 700,brico,44.90,79.90,20,6,NEUF,bricomarche-saint-herblain,https://www.bricomarche.com/p/scie-sauteuse-bosch-pst-700
-3165140999999,Niveau laser Bosch,brico,59.90,99.90,20,4,NEUF,bricomarche-lyon-8e,https://www.bricomarche.com/p/niveau-laser-bosch
-ABC,Produit sans EAN,brico,10,20,20,1,NEUF,bricomarche-lyon-8e,https://www.bricomarche.com/p/x
-3165140794211,Perceuse visseuse Bosch 18V,brico,200,189.90,20,1,NEUF,bricomarche-lyon-8e,https://www.bricomarche.com/p/perceuse
-3165140794211,Perceuse visseuse Bosch 18V,brico,119.90,189.90,20,1,NEUF,magasin-inconnu,https://www.bricomarche.com/p/perceuse
+ean,nom,categorie,prix_remise,prix_reference,tva,stock,condition,pos,merchant_url,broker,scope,pos_cibles,broker_rate
+3165140794211,Perceuse visseuse Bosch 18V,brico,119.90,189.90,20,12,NEUF,bricomarche-lyon-8e,https://www.bricomarche.com/p/perceuse-visseuse-bosch-18v,,,
+3165140551023,Scie sauteuse Bosch PST 700,brico,44.90,79.90,20,6,NEUF,bricomarche-saint-herblain,https://www.bricomarche.com/p/scie-sauteuse-bosch-pst-700,,pos_cibles,,
+3165140999999,Niveau laser Bosch,brico,59.90,99.90,20,4,NEUF,bricomarche-lyon-8e,https://www.bricomarche.com/p/niveau-laser-bosch,,pos_cibles,bricomarche-lyon-8e|bricomarche-saint-herblain,
+4006381333931,Metre ruban 5 m,brico,4.90,9.90,20,20,NEUF,,https://www.bricomarche.com/p/metre-ruban,,enseigne,,
+ABC,Produit sans EAN,brico,10,20,20,1,NEUF,bricomarche-lyon-8e,https://www.bricomarche.com/p/x,,,
+3165140794211,Perceuse visseuse Bosch 18V,brico,200,189.90,20,1,NEUF,bricomarche-lyon-8e,https://www.bricomarche.com/p/perceuse,,,
+3165140794211,Perceuse visseuse Bosch 18V,brico,119.90,189.90,20,1,NEUF,magasin-inconnu,https://www.bricomarche.com/p/perceuse,,,

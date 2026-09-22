@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 import { discountPercent } from "@/lib/money";
+import { sqlOfferPlacementJoin } from "@/lib/offer-placement";
 import { SEARCH_RESULT_LIMIT } from "@/lib/search";
 
 export type NearbyOffer = {
@@ -176,7 +177,7 @@ export async function findOffersNearby(
         ST_MakePoint(${lng}, ${lat})::geography
       ) AS "distanceM"
     FROM "Offer" o
-    JOIN "Pos" p ON p.id = o."posId"
+    ${sqlOfferPlacementJoin()}
     JOIN "Product" pr ON pr.id = o."productId"
     JOIN "Merchant" m ON m.id = o."merchantId"
     LEFT JOIN "Brand" b ON b.id = pr."brandId"

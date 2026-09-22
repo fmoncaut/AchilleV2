@@ -5,6 +5,7 @@ import {
   AdminMain,
 } from "@/components/admin/admin-shell";
 import { requireAdminActor } from "@/lib/admin/actor";
+import { listBrokerOptions } from "@/lib/admin/brokers";
 import { listCategories, listMerchantPos } from "@/lib/admin/offers";
 
 export const metadata = {
@@ -13,9 +14,10 @@ export const metadata = {
 
 export default async function NouvelleOffrePage() {
   const actor = await requireAdminActor();
-  const [categories, poses] = await Promise.all([
+  const [categories, poses, brokers] = await Promise.all([
     listCategories(),
     listMerchantPos(actor.merchantId),
+    listBrokerOptions(),
   ]);
 
   return (
@@ -40,6 +42,10 @@ export default async function NouvelleOffrePage() {
           poses={poses.map((pos) => ({
             id: pos.id,
             label: pos.city ? `${pos.name} (${pos.city})` : pos.name,
+          }))}
+          brokers={brokers.map((broker) => ({
+            id: broker.id,
+            label: `${broker.name} (${broker.billingType})`,
           }))}
         />
       </AdminCard>

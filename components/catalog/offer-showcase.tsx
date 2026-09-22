@@ -59,16 +59,24 @@ function pickCurrentOffer(
   if (offers.length === 0) {
     return null;
   }
-  if (offreId) {
-    const byId = offers.find((offer) => offer.id === offreId);
-    if (byId) {
-      return byId;
+  if (offreId && posSlug) {
+    const exact = offers.find(
+      (offer) => offer.id === offreId && offer.pos.slug === posSlug,
+    );
+    if (exact) {
+      return exact;
     }
   }
   if (posSlug) {
     const byPos = offers.find((offer) => offer.pos.slug === posSlug);
     if (byPos) {
       return byPos;
+    }
+  }
+  if (offreId) {
+    const byId = offers.find((offer) => offer.id === offreId);
+    if (byId) {
+      return byId;
     }
   }
   return offers[0] ?? null;
@@ -284,13 +292,14 @@ function OfferShowcaseView({
               </div>
               <ul>
                 {located.map((offer) => {
-                  const selected = offer.id === current.id;
+                  const selected =
+                    offer.id === current.id && offer.pos.id === current.pos.id;
                   const discount =
                     offer.discountPct ??
                     discountPercent(offer.priceRemise, offer.priceReference);
                   return (
                     <li
-                      key={offer.id}
+                      key={`${offer.id}-${offer.pos.id}`}
                       className="border-surface-container-high relative grid grid-cols-1 items-center gap-4 border-t p-5 first:border-t-0 lg:grid-cols-12 lg:px-6"
                     >
                       {selected ? (

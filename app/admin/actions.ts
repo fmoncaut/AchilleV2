@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { requireAdminActor } from "@/lib/admin/actor";
@@ -32,7 +32,14 @@ function parseOfferForm(formData: FormData) {
     ean: firstFormValue(formData, "ean"),
     name: firstFormValue(formData, "name"),
     categoryId: firstFormValue(formData, "categoryId"),
+    kind: firstFormValue(formData, "kind") || "AFFILIATION",
+    scope: firstFormValue(formData, "scope") || "POS_CIBLES",
     posId: firstFormValue(formData, "posId"),
+    posIds: formData
+      .getAll("posIds")
+      .filter((value): value is string => typeof value === "string" && value.length > 0),
+    brokerId: firstFormValue(formData, "brokerId"),
+    brokerRate: firstFormValue(formData, "brokerRate"),
     priceRemise: firstFormValue(formData, "priceRemise"),
     priceReference: firstFormValue(formData, "priceReference"),
     tvaRate: firstFormValue(formData, "tvaRate") || "20",
@@ -42,6 +49,12 @@ function parseOfferForm(formData: FormData) {
     isOnline: formData.get("isOnline") === "on",
     description: firstFormValue(formData, "description"),
   });
+}
+
+function revalidateCatalog() {
+  revalidatePath("/");
+  revalidatePath("/recherche");
+  revalidateTag("catalog", "max");
 }
 
 function fieldErrorsFromZod(error: {
@@ -78,6 +91,7 @@ export async function createOfferAction(
   }
 
   revalidatePath("/admin/offres");
+  revalidateCatalog();
   redirect(`/admin/offres/${offerIdCreated}?ok=1`);
 }
 
@@ -106,6 +120,7 @@ export async function updateOfferAction(
 
   revalidatePath("/admin/offres");
   revalidatePath(`/admin/offres/${offerId}`);
+  revalidateCatalog();
   redirect(`/admin/offres/${offerId}?ok=1`);
 }
 
@@ -115,6 +130,7 @@ export async function toggleOfferAction(formData: FormData) {
   await toggleOfferOnline(actor, offerId);
   revalidatePath("/admin/offres");
   revalidatePath(`/admin/offres/${offerId}`);
+  revalidateCatalog();
 }
 
 export async function deleteOfferAction(formData: FormData) {
@@ -122,6 +138,7 @@ export async function deleteOfferAction(formData: FormData) {
   const offerId = firstFormValue(formData, "id");
   await deleteOfferForMerchant(actor, offerId);
   revalidatePath("/admin/offres");
+  revalidateCatalog();
   redirect("/admin/offres?supprime=1");
 }
 
@@ -184,5 +201,6 @@ export async function importCsvAction(
 
   const result = await importValidCsvRows(actor, rows);
   revalidatePath("/admin/offres");
+  revalidateCatalog();
   return result;
 }

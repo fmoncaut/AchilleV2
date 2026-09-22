@@ -77,13 +77,14 @@ async function geocodePos(input: PosFormInput): Promise<GeocodeHit> {
 }
 
 export async function getPlatformCounts() {
-  const [merchants, poses, offers, users] = await Promise.all([
+  const [merchants, poses, offers, users, brokers] = await Promise.all([
     prisma.merchant.count(),
     prisma.pos.count(),
     prisma.offer.count(),
     prisma.user.count(),
+    prisma.broker.count(),
   ]);
-  return { merchants, poses, offers, users };
+  return { merchants, poses, offers, users, brokers };
 }
 
 export async function listMerchants() {

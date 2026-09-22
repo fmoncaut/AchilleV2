@@ -65,6 +65,7 @@ function offerData(input: {
 async function main() {
   await prisma.offerClick.deleteMany();
   await prisma.favorite.deleteMany();
+  await prisma.offerPos.deleteMany();
   await prisma.offer.deleteMany();
   await prisma.product.deleteMany();
   await prisma.pos.deleteMany();
@@ -286,6 +287,7 @@ async function main() {
     }),
   ]);
 
+  await prisma.offerPos.deleteMany();
   await prisma.offer.createMany({
     data: [
       offerData({
@@ -366,7 +368,16 @@ async function main() {
     ],
   });
 
-  const offers = await prisma.offer.count();
+  const seededOffers = await prisma.offer.findMany({
+    select: { id: true, posId: true },
+  });
+  await prisma.offerPos.createMany({
+    data: seededOffers.flatMap((offer) =>
+      offer.posId ? [{ offerId: offer.id, posId: offer.posId }] : [],
+    ),
+  });
+
+  const offers = seededOffers.length;
   const pos = await prisma.pos.count();
   console.log(
     `Seed Achille : ${pos} POS, ${offers} offres en ligne (prix remisé < référence).`,

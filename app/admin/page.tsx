@@ -32,6 +32,7 @@ export default async function AdminIndexPage() {
       value: counts.offers,
     },
     { href: "/admin/vendeurs", label: "Utilisateurs", value: counts.users },
+    { href: "/admin/brokers", label: "Brokers", value: counts.brokers },
   ];
 
   return (

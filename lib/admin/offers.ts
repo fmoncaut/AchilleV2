@@ -29,6 +29,7 @@ export type OfferListItem = {
   productImageUrl: string | null;
   categoryName: string | null;
   posName: string;
+  scopeLabel: string;
 };
 
 export async function listOffersForMerchant(
@@ -66,6 +67,7 @@ export async function listOffersForMerchant(
         },
       },
       pos: { select: { name: true } },
+      targetedPos: { select: { pos: { select: { name: true } } } },
     },
     orderBy: { updatedAt: "desc" },
   });
@@ -83,8 +85,30 @@ export async function listOffersForMerchant(
     productEan: offer.product.ean,
     productImageUrl: offer.product.imageUrl,
     categoryName: offer.product.category?.name ?? null,
-    posName: offer.pos.name,
+    posName: placementLabel(offer),
+    scopeLabel:
+      offer.kind === "DIRECT"
+        ? "Direct"
+        : offer.scope === "ENSEIGNE"
+          ? "Enseigne"
+          : "POS ciblés",
   }));
+}
+
+function placementLabel(offer: {
+  kind: "DIRECT" | "AFFILIATION";
+  scope: "ENSEIGNE" | "POS_CIBLES";
+  pos: { name: string } | null;
+  targetedPos: { pos: { name: string } }[];
+}): string {
+  if (offer.kind === "AFFILIATION" && offer.scope === "ENSEIGNE") {
+    return "Toute l’enseigne";
+  }
+  const names = offer.targetedPos.map((link) => link.pos.name);
+  if (names.length > 1) {
+    return `${names.length} magasins`;
+  }
+  return names[0] ?? offer.pos?.name ?? "—";
 }
 
 export async function getOfferForMerchant(merchantId: string, offerId: string) {
@@ -95,6 +119,8 @@ export async function getOfferForMerchant(merchantId: string, offerId: string) {
         include: { category: true },
       },
       pos: true,
+      targetedPos: { select: { posId: true } },
+      broker: { select: { id: true, name: true, billingType: true } },
     },
   });
 }
@@ -176,12 +202,23 @@ async function assertPosOfMerchant(merchantId: string, posId: string) {
   return pos;
 }
 
+function targetPosIds(input: OfferFormInput): string[] {
+  const raw = input.posIds.length > 0 ? input.posIds : input.posId ? [input.posId] : [];
+  return [...new Set(raw.filter(Boolean))];
+}
+
 export async function saveOfferForMerchant(
   actor: AdminActor,
   input: OfferFormInput,
   offerId?: string,
 ) {
-  await assertPosOfMerchant(actor.merchantId, input.posId);
+  const kind = input.kind;
+  const scope = kind === "DIRECT" ? "POS_CIBLES" : input.scope;
+  const posIds = kind === "AFFILIATION" && scope === "ENSEIGNE" ? [] : targetPosIds(input);
+
+  for (const posId of posIds) {
+    await assertPosOfMerchant(actor.merchantId, posId);
+  }
 
   const category = await prisma.category.findUnique({
     where: { id: input.categoryId },
@@ -189,6 +226,16 @@ export async function saveOfferForMerchant(
   });
   if (!category) {
     throw new Error("Catégorie inconnue.");
+  }
+
+  if (input.brokerId) {
+    const broker = await prisma.broker.findUnique({
+      where: { id: input.brokerId },
+      select: { id: true },
+    });
+    if (!broker) {
+      throw new Error("Broker inconnu.");
+    }
   }
 
   const product = await upsertProductByEan({
@@ -203,11 +250,35 @@ export async function saveOfferForMerchant(
   const tvaRate = toDecimal(input.tvaRate);
   const discountPct = computedDiscountPct(priceRemise, priceReference);
   const merchantUrl = input.merchantUrl ? input.merchantUrl : null;
+  const anchorPosId = posIds[0] ?? null;
+  const brokerId = kind === "AFFILIATION" && input.brokerId ? input.brokerId : null;
+  const brokerRate =
+    kind === "AFFILIATION" && input.brokerRate
+      ? toDecimal(input.brokerRate.replace(",", "."))
+      : null;
+
+  let resolvedId = offerId;
+  if (!resolvedId && kind === "AFFILIATION" && scope === "ENSEIGNE") {
+    const existing = await prisma.offer.findFirst({
+      where: {
+        productId: product.id,
+        merchantId: actor.merchantId,
+        kind: "AFFILIATION",
+        scope: "ENSEIGNE",
+      },
+      select: { id: true },
+    });
+    resolvedId = existing?.id;
+  }
 
   const payload = {
     productId: product.id,
-    posId: input.posId,
+    posId: anchorPosId,
     merchantId: actor.merchantId,
+    kind,
+    scope,
+    brokerId,
+    brokerRate,
     priceRemise,
     priceReference,
     discountPct,
@@ -218,50 +289,65 @@ export async function saveOfferForMerchant(
     merchantUrl,
   };
 
-  if (offerId) {
-    const existing = await getOfferForMerchant(actor.merchantId, offerId);
+  if (resolvedId) {
+    const existing = await getOfferForMerchant(actor.merchantId, resolvedId);
     if (!existing) {
       throw new Error("Offre introuvable.");
     }
+  }
 
+  if (anchorPosId) {
     const conflict = await prisma.offer.findFirst({
       where: {
         productId: product.id,
-        posId: input.posId,
-        id: { not: offerId },
+        posId: anchorPosId,
+        ...(resolvedId ? { id: { not: resolvedId } } : {}),
       },
       select: { id: true, merchantId: true },
     });
-    if (conflict) {
+    if (conflict && conflict.merchantId !== actor.merchantId) {
       throw new Error("Une offre existe déjà pour ce produit dans ce magasin.");
     }
-
-    return prisma.offer.update({
-      where: { id: existing.id },
-      data: payload,
-    });
+    if (conflict && conflict.merchantId === actor.merchantId && !resolvedId) {
+      resolvedId = conflict.id;
+    }
+    if (conflict && resolvedId && conflict.id !== resolvedId) {
+      throw new Error("Une offre existe déjà pour ce produit dans ce magasin.");
+    }
   }
 
+  const write = async (id: string | undefined) =>
+    prisma.$transaction(async (tx) => {
+      const offer = id
+        ? await tx.offer.update({ where: { id }, data: payload })
+        : await tx.offer.create({ data: payload });
+      await tx.offerPos.deleteMany({ where: { offerId: offer.id } });
+      if (kind === "AFFILIATION" && scope === "POS_CIBLES" && posIds.length > 0) {
+        await tx.offerPos.createMany({
+          data: posIds.map((posId) => ({ offerId: offer.id, posId })),
+        });
+      }
+      return offer;
+    });
+
   try {
-    return await prisma.offer.create({ data: payload });
+    return await write(resolvedId);
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2002"
+      error.code === "P2002" &&
+      anchorPosId
     ) {
       const existing = await prisma.offer.findUnique({
         where: {
-          productId_posId: { productId: product.id, posId: input.posId },
+          productId_posId: { productId: product.id, posId: anchorPosId },
         },
         select: { id: true, merchantId: true },
       });
       if (!existing || existing.merchantId !== actor.merchantId) {
         throw new Error("Une offre existe déjà pour ce produit dans ce magasin.");
       }
-      return prisma.offer.update({
-        where: { id: existing.id },
-        data: payload,
-      });
+      return write(existing.id);
     }
     throw error;
   }

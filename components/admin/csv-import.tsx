@@ -54,7 +54,10 @@ export function CsvImportWizard() {
           </label>
           <p className="font-body-sm text-body-sm text-on-surface-variant">
             Colonnes : ean, nom, categorie, prix_remise, prix_reference, tva,
-            stock, condition, pos, merchant_url. Modèle :{" "}
+            stock, condition, pos, merchant_url. Affiliation : broker (slug),
+            scope (enseigne ou pos_cibles), pos_cibles (slugs séparés par |),
+            broker_rate (décimal, optionnel). Sans scope, l’offre reste ciblée
+            sur la colonne pos. Modèle :{" "}
             <a
               href="/exemples/offres-import.csv"
               className="text-primary-container font-bold underline-offset-4 hover:underline"

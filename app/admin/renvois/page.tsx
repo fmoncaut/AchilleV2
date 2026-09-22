@@ -135,6 +135,39 @@ export default async function AdminRenvoisPage({
 
           <section className="flex flex-col gap-3">
             <h2 className="font-headline-sm text-headline-sm text-primary-container">
+              Par broker
+            </h2>
+            <AdminTable className="min-w-[20rem]">
+              <AdminThead>
+                <tr>
+                  <th className="px-4 py-3">Broker</th>
+                  <th className="px-4 py-3">Type</th>
+                  <th className="px-4 py-3">Renvois</th>
+                </tr>
+              </AdminThead>
+              <tbody>
+                {dashboard.byBroker.map((row) => (
+                  <tr
+                    key={row.brokerId ?? "sans-broker"}
+                    className="border-surface-container-high border-t"
+                  >
+                    <td className="font-body-sm text-primary-container px-4 py-3">
+                      {row.brokerName}
+                    </td>
+                    <td className="font-body-sm text-on-surface-variant px-4 py-3">
+                      {row.billingType ?? "—"}
+                    </td>
+                    <td className="font-headline-sm text-primary-container px-4 py-3 font-bold">
+                      {formatCount(row.count)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </AdminTable>
+          </section>
+
+          <section className="flex flex-col gap-3">
+            <h2 className="font-headline-sm text-headline-sm text-primary-container">
               Par enseigne
             </h2>
             <AdminTable className="min-w-[20rem]">

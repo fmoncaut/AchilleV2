@@ -101,6 +101,7 @@ export type RecordOfferClickInput = {
 };
 
 export type RecordOfferClickResult = {
+  id: string;
   recorded: boolean;
 };
 
@@ -122,17 +123,18 @@ export async function recordOfferClick(
   });
 
   if (duplicate) {
-    return { recorded: false };
+    return { id: duplicate.id, recorded: false };
   }
 
-  await prisma.offerClick.create({
+  const created = await prisma.offerClick.create({
     data: {
       offerId: input.offerId,
       userId: input.userId,
       sessionId: input.sessionId,
       referrer: sanitizeReferrer(input.referrer),
     },
+    select: { id: true },
   });
 
-  return { recorded: true };
+  return { id: created.id, recorded: true };
 }

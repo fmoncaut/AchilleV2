@@ -38,6 +38,7 @@ model Pos {
   lng          Float
   isActive     Boolean  @default(true)
   offers       Offer[]
+  offerLinks   OfferPos[]
   createdAt    DateTime @default(now())
 
   @@index([city])
@@ -88,14 +89,48 @@ enum ProductCondition {
   RECONDITIONNE
 }
 
+enum OfferKind {
+  DIRECT
+  AFFILIATION
+}
+
+enum OfferScope {
+  ENSEIGNE
+  POS_CIBLES
+}
+
+enum BrokerType {
+  CPC
+  CPA
+}
+
+model Broker {
+  id          String     @id @default(cuid())
+  name        String
+  slug        String     @unique
+  billingType BrokerType @default(CPC)
+  /// Gabarit http(s) : {merchant_url} {click_id} {sub_id}
+  urlTemplate String
+  offers      Offer[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
 model Offer {
   id             String           @id @default(cuid())
   productId      String
   product        Product          @relation(fields: [productId], references: [id])
-  posId          String
-  pos            Pos              @relation(fields: [posId], references: [id])
+  /// Magasin porteur des offres DIRECT, et ancre des offres POS_CIBLES.
+  /// Null pour une affiliation diffusée à toute l'enseigne.
+  posId          String?
+  pos            Pos?             @relation(fields: [posId], references: [id])
   merchantId     String
   merchant       Merchant         @relation(fields: [merchantId], references: [id])
+  kind           OfferKind        @default(AFFILIATION)
+  scope          OfferScope       @default(POS_CIBLES)
+  brokerId       String?
+  broker         Broker?          @relation(fields: [brokerId], references: [id], onDelete: SetNull)
+  brokerRate     Decimal?         @db.Decimal(10, 2)
   priceRemise    Decimal          @db.Decimal(10, 2)
   priceReference Decimal?         @db.Decimal(10, 2)
   discountPct    Int?
@@ -107,12 +142,25 @@ model Offer {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   clicks         OfferClick[]
+  targetedPos    OfferPos[]
 
   @@unique([productId, posId])
   @@index([posId])
   @@index([productId])
   @@index([merchantId])
   @@index([isOnline])
+  @@index([brokerId])
+}
+
+/// POS ciblés d'une offre d'affiliation (scope POS_CIBLES). Pas de duplication de l'offre.
+model OfferPos {
+  offerId String
+  posId   String
+  offer   Offer  @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  pos     Pos    @relation(fields: [posId], references: [id], onDelete: Cascade)
+
+  @@id([offerId, posId])
+  @@index([posId])
 }
 
 model OfferClick {
