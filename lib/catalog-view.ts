@@ -24,6 +24,7 @@ export type ShowcaseOffer = {
   tvaRate: string | null;
   condition: ProductCondition;
   isOnline: boolean;
+  kind: "DIRECT" | "AFFILIATION";
   merchantUrl: string | null;
   merchantName: string;
   pos: ShowcasePos;

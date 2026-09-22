@@ -53,6 +53,9 @@ export function AdminHeader({
               <Button asChild variant="ghost" size="sm">
                 <Link href="/admin/offres/import">Import CSV</Link>
               </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/admin/reservations">Réservations</Link>
+              </Button>
             </>
           ) : null}
           <Button asChild variant="ghost" size="sm">

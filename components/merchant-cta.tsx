@@ -1,4 +1,5 @@
 import { MaterialIcon } from "@/components/material-icon";
+import { ReserveButton } from "@/components/reserve-button";
 import { Button } from "@/components/ui/button";
 import { isAbsoluteHttpUrl } from "@/lib/merchant-url";
 import { outboundPath } from "@/lib/urls";
@@ -8,6 +9,10 @@ type MerchantCtaProps = {
   offerId: string;
   isOnline: boolean;
   merchantUrl: string | null;
+  kind?: "DIRECT" | "AFFILIATION";
+  posId?: string;
+  stock?: number;
+  returnTo?: string;
   compact?: boolean;
 };
 
@@ -15,8 +20,24 @@ export function MerchantCta({
   offerId,
   isOnline,
   merchantUrl,
+  kind = "AFFILIATION",
+  posId,
+  stock = 0,
+  returnTo = "/compte/reservations",
   compact = false,
 }: MerchantCtaProps) {
+  if (kind === "DIRECT" && posId) {
+    return (
+      <ReserveButton
+        offerId={offerId}
+        posId={posId}
+        stock={isOnline ? stock : 0}
+        returnTo={returnTo}
+        compact={compact}
+      />
+    );
+  }
+
   const enabled = isOnline && isAbsoluteHttpUrl(merchantUrl);
 
   if (!enabled) {

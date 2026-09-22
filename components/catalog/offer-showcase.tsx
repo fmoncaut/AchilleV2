@@ -221,6 +221,10 @@ function OfferShowcaseView({
                   offerId={current.id}
                   isOnline={current.isOnline}
                   merchantUrl={current.merchantUrl}
+                  kind={current.kind}
+                  posId={current.pos.id}
+                  stock={current.stock}
+                  returnTo={`/offre/${product.slug}`}
                 />
               </section>
             ) : (
@@ -235,15 +239,21 @@ function OfferShowcaseView({
             <div className="bg-primary-container text-on-primary shadow-navy-soft rounded-2xl p-4">
               <p className="font-headline-sm text-headline-sm flex items-center gap-2 font-bold">
                 <MaterialIcon
-                  name="open_in_new"
+                  name={
+                    current?.kind === "DIRECT"
+                      ? "shopping_bag"
+                      : "open_in_new"
+                  }
                   className="text-secondary-container text-[20px]"
                 />
-                Circuit affiliation
+                {current?.kind === "DIRECT"
+                  ? "Retrait en magasin"
+                  : "Circuit affiliation"}
               </p>
               <p className="font-body-sm text-body-sm text-surface-variant mt-1">
-                Achille compare les offres locales puis vous renvoie vers le
-                site du marchand (lien sécurisé et tracké). Pas de panier ni de
-                paiement ici.
+                {current?.kind === "DIRECT"
+                  ? "Vous réservez ici, sans paiement. Le magasin prépare la commande et vous la retirez avec le code. Le paiement arrivera dans un prochain incrément."
+                  : "Achille compare les offres locales puis vous renvoie vers le site du marchand (lien sécurisé et tracké). Pas de panier ni de paiement ici."}
               </p>
             </div>
           </div>
@@ -343,10 +353,16 @@ function OfferShowcaseView({
                       <div className="lg:col-span-3">
                         <span className="font-label-xs text-label-xs bg-surface-container-high text-on-surface inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-bold">
                           <MaterialIcon
-                            name="open_in_new"
+                            name={
+                              offer.kind === "DIRECT"
+                                ? "shopping_bag"
+                                : "open_in_new"
+                            }
                             className="text-[14px]"
                           />
-                          Site marchand (affiliation)
+                          {offer.kind === "DIRECT"
+                            ? "Retrait en magasin"
+                            : "Site marchand (affiliation)"}
                         </span>
                         <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
                           {offer.stock} en magasin
@@ -378,6 +394,10 @@ function OfferShowcaseView({
                           offerId={offer.id}
                           isOnline={offer.isOnline}
                           merchantUrl={offer.merchantUrl}
+                          kind={offer.kind}
+                          posId={offer.pos.id}
+                          stock={offer.stock}
+                          returnTo={`/offre/${product.slug}`}
                           compact
                         />
                       </div>

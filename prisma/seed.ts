@@ -63,6 +63,8 @@ function offerData(input: {
 }
 
 async function main() {
+  await prisma.reservationItem.deleteMany();
+  await prisma.reservation.deleteMany();
   await prisma.offerClick.deleteMany();
   await prisma.favorite.deleteMany();
   await prisma.offerPos.deleteMany();

@@ -14,9 +14,10 @@ model Merchant {
   logoUrl   String?
   isActive  Boolean  @default(true)
   pos       Pos[]
-  offers    Offer[]
-  users     User[]
-  createdAt DateTime @default(now())
+  offers       Offer[]
+  users        User[]
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
 }
 
 // Colonne PostGIS `geog geography(Point,4326)` : générée en migration SQL
@@ -39,7 +40,8 @@ model Pos {
   isActive     Boolean  @default(true)
   offers       Offer[]
   offerLinks   OfferPos[]
-  createdAt    DateTime @default(now())
+  reservations Reservation[]
+  createdAt    DateTime     @default(now())
 
   @@index([city])
 }
@@ -141,8 +143,9 @@ model Offer {
   merchantUrl    String?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
-  clicks         OfferClick[]
-  targetedPos    OfferPos[]
+  clicks           OfferClick[]
+  targetedPos      OfferPos[]
+  reservationItems ReservationItem[]
 
   @@unique([productId, posId])
   @@index([posId])
@@ -185,6 +188,64 @@ enum UserRole {
   ADMIN
 }
 
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  READY_FOR_PICKUP
+  PICKED_UP
+  CANCELLED
+  NO_SHOW
+  EXPIRED
+}
+
+/// Click & collect, mono-magasin. Aucun paiement (empreinte Stripe : incrément 2.3).
+model Reservation {
+  id             String            @id @default(cuid())
+  userId         String
+  user           User              @relation(fields: [userId], references: [id])
+  posId          String
+  pos            Pos               @relation(fields: [posId], references: [id])
+  merchantId     String
+  merchant       Merchant          @relation(fields: [merchantId], references: [id])
+  status         ReservationStatus @default(PENDING)
+  pickupCode     String            @unique
+  pickupDeadline DateTime
+  totalAmount    Decimal           @db.Decimal(10, 2)
+  /// Préparé pour 2.3, non utilisé.
+  commissionAmount Decimal?        @db.Decimal(10, 2)
+  /// Préparé pour 2.3, non utilisé.
+  feeAmount      Decimal?          @db.Decimal(10, 2)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  confirmedAt    DateTime?
+  readyAt        DateTime?
+  pickedUpAt     DateTime?
+  cancelledAt    DateTime?
+  expiredAt      DateTime?
+  noShowAt       DateTime?
+  items          ReservationItem[]
+
+  @@index([userId])
+  @@index([merchantId])
+  @@index([posId])
+  @@index([status])
+  @@index([pickupDeadline])
+}
+
+model ReservationItem {
+  id            String      @id @default(cuid())
+  reservationId String
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  offerId       String
+  offer         Offer       @relation(fields: [offerId], references: [id])
+  quantity      Int
+  unitPrice     Decimal     @db.Decimal(10, 2)
+  subtotal      Decimal     @db.Decimal(10, 2)
+
+  @@index([reservationId])
+  @@index([offerId])
+}
+
 model User {
   id            String    @id @default(cuid())
   email         String?   @unique
@@ -199,7 +260,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   favorites     Favorite[]
-  createdAt     DateTime  @default(now())
+  reservations  Reservation[]
+  createdAt     DateTime      @default(now())
 
   @@index([merchantId])
 }

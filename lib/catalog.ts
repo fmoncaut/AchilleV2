@@ -210,6 +210,7 @@ async function expandProductOffers(offers: LoadedOffer[]): Promise<ShowcaseOffer
         tvaRate: offer.tvaRate?.toFixed(2) ?? null,
         condition: offer.condition,
         isOnline: offer.isOnline,
+        kind: offer.kind,
         merchantUrl: offer.merchantUrl,
         merchantName: offer.merchant.name,
         pos: toShowcasePos(pos),
@@ -235,7 +236,7 @@ export const getCachedProductPage = unstable_cache(
       offers: await expandProductOffers(product.offers),
     };
   },
-  ["catalog-product-page-v5"],
+  ["catalog-product-page-v6"],
   catalogCache,
 );
 

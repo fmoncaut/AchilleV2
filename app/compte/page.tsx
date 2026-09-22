@@ -46,6 +46,11 @@ export default async function AccountPage() {
           <Link href="/compte/favoris">Mes favoris</Link>
         </Button>
       </p>
+      <p className="mt-3">
+        <Button asChild variant="outline" className="w-full">
+          <Link href="/compte/reservations">Mes réservations</Link>
+        </Button>
+      </p>
       {actor?.role === "ADMIN" ? (
         <p className="mt-3">
           <Button asChild variant="outline" className="w-full">
