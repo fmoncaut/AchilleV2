@@ -1,17 +1,17 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { confirmCartAction } from "@/app/reservation/actions";
 import { auth } from "@/auth";
 import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
 import { MaterialIcon } from "@/components/material-icon";
 import { OpeningHoursList } from "@/components/opening-hours";
-import { PaymentSlot } from "@/components/reservation/payment-slot";
+import { ReservationPayment } from "@/components/reservation/reservation-payment";
 import { TunnelSteps } from "@/components/reservation/tunnel-steps";
 import { Button } from "@/components/ui/button";
 import { formatEur } from "@/lib/money";
 import { getCart } from "@/lib/reservations/cart";
 import { currentCartOwner } from "@/lib/reservations/cart-session";
+import { getSiteUrl } from "@/lib/site";
 import { loginWithReturn } from "@/lib/urls";
 
 export const metadata = {
@@ -57,7 +57,7 @@ export default async function ReservationPickupPage({ searchParams }: PageProps)
             Informations de retrait
           </h1>
         </div>
-        <TunnelSteps current="pickup" />
+        <TunnelSteps current="payment" />
         {error ? (
           <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
             {error}
@@ -89,26 +89,37 @@ export default async function ReservationPickupPage({ searchParams }: PageProps)
           </div>
           <p className="font-body-sm text-body-sm text-on-surface-variant mt-4">
             Présentez le code de retrait en magasin. La réservation est
-            conservée {cart.pickupHours} h. Total {formatEur(cart.total)}, mis
-            de côté à la confirmation. Aucun paiement aujourd’hui.
+            conservée {cart.pickupHours} h. Total {formatEur(cart.total)}.
+            L’empreinte est autorisée ci-dessous et capturée seulement au
+            retrait.
           </p>
         </section>
-        <PaymentSlot />
+        {session?.user?.id && cart.canConfirm && cart.paymentsEnabled ? (
+          process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ? (
+            <ReservationPayment
+              publishableKey={process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+              returnOrigin={getSiteUrl()}
+            />
+          ) : (
+            <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
+              Paiement non configuré.
+            </p>
+          )
+        ) : session?.user?.id && cart.canConfirm ? (
+          <p className="font-body-sm bg-surface-container text-on-surface-variant rounded-2xl px-3 py-2">
+            Cette enseigne n’a pas encore activé l’encaissement. La réservation
+            payée n’est pas possible.
+          </p>
+        ) : session?.user?.id ? (
+          <p className="font-body-sm text-error font-medium">
+            Le panier ne peut pas être confirmé en l’état.
+          </p>
+        ) : null}
         <div className="flex flex-wrap items-center gap-3">
           <Button asChild variant="outline">
             <Link href="/reservation">Retour au récapitulatif</Link>
           </Button>
-          {session?.user?.id && cart.canConfirm ? (
-            <form action={confirmCartAction}>
-              <Button type="submit" size="lg">
-                Confirmer la réservation
-              </Button>
-            </form>
-          ) : session?.user?.id ? (
-            <p className="font-body-sm text-error font-medium">
-              Le panier ne peut pas être confirmé en l’état.
-            </p>
-          ) : (
+          {session?.user?.id ? null : (
             <Button asChild size="lg">
               <Link href={loginWithReturn("/reservation/retrait")}>
                 Se connecter pour confirmer

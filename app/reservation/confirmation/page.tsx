@@ -5,9 +5,14 @@ import { auth } from "@/auth";
 import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
 import { TunnelSteps } from "@/components/reservation/tunnel-steps";
 import { Button } from "@/components/ui/button";
+import { finalizeAuthorization } from "@/lib/payments/checkout";
 import { formatEur } from "@/lib/money";
 import { prisma } from "@/lib/db";
-import { pickupWindowHours } from "@/lib/reservations/service";
+import {
+  ReservationError,
+  pickupWindowHours,
+  STATUS_LABELS,
+} from "@/lib/reservations/service";
 
 export const metadata = {
   title: "Réservation confirmée | Achille",
@@ -42,7 +47,7 @@ export default async function ReservationConfirmationPage({
     redirect("/compte/reservations");
   }
 
-  const reservation = await prisma.reservation.findFirst({
+  let reservation = await prisma.reservation.findFirst({
     where: { id, userId },
     include: {
       items: {
@@ -56,6 +61,38 @@ export default async function ReservationConfirmationPage({
     notFound();
   }
 
+  let paymentError: string | null = null;
+  if (
+    reservation.paymentState === "REQUIRES_ACTION" &&
+    reservation.paymentIntentId &&
+    reservation.status === "PENDING"
+  ) {
+    try {
+      await finalizeAuthorization(userId, reservation.id);
+      reservation = await prisma.reservation.findFirstOrThrow({
+        where: { id, userId },
+        include: {
+          items: {
+            include: { offer: { select: { product: { select: { name: true } } } } },
+          },
+          pos: { select: { name: true, city: true } },
+          merchant: { select: { name: true } },
+        },
+      });
+    } catch (error) {
+      if (error instanceof ReservationError) {
+        paymentError = error.message;
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  const codeReady =
+    reservation.status === "CONFIRMED" ||
+    reservation.status === "READY_FOR_PICKUP" ||
+    reservation.status === "PICKED_UP";
+
   return (
     <BuyerMain>
       <BuyerSection className="flex flex-1 flex-col gap-6 py-10">
@@ -67,10 +104,18 @@ export default async function ReservationConfirmationPage({
             Réservation enregistrée
           </h1>
           <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-            Statut : en attente. Aucun paiement n’a été encaissé.
+            {codeReady
+              ? "Empreinte autorisée. Rien n’est débité avant le retrait en magasin."
+              : `Statut : ${STATUS_LABELS[reservation.status]}. L’empreinte n’est pas confirmée.`}
           </p>
+          {paymentError ? (
+            <p className="font-body-sm bg-error-container text-on-error-container mt-3 rounded-2xl px-3 py-2">
+              {paymentError}
+            </p>
+          ) : null}
         </div>
         <TunnelSteps current="confirmation" />
+        {codeReady ? (
         <section className="bg-primary-container text-on-primary shadow-navy-soft rounded-2xl p-5">
           <p className="font-label-md text-label-md text-surface-variant">
             Code de retrait
@@ -85,6 +130,7 @@ export default async function ReservationConfirmationPage({
             {pickupWindowHours()} h).
           </p>
         </section>
+        ) : null}
         <ul className="bg-surface-container-lowest shadow-navy-soft flex flex-col gap-3 rounded-2xl p-5">
           {reservation.items.map((item) => (
             <li

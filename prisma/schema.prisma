@@ -13,6 +13,13 @@ model Merchant {
   slug      String   @unique
   logoUrl   String?
   isActive  Boolean  @default(true)
+  /// Compte Stripe Connect Express. Vide tant que l’enseigne n’a pas commencé l’onboarding.
+  stripeAccountId String?  @unique
+  chargesEnabled  Boolean  @default(false)
+  payoutsEnabled  Boolean  @default(false)
+  detailsSubmitted Boolean @default(false)
+  /// Commission Achille (ex. 0.0800). Null = STRIPE_DEFAULT_FEE_RATE.
+  feeRate Decimal? @db.Decimal(6, 4)
   pos       Pos[]
   offers       Offer[]
   users        User[]
@@ -191,6 +198,14 @@ enum UserRole {
   ADMIN
 }
 
+enum PaymentState {
+  NONE
+  REQUIRES_ACTION
+  AUTHORIZED
+  CAPTURED
+  CANCELED
+}
+
 enum ReservationStatus {
   PENDING
   CONFIRMED
@@ -201,7 +216,7 @@ enum ReservationStatus {
   EXPIRED
 }
 
-/// Click & collect, mono-magasin. Aucun paiement (empreinte Stripe : incrément 2.3).
+/// Click & collect, mono-magasin. Empreinte Stripe Connect à la confirmation, capture au retrait.
 model Reservation {
   id             String            @id @default(cuid())
   userId         String
@@ -214,10 +229,12 @@ model Reservation {
   pickupCode     String            @unique
   pickupDeadline DateTime
   totalAmount    Decimal           @db.Decimal(10, 2)
-  /// Préparé pour 2.3, non utilisé.
+  /// Commission Achille, renseignée à la capture.
   commissionAmount Decimal?        @db.Decimal(10, 2)
-  /// Préparé pour 2.3, non utilisé.
+  /// application_fee_amount capturé, renseigné à la capture.
   feeAmount      Decimal?          @db.Decimal(10, 2)
+  paymentIntentId String?          @unique
+  paymentState    PaymentState     @default(NONE)
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
   confirmedAt    DateTime?
@@ -340,6 +357,13 @@ model VerificationToken {
 
   @@unique([token])
   @@id([identifier, token])
+}
+
+/// Événement Stripe déjà appliqué. La clé est l’id evt_… pour l’idempotence.
+model ProcessedStripeEvent {
+  id        String   @id
+  type      String
+  createdAt DateTime @default(now())
 }
 
 model Favorite {

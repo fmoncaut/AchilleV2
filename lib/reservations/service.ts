@@ -1,8 +1,14 @@
 import { randomInt, timingSafeEqual } from "node:crypto";
 
-import { Prisma, type ReservationStatus } from "@prisma/client";
+import { Prisma, type PaymentState, type ReservationStatus } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
+import {
+  captureForPickup,
+  releaseHold,
+  type ReleaseResult,
+} from "@/lib/payments/lifecycle";
+import { PaymentError } from "@/lib/payments/types";
 import type { ReservationCreateInput } from "@/lib/reservations/schemas";
 
 export class ReservationError extends Error {}
@@ -96,9 +102,57 @@ export type ReservationView = Prisma.ReservationGetPayload<{
   include: typeof reservationInclude;
 }>;
 
+async function settleHold(
+  reservation: {
+    id: string;
+    paymentIntentId: string | null;
+    paymentState: PaymentState;
+    totalAmount: Prisma.Decimal;
+    merchant?: { feeRate: Prisma.Decimal | null };
+  },
+  reason: "cancel" | "expire" | "noshow",
+): Promise<ReleaseResult> {
+  try {
+    return await releaseHold(
+      {
+        id: reservation.id,
+        paymentIntentId: reservation.paymentIntentId,
+        paymentState: reservation.paymentState,
+        totalAmount: reservation.totalAmount,
+        merchantFeeRate: reservation.merchant?.feeRate ?? null,
+      },
+      reason,
+    );
+  } catch (error) {
+    if (error instanceof PaymentError) {
+      throw new ReservationError(error.message);
+    }
+    throw error;
+  }
+}
+
+function paymentPatch(result: ReleaseResult): {
+  paymentState?: "CANCELED" | "CAPTURED";
+  commissionAmount?: Prisma.Decimal;
+  feeAmount?: Prisma.Decimal;
+} {
+  if (result.kind === "canceled") {
+    return { paymentState: "CANCELED" };
+  }
+  if (result.kind === "captured") {
+    return {
+      paymentState: "CAPTURED",
+      commissionAmount: result.commissionAmount,
+      feeAmount: result.feeAmount,
+    };
+  }
+  return {};
+}
+
 /**
  * PENDING / CONFIRMED dont la date limite est dépassée → EXPIRED, stock rendu.
- * READY_FOR_PICKUP n’est pas expiré automatiquement (no-show vendeur).
+ * L’empreinte est annulée avant le changement de statut. READY_FOR_PICKUP
+ * n’expire pas automatiquement (no-show vendeur).
  */
 export async function expireDueReservations(): Promise<number> {
   const now = new Date();
@@ -112,6 +166,37 @@ export async function expireDueReservations(): Promise<number> {
 
   let expired = 0;
   for (const row of due) {
+    const preview = await prisma.reservation.findUnique({
+      where: { id: row.id },
+      include: { merchant: { select: { feeRate: true } } },
+    });
+    if (
+      !preview ||
+      (preview.status !== "PENDING" && preview.status !== "CONFIRMED") ||
+      preview.pickupDeadline >= now
+    ) {
+      continue;
+    }
+
+    let released: ReleaseResult = { kind: "none" };
+    try {
+      released = await releaseHold(
+        {
+          id: preview.id,
+          paymentIntentId: preview.paymentIntentId,
+          paymentState: preview.paymentState,
+          totalAmount: preview.totalAmount,
+          merchantFeeRate: preview.merchant.feeRate,
+        },
+        "expire",
+      );
+    } catch (error) {
+      if (error instanceof PaymentError) {
+        continue;
+      }
+      throw error;
+    }
+
     const done = await prisma.$transaction(async (tx) => {
       const current = await tx.reservation.findUnique({
         where: { id: row.id },
@@ -130,7 +215,11 @@ export async function expireDueReservations(): Promise<number> {
           status: { in: ["PENDING", "CONFIRMED"] },
           pickupDeadline: { lt: now },
         },
-        data: { status: "EXPIRED", expiredAt: now },
+        data: {
+          status: "EXPIRED",
+          expiredAt: now,
+          ...paymentPatch(released),
+        },
       });
       if (updated.count !== 1) {
         return false;
@@ -212,8 +301,9 @@ async function holdDirectLine(
   };
 }
 
-/** Crée une réservation PENDING et met le stock de côté. Aucun paiement. */
-export async function createPendingReservation(
+/** Crée une réservation PENDING et met le stock de côté, dans la transaction fournie. */
+export async function insertPendingReservation(
+  tx: Prisma.TransactionClient,
   userId: string,
   lines: ReservationLineInput[],
   cartId?: string,
@@ -228,53 +318,60 @@ export async function createPendingReservation(
     );
   }
 
-  const deadline = computePickupDeadline();
+  const held: Array<Awaited<ReturnType<typeof holdDirectLine>>> = [];
+  for (const line of lines) {
+    held.push(await holdDirectLine(tx, line, expectedPosId));
+  }
+  const merchantId = held[0]?.merchantId;
+  if (!merchantId || held.some((line) => line.merchantId !== merchantId)) {
+    throw new ReservationError(
+      "La réservation doit porter sur un seul magasin.",
+    );
+  }
+  const totalAmount = held.reduce(
+    (sum, line) => sum.add(line.subtotal),
+    new Prisma.Decimal(0),
+  );
 
+  const reservation = await tx.reservation.create({
+    data: {
+      userId,
+      posId: expectedPosId,
+      merchantId,
+      status: "PENDING",
+      pickupCode: pickupCode(),
+      pickupDeadline: computePickupDeadline(),
+      totalAmount,
+      items: {
+        create: held.map((line) => ({
+          offerId: line.offerId,
+          quantity: line.quantity,
+          unitPrice: line.unitPrice,
+          subtotal: line.subtotal,
+        })),
+      },
+    },
+    include: reservationInclude,
+  });
+
+  if (cartId) {
+    await tx.reservationCart.deleteMany({ where: { id: cartId, userId } });
+  }
+
+  return reservation;
+}
+
+/** Crée une réservation PENDING sans empreinte (scripts et chemins non payés). */
+export async function createPendingReservation(
+  userId: string,
+  lines: ReservationLineInput[],
+  cartId?: string,
+) {
   for (let attempt = 0; attempt < 5; attempt += 1) {
     try {
-      return await prisma.$transaction(async (tx) => {
-        const held: Array<Awaited<ReturnType<typeof holdDirectLine>>> = [];
-        for (const line of lines) {
-          held.push(await holdDirectLine(tx, line, expectedPosId));
-        }
-        const merchantId = held[0]?.merchantId;
-        if (!merchantId || held.some((line) => line.merchantId !== merchantId)) {
-          throw new ReservationError(
-            "La réservation doit porter sur un seul magasin.",
-          );
-        }
-        const totalAmount = held.reduce(
-          (sum, line) => sum.add(line.subtotal),
-          new Prisma.Decimal(0),
-        );
-
-        const reservation = await tx.reservation.create({
-          data: {
-            userId,
-            posId: expectedPosId,
-            merchantId,
-            status: "PENDING",
-            pickupCode: pickupCode(),
-            pickupDeadline: deadline,
-            totalAmount,
-            items: {
-              create: held.map((line) => ({
-                offerId: line.offerId,
-                quantity: line.quantity,
-                unitPrice: line.unitPrice,
-                subtotal: line.subtotal,
-              })),
-            },
-          },
-          include: reservationInclude,
-        });
-
-        if (cartId) {
-          await tx.reservationCart.deleteMany({ where: { id: cartId, userId } });
-        }
-
-        return reservation;
-      });
+      return await prisma.$transaction((tx) =>
+        insertPendingReservation(tx, userId, lines, cartId),
+      );
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -304,31 +401,39 @@ export async function createReservation(
 export async function cancelReservation(userId: string, reservationId: string) {
   await expireDueReservations();
   const now = new Date();
-  const done = await prisma.$transaction(async (tx) => {
-    const current = await tx.reservation.findFirst({
-      where: { id: reservationId, userId },
-      include: { items: true },
-    });
-    if (!current) {
-      throw new ReservationError("Réservation introuvable.");
-    }
-    if (!HOLDING.includes(current.status)) {
-      throw new ReservationError("Cette réservation ne peut plus être annulée.");
-    }
+  const current = await prisma.reservation.findFirst({
+    where: { id: reservationId, userId },
+    include: { items: true, merchant: { select: { feeRate: true } } },
+  });
+  if (!current) {
+    throw new ReservationError("Réservation introuvable.");
+  }
+  if (!HOLDING.includes(current.status)) {
+    throw new ReservationError("Cette réservation ne peut plus être annulée.");
+  }
+  const released = await settleHold(current, "cancel");
+  if (released.kind === "captured") {
+    throw new ReservationError("Le paiement est déjà capturé.");
+  }
+
+  await prisma.$transaction(async (tx) => {
     const updated = await tx.reservation.updateMany({
       where: {
         id: reservationId,
         userId,
         status: { in: HOLDING },
       },
-      data: { status: "CANCELLED", cancelledAt: now },
+      data: {
+        status: "CANCELLED",
+        cancelledAt: now,
+        ...paymentPatch(released),
+      },
     });
     if (updated.count !== 1) {
       throw new ReservationError("Cette réservation ne peut plus être annulée.");
     }
     await restoreStock(tx, current.items);
   });
-  return done;
 }
 
 type MerchantMove = "CONFIRMED" | "READY_FOR_PICKUP" | "PICKED_UP" | "NO_SHOW";
@@ -341,53 +446,171 @@ export async function transitionReservationForMerchant(
 ) {
   await expireDueReservations();
   const now = new Date();
+  const current = await prisma.reservation.findFirst({
+    where: { id: reservationId, merchantId },
+    include: { items: true, merchant: { select: { feeRate: true } } },
+  });
+  if (!current) {
+    throw new ReservationError("Réservation introuvable.");
+  }
+
+  const allowed =
+    (current.status === "PENDING" && target === "CONFIRMED") ||
+    (current.status === "CONFIRMED" && target === "READY_FOR_PICKUP") ||
+    (current.status === "READY_FOR_PICKUP" && target === "PICKED_UP") ||
+    (HOLDING.includes(current.status) &&
+      target === "NO_SHOW" &&
+      current.pickupDeadline < now);
+
+  if (!allowed) {
+    throw new ReservationError("Transition de statut refusée.");
+  }
+
+  if (target === "CONFIRMED" && current.paymentState === "REQUIRES_ACTION") {
+    throw new ReservationError("L’empreinte carte n’est pas encore autorisée.");
+  }
+
+  if (target === "PICKED_UP") {
+    if (!pickupCodeInput || !pickupCodesMatch(current.pickupCode, pickupCodeInput)) {
+      throw new ReservationError("Code de retrait incorrect.");
+    }
+  }
+
+  let released: ReleaseResult = { kind: "none" };
+  let capturedFee: {
+    commissionAmount: Prisma.Decimal;
+    feeAmount: Prisma.Decimal;
+  } | null = null;
+
+  if (target === "PICKED_UP") {
+    try {
+      capturedFee = await captureForPickup({
+        id: current.id,
+        paymentIntentId: current.paymentIntentId,
+        paymentState: current.paymentState,
+        totalAmount: current.totalAmount,
+      });
+    } catch (error) {
+      if (error instanceof PaymentError) {
+        throw new ReservationError(error.message);
+      }
+      throw error;
+    }
+  }
+
+  if (target === "NO_SHOW") {
+    released = await settleHold(current, "noshow");
+  }
+
+  const stamp =
+    target === "CONFIRMED"
+      ? { confirmedAt: now }
+      : target === "READY_FOR_PICKUP"
+        ? { readyAt: now }
+        : target === "PICKED_UP"
+          ? { pickedUpAt: now }
+          : { noShowAt: now };
+
+  const money = capturedFee
+    ? {
+        paymentState: "CAPTURED" as const,
+        commissionAmount: capturedFee.commissionAmount,
+        feeAmount: capturedFee.feeAmount,
+      }
+    : paymentPatch(released);
 
   await prisma.$transaction(async (tx) => {
-    const current = await tx.reservation.findFirst({
-      where: { id: reservationId, merchantId },
-      include: { items: true },
-    });
-    if (!current) {
-      throw new ReservationError("Réservation introuvable.");
-    }
-
-    const allowed =
-      (current.status === "PENDING" && target === "CONFIRMED") ||
-      (current.status === "CONFIRMED" && target === "READY_FOR_PICKUP") ||
-      (current.status === "READY_FOR_PICKUP" && target === "PICKED_UP") ||
-      (HOLDING.includes(current.status) &&
-        target === "NO_SHOW" &&
-        current.pickupDeadline < now);
-
-    if (!allowed) {
-      throw new ReservationError("Transition de statut refusée.");
-    }
-
-    if (target === "PICKED_UP") {
-      if (!pickupCodeInput || !pickupCodesMatch(current.pickupCode, pickupCodeInput)) {
-        throw new ReservationError("Code de retrait incorrect.");
-      }
-    }
-
-    const stamp =
-      target === "CONFIRMED"
-        ? { confirmedAt: now }
-        : target === "READY_FOR_PICKUP"
-          ? { readyAt: now }
-          : target === "PICKED_UP"
-            ? { pickedUpAt: now }
-            : { noShowAt: now };
-
     const updated = await tx.reservation.updateMany({
       where: { id: reservationId, merchantId, status: current.status },
-      data: { status: target, ...stamp },
+      data: { status: target, ...stamp, ...money },
     });
     if (updated.count !== 1) {
+      const again = await tx.reservation.findFirst({
+        where: { id: reservationId, merchantId },
+        select: { status: true },
+      });
+      if (again?.status === target) {
+        return;
+      }
       throw new ReservationError("Transition de statut refusée.");
     }
     if (releasesStock(current.status, target)) {
       await restoreStock(tx, current.items);
     }
+  });
+}
+
+/** Webhook ou retour 3DS : CONFIRMED uniquement si l’empreinte est capturable. */
+export async function markAuthorizationReady(paymentIntentId: string) {
+  const current = await prisma.reservation.findUnique({
+    where: { paymentIntentId },
+  });
+  if (!current || current.status !== "PENDING" || current.paymentState !== "REQUIRES_ACTION") {
+    return;
+  }
+  const updated = await prisma.reservation.updateMany({
+    where: {
+      id: current.id,
+      status: "PENDING",
+      paymentState: "REQUIRES_ACTION",
+    },
+    data: {
+      status: "CONFIRMED",
+      paymentState: "AUTHORIZED",
+      confirmedAt: new Date(),
+    },
+  });
+  if (updated.count === 1) {
+    await prisma.reservationCart.deleteMany({
+      where: { userId: current.userId, posId: current.posId },
+    });
+  }
+}
+
+/** Webhook canceled : annule la réservation encore ouverte et rend le stock une seule fois. */
+export async function markAuthorizationCanceled(paymentIntentId: string) {
+  const now = new Date();
+  await prisma.$transaction(async (tx) => {
+    const current = await tx.reservation.findUnique({
+      where: { paymentIntentId },
+      include: { items: true },
+    });
+    if (!current || current.paymentState === "CAPTURED") {
+      return;
+    }
+    if (HOLDING.includes(current.status)) {
+      const updated = await tx.reservation.updateMany({
+        where: { id: current.id, status: { in: HOLDING } },
+        data: {
+          status: "CANCELLED",
+          cancelledAt: now,
+          paymentState: "CANCELED",
+        },
+      });
+      if (updated.count === 1) {
+        await restoreStock(tx, current.items);
+      }
+      return;
+    }
+    await tx.reservation.updateMany({
+      where: { id: current.id, paymentState: { not: "CANCELED" } },
+      data: { paymentState: "CANCELED" },
+    });
+  });
+}
+
+/** Webhook succeeded : enregistre la capture sans passer la réservation à PICKED_UP. */
+export async function markAuthorizationCaptured(
+  paymentIntentId: string,
+  fee: Prisma.Decimal,
+) {
+  await prisma.reservation.updateMany({
+    where: { paymentIntentId, paymentState: { not: "CAPTURED" } },
+    data: {
+      paymentState: "CAPTURED",
+      commissionAmount: fee,
+      feeAmount: fee,
+    },
   });
 }
 

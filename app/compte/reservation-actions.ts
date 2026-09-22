@@ -5,11 +5,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { reservationCreateSchema, reservationIdSchema } from "@/lib/reservations/schemas";
-import {
-  ReservationError,
-  cancelReservation,
-  createReservation,
-} from "@/lib/reservations/service";
+import { ReservationError, cancelReservation } from "@/lib/reservations/service";
 
 export type ReservationActionState = {
   error?: string;
@@ -58,16 +54,10 @@ export async function createReservationAction(
     return { error: parsed.error.issues[0]?.message ?? "Réservation invalide." };
   }
 
-  try {
-    const reservation = await createReservation(session.user.id, parsed.data);
-    revalidateStock();
-    redirect(`/compte/reservations?creee=${reservation.id}`);
-  } catch (error) {
-    if (error instanceof ReservationError) {
-      return { error: error.message };
-    }
-    throw error;
-  }
+  return {
+    error:
+      "La réservation en magasin se confirme dans le tunnel, avec une empreinte carte.",
+  };
 }
 
 export async function cancelReservationAction(formData: FormData) {

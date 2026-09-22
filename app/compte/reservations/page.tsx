@@ -52,7 +52,8 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
             Mes réservations
           </h1>
           <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-            Retrait en magasin. Aucun paiement n’est demandé.
+            Retrait en magasin. L’empreinte n’est débitée qu’au retrait, et
+            annulée si vous annulez avant.
           </p>
         </div>
         {createdId ? (
@@ -62,7 +63,8 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
         ) : null}
         {first(query.annulee) === "1" ? (
           <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
-            Réservation annulée. Le stock a été rendu au magasin.
+            Réservation annulée. Le stock a été rendu et l’empreinte, s’il y
+            en avait une, est libérée.
           </p>
         ) : null}
         {error ? (

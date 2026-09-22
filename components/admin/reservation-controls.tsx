@@ -12,12 +12,14 @@ import { Button } from "@/components/ui/button";
 type ReservationControlsProps = {
   reservationId: string;
   status: string;
+  paymentState: string;
   deadlinePassed: boolean;
 };
 
 export function ReservationControls({
   reservationId,
   status,
+  paymentState,
   deadlinePassed,
 }: ReservationControlsProps) {
   const [state, action, pending] = useActionState<
@@ -32,7 +34,10 @@ export function ReservationControls({
   return (
     <form action={action} className="flex flex-col items-start gap-2">
       <input type="hidden" name="id" value={reservationId} />
-      {status === "PENDING" ? (
+      {status === "PENDING" && paymentState === "REQUIRES_ACTION" ? (
+        <p className="font-body-sm text-on-surface-variant">En attente d’empreinte</p>
+      ) : null}
+      {status === "PENDING" && paymentState !== "REQUIRES_ACTION" ? (
         <Button type="submit" name="intent" value="confirm" size="sm" disabled={pending}>
           Confirmer
         </Button>

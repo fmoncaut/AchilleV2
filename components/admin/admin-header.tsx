@@ -56,7 +56,15 @@ export function AdminHeader({
               <Button asChild variant="ghost" size="sm">
                 <Link href="/admin/reservations">Réservations</Link>
               </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/admin/paiements">Paiements</Link>
+              </Button>
             </>
+          ) : null}
+          {showPlatform && !showOffers ? (
+            <Button asChild variant="ghost" size="sm">
+              <Link href="/admin/paiements">Paiements</Link>
+            </Button>
           ) : null}
           <Button asChild variant="ghost" size="sm">
             <Link href="/admin/renvois">Renvois</Link>

@@ -40,7 +40,8 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
             Récapitulatif
           </h1>
           <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-            Un seul magasin par réservation. Aucun paiement n’est demandé.
+            Un seul magasin par réservation. L’étape suivante autorise une
+            empreinte du total : le débit n’a lieu qu’au retrait.
           </p>
         </div>
         <TunnelSteps current="recap" />

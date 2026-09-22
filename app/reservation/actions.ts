@@ -7,8 +7,6 @@ import { auth } from "@/auth";
 import {
   addOfferToCart,
   CartStoreConflict,
-  confirmCart,
-  getCart,
   removeCartOffer,
   updateCartQuantity,
 } from "@/lib/reservations/cart";
@@ -16,8 +14,9 @@ import {
   currentCartOwner,
   ownerForCartWrite,
 } from "@/lib/reservations/cart-session";
-import { cartAddSchema, cartQuantitySchema } from "@/lib/reservations/schemas";
-import { ReservationError } from "@/lib/reservations/service";
+import { beginAuthorization, finalizeAuthorization } from "@/lib/payments/checkout";
+import { cartAddSchema, cartQuantitySchema, reservationIdSchema } from "@/lib/reservations/schemas";
+import { ReservationError, cancelReservation } from "@/lib/reservations/service";
 
 export type CartActionState = {
   error?: string;
@@ -135,25 +134,77 @@ export async function removeCartOfferAction(formData: FormData) {
   redirect("/reservation");
 }
 
-export async function confirmCartAction() {
+export async function beginAuthorizationAction(): Promise<
+  | { ok: true; reservationId: string; clientSecret: string }
+  | { ok: false; error: string }
+> {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    return { ok: false, error: "Connexion requise." };
+  }
+  try {
+    const result = await beginAuthorization(userId);
+    updateTag("catalog");
+    revalidateCart();
+    revalidatePath("/compte/reservations");
+    return { ok: true, ...result };
+  } catch (error) {
+    if (error instanceof ReservationError) {
+      return { ok: false, error: error.message };
+    }
+    throw error;
+  }
+}
+
+export async function finalizeAuthorizationAction(
+  reservationId: string,
+): Promise<{ ok: false; error: string } | undefined> {
   const session = await auth();
   const userId = session?.user?.id;
   if (!userId) {
     redirect("/login?callbackUrl=/reservation/retrait");
   }
-  await getCart(await currentCartOwner());
+  const parsed = reservationIdSchema.safeParse({ id: reservationId });
+  if (!parsed.success) {
+    return { ok: false, error: "Réservation invalide." };
+  }
   try {
-    const reservation = await confirmCart(userId);
-    updateTag("catalog");
-    revalidateCart();
-    revalidatePath("/compte/reservations");
-    redirect(`/reservation/confirmation?id=${reservation.id}`);
+    await finalizeAuthorization(userId, parsed.data.id);
   } catch (error) {
     if (error instanceof ReservationError) {
-      redirect(
-        `/reservation/retrait?erreur=${encodeURIComponent(error.message)}`,
-      );
+      return { ok: false, error: error.message };
     }
     throw error;
   }
+  updateTag("catalog");
+  revalidateCart();
+  revalidatePath("/compte/reservations");
+  redirect(`/reservation/confirmation?id=${parsed.data.id}`);
+}
+
+export async function abandonAuthorizationAction(
+  reservationId: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    return { ok: false, error: "Connexion requise." };
+  }
+  const parsed = reservationIdSchema.safeParse({ id: reservationId });
+  if (!parsed.success) {
+    return { ok: false, error: "Réservation invalide." };
+  }
+  try {
+    await cancelReservation(userId, parsed.data.id);
+  } catch (error) {
+    if (error instanceof ReservationError) {
+      return { ok: false, error: error.message };
+    }
+    throw error;
+  }
+  updateTag("catalog");
+  revalidateCart();
+  revalidatePath("/compte/reservations");
+  return { ok: true };
 }

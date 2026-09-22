@@ -45,7 +45,9 @@ export type CartView = {
   city: string | null;
   phone: string | null;
   openingHours: Prisma.JsonValue;
+  merchantId: string;
   merchantName: string;
+  paymentsEnabled: boolean;
   distanceM: number | null;
   lines: CartLineView[];
   total: Prisma.Decimal;
@@ -86,7 +88,14 @@ const cartInclude = {
       isActive: true,
     },
   },
-  merchant: { select: { name: true, isActive: true } },
+  merchant: {
+    select: {
+      name: true,
+      isActive: true,
+      stripeAccountId: true,
+      chargesEnabled: true,
+    },
+  },
 } satisfies Prisma.ReservationCartInclude;
 
 type CartRecord = Prisma.ReservationCartGetPayload<{ include: typeof cartInclude }>;
@@ -142,7 +151,11 @@ function toView(
     city: cart.pos.city,
     phone: cart.pos.phone,
     openingHours: cart.pos.openingHours,
+    merchantId: cart.merchantId,
     merchantName: cart.merchant.name,
+    paymentsEnabled: Boolean(
+      cart.merchant.stripeAccountId && cart.merchant.chargesEnabled,
+    ),
     distanceM,
     lines,
     total: lines.reduce(

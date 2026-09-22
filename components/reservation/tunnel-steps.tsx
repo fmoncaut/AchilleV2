@@ -17,9 +17,9 @@ export function TunnelSteps({ current }: { current: TunnelStep }) {
   return (
     <ol className="flex flex-wrap gap-2">
       {STEPS.map((step, index) => {
-        const done = index < currentIndex && step.id !== "payment";
+        const done = index < currentIndex;
         const active = step.id === current;
-        const disabled = step.id === "payment" || step.href == null;
+        const disabled = step.href == null && !done && !active;
         const className = cn(
           "font-label-md text-label-md inline-flex items-center gap-2 rounded-full px-3 py-1.5",
           active && "bg-primary-container text-on-primary shadow-navy",
@@ -35,9 +35,6 @@ export function TunnelSteps({ current }: { current: TunnelStep }) {
           <>
             <span className="font-label-xs text-label-xs">{index + 1}</span>
             {step.label}
-            {step.id === "payment" ? (
-              <span className="font-label-xs text-label-xs">2.3</span>
-            ) : null}
           </>
         );
         return (

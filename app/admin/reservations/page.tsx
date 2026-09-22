@@ -17,6 +17,14 @@ export const metadata = {
   title: "Réservations | Back-office Achille",
 };
 
+const PAYMENT_LABELS = {
+  NONE: "—",
+  REQUIRES_ACTION: "Empreinte en cours",
+  AUTHORIZED: "Empreinte",
+  CAPTURED: "Capturé",
+  CANCELED: "Annulé",
+} as const;
+
 function formatWhen(value: Date): string {
   return value.toLocaleString("fr-FR", {
     dateStyle: "short",
@@ -37,8 +45,8 @@ export default async function AdminReservationsPage() {
           Réservations
         </h1>
         <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-          Click & collect de votre enseigne. Aucun paiement n’est encaissé —
-          paiement à venir — 2.3.
+          Click & collect de votre enseigne. La capture part uniquement ici,
+          quand le code de retrait est validé.
         </p>
       </div>
       <AdminCard>
@@ -61,6 +69,7 @@ export default async function AdminReservationsPage() {
               <th className="px-4 py-3">Magasin</th>
               <th className="px-4 py-3">Montant</th>
               <th className="px-4 py-3">Statut</th>
+              <th className="px-4 py-3">Paiement</th>
               <th className="px-4 py-3">Limite</th>
               <th className="px-4 py-3">Actions</th>
             </tr>
@@ -93,6 +102,9 @@ export default async function AdminReservationsPage() {
                     {STATUS_LABELS[reservation.status]}
                   </span>
                 </td>
+                <td className="font-body-sm text-on-surface-variant px-4 py-3">
+                  {PAYMENT_LABELS[reservation.paymentState]}
+                </td>
                 <td className="font-body-sm text-on-surface-variant px-4 py-3 whitespace-nowrap">
                   {formatWhen(reservation.pickupDeadline)}
                 </td>
@@ -100,6 +112,7 @@ export default async function AdminReservationsPage() {
                   <ReservationControls
                     reservationId={reservation.id}
                     status={reservation.status}
+                    paymentState={reservation.paymentState}
                     deadlinePassed={reservation.deadlinePassed}
                   />
                 </td>
