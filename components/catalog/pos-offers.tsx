@@ -76,6 +76,8 @@ function PosOfferListInner({
             signedIn={signedIn}
             isProductFavorite={favoriteProductIds.includes(offer.productId)}
             loginHref={loginWithReturn(`/magasin/${posSlug}`)}
+            lat={lat}
+            lng={lng}
           />
         </li>
       ))}

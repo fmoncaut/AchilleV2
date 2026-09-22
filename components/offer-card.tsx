@@ -6,6 +6,7 @@ import { FavoriteButton } from "@/components/favorite-button";
 import { MaterialIcon } from "@/components/material-icon";
 import { OpenBadge } from "@/components/open-badge";
 import { ProductImage } from "@/components/product-image";
+import { ReserveButton } from "@/components/reserve-button";
 import { cn } from "@/lib/utils";
 import type { NearbyOfferCard } from "@/lib/geo";
 import { discountPercent, formatEur } from "@/lib/money";
@@ -19,6 +20,8 @@ type OfferCardProps = {
   isProductFavorite?: boolean;
   loginHref?: string;
   isOpen?: boolean;
+  lat?: number | null;
+  lng?: number | null;
 };
 
 export function OfferCard({
@@ -29,6 +32,8 @@ export function OfferCard({
   isProductFavorite = false,
   loginHref = loginWithReturn("/compte/favoris"),
   isOpen,
+  lat = null,
+  lng = null,
 }: OfferCardProps) {
   const discount =
     offer.discountPct ??
@@ -101,6 +106,18 @@ export function OfferCard({
           </p>
         </div>
       </Link>
+      {offer.kind === "DIRECT" ? (
+        <div className="px-4 pb-4">
+          <ReserveButton
+            offerId={offer.id}
+            posId={offer.posId}
+            stock={offer.stock}
+            compact
+            lat={lat}
+            lng={lng}
+          />
+        </div>
+      ) : null}
     </article>
   );
 }

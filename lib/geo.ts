@@ -19,6 +19,7 @@ export type NearbyOffer = {
   categorySlug: string | null;
   categoryName: string | null;
   merchantName: string;
+  kind: "DIRECT" | "AFFILIATION";
   posId: string;
   posName: string;
   posSlug: string;
@@ -51,6 +52,7 @@ export type NearbyOfferCard = {
   categorySlug: string | null;
   categoryName: string | null;
   merchantName: string;
+  kind: "DIRECT" | "AFFILIATION";
   posId: string;
   posName: string;
   posSlug: string;
@@ -74,6 +76,7 @@ type NearbyOfferRow = {
   categorySlug: string | null;
   categoryName: string | null;
   merchantName: string;
+  kind: "DIRECT" | "AFFILIATION";
   posId: string;
   posName: string;
   posSlug: string;
@@ -166,6 +169,7 @@ export async function findOffersNearby(
       c.slug AS "categorySlug",
       c.name AS "categoryName",
       m.name AS "merchantName",
+      o.kind,
       p.id AS "posId",
       p.name AS "posName",
       p.slug AS "posSlug",
@@ -208,6 +212,7 @@ export async function findOffersNearby(
       categorySlug: row.categorySlug,
       categoryName: row.categoryName,
       merchantName: row.merchantName,
+      kind: row.kind === "DIRECT" ? "DIRECT" : "AFFILIATION",
       posId: row.posId,
       posName: row.posName,
       posSlug: row.posSlug,

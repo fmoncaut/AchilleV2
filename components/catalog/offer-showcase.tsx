@@ -224,7 +224,8 @@ function OfferShowcaseView({
                   kind={current.kind}
                   posId={current.pos.id}
                   stock={current.stock}
-                  returnTo={`/offre/${product.slug}`}
+                  lat={lat}
+                  lng={lng}
                 />
               </section>
             ) : (
@@ -397,7 +398,8 @@ function OfferShowcaseView({
                           kind={offer.kind}
                           posId={offer.pos.id}
                           stock={offer.stock}
-                          returnTo={`/offre/${product.slug}`}
+                          lat={lat}
+                          lng={lng}
                           compact
                         />
                       </div>

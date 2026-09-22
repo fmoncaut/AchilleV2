@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { MaterialIcon } from "@/components/material-icon";
 import { auth } from "@/auth";
+import { headerCartCount } from "@/lib/reservations/cart-session";
 import { cn } from "@/lib/utils";
 
 const navLinkClass =
@@ -10,6 +11,7 @@ const navLinkClass =
 export async function SiteHeader() {
   const session = await auth();
   const signedIn = Boolean(session?.user);
+  const cartCount = await headerCartCount();
 
   return (
     <header className="bg-surface-container-lowest/95 shadow-navy-soft sticky top-0 z-50 w-full backdrop-blur-md">
@@ -26,6 +28,18 @@ export async function SiteHeader() {
           </p>
         </div>
         <nav className="flex items-center gap-1 sm:gap-2">
+          <Link href="/reservation" className={navLinkClass}>
+            <MaterialIcon
+              name="shopping_bag"
+              className="text-secondary-container text-[16px]"
+            />
+            <span className="hidden sm:inline">Réservation</span>
+            {cartCount > 0 ? (
+              <span className="bg-secondary-container text-on-secondary-container font-label-xs text-label-xs inline-flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 font-extrabold">
+                {cartCount}
+              </span>
+            ) : null}
+          </Link>
           <Link href="/recherche" className={navLinkClass}>
             <MaterialIcon
               name="explore"

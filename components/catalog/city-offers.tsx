@@ -119,6 +119,8 @@ function CityOffersView({
                     offer.productId,
                   )}
                   loginHref={loginHref}
+                  lat={lat}
+                  lng={lng}
                 />
               </li>
             ))}

@@ -12,8 +12,9 @@ type MerchantCtaProps = {
   kind?: "DIRECT" | "AFFILIATION";
   posId?: string;
   stock?: number;
-  returnTo?: string;
   compact?: boolean;
+  lat?: number | null;
+  lng?: number | null;
 };
 
 export function MerchantCta({
@@ -23,8 +24,9 @@ export function MerchantCta({
   kind = "AFFILIATION",
   posId,
   stock = 0,
-  returnTo = "/compte/reservations",
   compact = false,
+  lat = null,
+  lng = null,
 }: MerchantCtaProps) {
   if (kind === "DIRECT" && posId) {
     return (
@@ -32,8 +34,9 @@ export function MerchantCta({
         offerId={offerId}
         posId={posId}
         stock={isOnline ? stock : 0}
-        returnTo={returnTo}
         compact={compact}
+        lat={lat}
+        lng={lng}
       />
     );
   }

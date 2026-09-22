@@ -27,3 +27,17 @@ npx tsx scripts/expire-reservations.ts
 ```
 
 Pas de cron dans cet incrément.
+
+## Tunnel acheteur (incrément 2.2)
+
+Le bouton « Réserver en magasin » ajoute l’offre au **panier de réservation** (`ReservationCart` / `ReservationCartItem`), en base. Pas de `localStorage`. Un compte a un panier ; un invité en a un via le cookie httpOnly `reservationCart` (clé opaque). La confirmation exige une connexion : le panier invité est alors rattaché au compte.
+
+Le panier est **mono-magasin**. Ajouter une offre d’un autre point de vente propose de vider et remplacer. Les offres `AFFILIATION` sont refusées.
+
+Étapes :
+
+1. `/reservation` — récapitulatif (quantités bornées au stock, sous-totaux, total, magasin, distance si une localisation est connue, fenêtre de retrait).
+2. `/reservation/retrait` — adresse, horaires, consignes, puis l’encart désactivé **« Étape paiement — ajoutée en 2.3 »**.
+3. Confirmation — crée la réservation `PENDING` (même modèle qu’en 2.1), met le stock de côté, affiche le `pickupCode`.
+
+En 2.3, l’empreinte Stripe se glisse **dans cet encart**, entre les informations de retrait et le bouton « Confirmer la réservation ». La confirmation et la machine à états ne changent pas.

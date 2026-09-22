@@ -83,6 +83,7 @@ export function showcaseOfferToCard(
     categorySlug: product.categorySlug,
     categoryName: product.categoryName,
     merchantName: offer.merchantName,
+    kind: offer.kind,
     posId: offer.pos.id,
     posName: offer.pos.name,
     posSlug: offer.pos.slug,

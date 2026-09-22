@@ -17,6 +17,7 @@ model Merchant {
   offers       Offer[]
   users        User[]
   reservations Reservation[]
+  reservationCarts ReservationCart[]
   createdAt    DateTime      @default(now())
 }
 
@@ -41,6 +42,7 @@ model Pos {
   offers       Offer[]
   offerLinks   OfferPos[]
   reservations Reservation[]
+  reservationCarts ReservationCart[]
   createdAt    DateTime     @default(now())
 
   @@index([city])
@@ -146,6 +148,7 @@ model Offer {
   clicks           OfferClick[]
   targetedPos      OfferPos[]
   reservationItems ReservationItem[]
+  cartItems        ReservationCartItem[]
 
   @@unique([productId, posId])
   @@index([posId])
@@ -246,6 +249,42 @@ model ReservationItem {
   @@index([offerId])
 }
 
+/// Panier de réservation mono-magasin, avant confirmation. Aucun paiement.
+/// Un seul propriétaire : compte connecté, ou clé de session invitée (cookie httpOnly).
+model ReservationCart {
+  id         String   @id @default(cuid())
+  userId     String?  @unique
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Opaque, cookie httpOnly. L’état du panier reste en base.
+  sessionKey String?  @unique
+  posId      String
+  pos        Pos      @relation(fields: [posId], references: [id])
+  merchantId String
+  merchant   Merchant @relation(fields: [merchantId], references: [id])
+  /// Localisation de recherche connue au moment de l’ajout, pour la distance.
+  viewerLat  Float?
+  viewerLng  Float?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  items      ReservationCartItem[]
+
+  @@index([posId])
+}
+
+model ReservationCartItem {
+  id        String          @id @default(cuid())
+  cartId    String
+  cart      ReservationCart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  offerId   String
+  offer     Offer           @relation(fields: [offerId], references: [id])
+  quantity  Int
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@unique([cartId, offerId])
+  @@index([offerId])
+}
+
 model User {
   id            String    @id @default(cuid())
   email         String?   @unique
@@ -261,6 +300,7 @@ model User {
   sessions      Session[]
   favorites     Favorite[]
   reservations  Reservation[]
+  reservationCart ReservationCart?
   createdAt     DateTime      @default(now())
 
   @@index([merchantId])

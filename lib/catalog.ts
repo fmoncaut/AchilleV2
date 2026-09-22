@@ -111,6 +111,7 @@ export function serializePosOfferCard(
       category: { name: string; slug: string } | null;
     };
     merchant: { name: string };
+    kind: "DIRECT" | "AFFILIATION";
   },
   pos: {
     id: string;
@@ -137,6 +138,7 @@ export function serializePosOfferCard(
     categorySlug: offer.product.category?.slug ?? null,
     categoryName: offer.product.category?.name ?? null,
     merchantName: offer.merchant.name,
+    kind: offer.kind,
     posId: pos.id,
     posName: pos.name,
     posSlug: pos.slug,
@@ -273,7 +275,7 @@ export const getCachedPosPage = unstable_cache(
       offers: offers.map((offer) => serializePosOfferCard(offer, pos)),
     };
   },
-  ["catalog-pos-page-v4"],
+  ["catalog-pos-page-v5"],
   catalogCache,
 );
 
@@ -389,7 +391,7 @@ export const getCachedCityCategoryPage = unstable_cache(
       offers,
     };
   },
-  ["catalog-city-category-page-v4"],
+  ["catalog-city-category-page-v5"],
   catalogCache,
 );
 

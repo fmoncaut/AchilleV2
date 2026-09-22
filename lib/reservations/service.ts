@@ -145,83 +145,135 @@ export async function expireDueReservations(): Promise<number> {
   return expired;
 }
 
-export async function createReservation(
-  userId: string,
-  input: ReservationCreateInput,
+type ReservationLineInput = {
+  offerId: string;
+  posId: string;
+  quantity: number;
+};
+
+async function holdDirectLine(
+  tx: Prisma.TransactionClient,
+  input: ReservationLineInput,
+  expectedPosId: string,
 ) {
+  const offer = await tx.offer.findUnique({
+    where: { id: input.offerId },
+    select: {
+      id: true,
+      kind: true,
+      isOnline: true,
+      posId: true,
+      merchantId: true,
+      stock: true,
+      priceRemise: true,
+      merchant: { select: { isActive: true } },
+      pos: { select: { id: true, isActive: true } },
+    },
+  });
+  if (!offer || offer.kind !== "DIRECT" || !offer.isOnline) {
+    throw new ReservationError(
+      "Seules les offres en retrait magasin, en ligne, sont réservables.",
+    );
+  }
+  if (!offer.posId || !offer.pos?.isActive || !offer.merchant.isActive) {
+    throw new ReservationError("Ce magasin ne prend pas de réservation.");
+  }
+  if (offer.posId !== input.posId || offer.posId !== expectedPosId) {
+    throw new ReservationError(
+      "La réservation doit porter sur un seul magasin.",
+    );
+  }
+  if (offer.stock < input.quantity) {
+    throw new ReservationError("Stock insuffisant pour cette quantité.");
+  }
+
+  const held = await tx.offer.updateMany({
+    where: {
+      id: offer.id,
+      kind: "DIRECT",
+      isOnline: true,
+      posId: offer.posId,
+      stock: { gte: input.quantity },
+    },
+    data: { stock: { decrement: input.quantity } },
+  });
+  if (held.count !== 1) {
+    throw new ReservationError("Stock insuffisant pour cette quantité.");
+  }
+
+  const unitPrice = new Prisma.Decimal(offer.priceRemise);
+  return {
+    offerId: offer.id,
+    posId: offer.posId,
+    merchantId: offer.merchantId,
+    quantity: input.quantity,
+    unitPrice,
+    subtotal: unitPrice.mul(input.quantity),
+  };
+}
+
+/** Crée une réservation PENDING et met le stock de côté. Aucun paiement. */
+export async function createPendingReservation(
+  userId: string,
+  lines: ReservationLineInput[],
+  cartId?: string,
+) {
+  if (lines.length === 0) {
+    throw new ReservationError("Le panier de réservation est vide.");
+  }
+  const expectedPosId = lines[0]?.posId;
+  if (!expectedPosId || lines.some((line) => line.posId !== expectedPosId)) {
+    throw new ReservationError(
+      "La réservation doit porter sur un seul magasin.",
+    );
+  }
+
   const deadline = computePickupDeadline();
 
   for (let attempt = 0; attempt < 5; attempt += 1) {
     try {
       return await prisma.$transaction(async (tx) => {
-        const offer = await tx.offer.findUnique({
-          where: { id: input.offerId },
-          select: {
-            id: true,
-            kind: true,
-            isOnline: true,
-            posId: true,
-            merchantId: true,
-            stock: true,
-            priceRemise: true,
-            merchant: { select: { isActive: true } },
-            pos: { select: { id: true, isActive: true } },
-          },
-        });
-        if (!offer || offer.kind !== "DIRECT" || !offer.isOnline) {
+        const held: Array<Awaited<ReturnType<typeof holdDirectLine>>> = [];
+        for (const line of lines) {
+          held.push(await holdDirectLine(tx, line, expectedPosId));
+        }
+        const merchantId = held[0]?.merchantId;
+        if (!merchantId || held.some((line) => line.merchantId !== merchantId)) {
           throw new ReservationError(
-            "Seules les offres en retrait magasin, en ligne, sont réservables.",
+            "La réservation doit porter sur un seul magasin.",
           );
         }
-        if (!offer.posId || !offer.pos?.isActive || !offer.merchant.isActive) {
-          throw new ReservationError("Ce magasin ne prend pas de réservation.");
-        }
-        if (offer.posId !== input.posId) {
-          throw new ReservationError(
-            "La réservation doit porter sur le magasin de l’offre.",
-          );
-        }
-        if (offer.stock < input.quantity) {
-          throw new ReservationError("Stock insuffisant pour cette quantité.");
-        }
+        const totalAmount = held.reduce(
+          (sum, line) => sum.add(line.subtotal),
+          new Prisma.Decimal(0),
+        );
 
-        const held = await tx.offer.updateMany({
-          where: {
-            id: offer.id,
-            kind: "DIRECT",
-            isOnline: true,
-            posId: offer.posId,
-            stock: { gte: input.quantity },
-          },
-          data: { stock: { decrement: input.quantity } },
-        });
-        if (held.count !== 1) {
-          throw new ReservationError("Stock insuffisant pour cette quantité.");
-        }
-
-        const unitPrice = new Prisma.Decimal(offer.priceRemise);
-        const subtotal = unitPrice.mul(input.quantity);
-
-        return tx.reservation.create({
+        const reservation = await tx.reservation.create({
           data: {
             userId,
-            posId: offer.posId,
-            merchantId: offer.merchantId,
+            posId: expectedPosId,
+            merchantId,
             status: "PENDING",
             pickupCode: pickupCode(),
             pickupDeadline: deadline,
-            totalAmount: subtotal,
+            totalAmount,
             items: {
-              create: {
-                offerId: offer.id,
-                quantity: input.quantity,
-                unitPrice,
-                subtotal,
-              },
+              create: held.map((line) => ({
+                offerId: line.offerId,
+                quantity: line.quantity,
+                unitPrice: line.unitPrice,
+                subtotal: line.subtotal,
+              })),
             },
           },
           include: reservationInclude,
         });
+
+        if (cartId) {
+          await tx.reservationCart.deleteMany({ where: { id: cartId, userId } });
+        }
+
+        return reservation;
       });
     } catch (error) {
       if (
@@ -234,6 +286,19 @@ export async function createReservation(
     }
   }
   throw new ReservationError("Impossible de générer un code de retrait.");
+}
+
+export async function createReservation(
+  userId: string,
+  input: ReservationCreateInput,
+) {
+  return createPendingReservation(userId, [
+    {
+      offerId: input.offerId,
+      posId: input.posId,
+      quantity: input.quantity,
+    },
+  ]);
 }
 
 export async function cancelReservation(userId: string, reservationId: string) {

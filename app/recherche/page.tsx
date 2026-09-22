@@ -254,6 +254,8 @@ export default async function RecherchePage({
                           offer.productId,
                         )}
                         loginHref={loginHref}
+                        lat={origin.lat}
+                        lng={origin.lng}
                       />
                     </li>
                   ))}
