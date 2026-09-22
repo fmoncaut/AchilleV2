@@ -78,3 +78,25 @@ export function AdminThead({ children }: { children: ReactNode }) {
     </thead>
   );
 }
+
+export function StatusChip({
+  active,
+  activeLabel = "Actif",
+  inactiveLabel = "Inactif",
+}: {
+  active: boolean;
+  activeLabel?: string;
+  inactiveLabel?: string;
+}) {
+  return (
+    <span
+      className={
+        active
+          ? "font-label-xs text-label-xs bg-tertiary-fixed text-on-tertiary-container rounded-full px-2.5 py-1 font-bold"
+          : "font-label-xs text-label-xs bg-surface-container text-on-surface-variant rounded-full px-2.5 py-1 font-bold"
+      }
+    >
+      {active ? activeLabel : inactiveLabel}
+    </span>
+  );
+}

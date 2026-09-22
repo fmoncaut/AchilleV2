@@ -10,6 +10,8 @@ import { discountPercent } from "@/lib/money";
 const onlineOfferWhere = {
   isOnline: true,
   stock: { gt: 0 },
+  merchant: { isActive: true },
+  pos: { isActive: true },
 } as const;
 
 const offerPosInclude = {
@@ -162,7 +164,7 @@ export const getCachedProductPage = unstable_cache(
       offers: product.offers.map(serializeShowcaseOffer),
     };
   },
-  ["catalog-product-page-v3"],
+  ["catalog-product-page-v4"],
   { revalidate: CACHE_TTL },
 );
 
@@ -184,7 +186,7 @@ export const getCachedPosPage = unstable_cache(
         },
       },
     });
-    if (!pos) {
+    if (!pos || !pos.isActive || !pos.merchant.isActive) {
       return null;
     }
     return {
@@ -203,13 +205,17 @@ export const getCachedPosPage = unstable_cache(
       offers: pos.offers.map((offer) => serializePosOfferCard(offer, pos)),
     };
   },
-  ["catalog-pos-page-v2"],
+  ["catalog-pos-page-v3"],
   { revalidate: CACHE_TTL },
 );
 
 async function listKnownCities(): Promise<string[]> {
   const rows = await prisma.pos.findMany({
-    where: { city: { not: null } },
+    where: {
+      city: { not: null },
+      isActive: true,
+      merchant: { isActive: true },
+    },
     select: { city: true },
     distinct: ["city"],
   });
@@ -229,7 +235,7 @@ async function getCityCategoryOffers(cityName: string, categoryId: string) {
   return prisma.offer.findMany({
     where: {
       ...onlineOfferWhere,
-      pos: { city: cityName },
+      pos: { isActive: true, city: cityName },
       product: { categoryId },
     },
     include: {
@@ -267,7 +273,7 @@ export const getCachedCityCategoryPage = unstable_cache(
       offers: offers.map((offer) => serializePosOfferCard(offer, offer.pos)),
     };
   },
-  ["catalog-city-category-page-v2"],
+  ["catalog-city-category-page-v3"],
   { revalidate: CACHE_TTL },
 );
 

@@ -152,6 +152,29 @@ export function canManageOffers(actor: DashboardActor): boolean {
   return Boolean(actor.merchantId);
 }
 
+/** Sections enseignes / magasins / vendeurs : rôle ADMIN uniquement. */
+export function isPlatformAdmin(
+  actor: DashboardActor | null,
+): actor is DashboardActor & { role: "ADMIN" } {
+  return actor?.role === "ADMIN";
+}
+
+export async function requireSuperAdmin(): Promise<
+  DashboardActor & { role: "ADMIN" }
+> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    redirect("/login?callbackUrl=/admin");
+  }
+
+  const actor = await getDashboardActor();
+  if (!isPlatformAdmin(actor)) {
+    redirect("/admin/non-autorise");
+  }
+
+  return actor;
+}
+
 /** Filtre Prisma obligatoire : jamais d'offres hors enseigne. */
 export function merchantOfferWhere(merchantId: string) {
   return { merchantId } as const;

@@ -12,6 +12,7 @@ model Merchant {
   name      String
   slug      String   @unique
   logoUrl   String?
+  isActive  Boolean  @default(true)
   pos       Pos[]
   offers    Offer[]
   users     User[]
@@ -35,6 +36,7 @@ model Pos {
   openingHours Json?
   lat          Float
   lng          Float
+  isActive     Boolean  @default(true)
   offers       Offer[]
   createdAt    DateTime @default(now())
 

@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import { signOutAction } from "@/app/compte/actions";
 import { UtilityCard } from "@/components/utility-page";
 import { Button } from "@/components/ui/button";
-import { getAdminActor } from "@/lib/admin/actor";
+import { getDashboardActor } from "@/lib/admin/actor";
 
 export const metadata = {
   title: "Mon compte — Achille",
@@ -19,7 +19,7 @@ export default async function AccountPage() {
     redirect("/login?callbackUrl=/compte");
   }
 
-  const actor = await getAdminActor();
+  const actor = await getDashboardActor();
 
   return (
     <UtilityCard kicker="Compte" title="Bonjour" icon="person">
@@ -46,7 +46,14 @@ export default async function AccountPage() {
           <Link href="/compte/favoris">Mes favoris</Link>
         </Button>
       </p>
-      {actor ? (
+      {actor?.role === "ADMIN" ? (
+        <p className="mt-3">
+          <Button asChild variant="outline" className="w-full">
+            <Link href="/admin">Console Achille</Link>
+          </Button>
+        </p>
+      ) : null}
+      {actor?.role === "MERCHANT" ? (
         <p className="mt-3">
           <Button asChild variant="outline" className="w-full">
             <Link href="/admin/offres">Back-office {actor.merchantName}</Link>

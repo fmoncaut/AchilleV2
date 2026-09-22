@@ -5,7 +5,11 @@ import type { ReactNode } from "react";
 import { auth } from "@/auth";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { Button } from "@/components/ui/button";
-import { canManageOffers, getDashboardActor } from "@/lib/admin/actor";
+import {
+  canManageOffers,
+  getDashboardActor,
+  isPlatformAdmin,
+} from "@/lib/admin/actor";
 
 export const dynamic = "force-dynamic";
 
@@ -54,6 +58,7 @@ export default async function AdminLayout({
       <AdminHeader
         merchantName={actor.merchantName ?? "Administration"}
         showOffers={canManageOffers(actor)}
+        showPlatform={isPlatformAdmin(actor)}
       />
       {children}
     </div>

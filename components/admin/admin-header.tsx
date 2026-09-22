@@ -7,12 +7,17 @@ import { Button } from "@/components/ui/button";
 type AdminHeaderProps = {
   merchantName: string;
   showOffers: boolean;
+  showPlatform: boolean;
 };
 
-export function AdminHeader({ merchantName, showOffers }: AdminHeaderProps) {
+export function AdminHeader({
+  merchantName,
+  showOffers,
+  showPlatform,
+}: AdminHeaderProps) {
   return (
     <div className="bg-surface-container-lowest shadow-navy-soft">
-      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
         <p className="font-headline-sm text-primary-container flex items-center gap-2 text-[16px] font-bold">
           <MaterialIcon
             name="storefront"
@@ -21,6 +26,22 @@ export function AdminHeader({ merchantName, showOffers }: AdminHeaderProps) {
           Back-office · {merchantName}
         </p>
         <nav className="flex flex-wrap items-center gap-2">
+          {showPlatform ? (
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/admin">Vue d’ensemble</Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/admin/enseignes">Enseignes</Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/admin/magasins">Magasins</Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/admin/vendeurs">Vendeurs</Link>
+              </Button>
+            </>
+          ) : null}
           {showOffers ? (
             <>
               <Button asChild variant="ghost" size="sm">

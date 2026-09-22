@@ -99,6 +99,8 @@ export async function findOffersNearby(
   const conditions: Prisma.Sql[] = [
     Prisma.sql`o."isOnline" = true`,
     Prisma.sql`o.stock > 0`,
+    Prisma.sql`m."isActive" = true`,
+    Prisma.sql`p."isActive" = true`,
     Prisma.sql`ST_DWithin(
       p.geog,
       ST_MakePoint(${lng}, ${lat})::geography,
