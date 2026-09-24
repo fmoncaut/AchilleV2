@@ -56,7 +56,7 @@ export function ReservationControls({
             className={adminFieldClass}
           />
           <Button type="submit" name="intent" value="pickup" size="sm" disabled={pending}>
-            Retirée
+            Valider la remise
           </Button>
         </div>
       ) : null}

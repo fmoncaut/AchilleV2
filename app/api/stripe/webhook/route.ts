@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
 
-import { constructStripeEvent } from "@/lib/payments/stripe-provider";
+import {
+  constructStripeEvent,
+  parseStripeEventNotification,
+} from "@/lib/payments/stripe-provider";
 import { PaymentError } from "@/lib/payments/types";
-import { handleStripeEvent } from "@/lib/payments/webhook";
+import {
+  handleStripeAccountNotification,
+  handleStripeEvent,
+} from "@/lib/payments/webhook";
 
 export const runtime = "nodejs";
 
@@ -23,6 +29,21 @@ export async function POST(request: Request) {
     const event = constructStripeEvent(payload, signature);
     await handleStripeEvent(event);
   } catch (error) {
+    if (
+      error instanceof PaymentError &&
+      error.message === "Signature de webhook invalide."
+    ) {
+      try {
+        const notification = parseStripeEventNotification(payload, signature);
+        await handleStripeAccountNotification(notification);
+        return NextResponse.json({ received: true });
+      } catch (thinError) {
+        if (rejectedSignature(thinError)) {
+          return NextResponse.json({ error: "Signature invalide." }, { status: 400 });
+        }
+        return NextResponse.json({ error: "Traitement impossible." }, { status: 500 });
+      }
+    }
     if (rejectedSignature(error)) {
       return NextResponse.json({ error: "Signature invalide." }, { status: 400 });
     }

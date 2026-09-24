@@ -13,7 +13,7 @@ model Merchant {
   slug      String   @unique
   logoUrl   String?
   isActive  Boolean  @default(true)
-  /// Compte Stripe Connect Express. Vide tant que l’enseigne n’a pas commencé l’onboarding.
+  /// Compte Stripe Accounts v2 (recipient). Vide tant que l’enseigne n’a pas commencé l’onboarding.
   stripeAccountId String?  @unique
   chargesEnabled  Boolean  @default(false)
   payoutsEnabled  Boolean  @default(false)

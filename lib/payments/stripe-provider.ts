@@ -59,19 +59,34 @@ export function createStripeProvider(): PaymentProvider {
   }
 
   return {
-    async createConnectAccount({ merchantId }) {
+    async createConnectAccount({ merchantId, displayName, contactEmail }) {
       try {
-        const account = await stripe().accounts.create(
+        const account = await stripe().v2.core.accounts.create(
           {
-            type: "express",
-            country: "FR",
-            capabilities: {
-              card_payments: { requested: true },
-              transfers: { requested: true },
+            display_name: displayName,
+            contact_email: contactEmail,
+            dashboard: "express",
+            identity: { country: "fr" },
+            configuration: {
+              recipient: {
+                capabilities: {
+                  stripe_balance: {
+                    stripe_transfers: { requested: true },
+                  },
+                },
+              },
+            },
+            defaults: {
+              currency: "eur",
+              responsibilities: {
+                fees_collector: "application",
+                losses_collector: "application",
+              },
             },
             metadata: { merchantId },
+            include: ["configuration.recipient"],
           },
-          { idempotencyKey: `achille-connect-${merchantId}` },
+          { idempotencyKey: `achille-connect-v2-${merchantId}` },
         );
         return { accountId: account.id };
       } catch (error) {
@@ -81,11 +96,16 @@ export function createStripeProvider(): PaymentProvider {
 
     async createOnboardingLink({ accountId, refreshUrl, returnUrl }) {
       try {
-        const link = await stripe().accountLinks.create({
+        const link = await stripe().v2.core.accountLinks.create({
           account: accountId,
-          refresh_url: refreshUrl,
-          return_url: returnUrl,
-          type: "account_onboarding",
+          use_case: {
+            type: "account_onboarding",
+            account_onboarding: {
+              configurations: ["recipient"],
+              refresh_url: refreshUrl,
+              return_url: returnUrl,
+            },
+          },
         });
         return { url: link.url };
       } catch (error) {
@@ -95,11 +115,18 @@ export function createStripeProvider(): PaymentProvider {
 
     async retrieveConnectAccount(accountId) {
       try {
-        const account = await stripe().accounts.retrieve(accountId);
+        const account = await stripe().v2.core.accounts.retrieve(accountId, {
+          include: ["configuration.recipient", "identity", "requirements"],
+        });
+        const balance = account.configuration?.recipient?.capabilities?.stripe_balance;
+        const transfersActive = balance?.stripe_transfers?.status === "active";
+        const payoutsActive = balance?.payouts?.status === "active";
+        const entries = account.requirements?.entries ?? [];
+        const pendingUser = entries.some((entry) => entry.awaiting_action_from === "user");
         return {
-          chargesEnabled: account.charges_enabled,
-          payoutsEnabled: account.payouts_enabled ?? false,
-          detailsSubmitted: account.details_submitted ?? false,
+          chargesEnabled: transfersActive,
+          payoutsEnabled: payoutsActive,
+          detailsSubmitted: transfersActive || (entries.length > 0 && !pendingUser),
         };
       } catch (error) {
         throw stripeError(error, "Compte Connect introuvable.");
@@ -203,6 +230,29 @@ export function createStripeProvider(): PaymentProvider {
       }
     },
   };
+}
+
+export function parseStripeEventNotification(
+  payload: string,
+  signature: string,
+): Stripe.V2.Core.EventNotification {
+  const secret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
+  if (!secret) {
+    throw new PaymentError("Secret de webhook absent.");
+  }
+  if (!signature) {
+    throw new PaymentError("Signature de webhook absente.");
+  }
+  const key = process.env.STRIPE_SECRET_KEY?.trim();
+  if (!key) {
+    throw new PaymentError("Paiement non configuré.");
+  }
+  const stripe = new Stripe(key);
+  try {
+    return stripe.parseEventNotification(payload, signature, secret);
+  } catch {
+    throw new PaymentError("Signature de webhook invalide.");
+  }
 }
 
 export function constructStripeEvent(payload: string, signature: string): Stripe.Event {

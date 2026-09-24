@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
-export const RADIUS_KM_OPTIONS = [5, 10, 20, 50] as const;
+export const RADIUS_KM_OPTIONS = [2, 5, 10, 20, 50] as const;
 export const DEFAULT_RADIUS_KM = 10;
 export const SEARCH_RESULT_LIMIT = 100;
 

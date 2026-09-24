@@ -46,7 +46,7 @@ Le panier n’est vidé qu’après cette autorisation. Un refus carte annule la
 
 Clés uniquement par l’environnement : `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`. Mode test.
 
-- Chaque enseigne a un compte Connect Express (`stripeAccountId`). Onboarding depuis `/admin/paiements` (ADMIN pour toute enseigne, MERCHANT pour la sienne). Sans `chargesEnabled`, une réservation DIRECT payée est refusée.
+- Chaque enseigne a un compte Accounts v2 recipient (`stripeAccountId`, `POST /v2/core/accounts`, lien `/v2/core/account_links`). Onboarding depuis `/admin/paiements`. `chargesEnabled` reflète `stripe_transfers` actif : sans ça, une réservation DIRECT payée est refusée. L’empreinte reste un PaymentIntent `capture_method: manual` avec `application_fee_amount` et `transfer_data.destination`.
 - Commission : `Merchant.feeRate` (Decimal), sinon `STRIPE_DEFAULT_FEE_RATE` (défaut 0,08). `application_fee_amount` est calculée à l’empreinte et prélevée sur le reversement vendeur (`transfer_data.destination`), pas ajoutée au total acheteur.
 - Empreinte à la confirmation : PaymentIntent `capture_method: manual`, devise `eur`, clé d’idempotence `achille-auth-{reservationId}`. `paymentIntentId` est stocké. La capture n’est jamais appelée depuis le navigateur.
 - Capture **uniquement** quand le vendeur valide le `pickupCode` sur `/admin/reservations` (statut `PICKED_UP`). `commissionAmount` et `feeAmount` sont alors renseignés.
@@ -54,4 +54,22 @@ Clés uniquement par l’environnement : `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIP
 - No-show : `STRIPE_NOSHOW_MODE=cancel` (défaut) libère l’empreinte. `partial` capture une pénalité `STRIPE_NOSHOW_PENALTY_RATE` (obligatoire dans ce mode, Decimal entre 0 et 1) et une commission proportionnelle. Le stock est rendu dans les deux cas.
 - Webhook `POST /api/stripe/webhook` : signature vérifiée avec `STRIPE_WEBHOOK_SECRET`. Événements `payment_intent.succeeded`, `payment_intent.canceled`, `payment_intent.amount_capturable_updated`, et `account.updated`. Idempotent via `ProcessedStripeEvent`. Le webhook ne capture pas et ne passe pas la réservation à `PICKED_UP`.
 
-En local : `stripe listen --forward-to localhost:3000/api/stripe/webhook`. Carte de test `4242 4242 4242 4242`, date future, CVC quelconque.
+En local, CLI Stripe 1.51 : `stripe listen --all-snapshot --forward-to localhost:3000/api/stripe/webhook`. Le drapeau `--all-snapshot` est obligatoire sur cette version. Carte de test `4242 4242 4242 4242`, date future, CVC quelconque. `4000 0025 0000 3155` force le 3DS. `4000 0000 0000 9995` est refusée.
+
+## Pause avant le test réel (23 septembre 2026)
+
+Le code 2.3 est commité (`6485df1`). Le test carte n’a pas été joué.
+
+Déjà en place, mode test uniquement (pas le compte de production) :
+
+- CLI Stripe 1.51.1 installé (`winget install --id Stripe.StripeCli`). L’identifiant `stripe.stripe-cli` n’existe pas dans winget.
+- CLI lié au mode test AchilleV2 (`stripe login`, environnement **Mode test** seulement).
+- `.env` contient `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` et `STRIPE_WEBHOOK_SECRET`. Ne pas commiter `.env`.
+- Le plugin Stripe / MCP Cursor n’est pas nécessaire pour ce test.
+
+Pour reprendre :
+
+1. `npm run dev`
+2. Dans un autre terminal : `stripe listen --all-snapshot --forward-to localhost:3000/api/stripe/webhook`
+3. Si le `whsec_…` affiché diffère de `STRIPE_WEBHOOK_SECRET`, mettre à jour `.env` et redémarrer `npm run dev`.
+4. Parcours : `/admin/paiements` (onboarding Connect) → réservation DIRECT → empreinte → `/admin/reservations` code de retrait → capture. Annulation acheteur et expiration doivent faire un `cancel`, sans débit.

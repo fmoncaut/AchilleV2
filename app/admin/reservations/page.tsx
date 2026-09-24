@@ -45,8 +45,9 @@ export default async function AdminReservationsPage() {
           Réservations
         </h1>
         <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-          Click & collect de votre enseigne. La capture part uniquement ici,
-          quand le code de retrait est validé.
+          Click & collect de votre enseigne. Le client présente son pass au
+          comptoir. La capture part uniquement ici, quand le code est validé.
+          Il n’y a pas de casier à déverrouiller.
         </p>
       </div>
       <AdminCard>

@@ -22,7 +22,11 @@ export type AuthorizationSnapshot = {
 };
 
 export type PaymentProvider = {
-  createConnectAccount(input: { merchantId: string }): Promise<{ accountId: string }>;
+  createConnectAccount(input: {
+    merchantId: string;
+    displayName: string;
+    contactEmail: string;
+  }): Promise<{ accountId: string }>;
   createOnboardingLink(input: {
     accountId: string;
     refreshUrl: string;

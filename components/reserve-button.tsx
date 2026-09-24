@@ -17,6 +17,7 @@ type ReserveButtonProps = {
   compact?: boolean;
   lat?: number | null;
   lng?: number | null;
+  ctaLabel?: string;
 };
 
 export function ReserveButton({
@@ -26,6 +27,7 @@ export function ReserveButton({
   compact = false,
   lat = null,
   lng = null,
+  ctaLabel = "Réserver en magasin",
 }: ReserveButtonProps) {
   const [state, action, pending] = useActionState<CartActionState, FormData>(
     addToCartAction,
@@ -66,7 +68,7 @@ export function ReserveButton({
         className={cn(!compact && "h-12 px-6 text-base")}
       >
         <MaterialIcon name="shopping_bag" className="text-[18px]" />
-        {stock < 1 ? "Rupture" : pending ? "Ajout…" : "Réserver en magasin"}
+        {stock < 1 ? "Rupture" : pending ? "Ajout…" : ctaLabel}
       </Button>
       {state.conflictPosName ? (
         <div className="bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">

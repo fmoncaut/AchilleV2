@@ -21,7 +21,10 @@ export async function startOnboardingAction(formData: FormData) {
   const merchantId = first(formData, "merchantId");
   try {
     assertMerchantPaymentAccess(actor, merchantId);
-    const url = await startMerchantOnboarding(merchantId);
+    const url = await startMerchantOnboarding(merchantId, {
+      role: actor.role,
+      email: actor.email,
+    });
     redirect(url);
   } catch (error) {
     if (error instanceof PaymentError) {

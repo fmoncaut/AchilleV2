@@ -3,11 +3,13 @@ import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
+import { PickupPass } from "@/components/reservation/pickup-pass";
 import { TunnelSteps } from "@/components/reservation/tunnel-steps";
 import { Button } from "@/components/ui/button";
 import { finalizeAuthorization } from "@/lib/payments/checkout";
 import { formatEur } from "@/lib/money";
 import { prisma } from "@/lib/db";
+import { pickupCodeSvg } from "@/lib/reservations/pickup-qr";
 import {
   ReservationError,
   pickupWindowHours,
@@ -92,6 +94,10 @@ export default async function ReservationConfirmationPage({
     reservation.status === "CONFIRMED" ||
     reservation.status === "READY_FOR_PICKUP" ||
     reservation.status === "PICKED_UP";
+  const storeLabel = `${reservation.merchant.name} · ${reservation.pos.name}${
+    reservation.pos.city ? ` (${reservation.pos.city})` : ""
+  }`;
+  const passSvg = codeReady ? await pickupCodeSvg(reservation.pickupCode) : null;
 
   return (
     <BuyerMain>
@@ -101,7 +107,7 @@ export default async function ReservationConfirmationPage({
             Retrait en magasin
           </p>
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1">
-            Réservation enregistrée
+            {codeReady ? "Stock réservé" : "Réservation enregistrée"}
           </h1>
           <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
             {codeReady
@@ -115,21 +121,14 @@ export default async function ReservationConfirmationPage({
           ) : null}
         </div>
         <TunnelSteps current="confirmation" />
-        {codeReady ? (
-        <section className="bg-primary-container text-on-primary shadow-navy-soft rounded-2xl p-5">
-          <p className="font-label-md text-label-md text-surface-variant">
-            Code de retrait
-          </p>
-          <p className="font-headline-lg text-secondary-container mt-1 tracking-widest">
-            {reservation.pickupCode}
-          </p>
-          <p className="font-body-sm text-body-sm text-surface-variant mt-3">
-            {reservation.merchant.name} · {reservation.pos.name}
-            {reservation.pos.city ? ` (${reservation.pos.city})` : ""}. À
-            retirer avant le {formatWhen(reservation.pickupDeadline)} (
-            {pickupWindowHours()} h).
-          </p>
-        </section>
+        {codeReady && passSvg ? (
+          <>
+            <PickupPass code={reservation.pickupCode} svg={passSvg} store={storeLabel} />
+            <p className="font-body-sm text-body-sm text-on-surface-variant">
+              À retirer avant le {formatWhen(reservation.pickupDeadline)} (
+              {pickupWindowHours()} h).
+            </p>
+          </>
         ) : null}
         <ul className="bg-surface-container-lowest shadow-navy-soft flex flex-col gap-3 rounded-2xl p-5">
           {reservation.items.map((item) => (

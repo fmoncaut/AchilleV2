@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { z } from "zod";
 
 import { prisma } from "@/lib/db";
 import { getPaymentProvider } from "@/lib/payments";
@@ -14,10 +15,27 @@ export function assertMerchantPaymentAccess(
   }
 }
 
-export async function startMerchantOnboarding(merchantId: string): Promise<string> {
+const contactEmailSchema = z.string().trim().email();
+
+const MISSING_CONTACT_EMAIL =
+  "Impossible d'activer l'encaissement : aucune adresse e-mail de contact disponible pour cette enseigne";
+
+export async function startMerchantOnboarding(
+  merchantId: string,
+  actor: { role: "ADMIN" | "MERCHANT"; email: string | null },
+): Promise<string> {
   const merchant = await prisma.merchant.findUnique({
     where: { id: merchantId },
-    select: { id: true, stripeAccountId: true },
+    select: {
+      id: true,
+      name: true,
+      stripeAccountId: true,
+      users: {
+        where: { role: "MERCHANT", email: { not: null } },
+        select: { email: true },
+        take: 1,
+      },
+    },
   });
   if (!merchant) {
     throw new PaymentError("Enseigne introuvable.");
@@ -26,7 +44,17 @@ export async function startMerchantOnboarding(merchantId: string): Promise<strin
   const provider = getPaymentProvider();
   let accountId = merchant.stripeAccountId;
   if (!accountId) {
-    const created = await provider.createConnectAccount({ merchantId: merchant.id });
+    const candidate =
+      merchant.users[0]?.email ?? (actor.role === "ADMIN" ? actor.email : null);
+    const parsed = contactEmailSchema.safeParse(candidate ?? "");
+    if (!parsed.success) {
+      throw new PaymentError(MISSING_CONTACT_EMAIL);
+    }
+    const created = await provider.createConnectAccount({
+      merchantId: merchant.id,
+      displayName: merchant.name,
+      contactEmail: parsed.data,
+    });
     accountId = created.accountId;
     await prisma.merchant.update({
       where: { id: merchant.id },

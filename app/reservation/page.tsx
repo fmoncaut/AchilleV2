@@ -29,20 +29,35 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
   const cart = await getCart(await currentCartOwner());
   const added = first(query.ajoutee) === "1";
 
+  const referenceTotal = cart
+    ? cart.lines.reduce(
+        (sum, line) => sum + Number(line.unitPrice) * line.quantity,
+        0,
+      )
+    : 0;
+
   return (
     <BuyerMain>
-      <BuyerSection className="flex flex-1 flex-col gap-6 py-10">
-        <div>
-          <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
-            Retrait en magasin
-          </p>
-          <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1">
-            Récapitulatif
-          </h1>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-            Un seul magasin par réservation. L’étape suivante autorise une
-            empreinte du total : le débit n’a lieu qu’au retrait.
-          </p>
+      <BuyerSection className="flex flex-1 flex-col gap-6 py-8">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+              Panier Click & Collect
+            </p>
+            <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1">
+              {cart ? cart.posName : "Mon panier"}
+            </h1>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+              Un seul magasin par réservation. L’étape suivante autorise une
+              empreinte du total : le débit n’a lieu qu’au retrait.
+            </p>
+          </div>
+          {cart ? (
+            <p className="bg-primary-container text-on-primary font-label-md text-label-md inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-bold">
+              <MaterialIcon name="store" className="text-[16px]" />
+              Panier 100 % mono-magasin
+            </p>
+          ) : null}
         </div>
         <TunnelSteps current="recap" />
         {added ? (
@@ -58,94 +73,115 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
             actionLabel="Voir les offres"
           />
         ) : (
-          <>
-            <section className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5">
-              <p className="font-label-xs text-label-xs text-on-surface-variant font-extrabold tracking-wider uppercase">
-                {cart.merchantName}
-              </p>
-              <h2 className="font-headline-sm text-primary-container mt-1">
-                {cart.posName}
-                {cart.city ? ` · ${cart.city}` : ""}
-              </h2>
-              {cart.distanceM != null ? (
-                <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 flex items-center gap-1">
-                  <MaterialIcon
-                    name="near_me"
-                    className="text-secondary-container text-[16px]"
-                  />
-                  À <Distance meters={cart.distanceM} variant="plain" />
+          <div className="grid items-start gap-6 lg:grid-cols-12">
+            <div className="flex min-w-0 flex-col gap-4 lg:col-span-7">
+              <section className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5">
+                <p className="font-label-xs text-label-xs text-on-surface-variant font-extrabold tracking-wider uppercase">
+                  {cart.merchantName}
                 </p>
-              ) : null}
-              <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-                Fenêtre de retrait : {cart.pickupHours} h après la confirmation.
-                Le stock est mis de côté à cette étape, pas avant.
-              </p>
-            </section>
-            <ul className="flex flex-col gap-4">
-              {cart.lines.map((line) => (
-                <li
-                  key={line.offerId}
-                  className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5"
-                >
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div>
-                      <Link
-                        href={`/offre/${line.productSlug}`}
-                        className="font-headline-sm text-primary-container hover:underline"
-                      >
-                        {line.productName}
-                      </Link>
-                      <p className="font-body-sm text-on-surface-variant mt-1">
-                        {formatEur(line.unitPrice)} × {line.quantity}
-                        {" · "}
-                        {line.stock} en magasin
+                <h2 className="font-headline-sm text-primary-container mt-1">
+                  {cart.posName}
+                  {cart.city ? ` · ${cart.city}` : ""}
+                </h2>
+                {cart.distanceM != null ? (
+                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 flex items-center gap-1">
+                    <MaterialIcon
+                      name="near_me"
+                      className="text-secondary-container text-[16px]"
+                    />
+                    À <Distance meters={cart.distanceM} variant="plain" />
+                  </p>
+                ) : null}
+                <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+                  Fenêtre de retrait : {cart.pickupHours} h après la confirmation.
+                  Le stock est mis de côté à cette étape, pas avant.
+                </p>
+              </section>
+              <ul className="flex flex-col gap-4">
+                {cart.lines.map((line) => (
+                  <li
+                    key={line.offerId}
+                    className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5"
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <Link
+                          href={`/offre/${line.productSlug}`}
+                          className="font-headline-sm text-primary-container hover:underline"
+                        >
+                          {line.productName}
+                        </Link>
+                        <p className="font-body-sm text-on-surface-variant mt-1">
+                          {formatEur(line.unitPrice)} × {line.quantity}
+                          {" · "}
+                          {line.stock} en magasin
+                        </p>
+                      </div>
+                      <p className="font-price-card text-secondary-container font-extrabold">
+                        {formatEur(line.subtotal)}
                       </p>
                     </div>
-                    <p className="font-price-card text-secondary-container font-extrabold">
-                      {formatEur(line.subtotal)}
-                    </p>
-                  </div>
-                  {line.issue ? (
-                    <p className="font-body-sm text-error mt-3 font-medium">
-                      {line.issue}
-                    </p>
-                  ) : null}
-                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-                    <CartQuantityForm
-                      offerId={line.offerId}
-                      quantity={line.quantity}
-                      stock={line.stock}
-                    />
-                    <form action={removeCartOfferAction}>
-                      <input type="hidden" name="offerId" value={line.offerId} />
-                      <Button type="submit" variant="ghost" size="sm">
-                        Retirer
-                      </Button>
-                    </form>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <div className="bg-primary-container text-on-primary shadow-navy-soft flex flex-wrap items-end justify-between gap-4 rounded-2xl p-5">
-              <div>
-                <p className="font-label-md text-label-md text-surface-variant">
-                  Total
-                </p>
-                <p className="font-price-hero text-secondary-container font-extrabold">
-                  {formatEur(cart.total)}
-                </p>
-              </div>
+                    {line.issue ? (
+                      <p className="font-body-sm text-error mt-3 font-medium">
+                        {line.issue}
+                      </p>
+                    ) : null}
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                      <CartQuantityForm
+                        offerId={line.offerId}
+                        quantity={line.quantity}
+                        stock={line.stock}
+                      />
+                      <form action={removeCartOfferAction}>
+                        <input type="hidden" name="offerId" value={line.offerId} />
+                        <Button type="submit" variant="ghost" size="sm">
+                          Retirer
+                        </Button>
+                      </form>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <aside className="bg-surface-container-lowest shadow-navy-soft flex flex-col gap-4 rounded-2xl p-5 lg:col-span-5 lg:sticky lg:top-24">
+              <h2 className="font-headline-sm text-primary-container">Récapitulatif</h2>
+              <dl className="font-body-sm text-body-sm flex flex-col gap-2">
+                <div className="flex justify-between gap-3">
+                  <dt className="text-on-surface-variant">
+                    Articles ({cart.itemCount})
+                  </dt>
+                  <dd>{formatEur(referenceTotal)}</dd>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <dt className="text-on-surface-variant">Retrait en magasin</dt>
+                  <dd>Inclus</dd>
+                </div>
+                <div className="border-outline-variant flex items-end justify-between gap-3 border-t pt-3">
+                  <dt className="font-label-md text-label-md text-primary-container font-bold">
+                    Total à régler au retrait
+                  </dt>
+                  <dd className="font-price-hero text-secondary-container font-extrabold">
+                    {formatEur(cart.total)}
+                  </dd>
+                </div>
+              </dl>
               {cart.canConfirm ? (
-                <Button asChild variant="default" size="lg">
-                  <Link href="/reservation/retrait">Continuer</Link>
+                <Button asChild size="lg" className="w-full">
+                  <Link href="/reservation/retrait">
+                    Procéder au paiement sécurisé
+                  </Link>
                 </Button>
               ) : (
-                <p className="font-body-sm text-body-sm max-w-sm">
+                <p className="font-body-sm text-body-sm text-on-surface-variant">
                   Ajustez les quantités au stock disponible pour continuer.
                 </p>
               )}
-            </div>
-          </>
+              <p className="font-label-xs text-label-xs text-on-surface-variant">
+                Empreinte bancaire maintenant, débit uniquement quand le magasin
+                valide le retrait.
+              </p>
+            </aside>
+          </div>
         )}
       </BuyerSection>
     </BuyerMain>

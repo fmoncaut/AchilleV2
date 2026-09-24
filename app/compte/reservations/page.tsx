@@ -2,10 +2,12 @@ import Link from "next/link";
 
 import { cancelReservationAction } from "@/app/compte/reservation-actions";
 import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
+import { PickupPass } from "@/components/reservation/pickup-pass";
 import { EmptyState } from "@/components/search/empty-state";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/auth";
 import { formatEur } from "@/lib/money";
+import { pickupCodeSvg } from "@/lib/reservations/pickup-qr";
 import { STATUS_LABELS, listReservationsForUser } from "@/lib/reservations/service";
 
 export const metadata = {
@@ -38,6 +40,12 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
   }
   const query = await searchParams;
   const reservations = await listReservationsForUser(userId);
+  const passes = new Map<string, string>();
+  for (const reservation of reservations) {
+    if (HOLDING.has(reservation.status)) {
+      passes.set(reservation.id, await pickupCodeSvg(reservation.pickupCode));
+    }
+  }
   const createdId = first(query.creee);
   const error = first(query.erreur);
 
@@ -108,12 +116,22 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
                 <p className="font-price-hero text-secondary-container mt-3 text-2xl font-extrabold">
                   {formatEur(reservation.totalAmount)}
                 </p>
-                <p className="font-body-sm text-primary-container mt-2">
-                  Code de retrait{" "}
-                  <span className="font-headline-sm tracking-widest">
-                    {reservation.pickupCode}
-                  </span>
-                </p>
+                {passes.get(reservation.id) ? (
+                  <div className="mt-3">
+                    <PickupPass
+                      code={reservation.pickupCode}
+                      svg={passes.get(reservation.id) ?? ""}
+                      store={`${reservation.merchant.name} · ${reservation.pos.name}`}
+                    />
+                  </div>
+                ) : (
+                  <p className="font-body-sm text-primary-container mt-2">
+                    Code de retrait{" "}
+                    <span className="font-headline-sm tracking-widest">
+                      {reservation.pickupCode}
+                    </span>
+                  </p>
+                )}
                 <p className="font-body-sm text-on-surface-variant mt-1">
                   À retirer avant le {formatWhen(reservation.pickupDeadline)}
                 </p>

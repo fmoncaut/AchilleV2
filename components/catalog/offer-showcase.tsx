@@ -253,8 +253,8 @@ function OfferShowcaseView({
               </p>
               <p className="font-body-sm text-body-sm text-surface-variant mt-1">
                 {current?.kind === "DIRECT"
-                  ? "Vous réservez ici, sans paiement. Le magasin prépare la commande et vous la retirez avec le code. Le paiement arrivera dans un prochain incrément."
-                  : "Achille compare les offres locales puis vous renvoie vers le site du marchand (lien sécurisé et tracké). Pas de panier ni de paiement ici."}
+                  ? "Vous réservez ici. Une empreinte du montant est prise, le débit n’a lieu qu’au retrait en magasin, avec le code."
+                  : "Achille compare les offres locales puis vous renvoie vers le site du marchand (lien sécurisé et tracké)."}
               </p>
             </div>
           </div>

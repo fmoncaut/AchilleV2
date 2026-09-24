@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import type Stripe from "stripe";
 
 import { prisma } from "@/lib/db";
+import { getPaymentProvider } from "@/lib/payments";
 import { centsToEuros } from "@/lib/payments/money";
 import { PaymentError } from "@/lib/payments/types";
 import {
@@ -71,6 +72,25 @@ async function applyEvent(event: Stripe.Event) {
   }
 }
 
+const V2_ACCOUNT_STATUS = new Set([
+  "v2.core.account.updated",
+  "v2.core.account[configuration.recipient].updated",
+  "v2.core.account[configuration.recipient].capability_status_updated",
+  "v2.core.account[requirements].updated",
+]);
+
+async function syncAccount(accountId: string) {
+  const status = await getPaymentProvider().retrieveConnectAccount(accountId);
+  await prisma.merchant.updateMany({
+    where: { stripeAccountId: accountId },
+    data: {
+      chargesEnabled: status.chargesEnabled,
+      payoutsEnabled: status.payoutsEnabled,
+      detailsSubmitted: status.detailsSubmitted,
+    },
+  });
+}
+
 /** Idempotent : un evt_… n’est enregistré qu’après application réussie. */
 export async function handleStripeEvent(event: Stripe.Event): Promise<void> {
   const seen = await prisma.processedStripeEvent.findUnique({
@@ -81,11 +101,50 @@ export async function handleStripeEvent(event: Stripe.Event): Promise<void> {
     return;
   }
 
-  await applyEvent(event);
+  if (V2_ACCOUNT_STATUS.has(event.type)) {
+    const accountId = (event as { related_object?: { id?: string } }).related_object?.id;
+    if (accountId) {
+      await syncAccount(accountId);
+    }
+  } else {
+    await applyEvent(event);
+  }
 
   try {
     await prisma.processedStripeEvent.create({
       data: { id: event.id, type: event.type },
+    });
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return;
+    }
+    throw error;
+  }
+}
+
+/** Événement fin Accounts v2 : même idempotence, statut relu via l’API v2. */
+export async function handleStripeAccountNotification(
+  notification: { id: string; type: string; related_object?: { id?: string } },
+): Promise<void> {
+  const seen = await prisma.processedStripeEvent.findUnique({
+    where: { id: notification.id },
+    select: { id: true },
+  });
+  if (seen) {
+    return;
+  }
+  if (V2_ACCOUNT_STATUS.has(notification.type)) {
+    const accountId = notification.related_object?.id;
+    if (accountId) {
+      await syncAccount(accountId);
+    }
+  }
+  try {
+    await prisma.processedStripeEvent.create({
+      data: { id: notification.id, type: notification.type },
     });
   } catch (error) {
     if (
