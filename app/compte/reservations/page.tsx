@@ -2,14 +2,20 @@ import Link from "next/link";
 
 import { cancelReservationAction } from "@/app/compte/reservation-actions";
 import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
+import { PickupCountdown } from "@/components/reservation/pickup-countdown";
 import { PickupPass } from "@/components/reservation/pickup-pass";
+import { ReservationBoard } from "@/components/reservation/reservation-board";
 import { EmptyState } from "@/components/search/empty-state";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/auth";
 import { formatEur } from "@/lib/money";
 import { parseOpeningHours } from "@/lib/opening-hours";
 import { pickupCodeSvg } from "@/lib/reservations/pickup-qr";
-import { STATUS_LABELS, listReservationsForUser } from "@/lib/reservations/service";
+import {
+  STATUS_LABELS,
+  listReservationsForUser,
+  type ReservationView,
+} from "@/lib/reservations/service";
 
 export const metadata = {
   title: "Mes réservations — Achille",
@@ -31,13 +37,123 @@ function formatWhen(value: Date): string {
   });
 }
 
-const HOLDING = new Set(["PENDING", "CONFIRMED", "READY_FOR_PICKUP"]);
-const WITH_PASS = new Set([
-  "PENDING",
-  "CONFIRMED",
-  "READY_FOR_PICKUP",
-  "PICKED_UP",
-]);
+const CANCELABLE = new Set(["PENDING", "CONFIRMED", "READY_FOR_PICKUP"]);
+const WITH_PASS = new Set(["CONFIRMED", "READY_FOR_PICKUP", "PICKED_UP"]);
+const WITH_COUNTDOWN = new Set(["CONFIRMED", "READY_FOR_PICKUP"]);
+
+const GROUPS = [
+  {
+    id: "pickup",
+    title: "À retirer",
+    statuses: ["READY_FOR_PICKUP", "CONFIRMED"],
+  },
+  { id: "progress", title: "En cours", statuses: ["PENDING"] },
+  { id: "done", title: "Terminées", statuses: ["PICKED_UP"] },
+  {
+    id: "cancelled",
+    title: "Annulées",
+    statuses: ["CANCELLED", "EXPIRED", "NO_SHOW"],
+  },
+] as const;
+
+function storeAddress(reservation: ReservationView): string {
+  return [
+    reservation.pos.address,
+    [reservation.pos.postalCode, reservation.pos.city].filter(Boolean).join(" "),
+  ]
+    .filter(Boolean)
+    .join(", ");
+}
+
+function productLabel(reservation: ReservationView): string {
+  return reservation.items
+    .map((item) => `${item.offer.product.name} × ${item.quantity}`)
+    .join(", ");
+}
+
+function ReservationCard({
+  reservation,
+  svg,
+  nowIso,
+}: {
+  reservation: ReservationView;
+  svg: string | null;
+  nowIso: string;
+}) {
+  const product = productLabel(reservation);
+  const store = `${reservation.merchant.name} · ${reservation.pos.name}`;
+
+  return (
+    <li className="bg-surface-container-lowest shadow-navy-soft flex flex-col gap-3 rounded-2xl p-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="font-headline-sm text-primary-container">{product}</p>
+          <p className="font-body-sm text-on-surface-variant mt-1">
+            {store}
+            {reservation.pos.city ? ` (${reservation.pos.city})` : ""}
+          </p>
+        </div>
+        <span className="font-label-xs text-label-xs bg-primary-container text-on-primary rounded-full px-2.5 py-1 font-bold">
+          {STATUS_LABELS[reservation.status]}
+        </span>
+      </div>
+      <p className="font-price-hero text-secondary-container text-2xl font-extrabold">
+        {formatEur(reservation.totalAmount)}
+      </p>
+      {WITH_COUNTDOWN.has(reservation.status) ? (
+        <PickupCountdown
+          deadlineIso={reservation.pickupDeadline.toISOString()}
+          initialNowIso={nowIso}
+        />
+      ) : reservation.status === "EXPIRED" ? (
+        <p className="font-body-sm text-on-surface-variant">
+          Délai dépassé le {formatWhen(reservation.pickupDeadline)}. L’empreinte
+          a été libérée et le stock rendu.
+        </p>
+      ) : (
+        <p className="font-body-sm text-on-surface-variant">
+          Limite de retrait : {formatWhen(reservation.pickupDeadline)}
+        </p>
+      )}
+      {svg ? (
+        <PickupPass
+          code={reservation.pickupCode}
+          svg={svg}
+          product={product}
+          storeName={store}
+          address={storeAddress(reservation)}
+          hours={parseOpeningHours(reservation.pos.openingHours)}
+          amount={formatEur(reservation.totalAmount)}
+          deadline={formatWhen(reservation.pickupDeadline)}
+          status={STATUS_LABELS[reservation.status]}
+        />
+      ) : CANCELABLE.has(reservation.status) ? (
+        <p className="font-body-sm text-primary-container">
+          Code de retrait{" "}
+          <span className="font-headline-sm tracking-widest">
+            {reservation.pickupCode}
+          </span>
+        </p>
+      ) : null}
+      {reservation.status === "PICKED_UP" ? (
+        <Link
+          href={`/compte/reservations/${reservation.id}/facture`}
+          className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+        >
+          Voir la facture
+        </Link>
+      ) : null}
+      {CANCELABLE.has(reservation.status) ? (
+        <form action={cancelReservationAction}>
+          <input type="hidden" name="id" value={reservation.id} />
+          <Button type="submit" variant="outline" size="sm">
+            Annuler
+          </Button>
+        </form>
+      ) : null}
+    </li>
+  );
+}
 
 export default async function ReservationsPage({ searchParams }: PageProps) {
   const session = await auth();
@@ -47,6 +163,7 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
   }
   const query = await searchParams;
   const reservations = await listReservationsForUser(userId);
+  const nowIso = new Date().toISOString();
   const passes = new Map<string, string>();
   for (const reservation of reservations) {
     if (WITH_PASS.has(reservation.status)) {
@@ -55,6 +172,28 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
   }
   const createdId = first(query.creee);
   const error = first(query.erreur);
+  const groups = GROUPS.map((group) => {
+    const rows = reservations.filter((reservation) =>
+      (group.statuses as readonly string[]).includes(reservation.status),
+    );
+    return {
+      id: group.id,
+      title: group.title,
+      count: rows.length,
+      content: (
+        <ul className="flex flex-col gap-4">
+          {rows.map((reservation) => (
+            <ReservationCard
+              key={reservation.id}
+              reservation={reservation}
+              svg={passes.get(reservation.id) ?? null}
+              nowIso={nowIso}
+            />
+          ))}
+        </ul>
+      ),
+    };
+  });
 
   return (
     <BuyerMain>
@@ -67,8 +206,8 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
             Mes réservations
           </h1>
           <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-            Retrait en magasin. L’empreinte n’est débitée qu’au retrait, et
-            annulée si vous annulez avant.
+            Retrait en magasin. L’empreinte n’est débitée qu’au retrait. Si
+            vous ne retirez pas à temps, elle est libérée.
           </p>
         </div>
         {createdId ? (
@@ -95,92 +234,7 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
             actionLabel="Voir les offres"
           />
         ) : (
-          <ul className="flex flex-col gap-4">
-            {reservations.map((reservation) => (
-              <li
-                key={reservation.id}
-                className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5"
-              >
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <p className="font-headline-sm text-primary-container">
-                      {reservation.items
-                        .map(
-                          (item) =>
-                            `${item.offer.product.name} × ${item.quantity}`,
-                        )
-                        .join(", ")}
-                    </p>
-                    <p className="font-body-sm text-on-surface-variant mt-1">
-                      {reservation.merchant.name} · {reservation.pos.name}
-                      {reservation.pos.city ? ` (${reservation.pos.city})` : ""}
-                    </p>
-                  </div>
-                  <span className="font-label-xs text-label-xs bg-primary-container text-on-primary rounded-full px-2.5 py-1 font-bold">
-                    {STATUS_LABELS[reservation.status]}
-                  </span>
-                </div>
-                <p className="font-price-hero text-secondary-container mt-3 text-2xl font-extrabold">
-                  {formatEur(reservation.totalAmount)}
-                </p>
-                {passes.get(reservation.id) ? (
-                  <div className="mt-3">
-                    <PickupPass
-                      code={reservation.pickupCode}
-                      svg={passes.get(reservation.id) ?? ""}
-                      product={reservation.items
-                        .map(
-                          (item) =>
-                            `${item.offer.product.name} × ${item.quantity}`,
-                        )
-                        .join(", ")}
-                      storeName={`${reservation.merchant.name} · ${reservation.pos.name}`}
-                      address={[
-                        reservation.pos.address,
-                        [reservation.pos.postalCode, reservation.pos.city]
-                          .filter(Boolean)
-                          .join(" "),
-                      ]
-                        .filter(Boolean)
-                        .join(", ")}
-                      hours={parseOpeningHours(reservation.pos.openingHours)}
-                      amount={formatEur(reservation.totalAmount)}
-                      deadline={formatWhen(reservation.pickupDeadline)}
-                      status={STATUS_LABELS[reservation.status]}
-                    />
-                  </div>
-                ) : (
-                  <p className="font-body-sm text-primary-container mt-2">
-                    Code de retrait{" "}
-                    <span className="font-headline-sm tracking-widest">
-                      {reservation.pickupCode}
-                    </span>
-                  </p>
-                )}
-                <p className="font-body-sm text-on-surface-variant mt-1">
-                  À retirer avant le {formatWhen(reservation.pickupDeadline)}
-                </p>
-                {reservation.status === "PICKED_UP" ? (
-                  <p className="mt-4">
-                    <Link
-                      href={`/compte/reservations/${reservation.id}/facture`}
-                      className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
-                    >
-                      Voir la facture
-                    </Link>
-                  </p>
-                ) : null}
-                {HOLDING.has(reservation.status) ? (
-                  <form action={cancelReservationAction} className="mt-4">
-                    <input type="hidden" name="id" value={reservation.id} />
-                    <Button type="submit" variant="outline" size="sm">
-                      Annuler
-                    </Button>
-                  </form>
-                ) : null}
-              </li>
-            ))}
-          </ul>
+          <ReservationBoard groups={groups} />
         )}
         <p>
           <Link

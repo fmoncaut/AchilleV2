@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/search/empty-state";
 import { Button } from "@/components/ui/button";
 import { formatEur } from "@/lib/money";
 import { getCart } from "@/lib/reservations/cart";
+import { pickupWindowHours } from "@/lib/reservations/service";
 import { currentCartOwner } from "@/lib/reservations/cart-session";
 
 export const metadata = {
@@ -178,7 +179,8 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
               )}
               <p className="font-label-xs text-label-xs text-on-surface-variant">
                 Empreinte bancaire maintenant, débit uniquement quand le magasin
-                valide le retrait.
+                valide le retrait. Fenêtre de retrait : {pickupWindowHours()} h
+                après l’empreinte. Passé ce délai, l’empreinte est libérée.
               </p>
             </aside>
           </div>

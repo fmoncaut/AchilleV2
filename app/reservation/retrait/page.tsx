@@ -91,7 +91,8 @@ export default async function ReservationPickupPage({ searchParams }: PageProps)
             Présentez le code de retrait en magasin. La réservation est
             conservée {cart.pickupHours} h. Total {formatEur(cart.total)}.
             L’empreinte est autorisée ci-dessous et capturée seulement au
-            retrait.
+            retrait. Si vous ne retirez pas dans ce délai, l’empreinte est
+            libérée.
           </p>
         </section>
         {session?.user?.id && cart.canConfirm && cart.paymentsEnabled ? (

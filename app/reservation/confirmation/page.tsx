@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
+import { PickupCountdown } from "@/components/reservation/pickup-countdown";
 import { PickupPass } from "@/components/reservation/pickup-pass";
 import { TunnelSteps } from "@/components/reservation/tunnel-steps";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,7 @@ import { prisma } from "@/lib/db";
 import { pickupCodeSvg } from "@/lib/reservations/pickup-qr";
 import {
   ReservationError,
-  pickupWindowHours,
+  expireDueReservations,
   STATUS_LABELS,
 } from "@/lib/reservations/service";
 
@@ -45,7 +46,9 @@ export default async function ReservationConfirmationPage({
   if (!userId) {
     redirect("/login?callbackUrl=/compte/reservations");
   }
+  await expireDueReservations();
   const id = first((await searchParams).id);
+  const nowIso = new Date().toISOString();
   if (!id) {
     redirect("/compte/reservations");
   }
@@ -138,6 +141,11 @@ export default async function ReservationConfirmationPage({
           ) : null}
         </div>
         <TunnelSteps current="confirmation" />
+        {reservation.status === "EXPIRED" ? (
+          <p className="font-body-sm bg-surface-container text-on-surface-variant rounded-2xl px-3 py-2">
+            Délai dépassé. L’empreinte a été libérée et le stock rendu.
+          </p>
+        ) : null}
         {codeReady && passSvg ? (
           <>
             <PickupPass
@@ -160,10 +168,13 @@ export default async function ReservationConfirmationPage({
               deadline={formatWhen(reservation.pickupDeadline)}
               status={STATUS_LABELS[reservation.status]}
             />
-            <p className="font-body-sm text-body-sm text-on-surface-variant">
-              À retirer avant le {formatWhen(reservation.pickupDeadline)} (
-              {pickupWindowHours()} h).
-            </p>
+            {reservation.status === "CONFIRMED" ||
+            reservation.status === "READY_FOR_PICKUP" ? (
+              <PickupCountdown
+                deadlineIso={reservation.pickupDeadline.toISOString()}
+                initialNowIso={nowIso}
+              />
+            ) : null}
           </>
         ) : null}
         <ul className="bg-surface-container-lowest shadow-navy-soft flex flex-col gap-3 rounded-2xl p-5">
