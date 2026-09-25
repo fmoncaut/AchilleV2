@@ -125,12 +125,12 @@ export async function beginAuthorization(userId: string): Promise<{
               idempotencyKey: `achille-cancel-${inflight.id}`,
             });
           }
-          const dropped = await tx.reservation.updateMany({
-            where: { id: inflight.id, userId, status: "PENDING" },
-            data: {
-              status: "CANCELLED",
-              cancelledAt: new Date(),
-              paymentState: inflight.paymentIntentId ? "CANCELED" : "NONE",
+          const dropped = await tx.reservation.deleteMany({
+            where: {
+              id: inflight.id,
+              userId,
+              status: "PENDING",
+              paymentState: { notIn: ["AUTHORIZED", "CAPTURED"] },
             },
           });
           if (dropped.count === 1) {

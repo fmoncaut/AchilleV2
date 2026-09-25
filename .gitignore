@@ -37,3 +37,16 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .cursor/mcp.json
+
+# Skills Stripe installés localement pour l’agent, pas le produit
+.agents/
+skills-lock.json
+
+# Scripts de dev jetables (hors verify-*.ts)
+scripts/check-admin.ts
+scripts/make-admin.ts
+scripts/whoami.ts
+scripts/attach-brico.ts
+scripts/last-reservation.ts
+scripts/check-stock.ts
+scripts/list-reservations.ts

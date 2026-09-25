@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import {
   assignUserRoleAction,
@@ -18,22 +19,46 @@ export function UserRoleForm({
   users: Option[];
   merchants: Option[];
 }) {
+  const router = useRouter();
+  const [userId, setUserId] = useState("");
+  const [merchantId, setMerchantId] = useState("");
+  const [role, setRole] = useState<"MERCHANT" | "ADMIN">("MERCHANT");
   const [state, formAction, pending] = useActionState<
     PlatformActionState,
     FormData
   >(assignUserRoleAction, {});
 
+  useEffect(() => {
+    if (state.ok) {
+      router.refresh();
+    }
+  }, [state.ok, router]);
+
   return (
     <form action={formAction} className="flex flex-col gap-4">
+      <input type="hidden" name="userId" value={userId} />
+      <input type="hidden" name="merchantId" value={merchantId} />
+      <input type="hidden" name="role" value={role} />
       {state.error ? (
         <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
           {state.error}
         </p>
       ) : null}
+      {state.ok ? (
+        <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
+          Rattachement enregistré. Le rôle est lu en base à chaque requête :
+          rechargez la page de l’utilisateur concerné, sans nouvelle connexion.
+        </p>
+      ) : null}
       <div className="grid gap-4 sm:grid-cols-3">
         <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1">
           Utilisateur
-          <select name="userId" required defaultValue="" className={adminFieldClass}>
+          <select
+            value={userId}
+            required
+            onChange={(event) => setUserId(event.target.value)}
+            className={adminFieldClass}
+          >
             <option value="">Choisir…</option>
             {users.map((user) => (
               <option key={user.id} value={user.id}>
@@ -47,7 +72,11 @@ export function UserRoleForm({
         </label>
         <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1">
           Enseigne
-          <select name="merchantId" defaultValue="" className={adminFieldClass}>
+          <select
+            value={merchantId}
+            onChange={(event) => setMerchantId(event.target.value)}
+            className={adminFieldClass}
+          >
             <option value="">Aucune</option>
             {merchants.map((merchant) => (
               <option key={merchant.id} value={merchant.id}>
@@ -63,7 +92,13 @@ export function UserRoleForm({
         </label>
         <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1">
           Rôle
-          <select name="role" defaultValue="MERCHANT" className={adminFieldClass}>
+          <select
+            value={role}
+            onChange={(event) =>
+              setRole(event.target.value === "ADMIN" ? "ADMIN" : "MERCHANT")
+            }
+            className={adminFieldClass}
+          >
             <option value="MERCHANT">Vendeur (MERCHANT)</option>
             <option value="ADMIN">Administrateur (ADMIN)</option>
           </select>
@@ -73,14 +108,24 @@ export function UserRoleForm({
         </label>
       </div>
       <div className="flex flex-wrap gap-2">
-        <Button type="submit" name="intent" value="assign" disabled={pending}>
+        <Button
+          type="submit"
+          disabled={pending || !userId}
+          formAction={(formData) => {
+            formData.set("intent", "assign");
+            formAction(formData);
+          }}
+        >
           {pending ? "Enregistrement…" : "Rattacher"}
         </Button>
         <Button
           type="submit"
-          name="intent" value="revoke"
           variant="outline"
-          disabled={pending}
+          disabled={pending || !userId}
+          formAction={(formData) => {
+            formData.set("intent", "revoke");
+            formAction(formData);
+          }}
         >
           Retirer l’accès
         </Button>

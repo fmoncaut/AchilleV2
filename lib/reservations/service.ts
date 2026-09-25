@@ -398,6 +398,42 @@ export async function createReservation(
   ]);
 }
 
+/** Empreinte refusée : la réservation n’a jamais été confirmée, on l’efface et on rend le stock. */
+export async function discardUnpaidReservation(userId: string, reservationId: string) {
+  const current = await prisma.reservation.findFirst({
+    where: { id: reservationId, userId },
+    include: { items: true },
+  });
+  if (!current) {
+    return;
+  }
+  if (current.status !== "PENDING" || current.paymentState === "CAPTURED") {
+    throw new ReservationError("Cette réservation ne peut plus être retirée.");
+  }
+  if (current.paymentState === "AUTHORIZED") {
+    throw new ReservationError("L’empreinte est déjà autorisée.");
+  }
+  if (current.paymentIntentId) {
+    await settleHold(current, "cancel");
+  }
+  await prisma.$transaction(async (tx) => {
+    const still = await tx.reservation.findFirst({
+      where: {
+        id: reservationId,
+        userId,
+        status: "PENDING",
+        paymentState: { notIn: ["AUTHORIZED", "CAPTURED"] },
+      },
+      include: { items: true },
+    });
+    if (!still) {
+      return;
+    }
+    await restoreStock(tx, still.items);
+    await tx.reservation.delete({ where: { id: still.id } });
+  });
+}
+
 export async function cancelReservation(userId: string, reservationId: string) {
   await expireDueReservations();
   const now = new Date();
@@ -576,6 +612,19 @@ export async function markAuthorizationCanceled(paymentIntentId: string) {
       include: { items: true },
     });
     if (!current || current.paymentState === "CAPTURED") {
+      return;
+    }
+    if (current.status === "PENDING") {
+      const removed = await tx.reservation.deleteMany({
+        where: {
+          id: current.id,
+          status: "PENDING",
+          paymentState: { not: "CAPTURED" },
+        },
+      });
+      if (removed.count === 1) {
+        await restoreStock(tx, current.items);
+      }
       return;
     }
     if (HOLDING.includes(current.status)) {

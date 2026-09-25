@@ -50,7 +50,8 @@ export function SearchForm({
   const [lieu, setLieu] = useState(values.lieu);
   const [lat, setLat] = useState(values.lat);
   const [lng, setLng] = useState(values.lng);
-  const [radius, setRadius] = useState(values.r);
+  const [pickedRadius, setPickedRadius] = useState<string | null>(null);
+  const radius = pickedRadius ?? values.r;
   const [cat, setCat] = useState(values.cat);
   const [hits, setHits] = useState<GeocodeHit[]>([]);
   const [open, setOpen] = useState(false);
@@ -301,7 +302,7 @@ export function SearchForm({
               <button
                 key={km}
                 type="button"
-                onClick={() => setRadius(String(km))}
+                onClick={() => setPickedRadius(String(km))}
                 className={cn(
                   "font-label-md text-label-md rounded-full px-3 py-1 transition-colors",
                   active

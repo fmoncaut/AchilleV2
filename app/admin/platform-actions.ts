@@ -24,6 +24,7 @@ import {
 export type PlatformActionState = {
   error?: string;
   fieldErrors?: Record<string, string>;
+  ok?: boolean;
 };
 
 function first(formData: FormData, key: string): string {
@@ -218,5 +219,5 @@ export async function assignUserRoleAction(
   }
   revalidatePath("/admin/vendeurs");
   revalidatePath("/admin");
-  redirect("/admin/vendeurs?ok=1");
+  return { ok: true };
 }

@@ -16,7 +16,7 @@ import {
 } from "@/lib/reservations/cart-session";
 import { beginAuthorization, finalizeAuthorization } from "@/lib/payments/checkout";
 import { cartAddSchema, cartQuantitySchema, reservationIdSchema } from "@/lib/reservations/schemas";
-import { ReservationError, cancelReservation } from "@/lib/reservations/service";
+import { ReservationError, discardUnpaidReservation } from "@/lib/reservations/service";
 
 export type CartActionState = {
   error?: string;
@@ -196,7 +196,7 @@ export async function abandonAuthorizationAction(
     return { ok: false, error: "Réservation invalide." };
   }
   try {
-    await cancelReservation(userId, parsed.data.id);
+    await discardUnpaidReservation(userId, parsed.data.id);
   } catch (error) {
     if (error instanceof ReservationError) {
       return { ok: false, error: error.message };
