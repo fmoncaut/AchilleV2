@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "skills": {
+    "connect-recommend": {
+      "source": "stripe/ai",
+      "sourceType": "github",
+      "skillPath": "skills/connect-recommend/SKILL.md",
+      "computedHash": "64a6cc52d116cb13488b5d00f8210e81828b24b33e70884687e86311eb72f743"
+    },
+    "connect-required-verification-information": {
+      "source": "stripe/ai",
+      "sourceType": "github",
+      "skillPath": "skills/connect-required-verification-information/SKILL.md",
+      "computedHash": "34738a8abbc1f994072236d79246f5475207d09aae023280c0324d0761534527"
+    },
+    "metronome": {
+      "source": "stripe/ai",
+      "sourceType": "github",
+      "skillPath": "skills/metronome/SKILL.md",
+      "computedHash": "6d5e19c216a2dc6a31473da8537aef8f6f53623ca2819b6bf7f691b38ab3d24c"
+    },
+    "stripe-apps": {
+      "source": "stripe/ai",
+      "sourceType": "github",
+      "skillPath": "skills/stripe-apps/SKILL.md",
+      "computedHash": "3ce1c9b4c81830204aa6891821a15c8dc944e9a927c87bc427ebde285c8bdc83"
+    },
+    "stripe-best-practices": {
+      "source": "stripe/ai",
+      "sourceType": "github",
+      "skillPath": "skills/stripe-best-practices/SKILL.md",
+      "computedHash": "9b7203299b22a8c623b15cfdc65bfe41a8f88b5eaa4a720aafc922b4578f72b8"
+    },
+    "stripe-directory": {
+      "source": "stripe/ai",
+      "sourceType": "github",
+      "skillPath": "skills/stripe-directory/SKILL.md",
+      "computedHash": "fa2ceb4486b319ff1220a9fc0419ad80e1ee9bdade099fac94b970ccc33f72a6"
+    },
+    "stripe-docs": {
+      "source": "stripe/ai",
+      "sourceType": "github",
+      "skillPath": "skills/stripe-docs/SKILL.md",
+      "computedHash": "dcdfb696f2532117b3562b1c967fcc8f3ef0f837d8e12d9b2978ec9e6f5a7023"
+    },
+    "stripe-pay": {
+      "source": "stripe/ai",
+      "sourceType": "github",
+      "skillPath": "skills/stripe-pay/SKILL.md",
+      "computedHash": "7f16c70fec74389ebb9133f458812e07a317afff97da2dd40cc892433bd427da"
+    },
+    "stripe-projects": {
+      "source": "stripe/ai",
+      "sourceType": "github",
+      "skillPath": "skills/stripe-projects/SKILL.md",
+      "computedHash": "d6b477f453725bb85c71448f64f141da4b4656c771e82602b6a8352bd78d8cf9"
+    },
+    "upgrade-stripe": {
+      "source": "stripe/ai",
+      "sourceType": "github",
+      "skillPath": "skills/upgrade-stripe/SKILL.md",
+      "computedHash": "bcff2e2a507e43ae89193e3c6eec344efa68607e1d906dd23e224975f94f85a8"
+    }
+  }
+}
