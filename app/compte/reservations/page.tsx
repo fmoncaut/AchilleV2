@@ -8,6 +8,7 @@ import { ReservationBoard } from "@/components/reservation/reservation-board";
 import { EmptyState } from "@/components/search/empty-state";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/auth";
+import { unreadReservationIds } from "@/lib/messages/service";
 import { formatEur } from "@/lib/money";
 import { parseOpeningHours } from "@/lib/opening-hours";
 import { pickupCodeSvg } from "@/lib/reservations/pickup-qr";
@@ -75,10 +76,12 @@ function ReservationCard({
   reservation,
   svg,
   nowIso,
+  unread,
 }: {
   reservation: ReservationView;
   svg: string | null;
   nowIso: string;
+  unread: boolean;
 }) {
   const product = productLabel(reservation);
   const store = `${reservation.merchant.name} · ${reservation.pos.name}`;
@@ -135,6 +138,12 @@ function ReservationCard({
           </span>
         </p>
       ) : null}
+      <Link
+        href={`/compte/reservations/${reservation.id}`}
+        className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+      >
+        {unread ? "Message non lu" : "Messages"}
+      </Link>
       {reservation.status === "PICKED_UP" ? (
         <Link
           href={`/compte/reservations/${reservation.id}/facture`}
@@ -163,6 +172,7 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
   }
   const query = await searchParams;
   const reservations = await listReservationsForUser(userId);
+  const unreadIds = await unreadReservationIds(userId, "buyer");
   const nowIso = new Date().toISOString();
   const passes = new Map<string, string>();
   for (const reservation of reservations) {
@@ -188,6 +198,7 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
               reservation={reservation}
               svg={passes.get(reservation.id) ?? null}
               nowIso={nowIso}
+              unread={unreadIds.has(reservation.id)}
             />
           ))}
         </ul>

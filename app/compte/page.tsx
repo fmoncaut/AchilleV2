@@ -6,6 +6,7 @@ import { signOutAction } from "@/app/compte/actions";
 import { UtilityCard } from "@/components/utility-page";
 import { Button } from "@/components/ui/button";
 import { getDashboardActor } from "@/lib/admin/actor";
+import { countUnreadForBuyer } from "@/lib/messages/service";
 
 export const metadata = {
   title: "Mon compte — Achille",
@@ -20,6 +21,7 @@ export default async function AccountPage() {
   }
 
   const actor = await getDashboardActor();
+  const unread = user.id ? await countUnreadForBuyer(user.id) : 0;
 
   return (
     <UtilityCard kicker="Compte" title="Bonjour" icon="person">
@@ -48,7 +50,10 @@ export default async function AccountPage() {
       </p>
       <p className="mt-3">
         <Button asChild variant="outline" className="w-full">
-          <Link href="/compte/reservations">Mes réservations</Link>
+          <Link href="/compte/reservations">
+            Mes réservations
+            {unread > 0 ? ` (${unread} non lu${unread > 1 ? "s" : ""})` : ""}
+          </Link>
         </Button>
       </p>
       {actor?.role === "ADMIN" ? (

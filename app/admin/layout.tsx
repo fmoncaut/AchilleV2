@@ -10,6 +10,7 @@ import {
   getDashboardActor,
   isPlatformAdmin,
 } from "@/lib/admin/actor";
+import { countUnreadForMerchant } from "@/lib/messages/service";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +60,11 @@ export default async function AdminLayout({
         merchantName={actor.merchantName ?? "Administration"}
         showOffers={canManageOffers(actor)}
         showPlatform={isPlatformAdmin(actor)}
+        unreadReservations={
+          actor.merchantId
+            ? await countUnreadForMerchant(actor.merchantId)
+            : 0
+        }
       />
       {children}
     </div>

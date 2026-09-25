@@ -4,6 +4,7 @@ import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { notifyReservationEvent } from "@/lib/messages/service";
 import { reservationCreateSchema, reservationIdSchema } from "@/lib/reservations/schemas";
 import { ReservationError, cancelReservation } from "@/lib/reservations/service";
 
@@ -78,6 +79,16 @@ export async function cancelReservationAction(formData: FormData) {
       );
     }
     throw error;
+  }
+  try {
+    await notifyReservationEvent(
+      parsed.data.id,
+      "Réservation annulée",
+      "L’acheteur a annulé une réservation. L’empreinte est libérée.",
+      "merchant",
+    );
+  } catch (error) {
+    console.error("[notifications] annulation", error);
   }
   revalidateStock();
   redirect("/compte/reservations?annulee=1");

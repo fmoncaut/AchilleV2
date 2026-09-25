@@ -198,6 +198,11 @@ enum UserRole {
   ADMIN
 }
 
+enum MessageSenderRole {
+  BUYER
+  MERCHANT
+}
+
 enum PaymentState {
   NONE
   REQUIRES_ACTION
@@ -244,6 +249,7 @@ model Reservation {
   expiredAt      DateTime?
   noShowAt       DateTime?
   items          ReservationItem[]
+  messages       Message[]
 
   @@index([userId])
   @@index([merchantId])
@@ -264,6 +270,21 @@ model ReservationItem {
 
   @@index([reservationId])
   @@index([offerId])
+}
+
+/// Fil interne acheteur ↔ enseigne, uniquement sur une réservation.
+model Message {
+  id            String            @id @default(cuid())
+  reservationId String
+  reservation   Reservation       @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  senderUserId  String
+  sender        User              @relation(fields: [senderUserId], references: [id])
+  senderRole    MessageSenderRole
+  body          String
+  createdAt     DateTime          @default(now())
+  readAt        DateTime?
+
+  @@index([reservationId, createdAt])
 }
 
 /// Panier de réservation mono-magasin, avant confirmation. Aucun paiement.
@@ -318,6 +339,7 @@ model User {
   favorites     Favorite[]
   reservations  Reservation[]
   reservationCart ReservationCart?
+  messages      Message[]
   createdAt     DateTime      @default(now())
 
   @@index([merchantId])

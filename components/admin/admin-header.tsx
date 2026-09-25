@@ -8,12 +8,14 @@ type AdminHeaderProps = {
   merchantName: string;
   showOffers: boolean;
   showPlatform: boolean;
+  unreadReservations?: number;
 };
 
 export function AdminHeader({
   merchantName,
   showOffers,
   showPlatform,
+  unreadReservations = 0,
 }: AdminHeaderProps) {
   return (
     <div className="bg-surface-container-lowest shadow-navy-soft">
@@ -54,7 +56,14 @@ export function AdminHeader({
                 <Link href="/admin/offres/import">Import CSV</Link>
               </Button>
               <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/reservations">Réservations</Link>
+                <Link href="/admin/reservations">
+                  Réservations
+                  {unreadReservations > 0 ? (
+                    <span className="bg-secondary-container text-on-secondary-container ml-1 inline-flex min-w-5 justify-center rounded-full px-1 text-[10px]">
+                      {unreadReservations}
+                    </span>
+                  ) : null}
+                </Link>
               </Button>
               <Button asChild variant="ghost" size="sm">
                 <Link href="/admin/paiements">Paiements</Link>

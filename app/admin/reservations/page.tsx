@@ -9,6 +9,7 @@ import {
   AdminThead,
 } from "@/components/admin/admin-shell";
 import { requireAdminActor } from "@/lib/admin/actor";
+import { unreadReservationIds } from "@/lib/messages/service";
 import { formatEur } from "@/lib/money";
 import {
   STATUS_LABELS,
@@ -38,6 +39,11 @@ function formatWhen(value: Date): string {
 export default async function AdminReservationsPage() {
   const actor = await requireAdminActor();
   const reservations = await listReservationsForMerchant(actor.merchantId);
+  const unreadIds = await unreadReservationIds(
+    actor.userId,
+    "merchant",
+    actor.merchantId,
+  );
 
   return (
     <AdminMain>
@@ -118,6 +124,12 @@ export default async function AdminReservationsPage() {
                     paymentState={reservation.paymentState}
                     deadlinePassed={reservation.deadlinePassed}
                   />
+                  <Link
+                    href={`/admin/reservations/${reservation.id}`}
+                    className="font-label-md text-primary-container mt-2 inline-block font-bold underline-offset-4 hover:underline"
+                  >
+                    {unreadIds.has(reservation.id) ? "Message non lu" : "Messages"}
+                  </Link>
                   {reservation.status === "PICKED_UP" ? (
                     <Link
                       href={`/admin/reservations/${reservation.id}/facture`}

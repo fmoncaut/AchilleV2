@@ -3,6 +3,7 @@
 import { revalidatePath, updateTag } from "next/cache";
 
 import { requireAdminActor } from "@/lib/admin/actor";
+import { notifyReservationEvent } from "@/lib/messages/service";
 import { pickupSchema, reservationIdSchema } from "@/lib/reservations/schemas";
 import {
   ReservationError,
@@ -82,6 +83,19 @@ export async function merchantReservationAction(
     throw error;
   }
 
+  if (intent === "ready" || intent === "pickup" || intent === "noshow") {
+    const note =
+      intent === "ready"
+        ? ["Commande prête au retrait", "Votre réservation est prête au comptoir."]
+        : intent === "pickup"
+          ? ["Retrait confirmé", "Le magasin a validé la remise. Le paiement est capturé."]
+          : ["Retrait non effectué", "Le délai est dépassé. L’empreinte est libérée."];
+    try {
+      await notifyReservationEvent(id, note[0], note[1], "buyer");
+    } catch (error) {
+      console.error("[notifications] statut réservation", error);
+    }
+  }
   revalidateStock();
   if (intent === "pickup") {
     return {

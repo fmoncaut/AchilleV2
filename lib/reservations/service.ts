@@ -3,6 +3,7 @@ import { randomInt, timingSafeEqual } from "node:crypto";
 import { Prisma, type PaymentState, type ReservationStatus } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
+import { notifyReservationEvent } from "@/lib/messages/service";
 import {
   captureForPickup,
   releaseHold,
@@ -240,6 +241,16 @@ export async function expireDueReservations(): Promise<number> {
     });
     if (done) {
       expired += 1;
+      try {
+        await notifyReservationEvent(
+          row.id,
+          "Réservation expirée",
+          "Le délai de retrait est dépassé. L’empreinte est libérée et le stock est rendu.",
+          "buyer",
+        );
+      } catch (error) {
+        console.error("[notifications] expiration", error);
+      }
     }
   }
   return expired;
