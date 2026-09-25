@@ -8,6 +8,7 @@ import { TunnelSteps } from "@/components/reservation/tunnel-steps";
 import { Button } from "@/components/ui/button";
 import { finalizeAuthorization } from "@/lib/payments/checkout";
 import { formatEur } from "@/lib/money";
+import { parseOpeningHours } from "@/lib/opening-hours";
 import { prisma } from "@/lib/db";
 import { pickupCodeSvg } from "@/lib/reservations/pickup-qr";
 import {
@@ -55,7 +56,15 @@ export default async function ReservationConfirmationPage({
       items: {
         include: { offer: { select: { product: { select: { name: true } } } } },
       },
-      pos: { select: { name: true, city: true } },
+      pos: {
+        select: {
+          name: true,
+          address: true,
+          postalCode: true,
+          city: true,
+          openingHours: true,
+        },
+      },
       merchant: { select: { name: true } },
     },
   });
@@ -77,7 +86,15 @@ export default async function ReservationConfirmationPage({
           items: {
             include: { offer: { select: { product: { select: { name: true } } } } },
           },
-          pos: { select: { name: true, city: true } },
+          pos: {
+        select: {
+          name: true,
+          address: true,
+          postalCode: true,
+          city: true,
+          openingHours: true,
+        },
+      },
           merchant: { select: { name: true } },
         },
       });
@@ -123,7 +140,26 @@ export default async function ReservationConfirmationPage({
         <TunnelSteps current="confirmation" />
         {codeReady && passSvg ? (
           <>
-            <PickupPass code={reservation.pickupCode} svg={passSvg} store={storeLabel} />
+            <PickupPass
+              code={reservation.pickupCode}
+              svg={passSvg}
+              product={reservation.items
+                .map((item) => `${item.offer.product.name} × ${item.quantity}`)
+                .join(", ")}
+              storeName={storeLabel}
+              address={[
+                reservation.pos.address,
+                [reservation.pos.postalCode, reservation.pos.city]
+                  .filter(Boolean)
+                  .join(" "),
+              ]
+                .filter(Boolean)
+                .join(", ")}
+              hours={parseOpeningHours(reservation.pos.openingHours)}
+              amount={formatEur(reservation.totalAmount)}
+              deadline={formatWhen(reservation.pickupDeadline)}
+              status={STATUS_LABELS[reservation.status]}
+            />
             <p className="font-body-sm text-body-sm text-on-surface-variant">
               À retirer avant le {formatWhen(reservation.pickupDeadline)} (
               {pickupWindowHours()} h).

@@ -11,6 +11,7 @@ import {
 
 export type MerchantReservationState = {
   error?: string;
+  ok?: string;
   reservationId?: string;
 };
 
@@ -82,5 +83,11 @@ export async function merchantReservationAction(
   }
 
   revalidateStock();
+  if (intent === "pickup") {
+    return {
+      reservationId: id,
+      ok: "Remise validée. Le paiement est capturé.",
+    };
+  }
   return {};
 }

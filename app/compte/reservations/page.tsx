@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/search/empty-state";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/auth";
 import { formatEur } from "@/lib/money";
+import { parseOpeningHours } from "@/lib/opening-hours";
 import { pickupCodeSvg } from "@/lib/reservations/pickup-qr";
 import { STATUS_LABELS, listReservationsForUser } from "@/lib/reservations/service";
 
@@ -31,6 +32,12 @@ function formatWhen(value: Date): string {
 }
 
 const HOLDING = new Set(["PENDING", "CONFIRMED", "READY_FOR_PICKUP"]);
+const WITH_PASS = new Set([
+  "PENDING",
+  "CONFIRMED",
+  "READY_FOR_PICKUP",
+  "PICKED_UP",
+]);
 
 export default async function ReservationsPage({ searchParams }: PageProps) {
   const session = await auth();
@@ -42,7 +49,7 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
   const reservations = await listReservationsForUser(userId);
   const passes = new Map<string, string>();
   for (const reservation of reservations) {
-    if (HOLDING.has(reservation.status)) {
+    if (WITH_PASS.has(reservation.status)) {
       passes.set(reservation.id, await pickupCodeSvg(reservation.pickupCode));
     }
   }
@@ -121,7 +128,25 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
                     <PickupPass
                       code={reservation.pickupCode}
                       svg={passes.get(reservation.id) ?? ""}
-                      store={`${reservation.merchant.name} · ${reservation.pos.name}`}
+                      product={reservation.items
+                        .map(
+                          (item) =>
+                            `${item.offer.product.name} × ${item.quantity}`,
+                        )
+                        .join(", ")}
+                      storeName={`${reservation.merchant.name} · ${reservation.pos.name}`}
+                      address={[
+                        reservation.pos.address,
+                        [reservation.pos.postalCode, reservation.pos.city]
+                          .filter(Boolean)
+                          .join(" "),
+                      ]
+                        .filter(Boolean)
+                        .join(", ")}
+                      hours={parseOpeningHours(reservation.pos.openingHours)}
+                      amount={formatEur(reservation.totalAmount)}
+                      deadline={formatWhen(reservation.pickupDeadline)}
+                      status={STATUS_LABELS[reservation.status]}
                     />
                   </div>
                 ) : (
@@ -135,6 +160,16 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
                 <p className="font-body-sm text-on-surface-variant mt-1">
                   À retirer avant le {formatWhen(reservation.pickupDeadline)}
                 </p>
+                {reservation.status === "PICKED_UP" ? (
+                  <p className="mt-4">
+                    <Link
+                      href={`/compte/reservations/${reservation.id}/facture`}
+                      className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+                    >
+                      Voir la facture
+                    </Link>
+                  </p>
+                ) : null}
                 {HOLDING.has(reservation.status) ? (
                   <form action={cancelReservationAction} className="mt-4">
                     <input type="hidden" name="id" value={reservation.id} />

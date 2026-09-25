@@ -1,12 +1,12 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 
 import {
   merchantReservationAction,
   type MerchantReservationState,
 } from "@/app/admin/reservation-actions";
-import { adminFieldClass } from "@/components/admin/admin-shell";
+import { PickupCodeField } from "@/components/admin/pickup-code-field";
 import { Button } from "@/components/ui/button";
 
 type ReservationControlsProps = {
@@ -22,6 +22,7 @@ export function ReservationControls({
   paymentState,
   deadlinePassed,
 }: ReservationControlsProps) {
+  const [code, setCode] = useState("");
   const [state, action, pending] = useActionState<
     MerchantReservationState,
     FormData
@@ -30,6 +31,8 @@ export function ReservationControls({
     state.reservationId === reservationId || !state.reservationId
       ? state.error
       : undefined;
+  const done =
+    state.reservationId === reservationId && state.ok ? state.ok : undefined;
 
   return (
     <form action={action} className="flex flex-col items-start gap-2">
@@ -38,42 +41,68 @@ export function ReservationControls({
         <p className="font-body-sm text-on-surface-variant">En attente d’empreinte</p>
       ) : null}
       {status === "PENDING" && paymentState !== "REQUIRES_ACTION" ? (
-        <Button type="submit" name="intent" value="confirm" size="sm" disabled={pending}>
+        <Button
+          type="submit"
+          size="sm"
+          disabled={pending}
+          formAction={(formData) => {
+            formData.set("intent", "confirm");
+            action(formData);
+          }}
+        >
           Confirmer
         </Button>
       ) : null}
       {status === "CONFIRMED" ? (
-        <Button type="submit" name="intent" value="ready" size="sm" disabled={pending}>
+        <Button
+          type="submit"
+          size="sm"
+          disabled={pending}
+          formAction={(formData) => {
+            formData.set("intent", "ready");
+            action(formData);
+          }}
+        >
           Prête au retrait
         </Button>
       ) : null}
       {status === "READY_FOR_PICKUP" ? (
-        <div className="flex flex-wrap items-center gap-2">
-          <input
-            name="pickupCode"
-            placeholder="Code de retrait"
-            autoComplete="off"
-            className={adminFieldClass}
-          />
-          <Button type="submit" name="intent" value="pickup" size="sm" disabled={pending}>
-            Valider la remise
+        <div className="flex max-w-xs flex-col gap-2">
+          <p className="font-body-sm text-primary-container font-semibold">
+            La capture n’a lieu qu’ici, au comptoir, après un code correct.
+          </p>
+          <PickupCodeField value={code} onChange={setCode} />
+          <Button
+            type="submit"
+            size="sm"
+            disabled={pending || code.trim().length === 0}
+            formAction={(formData) => {
+              formData.set("intent", "pickup");
+              formData.set("pickupCode", code);
+              action(formData);
+            }}
+          >
+            {pending ? "Validation…" : "Valider la remise"}
           </Button>
         </div>
       ) : null}
       {status === "READY_FOR_PICKUP" && deadlinePassed ? (
         <Button
           type="submit"
-          name="intent"
-          value="noshow"
           size="sm"
           variant="outline"
           disabled={pending}
+          formAction={(formData) => {
+            formData.set("intent", "noshow");
+            action(formData);
+          }}
         >
           No-show
         </Button>
       ) : null}
-      {error ? (
-        <p className="font-body-sm text-error font-medium">{error}</p>
+      {error ? <p className="font-body-sm text-error font-medium">{error}</p> : null}
+      {done ? (
+        <p className="font-body-sm text-on-tertiary-container font-medium">{done}</p>
       ) : null}
     </form>
   );

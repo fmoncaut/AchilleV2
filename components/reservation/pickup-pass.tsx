@@ -2,14 +2,28 @@
 
 import { useRef } from "react";
 
+type HourRow = { label: string; value: string };
+
 export function PickupPass({
   code,
   svg,
-  store,
+  product,
+  storeName,
+  address,
+  hours,
+  amount,
+  deadline,
+  status,
 }: {
   code: string;
   svg: string;
-  store: string;
+  product: string;
+  storeName: string;
+  address: string;
+  hours: HourRow[];
+  amount: string;
+  deadline: string;
+  status: string;
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -28,8 +42,8 @@ export function PickupPass({
             {code}
           </p>
           <p className="font-body-sm text-body-sm text-surface-variant mt-2">
-            Présentez ce pass au comptoir de {store}. Le magasin saisit le code
-            pour clôturer la remise. Aucun casier n’est déverrouillé.
+            Présentez ce pass au comptoir de {storeName}. Le QR contient le
+            code de retrait. Le magasin le saisit pour encaisser.
           </p>
           <button
             type="button"
@@ -42,29 +56,45 @@ export function PickupPass({
       </div>
       <dialog
         ref={dialogRef}
-        className="bg-surface-container-lowest text-on-surface w-[min(100%,24rem)] rounded-2xl p-6 backdrop:bg-primary-container/70"
+        className="bg-primary-container text-on-primary fixed inset-0 m-0 h-full max-h-none w-full max-w-none rounded-none p-6 backdrop:bg-primary-container/80"
       >
-        <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
-          Pass retrait
-        </p>
-        <div
-          className="mx-auto mt-4 w-56"
-          dangerouslySetInnerHTML={{ __html: svg }}
-        />
-        <p className="font-headline-md text-primary-container mt-4 text-center tracking-[0.3em]">
-          {code}
-        </p>
-        <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 text-center">
-          {store}
-        </p>
-        <form method="dialog" className="mt-4 text-center">
-          <button
-            type="submit"
-            className="font-label-md text-label-md text-primary-container font-bold underline-offset-4 hover:underline"
-          >
-            Fermer
-          </button>
-        </form>
+        <div className="mx-auto flex h-full max-w-lg flex-col items-center justify-center gap-4 text-center">
+          <p className="font-label-xs text-label-xs text-secondary-container font-extrabold tracking-wider uppercase">
+            Bon de retrait · {status}
+          </p>
+          <div
+            className="bg-surface-container-lowest w-56 rounded-2xl p-3"
+            dangerouslySetInnerHTML={{ __html: svg }}
+          />
+          <p className="font-headline-lg text-secondary-container tracking-[0.35em]">
+            {code}
+          </p>
+          <div className="font-body-sm text-body-sm text-surface-variant space-y-1">
+            <p className="text-on-primary font-semibold">{product}</p>
+            <p>{storeName}</p>
+            <p>{address || "Adresse non renseignée"}</p>
+            <p className="text-secondary-container font-extrabold">{amount}</p>
+            <p>À retirer avant le {deadline}</p>
+          </div>
+          {hours.length > 0 ? (
+            <dl className="font-body-sm text-body-sm grid grid-cols-2 gap-x-6 gap-y-1 text-left">
+              {hours.map((row) => (
+                <div key={row.label} className="contents">
+                  <dt>{row.label}</dt>
+                  <dd className="text-surface-variant">{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+          ) : null}
+          <form method="dialog">
+            <button
+              type="submit"
+              className="bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full px-4 py-2 font-bold"
+            >
+              Fermer
+            </button>
+          </form>
+        </div>
       </dialog>
     </section>
   );

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { ReservationControls } from "@/components/admin/reservation-controls";
 import {
   AdminCard,
@@ -116,6 +118,14 @@ export default async function AdminReservationsPage() {
                     paymentState={reservation.paymentState}
                     deadlinePassed={reservation.deadlinePassed}
                   />
+                  {reservation.status === "PICKED_UP" ? (
+                    <Link
+                      href={`/admin/reservations/${reservation.id}/facture`}
+                      className="font-label-md text-primary-container mt-2 inline-block font-bold underline-offset-4 hover:underline"
+                    >
+                      Imprimer une facture
+                    </Link>
+                  ) : null}
                 </td>
               </tr>
             ))}

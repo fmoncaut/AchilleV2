@@ -89,12 +89,23 @@ const reservationInclude = {
       offer: {
         select: {
           id: true,
+          tvaRate: true,
           product: { select: { name: true, slug: true } },
         },
       },
     },
   },
-  pos: { select: { id: true, name: true, slug: true, city: true } },
+  pos: {
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      address: true,
+      postalCode: true,
+      city: true,
+      openingHours: true,
+    },
+  },
   merchant: { select: { id: true, name: true } },
 } as const;
 
