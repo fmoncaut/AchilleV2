@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:webpack": "next build --webpack",
     "postbuild": "node scripts/copy-standalone-assets.mjs",
     "prestart": "test -f .next/standalone/server.js || npm run build",
     "start": "node .next/standalone/server.js",
@@ -26,6 +27,8 @@
     "@auth/prisma-adapter": "^2.11.3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.2",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@fontsource/bricolage-grotesque": "^5.2.10",
@@ -53,8 +56,6 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@types/nodemailer": "^8.0.2",
-    "@types/qrcode": "^1.5.6",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "eslint-config-prettier": "^10.1.8",
