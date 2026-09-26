@@ -15,7 +15,9 @@ Dans la [console Clever Cloud](https://console.clever-cloud.com/) :
 3. Taille d’instance : **S** (ou plus) pour le run. Pour le **build Next.js**, passer le *build flavor* à **M** (Scalability / build instance) — un build Next.js manque souvent de mémoire en XS.
 4. Version Node : **22** (`CC_NODE_VERSION=22`).
 
-Clever Cloud installe les dépendances puis lance `npm start`. Il n’exécute pas `npm run build` tout seul. Le runtime Node ne lit pas de `clevercloud/node.json` : la ligne « No Clever Cloud specific configuration file detected » est normale. `CC_RUN_BUILD_STEP` n’est pas une variable documentée, elle est ignorée. Le build est lancé par `clevercloud/pre-run.sh`, puis une seconde fois par `npm run prestart` seulement si `.next/standalone/server.js` manque encore.
+Clever Cloud installe les dépendances puis lance `npm start`. Il n’exécute pas `npm run build` tout seul. Le runtime Node ne lit pas de `clevercloud/node.json` : la ligne « No Clever Cloud specific configuration file detected » est normale. `CC_RUN_BUILD_STEP` n’est pas une variable documentée, elle est ignorée.
+
+Le build est le script npm `prestart` : `test -f .next/standalone/server.js || npm run build`. Il ne reconstruit pas si le process redémarre sans nouveau déploiement. Dans les logs, `next build` apparaît **après** `CC_PRE_RUN_HOOK` (migrations), au moment de `npm start`, pas avant.
 
 ## 2. Add-on PostgreSQL — plan dédié payant (obligatoire)
 
@@ -64,14 +66,13 @@ Redirect OAuth (quand Google/Apple seront branchés) : `<AUTH_URL>/api/auth/call
 
 ## 5. Hook de migration (pas de `migrate dev` en prod)
 
-Le fichier versionné `clevercloud/pre-run.sh` exécute, dans cet ordre :
+Le fichier versionné `clevercloud/pre-run.sh` exécute uniquement :
 
 ```bash
-npm run build
 npx prisma migrate deploy
 ```
 
-`npm run build` est obligatoire : le script `start` lance `.next/standalone/server.js`, qui n’existe qu’après ce build. Tailwind et TypeScript sont en `dependencies` pour rester installés quand `NODE_ENV=production` (les `devDependencies` ne le sont pas).
+Le bundle standalone est produit par `prestart` au lancement de `npm start`. Tailwind et TypeScript sont en `dependencies` pour rester installés quand `NODE_ENV=production` (les `devDependencies` ne le sont pas).
 
 Dans la console, variable :
 

@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "postbuild": "node scripts/copy-standalone-assets.mjs",
-    "prestart": "node scripts/ensure-standalone-build.mjs",
+    "prestart": "test -f .next/standalone/server.js || npm run build",
     "start": "node .next/standalone/server.js",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
@@ -66,3 +66,4 @@
     "node": ">=20"
   }
 }
+
