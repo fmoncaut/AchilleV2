@@ -17,7 +17,7 @@ Dans la [console Clever Cloud](https://console.clever-cloud.com/) :
 
 Clever Cloud installe les dépendances puis lance `npm start`. Il n’exécute pas `npm run build` tout seul. Le runtime Node ne lit pas de `clevercloud/node.json` : la ligne « No Clever Cloud specific configuration file detected » est normale. `CC_RUN_BUILD_STEP` n’est pas une variable documentée, elle est ignorée.
 
-Le build est le script npm `prestart` : `test -f .next/standalone/server.js || npm run build`. Il ne reconstruit pas si le process redémarre sans nouveau déploiement. Dans les logs, `next build` apparaît **après** `CC_PRE_RUN_HOOK` (migrations), au moment de `npm start`, pas avant.
+`next build` est dans `clevercloud/pre-run.sh`, avant `npm start`. Le health check Clever Cloud attend le port 8080 dès le lancement : si le build reste dans `prestart`, le process n'écoute pas encore et le déploiement est coupé. Le hook ne reconstruit pas si `.next/standalone/server.js` existe déjà (redémarrage). `prestart` garde le même test, au cas où le standalone manquerait encore.
 
 ## 2. Add-on PostgreSQL — plan dédié payant (obligatoire)
 
@@ -34,7 +34,7 @@ L’add-on injecte notamment `POSTGRESQL_ADDON_URI`. Prisma lit **`DATABASE_URL`
 DATABASE_URL=$POSTGRESQL_ADDON_URI
 ```
 
-(Clever Cloud interpole la variable de l’add-on. Une valeur copiée sans le `$`, ou un hôte seul, fait échouer `prisma migrate deploy` avec P1012.) Si `DATABASE_URL` n’est pas une URL Postgres, le hook et `lib/db.ts` utilisent `POSTGRESQL_ADDON_URI`.
+Clever Cloud injecte cette valeur telle quelle, sans remplacer le `$`. Prisma refuse alors la chaîne (P1012). Le hook et `lib/db.ts` recopient `POSTGRESQL_ADDON_URI` dès que `DATABASE_URL` n’est pas une URL `postgresql://` ou `postgres://`.
 
 ## 3. Connecter le dépôt GitHub (auto-déploiement)
 
@@ -66,13 +66,14 @@ Redirect OAuth (quand Google/Apple seront branchés) : `<AUTH_URL>/api/auth/call
 
 ## 5. Hook de migration (pas de `migrate dev` en prod)
 
-Le fichier versionné `clevercloud/pre-run.sh` exécute uniquement :
+Le fichier versionné `clevercloud/pre-run.sh` exécute, dans l’ordre :
 
 ```bash
 npx prisma migrate deploy
+test -f .next/standalone/server.js || npm run build
 ```
 
-Le bundle standalone est produit par `prestart` au lancement de `npm start`. Tailwind et TypeScript sont en `dependencies` pour rester installés quand `NODE_ENV=production` (les `devDependencies` ne le sont pas).
+`npm start` trouve alors le standalone et écoute tout de suite le port 8080. Tailwind, TypeScript et les `@types` lus par `next build` sont en `dependencies` : avec `NODE_ENV=production`, les `devDependencies` ne sont pas installées.
 
 Dans la console, variable :
 

@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Migrations Prisma uniquement. Le build Next est dans npm prestart
-# (test -f .next/standalone/server.js || npm run build), pas ici :
 # Clever Cloud n'a pas d'étape de build Node native.
+# Ce hook tourne avant npm start, donc avant le health check du port 8080.
+# next build doit finir ici : s'il reste dans prestart, le process n'écoute
+# pas encore et le déploiement est coupé.
+# On ne reconstruit pas si le standalone est déjà là (redémarrage).
 # Ne jamais utiliser `prisma migrate dev` ici.
-# L'add-on Clever injecte POSTGRESQL_ADDON_URI. DATABASE_URL doit être cette URL ;
-# si la console en contient une autre, on reprend l'URI de l'add-on pour migrer.
+# L'add-on Clever injecte POSTGRESQL_ADDON_URI. La console n'interpole pas
+# DATABASE_URL=$POSTGRESQL_ADDON_URI : on reprend l'URI réelle pour migrer.
 case "${DATABASE_URL:-}" in
   postgresql://*|postgres://*) ;;
   *)
@@ -17,3 +19,7 @@ case "${DATABASE_URL:-}" in
     ;;
 esac
 npx prisma migrate deploy
+
+if [ ! -f .next/standalone/server.js ]; then
+  npm run build
+fi
