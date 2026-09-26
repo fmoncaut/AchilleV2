@@ -23,6 +23,8 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
+    "@fontsource/bricolage-grotesque": "^5.2.10",
+    "@fontsource/manrope": "^5.2.8",
     "@prisma/client": "6.19.3",
     "@stripe/react-stripe-js": "^6.11.0",
     "@stripe/stripe-js": "^9.17.0",
