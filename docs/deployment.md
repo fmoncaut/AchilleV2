@@ -28,13 +28,13 @@ Le build est le script npm `prestart` : `test -f .next/standalone/server.js || n
 
 PostGIS est une **extension par défaut** sur les plans dédiés Clever Cloud. **Aucune action manuelle** dans `psql` : la première migration Prisma contient `CREATE EXTENSION IF NOT EXISTS postgis;` et l’exécute au premier `prisma migrate deploy`.
 
-L’add-on injecte notamment `POSTGRESQL_ADDON_URI`. Prisma lit **`DATABASE_URL`** : dans les variables de l’app, définir :
+L’add-on injecte notamment `POSTGRESQL_ADDON_URI`. Prisma lit **`DATABASE_URL`**, qui doit commencer par `postgresql://` ou `postgres://`. Dans les variables de l’app :
 
 ```
 DATABASE_URL=$POSTGRESQL_ADDON_URI
 ```
 
-(Clever Cloud interpole la variable de l’add-on.)
+(Clever Cloud interpole la variable de l’add-on. Une valeur copiée sans le `$`, ou un hôte seul, fait échouer `prisma migrate deploy` avec P1012.) Si `DATABASE_URL` n’est pas une URL Postgres, le hook et `lib/db.ts` utilisent `POSTGRESQL_ADDON_URI`.
 
 ## 3. Connecter le dépôt GitHub (auto-déploiement)
 
