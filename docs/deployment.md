@@ -15,7 +15,7 @@ Dans la [console Clever Cloud](https://console.clever-cloud.com/) :
 3. Taille d’instance : **S** (ou plus) pour le run. Pour le **build Next.js**, passer le *build flavor* à **M** (Scalability / build instance) — un build Next.js manque souvent de mémoire en XS.
 4. Version Node : **22** (`CC_NODE_VERSION=22`).
 
-Clever Cloud installe les dépendances puis lance `npm start`. Il n’exécute pas `npm run build` tout seul. Le hook `clevercloud/pre-run.sh` lance le build (sortie standalone), puis `prisma migrate deploy`.
+Clever Cloud installe les dépendances puis lance `npm start`. Il n’exécute pas `npm run build` tout seul. Le runtime Node ne lit pas de `clevercloud/node.json` : la ligne « No Clever Cloud specific configuration file detected » est normale. `CC_RUN_BUILD_STEP` n’est pas une variable documentée, elle est ignorée. Le build est lancé par `clevercloud/pre-run.sh`, puis une seconde fois par `npm run prestart` seulement si `.next/standalone/server.js` manque encore.
 
 ## 2. Add-on PostgreSQL — plan dédié payant (obligatoire)
 
@@ -101,11 +101,7 @@ Variables **obligatoires** pour que le process écoute sur l’instance :
 HOSTNAME=0.0.0.0
 ```
 
-Surcharge possible (inutile si `npm start` est inchangé) :
-
-```
-CC_RUN_COMMAND=node .next/standalone/server.js
-```
+Ne pas définir `CC_RUN_COMMAND` : cette variable remplace `npm start` et saute `prestart`. Le démarrage doit rester `npm start`.
 
 Health check (optionnel dans la console) : chemin **`/api/health`** (JSON `{ status, timestamp }`, HTTP 200).
 
