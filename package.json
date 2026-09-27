@@ -10,7 +10,7 @@
     "prestart": "test -f .next/standalone/server.js || npm run build",
     "start": "node .next/standalone/server.js",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json",
     "format": "prettier --write .",
     "seed": "prisma db seed",
     "import-categories": "tsx scripts/import-categories.ts",
