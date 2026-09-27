@@ -28,6 +28,12 @@ model Merchant {
   createdAt    DateTime      @default(now())
 }
 
+enum PosStatus {
+  ACTIVE_VISIBLE
+  INACTIVE_VISIBLE
+  INACTIVE_HIDDEN
+}
+
 // Colonne PostGIS `geog geography(Point,4326)` : générée en migration SQL
 // (GENERATED ALWAYS AS ST_SetSRID(ST_MakePoint(lng, lat), 4326)::geography STORED)
 // + index GiST `pos_geog_idx`. Ne pas la supprimer ; ne pas la déclarer ici
@@ -45,7 +51,16 @@ model Pos {
   openingHours Json?
   lat          Float
   lng          Float
-  isActive     Boolean  @default(true)
+  /// Lu par le catalogue, la géo et les réservations. Le tri-état `status` ne le remplace pas encore.
+  isActive     Boolean   @default(true)
+  status       PosStatus @default(ACTIVE_VISIBLE)
+  /// Traçabilité import legacy. Hors logique métier.
+  legacyDealerId          String?
+  legacyFuzionContainerId String?
+  /// Horodatage de promotion vers la base de production (bases staging et prod distinctes).
+  promotedToProdAt DateTime?
+  /// URL Scaleway du logo. Pas l'URL S3 legacy.
+  logoUrl      String?
   offers       Offer[]
   offerLinks   OfferPos[]
   reservations Reservation[]
@@ -67,6 +82,8 @@ model Category {
   name     String
   slug     String     @unique
   icon     String?
+  /// Code taxonomie Google Shopping, pour réconcilier les catégories externes.
+  googleCategoryCode String?
   parentId String?
   parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
   children Category[] @relation("CategoryTree")
