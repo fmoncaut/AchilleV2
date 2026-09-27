@@ -232,13 +232,14 @@ export function createStripeProvider(): PaymentProvider {
   };
 }
 
-export function parseStripeEventNotification(
+function parseEventNotification(
   payload: string,
   signature: string,
+  secret: string | undefined,
+  missingSecret: string,
 ): Stripe.V2.Core.EventNotification {
-  const secret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
   if (!secret) {
-    throw new PaymentError("Secret de webhook absent.");
+    throw new PaymentError(missingSecret);
   }
   if (!signature) {
     throw new PaymentError("Signature de webhook absente.");
@@ -253,6 +254,31 @@ export function parseStripeEventNotification(
   } catch {
     throw new PaymentError("Signature de webhook invalide.");
   }
+}
+
+export function parseStripeEventNotification(
+  payload: string,
+  signature: string,
+): Stripe.V2.Core.EventNotification {
+  return parseEventNotification(
+    payload,
+    signature,
+    process.env.STRIPE_WEBHOOK_SECRET?.trim(),
+    "Secret de webhook absent.",
+  );
+}
+
+/** Thin events Comptes v2 : secret de l’endpoint « Compte v2 », pas celui des paiements. */
+export function parseStripeAccountEventNotification(
+  payload: string,
+  signature: string,
+): Stripe.V2.Core.EventNotification {
+  return parseEventNotification(
+    payload,
+    signature,
+    process.env.STRIPE_WEBHOOK_SECRET_ACCOUNT?.trim(),
+    "Secret de webhook compte absent.",
+  );
 }
 
 export function constructStripeEvent(payload: string, signature: string): Stripe.Event {

@@ -39,12 +39,14 @@ export async function POST(request: Request) {
         return NextResponse.json({ received: true });
       } catch (thinError) {
         if (rejectedSignature(thinError)) {
+          console.error("[stripe webhook paiement] signature invalide.");
           return NextResponse.json({ error: "Signature invalide." }, { status: 400 });
         }
         return NextResponse.json({ error: "Traitement impossible." }, { status: 500 });
       }
     }
     if (rejectedSignature(error)) {
+      console.error("[stripe webhook paiement] signature invalide.");
       return NextResponse.json({ error: "Signature invalide." }, { status: 400 });
     }
     return NextResponse.json({ error: "Traitement impossible." }, { status: 500 });

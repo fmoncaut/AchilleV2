@@ -61,6 +61,7 @@ Ne pas ajouter de token Clever Cloud, de clé SSH cloud, ni d’OIDC dans GitHub
 | `APPLE_ID` / `APPLE_SECRET` | non | Sign in with Apple |
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASSWORD` / `EMAIL_FROM` | non | e-mail (Brevo) |
 | `NEXT_PUBLIC_APP_URL` | non | URL publique, si besoin côté client |
+| `STRIPE_WEBHOOK_SECRET_ACCOUNT` | oui (Connect v2) | `whsec_…` de l’endpoint Stripe « Compte v2 (thin) », distinct de `STRIPE_WEBHOOK_SECRET` |
 
 Redirect OAuth (quand Google/Apple seront branchés) : `<AUTH_URL>/api/auth/callback/google` et `…/callback/apple`.
 
