@@ -6,6 +6,7 @@ import { saveCategoryMapping } from "../lib/affiliation-feed/mapping";
 import { parseFeedCsv } from "../lib/affiliation-feed/parse";
 import { publishPendingLine } from "../lib/affiliation-feed/review";
 import { prisma } from "../lib/db";
+import { findOffersNearby } from "../lib/geo";
 import { publicOfferWhere } from "../lib/offer-placement";
 
 function assert(condition: unknown, message: string): asserts condition {
@@ -309,6 +310,39 @@ async function main() {
     where: { feedId: paused.id, externalProductKey: "77777777", ...publicOfferWhere },
   });
   assert(pantalonPublic === 0, "L'amorçage sur un flux en pause reste invisible.");
+
+  const pos = await prisma.pos.create({
+    data: {
+      merchantId: merchant.id,
+      name: "Magasin vérif",
+      slug: "verif-magasin-feed",
+      lat: 45.75,
+      lng: 4.85,
+    },
+  });
+  const manualProduct = await prisma.product.create({
+    data: { name: "Marteau", slug: "verif-marteau" },
+  });
+  const manual = await prisma.offer.create({
+    data: {
+      productId: manualProduct.id,
+      posId: pos.id,
+      merchantId: merchant.id,
+      kind: "DIRECT",
+      priceRemise: new Prisma.Decimal("10.00"),
+      stock: 3,
+      isOnline: true,
+    },
+  });
+  assert(manual.feedId == null, "L'offre saisie à la main n'a pas de flux.");
+  const nearby = await findOffersNearby(45.75, 4.85, 5_000);
+  const nearbyIds = new Set(nearby.map((offer) => offer.id));
+  assert(nearbyIds.has(manual.id), "Une offre sans flux, en ligne, reste dans la recherche.");
+  assert(pausedOffer && !nearbyIds.has(pausedOffer.id), "Une offre de flux en pause sort de la recherche.");
+  const manualPublic = await prisma.offer.count({
+    where: { id: manual.id, ...publicOfferWhere },
+  });
+  assert(manualPublic === 1, "Une offre sans flux reste dans le catalogue public.");
 
   console.log("verify-affiliation-feed ok");
 }
