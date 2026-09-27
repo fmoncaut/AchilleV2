@@ -8,24 +8,25 @@ datasource db {
 }
 
 model Merchant {
-  id        String   @id @default(cuid())
-  name      String
-  slug      String   @unique
-  logoUrl   String?
-  isActive  Boolean  @default(true)
+  id               String            @id @default(cuid())
+  name             String
+  slug             String            @unique
+  logoUrl          String?
+  isActive         Boolean           @default(true)
   /// Compte Stripe Accounts v2 (recipient). Vide tant que l’enseigne n’a pas commencé l’onboarding.
-  stripeAccountId String?  @unique
-  chargesEnabled  Boolean  @default(false)
-  payoutsEnabled  Boolean  @default(false)
-  detailsSubmitted Boolean @default(false)
+  stripeAccountId  String?           @unique
+  chargesEnabled   Boolean           @default(false)
+  payoutsEnabled   Boolean           @default(false)
+  detailsSubmitted Boolean           @default(false)
   /// Commission Achille (ex. 0.0800). Null = STRIPE_DEFAULT_FEE_RATE.
-  feeRate Decimal? @db.Decimal(6, 4)
-  pos       Pos[]
-  offers       Offer[]
-  users        User[]
-  reservations Reservation[]
+  feeRate          Decimal?          @db.Decimal(6, 4)
+  pos              Pos[]
+  offers           Offer[]
+  affiliationFeeds AffiliationFeed[]
+  users            User[]
+  reservations     Reservation[]
   reservationCarts ReservationCart[]
-  createdAt    DateTime      @default(now())
+  createdAt        DateTime          @default(now())
 }
 
 enum PosStatus {
@@ -39,33 +40,33 @@ enum PosStatus {
 // + index GiST `pos_geog_idx`. Ne pas la supprimer ; ne pas la déclarer ici
 // (Prisma ne gère pas nativement le type geography).
 model Pos {
-  id           String   @id @default(cuid())
-  merchantId   String
-  merchant     Merchant @relation(fields: [merchantId], references: [id])
-  name         String
-  slug         String   @unique
-  address      String?
-  postalCode   String?
-  city         String?
-  phone        String?
-  openingHours Json?
-  lat          Float
-  lng          Float
+  id                      String            @id @default(cuid())
+  merchantId              String
+  merchant                Merchant          @relation(fields: [merchantId], references: [id])
+  name                    String
+  slug                    String            @unique
+  address                 String?
+  postalCode              String?
+  city                    String?
+  phone                   String?
+  openingHours            Json?
+  lat                     Float
+  lng                     Float
   /// Lu par le catalogue, la géo et les réservations. Le tri-état `status` ne le remplace pas encore.
-  isActive     Boolean   @default(true)
-  status       PosStatus @default(ACTIVE_VISIBLE)
+  isActive                Boolean           @default(true)
+  status                  PosStatus         @default(ACTIVE_VISIBLE)
   /// Traçabilité import legacy. Hors logique métier.
   legacyDealerId          String?
   legacyFuzionContainerId String?
   /// Horodatage de promotion vers la base de production (bases staging et prod distinctes).
-  promotedToProdAt DateTime?
+  promotedToProdAt        DateTime?
   /// URL Scaleway du logo. Pas l'URL S3 legacy.
-  logoUrl      String?
-  offers       Offer[]
-  offerLinks   OfferPos[]
-  reservations Reservation[]
-  reservationCarts ReservationCart[]
-  createdAt    DateTime     @default(now())
+  logoUrl                 String?
+  offers                  Offer[]
+  offerLinks              OfferPos[]
+  reservations            Reservation[]
+  reservationCarts        ReservationCart[]
+  createdAt               DateTime          @default(now())
 
   @@index([city])
 }
@@ -78,37 +79,39 @@ model Brand {
 }
 
 model Category {
-  id       String     @id @default(cuid())
-  name     String
-  slug     String     @unique
-  icon     String?
+  id                 String     @id @default(cuid())
+  name               String
+  slug               String     @unique
+  icon               String?
   /// Code taxonomie Google Shopping, pour réconcilier les catégories externes.
   googleCategoryCode String?
   /// Clé d'import Arbo Achille : « FAMILLE::id ». Les ID du fichier sont réutilisés entre familles.
-  legacyCategoryCode String? @unique
-  parentId String?
-  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
-  children Category[] @relation("CategoryTree")
-  products Product[]
+  legacyCategoryCode String?    @unique
+  parentId           String?
+  parent             Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children           Category[] @relation("CategoryTree")
+  products           Product[]
+  reconciledOffers   Offer[]
 }
 
 model Product {
-  id               String    @id @default(cuid())
-  ean              String?   @unique
-  name             String
-  slug             String    @unique
-  description      String?
-  shortDescription String?
-  imageUrl         String?
-  images           String[]
-  publicPrice      Decimal?  @db.Decimal(10, 2)
-  weight           Float?
-  keywords         String?
-  brandId          String?
-  brand            Brand?    @relation(fields: [brandId], references: [id])
-  categoryId       String?
-  category         Category? @relation(fields: [categoryId], references: [id])
-  offers           Offer[]
+  id                     String                  @id @default(cuid())
+  ean                    String?                 @unique
+  name                   String
+  slug                   String                  @unique
+  description            String?
+  shortDescription       String?
+  imageUrl               String?
+  images                 String[]
+  publicPrice            Decimal?                @db.Decimal(10, 2)
+  weight                 Float?
+  keywords               String?
+  brandId                String?
+  brand                  Brand?                  @relation(fields: [brandId], references: [id])
+  categoryId             String?
+  category               Category?               @relation(fields: [categoryId], references: [id])
+  offers                 Offer[]
+  affiliationImportLines AffiliationImportLine[]
 
   @@index([categoryId])
 }
@@ -146,42 +149,156 @@ model Broker {
   updatedAt   DateTime   @updatedAt
 }
 
+enum AffiliationNetwork {
+  KWANKO
+  TRADEDOUBLER
+  AWIN
+  AFFILAE
+  EFFILIATION
+  MARKETPLACE
+}
+
+enum AffiliationFeedStatus {
+  ACTIVE
+  PAUSED
+}
+
+enum AffiliationImportStatus {
+  MATCHED
+  PENDING_PRODUCT_CREATION
+  READY_TO_PUBLISH
+}
+
+enum AffiliationPriceRule {
+  SINGLE
+  CURRENT_AND_CROSSED
+  SALE_THEN_LIST
+}
+
+enum AffiliationStockMode {
+  QUANTITY
+  FLAG
+}
+
+enum AffiliationCategoryMode {
+  SINGLE
+  FALLBACK
+  CONCAT
+}
+
+/// Mapping de colonnes d'un réseau. Une ligne par réseau ; MARKETPLACE n'a pas encore de profil.
+model AffiliationProfile {
+  id                   String                   @id @default(cuid())
+  network              AffiliationNetwork       @unique
+  delimiter            String
+  quoted               Boolean                  @default(false)
+  productKeyColumns    String[]
+  titleColumn          String?
+  priceColumn          String?
+  priceAltColumn       String?
+  priceRule            AffiliationPriceRule?
+  imageColumns         String[]
+  brandColumns         String[]
+  trackingLinkColumn   String?
+  stockColumn          String?
+  stockMode            AffiliationStockMode?
+  /// Valeurs « en stock » quand stockMode = FLAG. Tableau vide = non configuré.
+  availabilityInTokens String[]
+  categoryColumns      String[]
+  categoryMode         AffiliationCategoryMode?
+  categoryJoiner       String?
+  feeds                AffiliationFeed[]
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+}
+
+model AffiliationFeed {
+  id         String                  @id @default(cuid())
+  merchantId String
+  merchant   Merchant                @relation(fields: [merchantId], references: [id])
+  profileId  String
+  profile    AffiliationProfile      @relation(fields: [profileId], references: [id])
+  sourceUrl  String?
+  status     AffiliationFeedStatus   @default(PAUSED)
+  lines      AffiliationImportLine[]
+  offers     Offer[]
+  createdAt  DateTime                @default(now())
+  updatedAt  DateTime                @updatedAt
+
+  @@index([merchantId])
+  @@index([profileId])
+}
+
+/// Ligne importée avant ou après création de l'offre. État durable si l'EAN ne matche aucun produit.
+model AffiliationImportLine {
+  id                  String                  @id @default(cuid())
+  feedId              String
+  feed                AffiliationFeed         @relation(fields: [feedId], references: [id])
+  externalProductKey  String
+  externalCategoryRaw String?
+  status              AffiliationImportStatus
+  productId           String?
+  product             Product?                @relation(fields: [productId], references: [id], onDelete: SetNull)
+  offerId             String?                 @unique
+  offer               Offer?                  @relation(fields: [offerId], references: [id], onDelete: SetNull)
+  /// Ligne brute complète, pour les champs que le profil ne mappe pas.
+  payload             Json?
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime                @updatedAt
+
+  @@unique([feedId, externalProductKey])
+  @@index([status])
+  @@index([productId])
+}
+
 model Offer {
-  id             String           @id @default(cuid())
-  productId      String
-  product        Product          @relation(fields: [productId], references: [id])
+  id                   String                 @id @default(cuid())
+  productId            String
+  product              Product                @relation(fields: [productId], references: [id])
   /// Magasin porteur des offres DIRECT, et ancre des offres POS_CIBLES.
   /// Null pour une affiliation diffusée à toute l'enseigne.
-  posId          String?
-  pos            Pos?             @relation(fields: [posId], references: [id])
-  merchantId     String
-  merchant       Merchant         @relation(fields: [merchantId], references: [id])
-  kind           OfferKind        @default(AFFILIATION)
-  scope          OfferScope       @default(POS_CIBLES)
-  brokerId       String?
-  broker         Broker?          @relation(fields: [brokerId], references: [id], onDelete: SetNull)
-  brokerRate     Decimal?         @db.Decimal(10, 2)
-  priceRemise    Decimal          @db.Decimal(10, 2)
-  priceReference Decimal?         @db.Decimal(10, 2)
-  discountPct    Int?
-  tvaRate        Decimal?         @db.Decimal(4, 2)
-  stock          Int              @default(0)
-  condition      ProductCondition @default(NEUF)
-  isOnline       Boolean          @default(false)
-  merchantUrl    String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  clicks           OfferClick[]
-  targetedPos      OfferPos[]
-  reservationItems ReservationItem[]
-  cartItems        ReservationCartItem[]
+  posId                String?
+  pos                  Pos?                   @relation(fields: [posId], references: [id])
+  merchantId           String
+  merchant             Merchant               @relation(fields: [merchantId], references: [id])
+  kind                 OfferKind              @default(AFFILIATION)
+  scope                OfferScope             @default(POS_CIBLES)
+  brokerId             String?
+  broker               Broker?                @relation(fields: [brokerId], references: [id], onDelete: SetNull)
+  brokerRate           Decimal?               @db.Decimal(10, 2)
+  priceRemise          Decimal                @db.Decimal(10, 2)
+  priceReference       Decimal?               @db.Decimal(10, 2)
+  discountPct          Int?
+  tvaRate              Decimal?               @db.Decimal(4, 2)
+  stock                Int                    @default(0)
+  condition            ProductCondition       @default(NEUF)
+  isOnline             Boolean                @default(false)
+  merchantUrl          String?
+  /// Flux d'affiliation. Null pour une offre saisie à la main.
+  feedId               String?
+  feed                 AffiliationFeed?       @relation(fields: [feedId], references: [id], onDelete: Restrict)
+  externalProductKey   String?
+  externalCategoryRaw  String?
+  /// Catégorie vitrine, remplie à partir d'A.4.3. Product.categoryId n'est pas touché ici.
+  reconciledCategoryId String?
+  reconciledCategory   Category?              @relation(fields: [reconciledCategoryId], references: [id], onDelete: SetNull)
+  importLine           AffiliationImportLine?
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  clicks               OfferClick[]
+  targetedPos          OfferPos[]
+  reservationItems     ReservationItem[]
+  cartItems            ReservationCartItem[]
 
   @@unique([productId, posId])
+  @@unique([feedId, externalProductKey])
   @@index([posId])
   @@index([productId])
   @@index([merchantId])
   @@index([isOnline])
   @@index([brokerId])
+  @@index([feedId])
+  @@index([reconciledCategoryId])
 }
 
 /// POS ciblés d'une offre d'affiliation (scope POS_CIBLES). Pas de duplication de l'offre.
@@ -242,33 +359,33 @@ enum ReservationStatus {
 
 /// Click & collect, mono-magasin. Empreinte Stripe Connect à la confirmation, capture au retrait.
 model Reservation {
-  id             String            @id @default(cuid())
-  userId         String
-  user           User              @relation(fields: [userId], references: [id])
-  posId          String
-  pos            Pos               @relation(fields: [posId], references: [id])
-  merchantId     String
-  merchant       Merchant          @relation(fields: [merchantId], references: [id])
-  status         ReservationStatus @default(PENDING)
-  pickupCode     String            @unique
-  pickupDeadline DateTime
-  totalAmount    Decimal           @db.Decimal(10, 2)
+  id               String            @id @default(cuid())
+  userId           String
+  user             User              @relation(fields: [userId], references: [id])
+  posId            String
+  pos              Pos               @relation(fields: [posId], references: [id])
+  merchantId       String
+  merchant         Merchant          @relation(fields: [merchantId], references: [id])
+  status           ReservationStatus @default(PENDING)
+  pickupCode       String            @unique
+  pickupDeadline   DateTime
+  totalAmount      Decimal           @db.Decimal(10, 2)
   /// Commission Achille, renseignée à la capture.
-  commissionAmount Decimal?        @db.Decimal(10, 2)
+  commissionAmount Decimal?          @db.Decimal(10, 2)
   /// application_fee_amount capturé, renseigné à la capture.
-  feeAmount      Decimal?          @db.Decimal(10, 2)
-  paymentIntentId String?          @unique
-  paymentState    PaymentState     @default(NONE)
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
-  confirmedAt    DateTime?
-  readyAt        DateTime?
-  pickedUpAt     DateTime?
-  cancelledAt    DateTime?
-  expiredAt      DateTime?
-  noShowAt       DateTime?
-  items          ReservationItem[]
-  messages       Message[]
+  feeAmount        Decimal?          @db.Decimal(10, 2)
+  paymentIntentId  String?           @unique
+  paymentState     PaymentState      @default(NONE)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  confirmedAt      DateTime?
+  readyAt          DateTime?
+  pickedUpAt       DateTime?
+  cancelledAt      DateTime?
+  expiredAt        DateTime?
+  noShowAt         DateTime?
+  items            ReservationItem[]
+  messages         Message[]
 
   @@index([userId])
   @@index([merchantId])
@@ -309,20 +426,20 @@ model Message {
 /// Panier de réservation mono-magasin, avant confirmation. Aucun paiement.
 /// Un seul propriétaire : compte connecté, ou clé de session invitée (cookie httpOnly).
 model ReservationCart {
-  id         String   @id @default(cuid())
-  userId     String?  @unique
-  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String                @id @default(cuid())
+  userId     String?               @unique
+  user       User?                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   /// Opaque, cookie httpOnly. L’état du panier reste en base.
-  sessionKey String?  @unique
+  sessionKey String?               @unique
   posId      String
-  pos        Pos      @relation(fields: [posId], references: [id])
+  pos        Pos                   @relation(fields: [posId], references: [id])
   merchantId String
-  merchant   Merchant @relation(fields: [merchantId], references: [id])
+  merchant   Merchant              @relation(fields: [merchantId], references: [id])
   /// Localisation de recherche connue au moment de l’ajout, pour la distance.
   viewerLat  Float?
   viewerLng  Float?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime              @default(now())
+  updatedAt  DateTime              @updatedAt
   items      ReservationCartItem[]
 
   @@index([posId])
@@ -343,23 +460,23 @@ model ReservationCartItem {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String?   @unique
-  emailVerified DateTime?
-  name          String?
-  image         String?
-  lastLat       Float?
-  lastLng       Float?
-  role          UserRole  @default(USER)
-  merchantId    String?
-  merchant      Merchant? @relation(fields: [merchantId], references: [id])
-  accounts      Account[]
-  sessions      Session[]
-  favorites     Favorite[]
-  reservations  Reservation[]
+  id              String           @id @default(cuid())
+  email           String?          @unique
+  emailVerified   DateTime?
+  name            String?
+  image           String?
+  lastLat         Float?
+  lastLng         Float?
+  role            UserRole         @default(USER)
+  merchantId      String?
+  merchant        Merchant?        @relation(fields: [merchantId], references: [id])
+  accounts        Account[]
+  sessions        Session[]
+  favorites       Favorite[]
+  reservations    Reservation[]
   reservationCart ReservationCart?
-  messages      Message[]
-  createdAt     DateTime      @default(now())
+  messages        Message[]
+  createdAt       DateTime         @default(now())
 
   @@index([merchantId])
 }
@@ -396,8 +513,8 @@ model VerificationToken {
   token      String
   expires    DateTime
 
-  @@unique([token])
   @@id([identifier, token])
+  @@unique([token])
 }
 
 /// Événement Stripe déjà appliqué. La clé est l’id evt_… pour l’idempotence.
