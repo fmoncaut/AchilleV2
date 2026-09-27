@@ -43,11 +43,14 @@ export async function GET(
       id: true,
       isOnline: true,
       merchantUrl: true,
+      feedId: true,
+      feed: { select: { status: true } },
       broker: { select: { urlTemplate: true } },
     },
   });
 
-  if (!offer || !offer.isOnline || !offer.merchantUrl) {
+  const feedHidden = Boolean(offer?.feedId && offer.feed?.status !== "ACTIVE");
+  if (!offer || !offer.isOnline || !offer.merchantUrl || feedHidden) {
     return jsonError(404, "Offre introuvable", anonId);
   }
 

@@ -31,10 +31,16 @@ export function sqlOfferPlacementJoin(): Prisma.Sql {
   `;
 }
 
+/** Offre saisie à la main, ou rattachée à un flux activé. */
+export const publicFeedWhere = {
+  OR: [{ feedId: null }, { feed: { status: "ACTIVE" as const } }],
+} satisfies Prisma.OfferWhereInput;
+
 export const publicOfferWhere = {
   isOnline: true,
   stock: { gt: 0 },
   merchant: { isActive: true },
+  AND: [publicFeedWhere],
   OR: [
     { kind: "DIRECT" as const, pos: { isActive: true } },
     { kind: "AFFILIATION" as const, scope: "ENSEIGNE" as const },
@@ -60,6 +66,7 @@ export function offerVisibleAtPosWhere(pos: {
     isOnline: true,
     stock: { gt: 0 },
     merchant: { isActive: true },
+    AND: [publicFeedWhere],
     OR: [
       { kind: "DIRECT", posId: pos.id },
       {

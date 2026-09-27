@@ -92,6 +92,7 @@ model Category {
   children           Category[] @relation("CategoryTree")
   products           Product[]
   reconciledOffers   Offer[]
+  affiliationMappings AffiliationCategoryMapping[]
 }
 
 model Product {
@@ -249,6 +250,21 @@ model AffiliationImportLine {
   @@unique([feedId, externalProductKey])
   @@index([status])
   @@index([productId])
+}
+
+/// Décision humaine : une valeur exacte de catégorie externe, pour un réseau.
+/// externalCategoryRaw vide = catégorie absente. categoryId null = non classé explicite.
+model AffiliationCategoryMapping {
+  id                  String             @id @default(cuid())
+  network             AffiliationNetwork
+  externalCategoryRaw String
+  categoryId          String?
+  category            Category?          @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  @@unique([network, externalCategoryRaw])
+  @@index([categoryId])
 }
 
 model Offer {

@@ -9,6 +9,7 @@ import { discountPercent } from "@/lib/money";
 import {
   offerMatchesPos,
   offerVisibleAtPosWhere,
+  publicFeedWhere,
   publicOfferWhere,
 } from "@/lib/offer-placement";
 
@@ -66,6 +67,7 @@ async function loadProductShowcase(slug: string) {
           isOnline: true,
           stock: { gt: 0 },
           merchant: { isActive: true },
+          AND: [publicFeedWhere],
         },
         include: {
           merchant: { select: { id: true, name: true, slug: true } },
@@ -238,7 +240,7 @@ export const getCachedProductPage = unstable_cache(
       offers: await expandProductOffers(product.offers),
     };
   },
-  ["catalog-product-page-v6"],
+  ["catalog-product-page-v7"],
   catalogCache,
 );
 
@@ -275,7 +277,7 @@ export const getCachedPosPage = unstable_cache(
       offers: offers.map((offer) => serializePosOfferCard(offer, pos)),
     };
   },
-  ["catalog-pos-page-v5"],
+  ["catalog-pos-page-v6"],
   catalogCache,
 );
 
@@ -328,6 +330,7 @@ async function getCityCategoryOffers(cityName: string, categoryId: string) {
       isOnline: true,
       stock: { gt: 0 },
       merchant: { isActive: true },
+      AND: [publicFeedWhere],
       product: { categoryId },
       OR: [
         { kind: "DIRECT", posId: { in: posIds } },
@@ -391,7 +394,7 @@ export const getCachedCityCategoryPage = unstable_cache(
       offers,
     };
   },
-  ["catalog-city-category-page-v5"],
+  ["catalog-city-category-page-v6"],
   catalogCache,
 );
 

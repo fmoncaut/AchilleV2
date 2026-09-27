@@ -1,6 +1,10 @@
 import { parse, type CsvError } from "csv-parse/sync";
 
-export type FeedRejectReason = "column_count" | "missing_key" | "missing_price";
+export type FeedRejectReason =
+  | "column_count"
+  | "missing_key"
+  | "missing_price"
+  | "invalid_ean";
 
 export type FeedReject = {
   line: number;

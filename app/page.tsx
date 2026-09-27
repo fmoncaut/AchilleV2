@@ -102,7 +102,12 @@ async function resolveOrigin(userId: string | undefined): Promise<{
 
   const busiest = await prisma.offer.groupBy({
     by: ["posId"],
-    where: { isOnline: true, stock: { gt: 0 }, posId: { not: null } },
+    where: {
+      isOnline: true,
+      stock: { gt: 0 },
+      posId: { not: null },
+      OR: [{ feedId: null }, { feed: { status: "ACTIVE" } }],
+    },
     _count: { id: true },
     orderBy: { _count: { id: "desc" } },
     take: 1,

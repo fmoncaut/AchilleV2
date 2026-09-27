@@ -8,6 +8,7 @@ type AdminHeaderProps = {
   merchantName: string;
   showOffers: boolean;
   showPlatform: boolean;
+  showPending?: boolean;
   unreadReservations?: number;
 };
 
@@ -15,6 +16,7 @@ export function AdminHeader({
   merchantName,
   showOffers,
   showPlatform,
+  showPending = false,
   unreadReservations = 0,
 }: AdminHeaderProps) {
   return (
@@ -45,6 +47,12 @@ export function AdminHeader({
               <Button asChild variant="ghost" size="sm">
                 <Link href="/admin/brokers">Brokers</Link>
               </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/admin/affiliation/categories">Catégories</Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/admin/affiliation/produits">Produits à créer</Link>
+              </Button>
             </>
           ) : null}
           {showOffers ? (
@@ -52,6 +60,11 @@ export function AdminHeader({
               <Button asChild variant="ghost" size="sm">
                 <Link href="/admin/offres">Offres</Link>
               </Button>
+              {showPending ? (
+                <Button asChild variant="ghost" size="sm">
+                  <Link href="/admin/affiliation/en-attente">En attente</Link>
+                </Button>
+              ) : null}
               <Button asChild variant="ghost" size="sm">
                 <Link href="/admin/offres/import">Import CSV</Link>
               </Button>

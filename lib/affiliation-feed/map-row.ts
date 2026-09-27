@@ -32,6 +32,8 @@ export type NormalizedFeedRow = {
   isOnline: boolean;
   externalCategoryRaw: string | null;
   merchantUrl: string | null;
+  title: string;
+  imageUrl: string | null;
   payload: Prisma.InputJsonObject;
 };
 
@@ -153,8 +155,22 @@ function payloadOf(header: string[], cells: string[]): Prisma.InputJsonObject {
   return payload;
 }
 
+function imageOf(
+  profile: FeedProfileColumns & { imageColumns?: string[] },
+  header: string[],
+  cells: string[],
+): string | null {
+  for (const name of profile.imageColumns ?? []) {
+    const value = cell(header, cells, name);
+    if (value.startsWith("http://") || value.startsWith("https://")) {
+      return value;
+    }
+  }
+  return null;
+}
+
 export function mapFeedRow(
-  profile: FeedProfileColumns,
+  profile: FeedProfileColumns & { imageColumns?: string[] },
   header: string[],
   cells: string[],
 ): MappedFeedRow {
@@ -179,6 +195,8 @@ export function mapFeedRow(
       isOnline: stock.isOnline,
       externalCategoryRaw: categoryOf(profile, header, cells),
       merchantUrl: merchantUrl || null,
+      title: cell(header, cells, profile.titleColumn) || externalProductKey,
+      imageUrl: imageOf(profile, header, cells),
       payload: payloadOf(header, cells),
     },
   };

@@ -60,6 +60,7 @@ export default async function AdminLayout({
         merchantName={actor.merchantName ?? "Administration"}
         showOffers={canManageOffers(actor)}
         showPlatform={isPlatformAdmin(actor)}
+        showPending={actor.role === "MERCHANT"}
         unreadReservations={
           actor.merchantId
             ? await countUnreadForMerchant(actor.merchantId)

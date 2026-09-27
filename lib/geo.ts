@@ -104,6 +104,13 @@ export async function findOffersNearby(
     Prisma.sql`o."isOnline" = true`,
     Prisma.sql`o.stock > 0`,
     Prisma.sql`m."isActive" = true`,
+    Prisma.sql`(
+      o."feedId" IS NULL
+      OR EXISTS (
+        SELECT 1 FROM "AffiliationFeed" f
+        WHERE f.id = o."feedId" AND f.status = 'ACTIVE'
+      )
+    )`,
     Prisma.sql`p."isActive" = true`,
     Prisma.sql`ST_DWithin(
       p.geog,

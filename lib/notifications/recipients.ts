@@ -17,3 +17,18 @@ export async function findFirstAdminWithEmail(): Promise<NotificationRecipient |
   }
   return { userId: admin.id, email: admin.email };
 }
+
+/** Premier compte MERCHANT de l'enseigne qui a un e-mail. */
+export async function findFirstMerchantWithEmail(
+  merchantId: string,
+): Promise<NotificationRecipient | null> {
+  const merchant = await prisma.user.findFirst({
+    where: { role: "MERCHANT", merchantId, email: { not: null } },
+    select: { id: true, email: true },
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+  });
+  if (!merchant?.email) {
+    return null;
+  }
+  return { userId: merchant.id, email: merchant.email };
+}

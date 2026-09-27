@@ -2,8 +2,11 @@ import { Prisma } from "@prisma/client";
 
 import { importAffiliationFeed } from "../lib/affiliation-feed/import";
 import { mapFeedRow } from "../lib/affiliation-feed/map-row";
+import { saveCategoryMapping } from "../lib/affiliation-feed/mapping";
 import { parseFeedCsv } from "../lib/affiliation-feed/parse";
+import { publishPendingLine } from "../lib/affiliation-feed/review";
 import { prisma } from "../lib/db";
+import { publicOfferWhere } from "../lib/offer-placement";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
@@ -116,13 +119,23 @@ async function main() {
     data: { merchantId: merchant.id, profileId: tradedoubler.id, status: "PAUSED" },
   });
 
-  let pausedThrew = false;
-  try {
-    await importAffiliationFeed(paused.id, "ean;name;price\n1;a;1\n");
-  } catch (error) {
-    pausedThrew = error instanceof Error && error.message === "Ce flux est en pause.";
-  }
-  assert(pausedThrew, "Un flux en pause ne s'importe pas.");
+  const pausedReport = await importAffiliationFeed(
+    paused.id,
+    [
+      "ean;name;price;availability;categories;MerchantCategoryName;TDCategoryName;productUrl",
+      "11111111;Chemise;19.99;in stock;;;;https://pdt.tradedoubler.com/click?x=1",
+    ].join("\n"),
+    { notify: async () => undefined },
+  );
+  assert(pausedReport.matched === 1, "Un flux en pause s'importe.");
+  const pausedOffer = await prisma.offer.findFirst({
+    where: { feedId: paused.id, externalProductKey: "11111111" },
+  });
+  assert(pausedOffer?.isOnline === true, "Le stock met l'offre en ligne.");
+  const pausedPublic = await prisma.offer.count({
+    where: { id: pausedOffer?.id, ...publicOfferWhere },
+  });
+  assert(pausedPublic === 0, "Un flux en pause n'est pas public.");
 
   const notices: string[] = [];
   const td = await importAffiliationFeed(
@@ -220,6 +233,82 @@ async function main() {
     orderBy: [{ createdAt: "asc" }, { id: "asc" }],
   });
   assert(adminHit?.id === admin.id, "L'e-mail part au premier ADMIN, pas au marchand.");
+
+  const mode = await prisma.category.create({
+    data: { name: "Mode vérif", slug: "mode-verif" },
+  });
+  const autre = await prisma.category.create({
+    data: { name: "Autre vérif", slug: "autre-verif" },
+  });
+  const mapped = await saveCategoryMapping("TRADEDOUBLER", ";Fashion;68", mode.id);
+  assert(mapped.offers === 0, "Aucune offre n'a encore cette catégorie.");
+  const withCategory = await importAffiliationFeed(
+    feedTd.id,
+    [
+      "ean;name;price;availability;categories;MerchantCategoryName;TDCategoryName;productUrl",
+      '88888888;Robe;25.00;in stock;";Fashion;68";;;https://pdt.tradedoubler.com/click?x=8',
+    ].join("\n"),
+    { notify: async () => undefined },
+  );
+  assert(withCategory.pendingCreated === 1, "L'EAN inconnu reste en revue.");
+  const robeLine = await prisma.affiliationImportLine.findFirst({
+    where: { feedId: feedTd.id, externalProductKey: "88888888" },
+  });
+  assert(robeLine?.status === "PENDING_PRODUCT_CREATION", "Pas d'offre sans produit.");
+  assert(robeLine, "Ligne robe manquante.");
+  await publishPendingLine(robeLine.id);
+  const robe = await prisma.offer.findFirst({
+    where: { feedId: feedTd.id, externalProductKey: "88888888" },
+    include: { product: true },
+  });
+  assert(robe?.reconciledCategoryId === mode.id, "La revue applique le mapping.");
+  assert(robe?.product.categoryId === mode.id, "La catégorie est recopiée sur le produit.");
+  assert(robe?.product.name === "Robe", "Le titre vient du fichier.");
+
+  await prisma.product.update({
+    where: { ean: "11111111" },
+    data: { categoryId: autre.id },
+  });
+  const conflict = await importAffiliationFeed(
+    feedTd.id,
+    [
+      "ean;name;price;availability;categories;MerchantCategoryName;TDCategoryName;productUrl",
+      '11111111;Chemise;19.99;in stock;";Fashion;68";;;https://pdt.tradedoubler.com/click?x=1',
+    ].join("\n"),
+    { notify: async () => undefined },
+  );
+  assert(conflict.categoryConflicts === 1, "Un produit déjà classé n'est pas écrasé.");
+  const kept = await prisma.product.findUnique({ where: { ean: "11111111" } });
+  assert(kept?.categoryId === autre.id, "La catégorie existante reste.");
+  const chemiseOffer = await prisma.offer.findFirst({
+    where: { feedId: feedTd.id, externalProductKey: "11111111" },
+  });
+  assert(chemiseOffer?.reconciledCategoryId === mode.id, "L'offre reçoit quand même le mapping.");
+
+  const bootstrap = await importAffiliationFeed(
+    paused.id,
+    [
+      "ean;name;price;availability;categories;MerchantCategoryName;TDCategoryName;productUrl",
+      "77777777;Pantalon;30.00;in stock;;;;https://pdt.tradedoubler.com/click?x=7",
+      "SKU-1;Sans ean;12.00;in stock;;;;https://pdt.tradedoubler.com/click?x=9",
+    ].join("\n"),
+    { notify: async () => undefined, mode: "bootstrap" },
+  );
+  assert(bootstrap.matched === 1, "L'amorçage crée le produit à EAN valide.");
+  assert(
+    bootstrap.rejects.some((reject) => reject.reason === "invalid_ean"),
+    "L'amorçage rejette la clé qui n'est pas un EAN.",
+  );
+  const skuLine = await prisma.affiliationImportLine.findFirst({
+    where: { externalProductKey: "SKU-1" },
+  });
+  assert(skuLine == null, "Pas de ligne pour une clé sans EAN.");
+  const pantalon = await prisma.product.findUnique({ where: { ean: "77777777" } });
+  assert(pantalon?.name === "Pantalon" && pantalon.categoryId == null, "Produit amorcé sans catégorie.");
+  const pantalonPublic = await prisma.offer.count({
+    where: { feedId: paused.id, externalProductKey: "77777777", ...publicOfferWhere },
+  });
+  assert(pantalonPublic === 0, "L'amorçage sur un flux en pause reste invisible.");
 
   console.log("verify-affiliation-feed ok");
 }
