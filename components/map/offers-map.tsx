@@ -2,20 +2,49 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef } from "react";
-import {
+import type {
   Map as MapLibreMap,
   Marker,
-  NavigationControl,
-  Popup,
-  type StyleSpecification,
+  StyleSpecification,
 } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-
 import { formatDistance } from "@/components/distance";
 import { EmptyState } from "@/components/search/empty-state";
 import type { NearbyOfferCard, UnavailablePos } from "@/lib/geo";
 import { formatEur } from "@/lib/money";
 import { offerPath } from "@/lib/urls";
+
+type MapLibreRuntime = Pick<
+  typeof import("maplibre-gl"),
+  "Map" | "Marker" | "NavigationControl" | "Popup"
+>;
+
+// MapLibre 4.7 inlines its worker by stringifying factory functions. Next rewrites
+// those functions, so the blob worker never starts. The published UMD file is
+// loaded as a classic script so that worker string stays intact.
+function loadMapLibre(): Promise<MapLibreRuntime> {
+  const current = (window as Window & { maplibregl?: MapLibreRuntime })
+    .maplibregl;
+  if (current) {
+    return Promise.resolve(current);
+  }
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "/maplibre/maplibre-gl.js";
+    script.async = true;
+    script.onload = () => {
+      const loaded = (window as Window & { maplibregl?: MapLibreRuntime })
+        .maplibregl;
+      if (!loaded) {
+        reject(new Error("MapLibre indisponible"));
+        return;
+      }
+      resolve(loaded);
+    };
+    script.onerror = () => reject(new Error("Échec du chargement de MapLibre"));
+    document.head.append(script);
+  });
+}
 
 type OffersMapProps = {
   offers: NearbyOfferCard[];
@@ -109,161 +138,184 @@ export function OffersMap({
       return;
     }
 
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    let cancelled = false;
+    let map: MapLibreMap | null = null;
+    let observer: ResizeObserver | null = null;
 
-    const map = new MapLibreMap({
-      container: node,
-      style: tilesUrl ? rasterStyle(tilesUrl) : styleUrl!,
-      center: [centerLng, centerLat],
-      zoom: 11,
-      fadeDuration: reduceMotion ? 0 : 300,
-    });
-
-    map.addControl(
-      new NavigationControl({ visualizePitch: false }),
-      "top-right",
-    );
-    mapRef.current = map;
-
-    const selectOffer = (offerId: string) => {
-      const url = new URL(pathRef.current, window.location.origin);
-      url.searchParams.set("vue", "carte");
-      url.searchParams.set("offre", offerId);
-      router.replace(`${url.pathname}?${url.searchParams.toString()}`, {
-        scroll: false,
-      });
-    };
-
-    const renderMarkers = () => {
-      for (const marker of markersRef.current) {
-        marker.remove();
-      }
-      markersRef.current = [];
-
-      for (const group of groupsRef.current) {
-        const element = document.createElement("button");
-        element.type = "button";
-        element.className =
-          "flex h-8 min-w-8 items-center justify-center rounded-full border-2 border-[#002642] bg-[#fe9800] px-1.5 text-xs font-extrabold text-[#002642] shadow-[0_2px_6px_rgba(0,38,66,0.15)]";
-        element.textContent = String(group.offers.length);
-        element.setAttribute(
-          "aria-label",
-          `${group.posName}, ${group.offers.length} offre${group.offers.length > 1 ? "s" : ""}`,
-        );
-
-        const popupNode = document.createElement("div");
-        popupNode.className = "min-w-48 max-w-64 text-sm text-[#191c1e]";
-        const title = document.createElement("p");
-        title.className = "font-bold text-[#002642]";
-        title.textContent = group.posName;
-        popupNode.append(title);
-
-        for (const offer of group.offers) {
-          const row = document.createElement("a");
-          row.href = offerPath(offer.productSlug, {
-            posSlug: offer.posSlug || undefined,
-          });
-          row.className =
-            "mt-2 block rounded-full px-2 py-1 text-[#002642] underline-offset-2 hover:bg-[#f2f4f7] hover:underline";
-          const distanceLabel =
-            offer.distanceM != null
-              ? formatDistance(offer.distanceM)
-              : offer.city;
-          row.textContent = distanceLabel
-            ? `${offer.productName} — ${formatEur(offer.priceRemise)} · ${distanceLabel}`
-            : `${offer.productName} — ${formatEur(offer.priceRemise)}`;
-          row.addEventListener("click", () => {
-            selectOffer(offer.id);
-          });
-          popupNode.append(row);
+    loadMapLibre()
+      .then((maplibregl) => {
+        if (cancelled) {
+          return;
         }
 
-        const popup = new Popup({
-          offset: 18,
-          closeButton: true,
-        }).setDOMContent(popupNode);
+        const reduceMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
 
-        const marker = new Marker({ element })
-          .setLngLat([group.lng, group.lat])
-          .setPopup(popup)
-          .addTo(map);
-
-        element.addEventListener("click", () => {
-          const preferred =
-            group.offers.find((offer) => offer.id === selectedRef.current) ??
-            group.offers[0];
-          if (preferred) {
-            selectOffer(preferred.id);
-          }
+        const created = new maplibregl.Map({
+          container: node,
+          style: tilesUrl ? rasterStyle(tilesUrl) : styleUrl!,
+          center: [centerLng, centerLat],
+          zoom: 11,
+          fadeDuration: reduceMotion ? 0 : 300,
         });
+        map = created;
+        if (cancelled) {
+          created.remove();
+          map = null;
+          return;
+        }
+        const { Marker, NavigationControl, Popup } = maplibregl;
 
-        markersRef.current.push(marker);
-      }
-
-      for (const pos of unavailableRef.current) {
-        const element = document.createElement("button");
-        element.type = "button";
-        element.className =
-          "flex h-8 min-w-8 items-center justify-center rounded-full border-2 border-[#002642] bg-[#e6e8ec] px-1.5 text-xs font-extrabold text-[#002642] shadow-[0_2px_6px_rgba(0,38,66,0.15)]";
-        element.textContent = "–";
-        element.setAttribute(
-          "aria-label",
-          `${pos.name}, magasin non disponible actuellement`,
+        created.addControl(
+          new NavigationControl({ visualizePitch: false }),
+          "top-right",
         );
+        mapRef.current = created;
 
-        const popupNode = document.createElement("div");
-        popupNode.className = "min-w-48 max-w-64 text-sm text-[#191c1e]";
-        const title = document.createElement("p");
-        title.className = "font-bold text-[#002642]";
-        title.textContent = pos.name;
-        const message = document.createElement("p");
-        message.className = "mt-2";
-        message.textContent = "Magasin non disponible actuellement";
-        const invite = document.createElement("p");
-        invite.className = "mt-2 text-[#3d4948]";
-        invite.textContent =
-          "Ce point de vente n’est pas ouvert sur Akwire. Rejoignez Akwire pour y proposer vos stocks.";
-        popupNode.append(title, message, invite);
+        const selectOffer = (offerId: string) => {
+          const url = new URL(pathRef.current, window.location.origin);
+          url.searchParams.set("vue", "carte");
+          url.searchParams.set("offre", offerId);
+          router.replace(`${url.pathname}?${url.searchParams.toString()}`, {
+            scroll: false,
+          });
+        };
 
-        const popup = new Popup({
-          offset: 18,
-          closeButton: true,
-        }).setDOMContent(popupNode);
+        const renderMarkers = () => {
+          for (const marker of markersRef.current) {
+            marker.remove();
+          }
+          markersRef.current = [];
 
-        const marker = new Marker({ element })
-          .setLngLat([pos.lng, pos.lat])
-          .setPopup(popup)
-          .addTo(map);
+          for (const group of groupsRef.current) {
+            const element = document.createElement("button");
+            element.type = "button";
+            element.className =
+              "flex h-8 min-w-8 items-center justify-center rounded-full border-2 border-[#002642] bg-[#fe9800] px-1.5 text-xs font-extrabold text-[#002642] shadow-[0_2px_6px_rgba(0,38,66,0.15)]";
+            element.textContent = String(group.offers.length);
+            element.setAttribute(
+              "aria-label",
+              `${group.posName}, ${group.offers.length} offre${group.offers.length > 1 ? "s" : ""}`,
+            );
 
-        markersRef.current.push(marker);
-      }
-    };
+            const popupNode = document.createElement("div");
+            popupNode.className = "min-w-48 max-w-64 text-sm text-[#191c1e]";
+            const title = document.createElement("p");
+            title.className = "font-bold text-[#002642]";
+            title.textContent = group.posName;
+            popupNode.append(title);
 
-    const onReady = () => {
-      map.resize();
-      renderMarkers();
-    };
+            for (const offer of group.offers) {
+              const row = document.createElement("a");
+              row.href = offerPath(offer.productSlug, {
+                posSlug: offer.posSlug || undefined,
+              });
+              row.className =
+                "mt-2 block rounded-full px-2 py-1 text-[#002642] underline-offset-2 hover:bg-[#f2f4f7] hover:underline";
+              const distanceLabel =
+                offer.distanceM != null
+                  ? formatDistance(offer.distanceM)
+                  : offer.city;
+              row.textContent = distanceLabel
+                ? `${offer.productName} — ${formatEur(offer.priceRemise)} · ${distanceLabel}`
+                : `${offer.productName} — ${formatEur(offer.priceRemise)}`;
+              row.addEventListener("click", () => {
+                selectOffer(offer.id);
+              });
+              popupNode.append(row);
+            }
 
-    if (map.loaded()) {
-      onReady();
-    } else {
-      map.once("load", onReady);
-    }
+            const popup = new Popup({
+              offset: 18,
+              closeButton: true,
+            }).setDOMContent(popupNode);
 
-    const observer = new ResizeObserver(() => {
-      map.resize();
-    });
-    observer.observe(node);
+            const marker = new Marker({ element })
+              .setLngLat([group.lng, group.lat])
+              .setPopup(popup)
+              .addTo(created);
+
+            element.addEventListener("click", () => {
+              const preferred =
+                group.offers.find(
+                  (offer) => offer.id === selectedRef.current,
+                ) ?? group.offers[0];
+              if (preferred) {
+                selectOffer(preferred.id);
+              }
+            });
+
+            markersRef.current.push(marker);
+          }
+
+          for (const pos of unavailableRef.current) {
+            const element = document.createElement("button");
+            element.type = "button";
+            element.className =
+              "flex h-8 min-w-8 items-center justify-center rounded-full border-2 border-[#002642] bg-[#e6e8ec] px-1.5 text-xs font-extrabold text-[#002642] shadow-[0_2px_6px_rgba(0,38,66,0.15)]";
+            element.textContent = "–";
+            element.setAttribute(
+              "aria-label",
+              `${pos.name}, magasin non disponible actuellement`,
+            );
+
+            const popupNode = document.createElement("div");
+            popupNode.className = "min-w-48 max-w-64 text-sm text-[#191c1e]";
+            const title = document.createElement("p");
+            title.className = "font-bold text-[#002642]";
+            title.textContent = pos.name;
+            const message = document.createElement("p");
+            message.className = "mt-2";
+            message.textContent = "Magasin non disponible actuellement";
+            const invite = document.createElement("p");
+            invite.className = "mt-2 text-[#3d4948]";
+            invite.textContent =
+              "Ce point de vente n’est pas ouvert sur Akwire. Rejoignez Akwire pour y proposer vos stocks.";
+            popupNode.append(title, message, invite);
+
+            const popup = new Popup({
+              offset: 18,
+              closeButton: true,
+            }).setDOMContent(popupNode);
+
+            const marker = new Marker({ element })
+              .setLngLat([pos.lng, pos.lat])
+              .setPopup(popup)
+              .addTo(created);
+
+            markersRef.current.push(marker);
+          }
+        };
+
+        const onReady = () => {
+          created.resize();
+          renderMarkers();
+        };
+
+        if (created.loaded()) {
+          onReady();
+        } else {
+          created.once("load", onReady);
+        }
+
+        observer = new ResizeObserver(() => {
+          map?.resize();
+        });
+        observer.observe(node);
+      })
+      .catch(() => {
+        // Le conteneur reste vide : l'état d'erreur est le fond absent.
+      });
 
     return () => {
-      observer.disconnect();
+      cancelled = true;
+      observer?.disconnect();
       for (const marker of markersRef.current) {
         marker.remove();
       }
       markersRef.current = [];
-      map.remove();
+      map?.remove();
       mapRef.current = null;
     };
   }, [centerLat, centerLng, groups, router, styleUrl, tilesUrl, unavailable]);
