@@ -22,6 +22,33 @@ assert(quoted.rows.length === 2, "La ligne quotée et la ligne valide doivent pa
 assert(quoted.rows[0]?.cells[1] === "a;b", "Le point-virgule dans les guillemets reste dans le champ.");
 assert(quoted.rejects.length === 1 && quoted.rejects[0]?.line === 3, "La ligne courte est rejetée.");
 
+const inches = parseFeedCsv(
+  'gtin;title;price\n"6942147491119";"Tv Uhd 4k 55" Hisense";"379.00"\n"12345678";"Cle Usb Philips "snow" 16 Go";"9.99"\nshort;only\n',
+  { delimiter: ";" },
+);
+assert(inches.rows.length === 2, "Les guillemets internes ne rejettent pas la ligne.");
+assert(inches.rows[0]?.cells[1] === 'Tv Uhd 4k 55" Hisense', "Le pouce reste dans le titre.");
+assert(
+  inches.rows[1]?.cells[1] === 'Cle Usb Philips "snow" 16 Go',
+  "Les guillemets autour d'un mot restent dans le titre.",
+);
+assert(inches.rejects.length === 1, "Une ligne trop courte reste rejetée.");
+assert(
+  !inches.rejects.some((reject) => reject.detail.includes("Invalid Closing Quote")),
+  "Plus de rejet pour guillemet interne.",
+);
+
+const tradedoublerQuotes = parseFeedCsv(
+  'ean;name;categories\n"11111111";"Chemise";";Fashion;68"\n',
+  { delimiter: ";" },
+);
+assert(
+  tradedoublerQuotes.rows.length === 1 &&
+    tradedoublerQuotes.rows[0]?.cells[2] === ";Fashion;68" &&
+    tradedoublerQuotes.rejects.length === 0,
+  "Le champ categories Tradedoubler reste entier.",
+);
+
 const tradedoublerProfile = {
   productKeyColumns: ["ean"],
   titleColumn: "name",

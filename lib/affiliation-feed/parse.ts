@@ -23,11 +23,19 @@ type InfoRecord = {
   info: { lines: number };
 };
 
+/** Guillemet résiduel laissé par relax_quotes autour d'un champ déjà quoté. */
+function unwrapResidualQuotes(cell: string): string {
+  if (cell.length >= 2 && cell.startsWith('"') && cell.endsWith('"')) {
+    return cell.slice(1, -1);
+  }
+  return cell;
+}
+
 /**
  * Lit un flux selon le délimiteur du profil. Les guillemets sont toujours
  * honorés : un séparateur à l'intérieur d'un champ quoté ne découpe pas la ligne.
- * Une ligne dont le nombre de colonnes diffère de l'en-tête est rejetée et
- * loguée, le reste du fichier continue.
+ * Un guillemet interne non échappé (55", "snow") est toléré. Une ligne dont le
+ * nombre de colonnes diffère de l'en-tête est rejetée, le reste du fichier continue.
  */
 export function parseFeedCsv(
   text: string,
@@ -40,6 +48,7 @@ export function parseFeedCsv(
     skip_empty_lines: true,
     skip_records_with_error: true,
     relax_column_count: false,
+    relax_quotes: true,
     info: true,
     on_skip(error: CsvError | undefined) {
       const line = typeof error?.lines === "number" ? error.lines : 0;
@@ -60,7 +69,7 @@ export function parseFeedCsv(
     header: headerRecord.record.map((cell) => cell.trim()),
     rows: parsed.slice(1).map((entry) => ({
       line: entry.info.lines,
-      cells: entry.record,
+      cells: entry.record.map(unwrapResidualQuotes),
     })),
     rejects,
   };
