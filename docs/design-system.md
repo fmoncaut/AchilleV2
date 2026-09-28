@@ -1,5 +1,9 @@
 # Achille — Design System (source : export Stitch « Achille V2 »)
 
+Projet Google Stitch : [`3577567773712782775`](https://stitch.withgoogle.com/projects/3577567773712782775) (« Achille V2 Web Marketplace »).  
+Fichier source versionné : `design/stitch/local_commerce_discovery_system/DESIGN.md`.  
+Design system Stitch généré depuis ce fichier : asset `ee90e065899049e4b86c7ac93f1162c4`.
+
 Référence unique pour l'apparence d'Achille. Tokens exacts, à câbler dans Tailwind v4
 (`@theme` dans app/globals.css) + variables CSS. Les écrans Stitch de référence sont
 dans `design/stitch/` (chaque dossier a `code.html` + `screen.png`).
