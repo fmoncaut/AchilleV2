@@ -8,7 +8,12 @@ import { OffersMapLoader } from "@/components/map/offers-map-loader";
 import { MaterialIcon } from "@/components/material-icon";
 import { SearchForm } from "@/components/search/search-form";
 import { prisma } from "@/lib/db";
-import { findOffersNearby, toOfferCard, type NearbyOfferCard } from "@/lib/geo";
+import {
+  findOffersNearby,
+  findUnavailablePosNearby,
+  toOfferCard,
+  type NearbyOfferCard,
+} from "@/lib/geo";
 import { getIgnMapConfig } from "@/lib/map-config";
 import { DEFAULT_RADIUS_KM, searchHref, type SearchQuery } from "@/lib/search";
 import { magasinPath } from "@/lib/urls";
@@ -87,7 +92,7 @@ async function resolveOrigin(userId: string | undefined): Promise<{
       const near = await prisma.$queryRaw<Array<{ city: string | null; name: string }>>`
         SELECT city, name
         FROM "Pos"
-        WHERE "isActive" = true
+        WHERE status = 'ACTIVE_VISIBLE'
         ORDER BY geog <-> ST_MakePoint(${user.lastLng}, ${user.lastLat})::geography
         LIMIT 1
       `;
@@ -100,18 +105,26 @@ async function resolveOrigin(userId: string | undefined): Promise<{
     }
   }
 
-  const busiest = await prisma.offer.groupBy({
-    by: ["posId"],
-    where: {
-      isOnline: true,
-      stock: { gt: 0 },
-      posId: { not: null },
-      OR: [{ feedId: null }, { feed: { status: "ACTIVE" } }],
-    },
-    _count: { id: true },
-    orderBy: { _count: { id: "desc" } },
-    take: 1,
-  });
+  const busiest = await prisma.$queryRaw<Array<{ posId: string }>>`
+    SELECT o."posId" AS "posId"
+    FROM "Offer" o
+    JOIN "Pos" p ON p.id = o."posId"
+    JOIN "Merchant" m ON m.id = p."merchantId"
+    WHERE o."isOnline" = true
+      AND o.stock > 0
+      AND p.status = 'ACTIVE_VISIBLE'
+      AND m."isActive" = true
+      AND (
+        o."feedId" IS NULL
+        OR EXISTS (
+          SELECT 1 FROM "AffiliationFeed" f
+          WHERE f.id = o."feedId" AND f.status = 'ACTIVE'
+        )
+      )
+    GROUP BY o."posId"
+    ORDER BY count(*) DESC
+    LIMIT 1
+  `;
   const posId = busiest[0]?.posId;
   if (!posId) {
     return null;
@@ -228,6 +241,9 @@ export default async function Home({ searchParams }: PageProps) {
           limit: 24,
         })
       ).map(toOfferCard)
+    : [];
+  const unavailable = origin
+    ? await findUnavailablePosNearby(origin.lat, origin.lng, radiusKm * 1000)
     : [];
   const posIds = [...new Set(offers.map((offer) => offer.posId))];
   const hourRows = posIds.length
@@ -539,6 +555,7 @@ export default async function Home({ searchParams }: PageProps) {
               </p>
               <OffersMapLoader
                 offers={visible}
+                unavailable={unavailable}
                 centerLat={origin.lat}
                 centerLng={origin.lng}
                 selectedOfferId={featured[0]?.id ?? ""}

@@ -6,7 +6,7 @@ import { requireSuperAdmin } from "@/lib/admin/actor";
 import { getPos, listMerchantOptions } from "@/lib/admin/platform";
 
 export const metadata = {
-  title: "Éditer un magasin | Back-office Achille",
+  title: "Éditer un magasin | Back-office Akwire",
 };
 
 type EditMagasinPageProps = {
@@ -45,7 +45,7 @@ export default async function EditMagasinPage({
   return (
     <AdminMain width="form">
       <div>
-        <AdminKicker>Console Achille</AdminKicker>
+        <AdminKicker>Console Akwire</AdminKicker>
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Éditer le magasin
         </h1>
@@ -72,7 +72,7 @@ export default async function EditMagasinPage({
             city: pos.city ?? "",
             phone: pos.phone ?? "",
             hours: hoursRecord(pos.openingHours),
-            isActive: pos.isActive,
+            status: pos.status,
             lat: pos.lat,
             lng: pos.lng,
           }}

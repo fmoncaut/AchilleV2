@@ -4,7 +4,7 @@ import { requireSuperAdmin } from "@/lib/admin/actor";
 import { listMerchantOptions } from "@/lib/admin/platform";
 
 export const metadata = {
-  title: "Nouveau magasin | Back-office Achille",
+  title: "Nouveau magasin | Back-office Akwire",
 };
 
 export default async function NouveauMagasinPage() {
@@ -14,7 +14,7 @@ export default async function NouveauMagasinPage() {
   return (
     <AdminMain width="form">
       <div>
-        <AdminKicker>Console Achille</AdminKicker>
+        <AdminKicker>Console Akwire</AdminKicker>
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Nouveau magasin
         </h1>

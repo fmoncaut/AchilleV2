@@ -36,6 +36,7 @@ type SourceRow = {
   legacyFuzionContainerId: string;
   logoUrl: string;
   sourceActive: boolean;
+  network: string | null;
 };
 
 type PlannedPos = {
@@ -54,6 +55,7 @@ type PlannedPos = {
   legacyFuzionContainerId: string | null;
   logoUrl: string;
   sourceActive: boolean;
+  network: string | null;
 };
 
 type RejectedRow = {
@@ -78,6 +80,11 @@ function cellString(value: ExcelJS.CellValue): string {
     if ("hyperlink" in value && typeof value.hyperlink === "string") return value.hyperlink.trim();
   }
   return "";
+}
+
+function sheetNetwork(sheet: string): string | null {
+  const match = sheet.normalize("NFC").match(/^(KW|EF|AW|TD|AF|AFF)\b/i);
+  return match?.[1]?.toUpperCase() ?? null;
 }
 
 function enseigneName(sheet: string): string {
@@ -106,8 +113,8 @@ function sourceActive(raw: string): boolean {
   return value === "true" || value === "1";
 }
 
-/** isActive source false → masqué. L'import initial masque aussi les lignes actives :
- * le catalogue lit Pos.isActive, que le tri-état status ne pilote pas encore. */
+/** Import initial : tout le monde reste masqué. La publication se fait dans le back-office.
+ * Un rejeu ne réécrit pas status, isActive ni statusSource. */
 function visibility(active: boolean): { status: "INACTIVE_HIDDEN"; isActive: false } {
   if (!active) {
     return { status: "INACTIVE_HIDDEN", isActive: false };
@@ -227,6 +234,7 @@ async function readRows(filePath: string): Promise<{ rows: SourceRow[]; rejected
         legacyFuzionContainerId: get(row, "fuzionContainerId"),
         logoUrl: get(row, "logo"),
         sourceActive: sourceActive(get(row, "isActive")),
+        network: sheetNetwork(sheet.name),
       });
     }
   }
@@ -261,6 +269,7 @@ function planImport(rows: SourceRow[]): PlannedPos[] {
     legacyFuzionContainerId: row.legacyFuzionContainerId || null,
     logoUrl: row.logoUrl,
     sourceActive: row.sourceActive,
+    network: row.network,
   }));
 }
 
@@ -275,6 +284,23 @@ function majorityLogo(rows: PlannedPos[]): string {
   for (const [url, count] of counts) {
     if (count > bestCount) {
       best = url;
+      bestCount = count;
+    }
+  }
+  return best;
+}
+
+function majorityNetwork(rows: PlannedPos[]): string | null {
+  const counts = new Map<string, number>();
+  for (const row of rows) {
+    if (!row.network) continue;
+    counts.set(row.network, (counts.get(row.network) ?? 0) + 1);
+  }
+  let best: string | null = null;
+  let bestCount = 0;
+  for (const [network, count] of counts) {
+    if (count > bestCount) {
+      best = network;
       bestCount = count;
     }
   }
@@ -394,10 +420,11 @@ async function writeImport(
     const columns = await prisma.$queryRaw<{ column_name: string }[]>`
       SELECT column_name
       FROM information_schema.columns
-      WHERE table_schema = 'public' AND table_name = 'Pos' AND column_name = 'placeId'
+      WHERE table_schema = 'public' AND table_name = 'Pos'
+        AND column_name IN ('placeId', 'statusSource')
     `;
-    if (columns.length === 0) {
-      throw new Error("Colonne Pos.placeId absente. Appliquer la migration avant l'import.");
+    if (columns.length < 2) {
+      throw new Error("Colonnes Pos.placeId ou Pos.statusSource absentes. Appliquer les migrations avant l'import.");
     }
 
     const byMerchant = new Map<string, PlannedPos[]>();
@@ -416,6 +443,7 @@ async function writeImport(
     for (const [slug, rows] of byMerchant) {
       const sourceLogo = majorityLogo(rows);
       const logoUrl = sourceLogo ? (logoBySource.get(sourceLogo) ?? null) : null;
+      const network = majorityNetwork(rows);
       const currentId = merchantIdBySlug.get(slug);
       if (currentId) {
         await prisma.merchant.update({
@@ -423,12 +451,19 @@ async function writeImport(
           data: {
             name: rows[0]!.enseigne,
             ...(logoUrl ? { logoUrl } : {}),
+            ...(network ? { legacyNetwork: network } : {}),
           },
         });
         merchantsUpdated += 1;
       } else {
         const created = await prisma.merchant.create({
-          data: { name: rows[0]!.enseigne, slug, logoUrl, isActive: true },
+          data: {
+            name: rows[0]!.enseigne,
+            slug,
+            logoUrl,
+            isActive: true,
+            ...(network ? { legacyNetwork: network } : {}),
+          },
           select: { id: true },
         });
         merchantIdBySlug.set(slug, created.id);
@@ -518,7 +553,8 @@ async function writeImport(
             ${row.legacyDealerId},
             ${row.legacyFuzionContainerId},
             ${row.placeId},
-            ${null}
+            ${null},
+            CAST('AUTO' AS "PosStatusSource")
           )`,
         ),
       );
@@ -526,7 +562,7 @@ async function writeImport(
         INSERT INTO "Pos" (
           "id", "merchantId", "name", "slug", "address", "postalCode", "city", "phone",
           "lat", "lng", "isActive", "status", "legacyDealerId", "legacyFuzionContainerId",
-          "placeId", "logoUrl"
+          "placeId", "logoUrl", "statusSource"
         )
         VALUES ${values}
         ON CONFLICT ("merchantId", "placeId") DO UPDATE SET

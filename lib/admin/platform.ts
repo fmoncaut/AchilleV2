@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, type PosStatus, type PosStatusSource } from "@prisma/client";
 
 import type { MerchantFormInput, PosFormInput, UserRoleInput } from "@/lib/admin/platform-schemas";
 import { WEEK_DAYS } from "@/lib/admin/platform-schemas";
@@ -57,23 +57,50 @@ function pickGeocodeHit(
   return hits.find((hit) => hit.postcode === postalCode) ?? hits[0] ?? null;
 }
 
-async function geocodePos(input: PosFormInput): Promise<GeocodeHit> {
+function manualPoint(input: PosFormInput): { lat: number; lng: number } | null {
+  if (!input.lat && !input.lng) {
+    return null;
+  }
+  const lat = Number(input.lat.replace(",", "."));
+  const lng = Number(input.lng.replace(",", "."));
+  if (
+    !Number.isFinite(lat) ||
+    !Number.isFinite(lng) ||
+    lat < -90 ||
+    lat > 90 ||
+    lng < -180 ||
+    lng > 180
+  ) {
+    return null;
+  }
+  return { lat, lng };
+}
+
+async function resolvePosPoint(
+  input: PosFormInput,
+): Promise<{ lat: number; lng: number; city: string }> {
   const query = `${input.address}, ${input.postalCode} ${input.city}`;
-  let hits: GeocodeHit[] = [];
   try {
-    hits = await geocodeAddress(query, 5);
+    const hit = pickGeocodeHit(await geocodeAddress(query, 5), input.postalCode);
+    if (hit) {
+      return { lat: hit.lat, lng: hit.lng, city: input.city || hit.city || "" };
+    }
   } catch {
+    const fallback = manualPoint(input);
+    if (fallback) {
+      return { ...fallback, city: input.city };
+    }
     throw new PlatformError(
-      "La Base Adresse Nationale est indisponible. Réessayez dans un instant.",
+      "La Base Adresse Nationale est indisponible. Saisissez la latitude et la longitude.",
     );
   }
-  const hit = pickGeocodeHit(hits, input.postalCode);
-  if (!hit) {
+  const fallback = manualPoint(input);
+  if (!fallback) {
     throw new PlatformError(
-      "Adresse introuvable dans la Base Adresse Nationale. Précisez la rue, le code postal et la ville.",
+      "Adresse introuvable dans la Base Adresse Nationale. Saisissez la latitude et la longitude.",
     );
   }
-  return hit;
+  return { ...fallback, city: input.city };
 }
 
 export async function getPlatformCounts() {
@@ -149,13 +176,6 @@ export async function listMerchantOptions() {
   });
 }
 
-export async function listPos() {
-  return prisma.pos.findMany({
-    orderBy: [{ merchant: { name: "asc" } }, { name: "asc" }],
-    include: { merchant: { select: { id: true, name: true, slug: true } } },
-  });
-}
-
 export async function getPos(id: string) {
   return prisma.pos.findUnique({
     where: { id },
@@ -163,19 +183,25 @@ export async function getPos(id: string) {
   });
 }
 
-function posData(input: PosFormInput, hit: GeocodeHit, slug: string) {
+function posData(
+  input: PosFormInput,
+  point: { lat: number; lng: number; city: string },
+  slug: string,
+) {
   return {
     merchantId: input.merchantId,
     name: input.name,
     slug,
     address: input.address,
     postalCode: input.postalCode,
-    city: input.city || hit.city,
+    city: input.city || point.city,
     phone: input.phone || null,
     openingHours: openingHoursJson(input.hours),
-    lat: hit.lat,
-    lng: hit.lng,
-    isActive: input.isActive,
+    lat: point.lat,
+    lng: point.lng,
+    status: input.status,
+    statusSource: "MANUAL" as const,
+    isActive: input.status === "ACTIVE_VISIBLE",
   };
 }
 
@@ -187,12 +213,12 @@ export async function createPos(input: PosFormInput) {
   if (!merchant) {
     throw new PlatformError("Enseigne introuvable.");
   }
-  const hit = await geocodePos(input);
+  const point = await resolvePosPoint(input);
   const slug = await uniqueSlug(
     "pos",
     `${merchant.slug}-${input.name}-${input.city}`,
   );
-  return prisma.pos.create({ data: posData(input, hit, slug) });
+  return prisma.pos.create({ data: posData(input, point, slug) });
 }
 
 export async function updatePos(id: string, input: PosFormInput) {
@@ -210,7 +236,7 @@ export async function updatePos(id: string, input: PosFormInput) {
   if (!merchant) {
     throw new PlatformError("Enseigne introuvable.");
   }
-  const hit = await geocodePos(input);
+  const point = await resolvePosPoint(input);
   const slug = await uniqueSlug(
     "pos",
     `${merchant.slug}-${input.name}-${input.city}`,
@@ -218,11 +244,11 @@ export async function updatePos(id: string, input: PosFormInput) {
   );
   return prisma.pos.update({
     where: { id },
-    data: posData(input, hit, slug),
+    data: posData(input, point, slug),
   });
 }
 
-export async function setPosActive(id: string, isActive: boolean) {
+export async function setPosStatus(id: string, status: PosStatus) {
   const pos = await prisma.pos.findUnique({
     where: { id },
     select: { id: true, slug: true },
@@ -230,8 +256,78 @@ export async function setPosActive(id: string, isActive: boolean) {
   if (!pos) {
     throw new PlatformError("Magasin introuvable.");
   }
-  await prisma.pos.update({ where: { id }, data: { isActive } });
+  await prisma.pos.update({
+    where: { id },
+    data: {
+      status,
+      statusSource: "MANUAL",
+      isActive: status === "ACTIVE_VISIBLE",
+    },
+  });
   return pos;
+}
+
+export async function setPosActive(id: string, isActive: boolean) {
+  return setPosStatus(id, isActive ? "ACTIVE_VISIBLE" : "INACTIVE_HIDDEN");
+}
+
+const POS_PAGE_SIZE = 50;
+
+export async function listPosNetworks(): Promise<string[]> {
+  const rows = await prisma.merchant.findMany({
+    where: { legacyNetwork: { not: null } },
+    distinct: ["legacyNetwork"],
+    select: { legacyNetwork: true },
+    orderBy: { legacyNetwork: "asc" },
+  });
+  return rows
+    .map((row) => row.legacyNetwork)
+    .filter((network): network is string => Boolean(network));
+}
+
+export async function listPosPage(filters: {
+  merchantId?: string;
+  status?: PosStatus;
+  statusSource?: PosStatusSource;
+  network?: string;
+  q?: string;
+  page: number;
+}) {
+  const page = Math.max(1, filters.page);
+  const where: Prisma.PosWhereInput = {};
+  if (filters.merchantId) {
+    where.merchantId = filters.merchantId;
+  }
+  if (filters.status) {
+    where.status = filters.status;
+  }
+  if (filters.statusSource) {
+    where.statusSource = filters.statusSource;
+  }
+  if (filters.network === "none") {
+    where.merchant = { legacyNetwork: null };
+  } else if (filters.network) {
+    where.merchant = { legacyNetwork: filters.network };
+  }
+  const q = filters.q?.trim();
+  if (q) {
+    where.name = { contains: q, mode: "insensitive" };
+  }
+  const [total, rows] = await prisma.$transaction([
+    prisma.pos.count({ where }),
+    prisma.pos.findMany({
+      where,
+      orderBy: [{ merchant: { name: "asc" } }, { name: "asc" }],
+      include: {
+        merchant: {
+          select: { id: true, name: true, slug: true, legacyNetwork: true },
+        },
+      },
+      skip: (page - 1) * POS_PAGE_SIZE,
+      take: POS_PAGE_SIZE,
+    }),
+  ]);
+  return { rows, total, page, pageSize: POS_PAGE_SIZE };
 }
 
 export async function listUsers(query: string) {

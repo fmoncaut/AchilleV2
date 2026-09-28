@@ -13,12 +13,13 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import { formatDistance } from "@/components/distance";
 import { EmptyState } from "@/components/search/empty-state";
-import type { NearbyOfferCard } from "@/lib/geo";
+import type { NearbyOfferCard, UnavailablePos } from "@/lib/geo";
 import { formatEur } from "@/lib/money";
 import { offerPath } from "@/lib/urls";
 
 type OffersMapProps = {
   offers: NearbyOfferCard[];
+  unavailable?: UnavailablePos[];
   centerLat: number;
   centerLng: number;
   selectedOfferId: string;
@@ -77,6 +78,7 @@ function groupByPos(offers: NearbyOfferCard[]): PosGroup[] {
 
 export function OffersMap({
   offers,
+  unavailable = [],
   centerLat,
   centerLng,
   selectedOfferId,
@@ -90,14 +92,16 @@ export function OffersMap({
   const markersRef = useRef<Marker[]>([]);
   const groups = useMemo(() => groupByPos(offers), [offers]);
   const groupsRef = useRef(groups);
+  const unavailableRef = useRef(unavailable);
   const selectedRef = useRef(selectedOfferId);
   const pathRef = useRef(recherchePath);
 
   useEffect(() => {
     groupsRef.current = groups;
+    unavailableRef.current = unavailable;
     selectedRef.current = selectedOfferId;
     pathRef.current = recherchePath;
-  }, [groups, recherchePath, selectedOfferId]);
+  }, [groups, recherchePath, selectedOfferId, unavailable]);
 
   useEffect(() => {
     const node = containerRef.current;
@@ -197,6 +201,44 @@ export function OffersMap({
 
         markersRef.current.push(marker);
       }
+
+      for (const pos of unavailableRef.current) {
+        const element = document.createElement("button");
+        element.type = "button";
+        element.className =
+          "flex h-8 min-w-8 items-center justify-center rounded-full border-2 border-[#002642] bg-[#e6e8ec] px-1.5 text-xs font-extrabold text-[#002642] shadow-[0_2px_6px_rgba(0,38,66,0.15)]";
+        element.textContent = "–";
+        element.setAttribute(
+          "aria-label",
+          `${pos.name}, magasin non disponible actuellement`,
+        );
+
+        const popupNode = document.createElement("div");
+        popupNode.className = "min-w-48 max-w-64 text-sm text-[#191c1e]";
+        const title = document.createElement("p");
+        title.className = "font-bold text-[#002642]";
+        title.textContent = pos.name;
+        const message = document.createElement("p");
+        message.className = "mt-2";
+        message.textContent = "Magasin non disponible actuellement";
+        const invite = document.createElement("p");
+        invite.className = "mt-2 text-[#3d4948]";
+        invite.textContent =
+          "Ce point de vente n’est pas ouvert sur Akwire. Rejoignez Akwire pour y proposer vos stocks.";
+        popupNode.append(title, message, invite);
+
+        const popup = new Popup({
+          offset: 18,
+          closeButton: true,
+        }).setDOMContent(popupNode);
+
+        const marker = new Marker({ element })
+          .setLngLat([pos.lng, pos.lat])
+          .setPopup(popup)
+          .addTo(map);
+
+        markersRef.current.push(marker);
+      }
     };
 
     const onReady = () => {
@@ -224,7 +266,7 @@ export function OffersMap({
       map.remove();
       mapRef.current = null;
     };
-  }, [centerLat, centerLng, groups, router, styleUrl, tilesUrl]);
+  }, [centerLat, centerLng, groups, router, styleUrl, tilesUrl, unavailable]);
 
   useEffect(() => {
     const map = mapRef.current;

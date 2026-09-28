@@ -14,7 +14,7 @@ import { requireSuperAdmin } from "@/lib/admin/actor";
 import { listMerchants } from "@/lib/admin/platform";
 
 export const metadata = {
-  title: "Enseignes | Back-office Achille",
+  title: "Enseignes | Back-office Akwire",
 };
 
 export default async function EnseignesPage() {
@@ -25,7 +25,7 @@ export default async function EnseignesPage() {
     <AdminMain>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <AdminKicker>Console Achille</AdminKicker>
+          <AdminKicker>Console Akwire</AdminKicker>
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
             Enseignes
           </h1>
@@ -46,6 +46,7 @@ export default async function EnseignesPage() {
               <th className="px-3 py-3">Nom</th>
               <th className="px-3 py-3">Slug</th>
               <th className="px-3 py-3">Magasins</th>
+              <th className="px-3 py-3">Publication POS</th>
               <th className="px-3 py-3">Statut</th>
               <th className="px-3 py-3">Actions</th>
             </tr>
@@ -70,6 +71,13 @@ export default async function EnseignesPage() {
                   {merchant.slug}
                 </td>
                 <td className="font-body-sm px-3 py-2">{merchant._count.pos}</td>
+                <td className="px-3 py-2">
+                  <StatusChip
+                    active={merchant.posPublished}
+                    activeLabel="Publiés"
+                    inactiveLabel="Masqués"
+                  />
+                </td>
                 <td className="px-3 py-2">
                   <StatusChip active={merchant.isActive} />
                 </td>

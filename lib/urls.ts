@@ -59,8 +59,12 @@ export function villeCategoriePath(
   return query ? `${path}?${query}` : path;
 }
 
-export function outboundPath(offerId: string): string {
-  return `/api/out/${offerId}`;
+export function outboundPath(offerId: string, posSlug?: string): string {
+  if (!posSlug) {
+    return `/api/out/${offerId}`;
+  }
+  const params = new URLSearchParams({ pos: posSlug });
+  return `/api/out/${offerId}?${params.toString()}`;
 }
 
 export function loginWithReturn(path: string): string {

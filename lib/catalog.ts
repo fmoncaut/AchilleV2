@@ -24,7 +24,7 @@ const posSelect = {
   openingHours: true,
   lat: true,
   lng: true,
-  isActive: true,
+  status: true,
   merchantId: true,
 } as const;
 
@@ -160,18 +160,18 @@ function placementStores(
   enseigneByMerchant: Map<string, Array<NonNullable<LoadedOffer["pos"]>>>,
 ) {
   if (offer.kind === "DIRECT") {
-    return offer.pos?.isActive ? [offer.pos] : [];
+    return offer.pos?.status === "ACTIVE_VISIBLE" ? [offer.pos] : [];
   }
   if (offer.scope === "ENSEIGNE") {
     return enseigneByMerchant.get(offer.merchantId) ?? [];
   }
   const targeted = offer.targetedPos
     .map((link) => link.pos)
-    .filter((pos) => pos.isActive);
+    .filter((pos) => pos.status === "ACTIVE_VISIBLE");
   if (targeted.length > 0) {
     return targeted;
   }
-  return offer.pos?.isActive ? [offer.pos] : [];
+  return offer.pos?.status === "ACTIVE_VISIBLE" ? [offer.pos] : [];
 }
 
 async function expandProductOffers(offers: LoadedOffer[]): Promise<ShowcaseOffer[]> {
@@ -188,7 +188,7 @@ async function expandProductOffers(offers: LoadedOffer[]): Promise<ShowcaseOffer
       : await prisma.pos.findMany({
           where: {
             merchantId: { in: merchantIds },
-            isActive: true,
+            status: "ACTIVE_VISIBLE",
             merchant: { isActive: true },
           },
           select: posSelect,
@@ -240,7 +240,7 @@ export const getCachedProductPage = unstable_cache(
       offers: await expandProductOffers(product.offers),
     };
   },
-  ["catalog-product-page-v7"],
+  ["catalog-product-page-v8"],
   catalogCache,
 );
 
@@ -250,7 +250,7 @@ export const getCachedPosPage = unstable_cache(
       where: { slug },
       include: { merchant: true },
     });
-    if (!pos || !pos.isActive || !pos.merchant.isActive) {
+    if (!pos || pos.status !== "ACTIVE_VISIBLE" || !pos.merchant.isActive) {
       return null;
     }
     const offers = await prisma.offer.findMany({
@@ -277,7 +277,7 @@ export const getCachedPosPage = unstable_cache(
       offers: offers.map((offer) => serializePosOfferCard(offer, pos)),
     };
   },
-  ["catalog-pos-page-v6"],
+  ["catalog-pos-page-v7"],
   catalogCache,
 );
 
@@ -285,7 +285,7 @@ async function listKnownCities(): Promise<string[]> {
   const rows = await prisma.pos.findMany({
     where: {
       city: { not: null },
-      isActive: true,
+      status: "ACTIVE_VISIBLE",
       merchant: { isActive: true },
     },
     select: { city: true },
@@ -307,7 +307,7 @@ async function getCityCategoryOffers(cityName: string, categoryId: string) {
   const poses = await prisma.pos.findMany({
     where: {
       city: cityName,
-      isActive: true,
+      status: "ACTIVE_VISIBLE",
       merchant: { isActive: true },
     },
     select: {
@@ -394,7 +394,7 @@ export const getCachedCityCategoryPage = unstable_cache(
       offers,
     };
   },
-  ["catalog-city-category-page-v6"],
+  ["catalog-city-category-page-v7"],
   catalogCache,
 );
 
@@ -405,7 +405,7 @@ export async function listSitemapEntries() {
       select: { slug: true },
     }),
     prisma.pos.findMany({
-      where: { isActive: true, merchant: { isActive: true } },
+      where: { status: "ACTIVE_VISIBLE", merchant: { isActive: true } },
       select: { id: true, slug: true, city: true, merchantId: true },
     }),
     prisma.offer.findMany({

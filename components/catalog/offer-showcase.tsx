@@ -223,6 +223,7 @@ function OfferShowcaseView({
                   merchantUrl={current.merchantUrl}
                   kind={current.kind}
                   posId={current.pos.id}
+                  posSlug={current.pos.slug}
                   stock={current.stock}
                   lat={lat}
                   lng={lng}
@@ -397,6 +398,7 @@ function OfferShowcaseView({
                           merchantUrl={offer.merchantUrl}
                           kind={offer.kind}
                           posId={offer.pos.id}
+                          posSlug={offer.pos.slug}
                           stock={offer.stock}
                           lat={lat}
                           lng={lng}

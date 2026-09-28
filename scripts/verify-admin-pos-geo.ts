@@ -53,7 +53,9 @@ async function main() {
         saturday: "",
         sunday: "fermé",
       },
-      isActive: true,
+      lat: "",
+      lng: "",
+      status: "ACTIVE_VISIBLE",
     });
     posId = pos.id;
 

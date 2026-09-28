@@ -11,6 +11,7 @@ type MerchantCtaProps = {
   merchantUrl: string | null;
   kind?: "DIRECT" | "AFFILIATION";
   posId?: string;
+  posSlug?: string;
   stock?: number;
   compact?: boolean;
   lat?: number | null;
@@ -23,6 +24,7 @@ export function MerchantCta({
   merchantUrl,
   kind = "AFFILIATION",
   posId,
+  posSlug,
   stock = 0,
   compact = false,
   lat = null,
@@ -57,7 +59,7 @@ export function MerchantCta({
         {compact ? null : (
           <p className="font-body-sm text-body-sm text-on-surface-variant">
             Cette offre n’est pas renvoyable vers le marchand pour le moment
-            (hors ligne ou sans lien). Achille ne vend pas : pas de panier ici.
+            (hors ligne ou sans lien). Akwire ne vend pas : pas de panier ici.
           </p>
         )}
       </div>
@@ -72,7 +74,7 @@ export function MerchantCta({
         className={cn(!compact && "h-12 px-6 text-base")}
       >
         <a
-          href={outboundPath(offerId)}
+          href={outboundPath(offerId, posSlug)}
           rel="nofollow sponsored noopener noreferrer"
           target="_blank"
         >

@@ -26,11 +26,17 @@ type PosFormProps = {
     city: string;
     phone: string;
     hours: Record<string, string>;
-    isActive: boolean;
+    status: "ACTIVE_VISIBLE" | "INACTIVE_VISIBLE" | "INACTIVE_HIDDEN";
     lat: number;
     lng: number;
   };
 };
+
+const STATUS_OPTIONS = [
+  { value: "ACTIVE_VISIBLE", label: "Publié" },
+  { value: "INACTIVE_VISIBLE", label: "Sur la carte, non cliquable" },
+  { value: "INACTIVE_HIDDEN", label: "Masqué" },
+] as const;
 
 export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
   const action = mode === "create" ? createPosAction : updatePosAction;
@@ -48,8 +54,10 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
         </p>
       ) : null}
       <p className="font-body-sm text-body-sm text-on-surface-variant">
-        L’adresse est géocodée via la Base Adresse Nationale à l’enregistrement.
-        La position (lat/lng) alimente la recherche autour de vous.
+        L’adresse est géocodée via la Base Adresse Nationale. Si elle ne trouve
+        rien, les coordonnées saisies sont enregistrées. Une adresse reconnue
+        les remplace. Enregistrer fixe une décision manuelle : la publication
+        de l’enseigne ne la modifiera plus.
       </p>
       <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1">
         Enseigne
@@ -169,20 +177,51 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
           ))}
         </div>
       </fieldset>
-      {defaults ? (
-        <p className="font-body-sm text-body-sm text-on-surface-variant">
-          Position actuelle : {defaults.lat.toFixed(5)}, {defaults.lng.toFixed(5)}.
-          Elle est recalculée si vous enregistrez une nouvelle adresse.
-        </p>
-      ) : null}
-      <label className="font-label-md text-label-md text-primary-container flex items-center gap-2">
-        <input
-          type="checkbox"
-          name="isActive"
-          defaultChecked={defaults?.isActive ?? true}
-          className="accent-secondary-container size-4"
-        />
-        Magasin actif (visible dans la recherche)
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1">
+          Latitude de repli
+          <input
+            name="lat"
+            inputMode="decimal"
+            defaultValue={defaults ? String(defaults.lat) : ""}
+            placeholder="45.75000"
+            className={adminFieldClass}
+          />
+          {state.fieldErrors?.lat ? (
+            <span className="font-body-sm text-error">{state.fieldErrors.lat}</span>
+          ) : null}
+        </label>
+        <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1">
+          Longitude de repli
+          <input
+            name="lng"
+            inputMode="decimal"
+            defaultValue={defaults ? String(defaults.lng) : ""}
+            placeholder="4.85000"
+            className={adminFieldClass}
+          />
+          {state.fieldErrors?.lng ? (
+            <span className="font-body-sm text-error">{state.fieldErrors.lng}</span>
+          ) : null}
+        </label>
+      </div>
+      <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1">
+        Visibilité
+        <select
+          name="status"
+          required
+          defaultValue={defaults?.status ?? "ACTIVE_VISIBLE"}
+          className={adminFieldClass}
+        >
+          {STATUS_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        {state.fieldErrors?.status ? (
+          <span className="font-body-sm text-error">{state.fieldErrors.status}</span>
+        ) : null}
       </label>
       <div>
         <Button type="submit" disabled={pending} size="lg">

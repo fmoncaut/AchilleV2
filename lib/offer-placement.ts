@@ -7,7 +7,7 @@ export function sqlOfferPlacementJoin(): Prisma.Sql {
   return Prisma.sql`
     INNER JOIN "Pos" p
       ON p."merchantId" = o."merchantId"
-      AND p."isActive" = true
+      AND p.status = 'ACTIVE_VISIBLE'
       AND (
         (o.kind = 'DIRECT' AND p.id = o."posId")
         OR (o.kind = 'AFFILIATION' AND o.scope = 'ENSEIGNE')
@@ -42,18 +42,18 @@ export const publicOfferWhere = {
   merchant: { isActive: true },
   AND: [publicFeedWhere],
   OR: [
-    { kind: "DIRECT" as const, pos: { isActive: true } },
+    { kind: "DIRECT" as const, pos: { status: "ACTIVE_VISIBLE" as const } },
     { kind: "AFFILIATION" as const, scope: "ENSEIGNE" as const },
     {
       kind: "AFFILIATION" as const,
       scope: "POS_CIBLES" as const,
-      targetedPos: { some: { pos: { isActive: true } } },
+      targetedPos: { some: { pos: { status: "ACTIVE_VISIBLE" as const } } },
     },
     {
       kind: "AFFILIATION" as const,
       scope: "POS_CIBLES" as const,
       targetedPos: { none: {} },
-      pos: { isActive: true },
+      pos: { status: "ACTIVE_VISIBLE" as const },
     },
   ],
 } satisfies Prisma.OfferWhereInput;

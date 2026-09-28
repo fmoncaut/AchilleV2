@@ -20,6 +20,10 @@ model Merchant {
   detailsSubmitted Boolean           @default(false)
   /// Commission Achille (ex. 0.0800). Null = STRIPE_DEFAULT_FEE_RATE.
   feeRate          Decimal?          @db.Decimal(6, 4)
+  /// Dernier clic superadmin sur « publier les POS ». N’est pas recalculé tout seul.
+  posPublished     Boolean           @default(false)
+  /// Préfixe réseau du fichier POS (KW, EF, AW, TD, AF, AFF). Vide tant qu’un réimport ne l’a pas rempli.
+  legacyNetwork    String?
   pos              Pos[]
   offers           Offer[]
   affiliationFeeds AffiliationFeed[]
@@ -33,6 +37,12 @@ enum PosStatus {
   ACTIVE_VISIBLE
   INACTIVE_VISIBLE
   INACTIVE_HIDDEN
+}
+
+/// AUTO : la publication d’enseigne peut réécrire le statut. MANUAL : décision du superadmin, jamais écrasée.
+enum PosStatusSource {
+  AUTO
+  MANUAL
 }
 
 // Colonne PostGIS `geog geography(Point,4326)` : générée en migration SQL
@@ -52,9 +62,11 @@ model Pos {
   openingHours            Json?
   lat                     Float
   lng                     Float
-  /// Lu par le catalogue, la géo et les réservations. Le tri-état `status` ne le remplace pas encore.
+  /// Dérivé de status : true seulement si ACTIVE_VISIBLE. Réécrit à chaque changement de statut.
   isActive                Boolean           @default(true)
+  /// Source de vérité de la vitrine. ACTIVE_VISIBLE, sur la carte sans clic, ou masqué.
   status                  PosStatus         @default(ACTIVE_VISIBLE)
+  statusSource            PosStatusSource   @default(AUTO)
   /// Traçabilité import legacy. Hors logique métier.
   legacyDealerId          String?
   legacyFuzionContainerId String?
@@ -72,6 +84,8 @@ model Pos {
 
   @@unique([merchantId, placeId])
   @@index([city])
+  @@index([status])
+  @@index([merchantId, statusSource])
 }
 
 model Brand {

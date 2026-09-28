@@ -111,7 +111,7 @@ export async function findOffersNearby(
         WHERE f.id = o."feedId" AND f.status = 'ACTIVE'
       )
     )`,
-    Prisma.sql`p."isActive" = true`,
+    Prisma.sql`p.status = 'ACTIVE_VISIBLE'`,
     Prisma.sql`ST_DWithin(
       p.geog,
       ST_MakePoint(${lng}, ${lat})::geography,
@@ -229,6 +229,53 @@ export async function findOffersNearby(
       distanceM: Number(row.distanceM),
     };
   });
+}
+
+export type UnavailablePos = {
+  id: string;
+  name: string;
+  slug: string;
+  city: string | null;
+  lat: number;
+  lng: number;
+};
+
+const UNAVAILABLE_PIN_LIMIT = 200;
+
+/** Magasins encore sur la carte, sans offre ni lien. */
+export async function findUnavailablePosNearby(
+  lat: number,
+  lng: number,
+  radiusM: number,
+): Promise<UnavailablePos[]> {
+  const rows = await prisma.$queryRaw<UnavailablePos[]>`
+    SELECT
+      p.id,
+      p.name,
+      p.slug,
+      p.city,
+      p.lat,
+      p.lng
+    FROM "Pos" p
+    JOIN "Merchant" m ON m.id = p."merchantId"
+    WHERE p.status = 'INACTIVE_VISIBLE'
+      AND m."isActive" = true
+      AND ST_DWithin(
+        p.geog,
+        ST_MakePoint(${lng}, ${lat})::geography,
+        ${radiusM}
+      )
+    ORDER BY ST_Distance(
+      p.geog,
+      ST_MakePoint(${lng}, ${lat})::geography
+    ) ASC
+    LIMIT ${UNAVAILABLE_PIN_LIMIT}
+  `;
+  return rows.map((row) => ({
+    ...row,
+    lat: Number(row.lat),
+    lng: Number(row.lng),
+  }));
 }
 
 export async function distancesToPos(

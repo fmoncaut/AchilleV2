@@ -18,7 +18,12 @@ import { Distance } from "@/components/distance";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { getFavoriteFlags } from "@/lib/favorites";
-import { findOffersNearby, toOfferCard, type NearbyOfferCard } from "@/lib/geo";
+import {
+  findOffersNearby,
+  findUnavailablePosNearby,
+  toOfferCard,
+  type NearbyOfferCard,
+} from "@/lib/geo";
 import { geocodeAddress } from "@/lib/geocode";
 import { getIgnMapConfig } from "@/lib/map-config";
 import { formatEur } from "@/lib/money";
@@ -131,6 +136,9 @@ export default async function RecherchePage({
         })
       ).map(toOfferCard)
     : [];
+  const unavailable = origin
+    ? await findUnavailablePosNearby(origin.lat, origin.lng, query.radiusKm * 1000)
+    : [];
 
   const ign = getIgnMapConfig();
   const recherchePath = searchHref(query);
@@ -201,15 +209,24 @@ export default async function RecherchePage({
         {origin ? (
           <>
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <p className="font-body-sm text-body-sm text-primary-container font-semibold">
-                {offers.length === 0
-                  ? `Aucune offre dans un rayon de ${query.radiusKm} km autour de ${locationLabel}.`
-                  : `${offers.length} offre${offers.length > 1 ? "s" : ""} dans un rayon de ${query.radiusKm} km autour de ${locationLabel}.`}
-              </p>
+              <div>
+                <p className="font-body-sm text-body-sm text-primary-container font-semibold">
+                  {offers.length === 0
+                    ? `Aucune offre dans un rayon de ${query.radiusKm} km autour de ${locationLabel}.`
+                    : `${offers.length} offre${offers.length > 1 ? "s" : ""} dans un rayon de ${query.radiusKm} km autour de ${locationLabel}.`}
+                </p>
+                {unavailable.length > 0 ? (
+                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                    {unavailable.length} magasin
+                    {unavailable.length > 1 ? "s" : ""} non disponible
+                    {unavailable.length > 1 ? "s" : ""} sur la carte.
+                  </p>
+                ) : null}
+              </div>
               <ViewToggle query={query} />
             </div>
 
-            {offers.length === 0 ? (
+            {offers.length === 0 && unavailable.length === 0 ? (
               <EmptyState
                 title="Aucune offre dans ce rayon"
                 description="Élargissez la zone, changez de lieu ou retirez des filtres (catégorie, prix, mot-clé)."
@@ -226,12 +243,18 @@ export default async function RecherchePage({
             ) : query.vue === "carte" ? (
               <OffersMapLoader
                 offers={offers}
+                unavailable={unavailable}
                 centerLat={origin.lat}
                 centerLng={origin.lng}
                 selectedOfferId={query.offre}
                 styleUrl={ign.styleUrl}
                 tilesUrl={ign.tilesUrl}
                 recherchePath={recherchePath}
+              />
+            ) : offers.length === 0 ? (
+              <EmptyState
+                title="Aucune offre dans ce rayon"
+                description="Des magasins non disponibles sont visibles en vue carte."
               />
             ) : (
               <section className="flex flex-col gap-4">

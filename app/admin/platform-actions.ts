@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { requireSuperAdmin } from "@/lib/admin/actor";
@@ -10,10 +10,11 @@ import {
   createPos,
   PlatformError,
   setMerchantActive,
-  setPosActive,
+  setPosStatus,
   updateMerchant,
   updatePos,
 } from "@/lib/admin/platform";
+import { PosPublishError, publishMerchantPos } from "@/lib/pos-publish";
 import {
   merchantFormSchema,
   posFormSchema,
@@ -49,6 +50,7 @@ function revalidatePublic(posSlug?: string) {
   revalidatePath("/");
   revalidatePath("/recherche");
   revalidatePath("/admin");
+  revalidateTag("catalog", "max");
   if (posSlug) {
     revalidatePath(`/magasin/${posSlug}`);
   }
@@ -74,7 +76,9 @@ function parsePos(formData: FormData) {
     city: first(formData, "city"),
     phone: first(formData, "phone"),
     hours,
-    isActive: formData.get("isActive") === "on",
+    lat: first(formData, "lat"),
+    lng: first(formData, "lng"),
+    status: first(formData, "status"),
   });
 }
 
@@ -188,14 +192,40 @@ export async function updatePosAction(
   redirect(`/admin/magasins/${id}?ok=1`);
 }
 
-export async function togglePosAction(formData: FormData) {
+export async function setPosStatusAction(formData: FormData) {
   await requireSuperAdmin();
   const id = first(formData, "id");
-  const isActive = first(formData, "isActive") !== "true";
-  const pos = await setPosActive(id, isActive);
+  const status = first(formData, "status");
+  if (
+    status !== "ACTIVE_VISIBLE" &&
+    status !== "INACTIVE_VISIBLE" &&
+    status !== "INACTIVE_HIDDEN"
+  ) {
+    return;
+  }
+  const pos = await setPosStatus(id, status);
   revalidatePublic(pos.slug);
   revalidatePath("/admin/magasins");
   revalidatePath(`/admin/magasins/${pos.id}`);
+}
+
+export async function publishMerchantPosAction(formData: FormData) {
+  await requireSuperAdmin();
+  const id = first(formData, "id");
+  const published = first(formData, "posPublished") === "true";
+  try {
+    await publishMerchantPos(id, published);
+  } catch (error) {
+    const message =
+      error instanceof PosPublishError
+        ? error.message
+        : "Publication impossible.";
+    redirect(`/admin/enseignes/${id}?publish=erreur&message=${encodeURIComponent(message)}`);
+  }
+  revalidatePublic();
+  revalidatePath("/admin/enseignes");
+  revalidatePath(`/admin/enseignes/${id}`);
+  redirect(`/admin/enseignes/${id}?publish=ok`);
 }
 
 export async function assignUserRoleAction(

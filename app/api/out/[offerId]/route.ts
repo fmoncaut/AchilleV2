@@ -11,6 +11,7 @@ import {
 import { buildBrokerRedirectUrl } from "@/lib/broker-url";
 import { prisma } from "@/lib/db";
 import { isAbsoluteHttpUrl } from "@/lib/merchant-url";
+import { offerMatchesPos } from "@/lib/offer-placement";
 
 export const dynamic = "force-dynamic";
 
@@ -43,15 +44,75 @@ export async function GET(
       id: true,
       isOnline: true,
       merchantUrl: true,
+      kind: true,
+      scope: true,
+      merchantId: true,
+      posId: true,
       feedId: true,
       feed: { select: { status: true } },
       broker: { select: { urlTemplate: true } },
+      merchant: { select: { isActive: true } },
+      pos: { select: { id: true, status: true, merchantId: true } },
+      targetedPos: { select: { posId: true, pos: { select: { status: true } } } },
     },
   });
 
   const feedHidden = Boolean(offer?.feedId && offer.feed?.status !== "ACTIVE");
   if (!offer || !offer.isOnline || !offer.merchantUrl || feedHidden) {
     return jsonError(404, "Offre introuvable", anonId);
+  }
+
+  const posSlug = new URL(request.url).searchParams.get("pos")?.trim() ?? "";
+  if (posSlug) {
+    const pos = await prisma.pos.findUnique({
+      where: { slug: posSlug },
+      select: {
+        id: true,
+        merchantId: true,
+        status: true,
+        merchant: { select: { isActive: true } },
+      },
+    });
+    const placed =
+      pos != null &&
+      offerMatchesPos(
+        {
+          kind: offer.kind,
+          scope: offer.scope,
+          merchantId: offer.merchantId,
+          posId: offer.posId,
+          targetedPos: offer.targetedPos,
+        },
+        pos,
+      );
+    if (!pos || pos.status !== "ACTIVE_VISIBLE" || !pos.merchant.isActive || !placed) {
+      return jsonError(404, "Offre introuvable", anonId);
+    }
+  } else if (offer.kind === "DIRECT") {
+    if (
+      !offer.merchant.isActive ||
+      offer.pos?.status !== "ACTIVE_VISIBLE"
+    ) {
+      return jsonError(404, "Offre introuvable", anonId);
+    }
+  } else if (offer.scope === "ENSEIGNE") {
+    const visible = await prisma.pos.count({
+      where: {
+        merchantId: offer.merchantId,
+        status: "ACTIVE_VISIBLE",
+        merchant: { isActive: true },
+      },
+    });
+    if (visible === 0) {
+      return jsonError(404, "Offre introuvable", anonId);
+    }
+  } else {
+    const targeted = offer.targetedPos.map((link) => link.pos.status);
+    const anchor = offer.pos?.status;
+    const visible = [...targeted, ...(anchor && offer.targetedPos.length === 0 ? [anchor] : [])];
+    if (!offer.merchant.isActive || !visible.includes("ACTIVE_VISIBLE")) {
+      return jsonError(404, "Offre introuvable", anonId);
+    }
   }
 
   if (!isAbsoluteHttpUrl(offer.merchantUrl)) {

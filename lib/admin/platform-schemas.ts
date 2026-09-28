@@ -55,7 +55,7 @@ export const posFormSchema = z.object({
   postalCode: z
     .string()
     .trim()
-    .regex(/^\d{5}$/, "Code postal à 5 chiffres"),
+    .regex(/^[A-Za-z0-9][A-Za-z0-9 -]{1,11}$/, "Code postal invalide"),
   city: z.string().trim().min(2, "Ville trop courte").max(80),
   phone: z
     .string()
@@ -74,7 +74,9 @@ export const posFormSchema = z.object({
     saturday: hourField,
     sunday: hourField,
   }),
-  isActive: z.boolean(),
+  lat: z.string().trim().max(20),
+  lng: z.string().trim().max(20),
+  status: z.enum(["ACTIVE_VISIBLE", "INACTIVE_VISIBLE", "INACTIVE_HIDDEN"]),
 });
 
 export type PosFormInput = z.infer<typeof posFormSchema>;
