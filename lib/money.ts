@@ -1,6 +1,8 @@
 import { Prisma } from "@prisma/client";
 
-export function toDecimal(value: Prisma.Decimal | string | number): Prisma.Decimal {
+export function toDecimal(
+  value: Prisma.Decimal | string | number,
+): Prisma.Decimal {
   return new Prisma.Decimal(value);
 }
 
@@ -21,7 +23,7 @@ export function discountPercent(
   const remise = toDecimal(priceRemise);
   const reference = toDecimal(priceReference);
 
-  if (reference.lte(0) || !remise.lt(reference)) {
+  if (!isStrictlyDiscounted(remise, reference)) {
     return null;
   }
 
@@ -31,4 +33,17 @@ export function discountPercent(
     .mul(100)
     .toDecimalPlaces(0, Prisma.Decimal.ROUND_HALF_UP)
     .toNumber();
+}
+
+/** Prix barré strictement supérieur au prix vendu. Absent, égal ou inférieur : non. */
+export function isStrictlyDiscounted(
+  priceRemise: Prisma.Decimal | string | number,
+  priceReference: Prisma.Decimal | string | number | null | undefined,
+): boolean {
+  if (priceReference == null) {
+    return false;
+  }
+  const remise = toDecimal(priceRemise);
+  const reference = toDecimal(priceReference);
+  return reference.gt(0) && remise.lt(reference);
 }

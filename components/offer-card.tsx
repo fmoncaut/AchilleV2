@@ -9,7 +9,7 @@ import { ProductImage } from "@/components/product-image";
 import { ReserveButton } from "@/components/reserve-button";
 import { cn } from "@/lib/utils";
 import type { NearbyOfferCard } from "@/lib/geo";
-import { discountPercent, formatEur } from "@/lib/money";
+import { discountPercent, formatEur, isStrictlyDiscounted } from "@/lib/money";
 import { loginWithReturn, offerPath } from "@/lib/urls";
 
 type OfferCardProps = {
@@ -35,9 +35,14 @@ export function OfferCard({
   lat = null,
   lng = null,
 }: OfferCardProps) {
-  const discount =
-    offer.discountPct ??
-    discountPercent(offer.priceRemise, offer.priceReference);
+  const showCrossed = isStrictlyDiscounted(
+    offer.priceRemise,
+    offer.priceReference,
+  );
+  const discount = showCrossed
+    ? (offer.discountPct ??
+      discountPercent(offer.priceRemise, offer.priceReference))
+    : null;
   const destination =
     href ??
     offerPath(offer.productSlug, { posSlug: offer.posSlug || undefined });
@@ -98,7 +103,7 @@ export function OfferCard({
             <span className="font-price-card text-price-card text-secondary-container font-extrabold">
               {formatEur(offer.priceRemise)}
             </span>
-            {offer.priceReference ? (
+            {showCrossed && offer.priceReference ? (
               <span className="font-body-sm text-body-sm text-on-surface-variant line-through">
                 {formatEur(offer.priceReference)}
               </span>

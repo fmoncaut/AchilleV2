@@ -28,7 +28,7 @@ import {
   type ShowcaseOffer,
   type ShowcaseProduct,
 } from "@/lib/catalog-view";
-import { discountPercent, formatEur } from "@/lib/money";
+import { discountPercent, formatEur, isStrictlyDiscounted } from "@/lib/money";
 import type { FavoriteFlags } from "@/lib/favorites";
 import {
   loginWithReturn,
@@ -95,10 +95,14 @@ function OfferShowcaseView({
   const current = pickCurrentOffer(located, query.offre, query.pos);
   const { lat, lng, tri } = query;
   const description = product.description ?? product.shortDescription;
-  const currentDiscount = current
-    ? (current.discountPct ??
-      discountPercent(current.priceRemise, current.priceReference))
-    : null;
+  const currentCrossed = current
+    ? isStrictlyDiscounted(current.priceRemise, current.priceReference)
+    : false;
+  const currentDiscount =
+    current && currentCrossed
+      ? (current.discountPct ??
+        discountPercent(current.priceRemise, current.priceReference))
+      : null;
   const citySlug = current?.pos.city ? slugifyCity(current.pos.city) : null;
 
   return (
@@ -187,7 +191,7 @@ function OfferShowcaseView({
                     <span className="font-price-hero text-price-hero text-secondary-container font-extrabold">
                       {formatEur(current.priceRemise)}
                     </span>
-                    {current.priceReference ? (
+                    {currentCrossed && current.priceReference ? (
                       <span className="font-body-md text-body-md text-outline line-through">
                         {formatEur(current.priceReference)}
                       </span>
@@ -242,9 +246,7 @@ function OfferShowcaseView({
               <p className="font-headline-sm text-headline-sm flex items-center gap-2 font-bold">
                 <MaterialIcon
                   name={
-                    current?.kind === "DIRECT"
-                      ? "shopping_bag"
-                      : "open_in_new"
+                    current?.kind === "DIRECT" ? "shopping_bag" : "open_in_new"
                   }
                   className="text-secondary-container text-[20px]"
                 />
@@ -306,9 +308,14 @@ function OfferShowcaseView({
                 {located.map((offer) => {
                   const selected =
                     offer.id === current.id && offer.pos.id === current.pos.id;
-                  const discount =
-                    offer.discountPct ??
-                    discountPercent(offer.priceRemise, offer.priceReference);
+                  const showCrossed = isStrictlyDiscounted(
+                    offer.priceRemise,
+                    offer.priceReference,
+                  );
+                  const discount = showCrossed
+                    ? (offer.discountPct ??
+                      discountPercent(offer.priceRemise, offer.priceReference))
+                    : null;
                   return (
                     <li
                       key={`${offer.id}-${offer.pos.id}`}
@@ -383,7 +390,7 @@ function OfferShowcaseView({
                           <span className="font-price-hero text-headline-md text-secondary-container font-extrabold">
                             {formatEur(offer.priceRemise)}
                           </span>
-                          {offer.priceReference ? (
+                          {showCrossed && offer.priceReference ? (
                             <span className="font-body-sm text-body-sm text-outline line-through">
                               {formatEur(offer.priceReference)}
                             </span>

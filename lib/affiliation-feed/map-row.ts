@@ -39,7 +39,11 @@ export type NormalizedFeedRow = {
 
 export type MappedFeedRow =
   | { ok: true; row: NormalizedFeedRow }
-  | { ok: false; reason: Exclude<FeedRejectReason, "column_count">; detail: string };
+  | {
+      ok: false;
+      reason: Exclude<FeedRejectReason, "column_count">;
+      detail: string;
+    };
 
 function cell(header: string[], cells: string[], name: string | null): string {
   if (!name) {
@@ -52,7 +56,11 @@ function cell(header: string[], cells: string[], name: string | null): string {
   return (cells[index] ?? "").trim();
 }
 
-function firstFilled(header: string[], cells: string[], names: string[]): string {
+function firstFilled(
+  header: string[],
+  cells: string[],
+  names: string[],
+): string {
   for (const name of names) {
     const value = cell(header, cells, name);
     if (value) {
@@ -91,9 +99,12 @@ function prices(
   profile: FeedProfileColumns,
   header: string[],
   cells: string[],
-): { priceRemise: Prisma.Decimal | null; priceReference: Prisma.Decimal | null } {
+): {
+  priceRemise: Prisma.Decimal | null;
+  priceReference: Prisma.Decimal | null;
+} {
   const primary = parseFeedMoney(cell(header, cells, profile.priceColumn));
-  const alt = parseFeedMoney(cell(header, cells, profile.priceAltColumn));
+  const alt = crossedPrice(profile, header, cells);
   if (profile.priceRule === "SALE_THEN_LIST") {
     if (primary) {
       return { priceRemise: primary, priceReference: alt };
@@ -104,6 +115,26 @@ function prices(
     return { priceRemise: primary, priceReference: alt };
   }
   return { priceRemise: primary, priceReference: null };
+}
+
+/**
+ * Prix barré. Awin : rrp_price, puis product_price_old si la colonne prioritaire est vide.
+ */
+function crossedPrice(
+  profile: FeedProfileColumns,
+  header: string[],
+  cells: string[],
+): Prisma.Decimal | null {
+  const configured = parseFeedMoney(
+    cell(header, cells, profile.priceAltColumn),
+  );
+  if (configured) {
+    return configured;
+  }
+  if (profile.priceAltColumn === "rrp_price") {
+    return parseFeedMoney(cell(header, cells, "product_price_old"));
+  }
+  return null;
 }
 
 function stockOf(
@@ -119,7 +150,9 @@ function stockOf(
     }
     return { stock: Math.max(0, Math.trunc(qty)), isOnline: qty > 0 };
   }
-  const tokens = profile.availabilityInTokens.map((token) => token.toLowerCase());
+  const tokens = profile.availabilityInTokens.map((token) =>
+    token.toLowerCase(),
+  );
   const online = tokens.length > 0 && tokens.includes(raw.toLowerCase());
   return { stock: online ? 1 : 0, isOnline: online };
 }
@@ -174,13 +207,21 @@ export function mapFeedRow(
   header: string[],
   cells: string[],
 ): MappedFeedRow {
-  const externalProductKey = firstFilled(header, cells, profile.productKeyColumns);
+  const externalProductKey = firstFilled(
+    header,
+    cells,
+    profile.productKeyColumns,
+  );
   if (!externalProductKey) {
     return { ok: false, reason: "missing_key", detail: "Clé produit absente" };
   }
   const money = prices(profile, header, cells);
   if (!money.priceRemise) {
-    return { ok: false, reason: "missing_price", detail: "Aucun prix exploitable" };
+    return {
+      ok: false,
+      reason: "missing_price",
+      detail: "Aucun prix exploitable",
+    };
   }
   const stock = stockOf(profile, header, cells);
   const merchantUrl = cell(header, cells, profile.trackingLinkColumn);

@@ -1,5 +1,5 @@
 import { DiscountBadge } from "@/components/discount-badge";
-import { discountPercent, formatEur } from "@/lib/money";
+import { discountPercent, formatEur, isStrictlyDiscounted } from "@/lib/money";
 import { cn } from "@/lib/utils";
 
 type PriceTagProps = {
@@ -15,7 +15,10 @@ export function PriceTag({
   discountPct,
   size = "md",
 }: PriceTagProps) {
-  const discount = discountPct ?? discountPercent(priceRemise, priceReference);
+  const showCrossed = isStrictlyDiscounted(priceRemise, priceReference);
+  const discount = showCrossed
+    ? (discountPct ?? discountPercent(priceRemise, priceReference))
+    : null;
   const priceClass =
     size === "lg"
       ? "font-price-hero text-price-hero font-extrabold text-secondary-container"
@@ -29,7 +32,7 @@ export function PriceTag({
     <p className="flex flex-wrap items-center gap-x-3 gap-y-2">
       {discount != null ? <DiscountBadge percent={discount} /> : null}
       <span className={priceClass}>{formatEur(priceRemise)}</span>
-      {priceReference ? (
+      {showCrossed && priceReference ? (
         <span className={cn(refClass)}>{formatEur(priceReference)}</span>
       ) : null}
     </p>

@@ -6,7 +6,7 @@ import { MaterialIcon } from "@/components/material-icon";
 import { ProductImage } from "@/components/product-image";
 import { ReserveButton } from "@/components/reserve-button";
 import type { NearbyOfferCard } from "@/lib/geo";
-import { discountPercent, formatEur } from "@/lib/money";
+import { discountPercent, formatEur, isStrictlyDiscounted } from "@/lib/money";
 import { offerPath } from "@/lib/urls";
 
 export function HomeDealCard({
@@ -21,20 +21,28 @@ export function HomeDealCard({
   const href = offerPath(offer.productSlug, {
     posSlug: offer.posSlug || undefined,
   });
-  const discount =
-    offer.discountPct ??
-    discountPercent(offer.priceRemise, offer.priceReference);
+  const showCrossed = isStrictlyDiscounted(
+    offer.priceRemise,
+    offer.priceReference,
+  );
+  const discount = showCrossed
+    ? (offer.discountPct ??
+      discountPercent(offer.priceRemise, offer.priceReference))
+    : null;
   const direct = offer.kind === "DIRECT";
-  const saved =
-    offer.priceReference != null
-      ? Number(offer.priceReference) - Number(offer.priceRemise)
-      : null;
+  const saved = showCrossed
+    ? Number(offer.priceReference) - Number(offer.priceRemise)
+    : null;
 
   return (
     <article className="bg-surface-container-lowest shadow-navy-soft hover:shadow-navy group flex flex-col overflow-hidden rounded-xl transition-shadow">
       <div className="relative">
         <Link href={href} className="block outline-none">
-          <ProductImage src={offer.imageUrl} name={offer.productName} variant="card" />
+          <ProductImage
+            src={offer.imageUrl}
+            name={offer.productName}
+            variant="card"
+          />
         </Link>
         {discount != null ? (
           <span className="absolute top-2 left-2">
@@ -79,7 +87,7 @@ export function HomeDealCard({
             <span className="font-price-card text-price-card text-secondary-container font-extrabold">
               {formatEur(offer.priceRemise)}
             </span>
-            {offer.priceReference ? (
+            {showCrossed && offer.priceReference ? (
               <span className="text-outline text-[13px] line-through">
                 {formatEur(offer.priceReference)}
               </span>

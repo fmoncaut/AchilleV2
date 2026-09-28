@@ -1,9 +1,10 @@
 import type { Prisma } from "@prisma/client";
 
-import { findCategoryMapping } from "@/lib/affiliation-feed/mapping";
+import { withdrawNonPromoOffer } from "@/lib/affiliation-feed/import";
 import { mapFeedRow } from "@/lib/affiliation-feed/map-row";
+import { findCategoryMapping } from "@/lib/affiliation-feed/mapping";
 import { prisma } from "@/lib/db";
-import { discountPercent } from "@/lib/money";
+import { discountPercent, isStrictlyDiscounted } from "@/lib/money";
 import { findFirstMerchantWithEmail } from "@/lib/notifications/recipients";
 import { dispatchNotification } from "@/lib/notifications/send";
 import { getSiteUrl } from "@/lib/site";
@@ -11,7 +12,9 @@ import { slugify } from "@/lib/slug";
 
 export class AffiliationReviewError extends Error {}
 
-function payloadRecord(payload: Prisma.JsonValue): Record<string, string> | null {
+function payloadRecord(
+  payload: Prisma.JsonValue,
+): Record<string, string> | null {
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
     return null;
   }
@@ -29,7 +32,9 @@ async function uniqueSlug(name: string, ean: string | null) {
   const base = (ean ? `${root}-${ean}` : root).slice(0, 80);
   let slug = base;
   let n = 2;
-  while (await prisma.product.findFirst({ where: { slug }, select: { id: true } })) {
+  while (
+    await prisma.product.findFirst({ where: { slug }, select: { id: true } })
+  ) {
     slug = `${base.slice(0, 70)}-${n}`;
     n += 1;
   }
@@ -54,7 +59,9 @@ export async function publishPendingLine(lineId: string) {
   }
   const payload = payloadRecord(line.payload);
   if (!payload) {
-    throw new AffiliationReviewError("La ligne n'a pas de contenu exploitable.");
+    throw new AffiliationReviewError(
+      "La ligne n'a pas de contenu exploitable.",
+    );
   }
   const header = Object.keys(payload);
   const mapped = mapFeedRow(
@@ -66,8 +73,19 @@ export async function publishPendingLine(lineId: string) {
     throw new AffiliationReviewError(mapped.detail);
   }
   const row = mapped.row;
+  if (!isStrictlyDiscounted(row.priceRemise, row.priceReference)) {
+    await prisma.$transaction((tx) =>
+      withdrawNonPromoOffer(tx, line.feedId, row.externalProductKey),
+    );
+    throw new AffiliationReviewError(
+      "Produit sans remise : le prix barré doit être strictement supérieur au prix vendu.",
+    );
+  }
   const existing = row.ean
-    ? await prisma.product.findUnique({ where: { ean: row.ean }, select: { id: true } })
+    ? await prisma.product.findUnique({
+        where: { ean: row.ean },
+        select: { id: true },
+      })
     : null;
   const productId =
     existing?.id ??

@@ -1,10 +1,13 @@
 import type { Prisma } from "@prisma/client";
 
 import { findCategoryMapping } from "@/lib/affiliation-feed/mapping";
-import { mapFeedRow, type NormalizedFeedRow } from "@/lib/affiliation-feed/map-row";
+import {
+  mapFeedRow,
+  type NormalizedFeedRow,
+} from "@/lib/affiliation-feed/map-row";
 import { parseFeedCsv, type FeedReject } from "@/lib/affiliation-feed/parse";
 import { prisma } from "@/lib/db";
-import { discountPercent } from "@/lib/money";
+import { discountPercent, isStrictlyDiscounted } from "@/lib/money";
 import { findFirstAdminWithEmail } from "@/lib/notifications/recipients";
 import { dispatchNotification } from "@/lib/notifications/send";
 import type { OutboundNotification } from "@/lib/notifications/types";
@@ -15,13 +18,21 @@ export class AffiliationImportError extends Error {}
 
 export type AffiliationImportMode = "normal" | "bootstrap";
 
+export type FeedExclusion = {
+  line: number;
+  reason: "no_discount";
+  detail: string;
+};
+
 export type AffiliationImportReport = {
   matched: number;
   pendingCreated: number;
   pendingExisting: number;
   offersOnline: number;
+  offersWithdrawn: number;
   categoryConflicts: number;
   rejects: FeedReject[];
+  exclusions: FeedExclusion[];
 };
 
 type ImportDeps = {
@@ -69,14 +80,20 @@ export async function importAffiliationFeed(
     pendingCreated: 0,
     pendingExisting: 0,
     offersOnline: 0,
+    offersWithdrawn: 0,
     categoryConflicts: 0,
     rejects,
+    exclusions: [],
   };
 
   for (const entry of parsed.rows) {
     const mapped = mapFeedRow(feed.profile, parsed.header, entry.cells);
     if (!mapped.ok) {
-      rejects.push({ line: entry.line, reason: mapped.reason, detail: mapped.detail });
+      rejects.push({
+        line: entry.line,
+        reason: mapped.reason,
+        detail: mapped.detail,
+      });
       continue;
     }
     const row = mapped.row;
@@ -85,6 +102,20 @@ export async function importAffiliationFeed(
         line: entry.line,
         reason: "invalid_ean",
         detail: "Amorçage : clé sans EAN valide, ligne non conservée",
+      });
+      continue;
+    }
+    if (!isStrictlyDiscounted(row.priceRemise, row.priceReference)) {
+      const withdrawn = await prisma.$transaction((tx) =>
+        withdrawNonPromoOffer(tx, feed.id, row.externalProductKey),
+      );
+      if (withdrawn !== "absent") {
+        report.offersWithdrawn += 1;
+      }
+      report.exclusions.push({
+        line: entry.line,
+        reason: "no_discount",
+        detail: "Prix barré absent, égal ou inférieur au prix vendu",
       });
       continue;
     }
@@ -109,6 +140,11 @@ export async function importAffiliationFeed(
       `[affiliation-import] ligne ${reject.line} rejetée (${reject.reason}) : ${reject.detail}`,
     );
   }
+  for (const exclusion of report.exclusions) {
+    console.info(
+      `[affiliation-import] ligne ${exclusion.line} exclue (${exclusion.reason}) : ${exclusion.detail}`,
+    );
+  }
 
   if (report.pendingCreated > 0) {
     const admin = await findAdmin();
@@ -128,12 +164,53 @@ export async function importAffiliationFeed(
   return report;
 }
 
-async function uniqueSlug(tx: Prisma.TransactionClient, name: string, ean: string | null) {
+/**
+ * Une offre de ce flux qui ne passe plus le filtre promo est retirée.
+ * Suppression si rien ne la référence. Sinon hors ligne et stock à zéro,
+ * pour garder l'historique de clics ou de réservation.
+ */
+export async function withdrawNonPromoOffer(
+  tx: Prisma.TransactionClient,
+  feedId: string,
+  externalProductKey: string,
+): Promise<"absent" | "deleted" | "offline"> {
+  const offer = await tx.offer.findUnique({
+    where: {
+      feedId_externalProductKey: { feedId, externalProductKey },
+    },
+    select: { id: true },
+  });
+  if (!offer) {
+    return "absent";
+  }
+  const [clicks, reservations, carts] = await Promise.all([
+    tx.offerClick.count({ where: { offerId: offer.id } }),
+    tx.reservationItem.count({ where: { offerId: offer.id } }),
+    tx.reservationCartItem.count({ where: { offerId: offer.id } }),
+  ]);
+  if (clicks + reservations + carts > 0) {
+    await tx.offer.update({
+      where: { id: offer.id },
+      data: { isOnline: false, stock: 0 },
+    });
+    return "offline";
+  }
+  await tx.offer.delete({ where: { id: offer.id } });
+  return "deleted";
+}
+
+async function uniqueSlug(
+  tx: Prisma.TransactionClient,
+  name: string,
+  ean: string | null,
+) {
   const root = slugify(name) || "produit";
   const base = ean ? `${root}-${ean}` : root;
   let slug = base.slice(0, 80);
   let n = 2;
-  while (await tx.product.findFirst({ where: { slug }, select: { id: true } })) {
+  while (
+    await tx.product.findFirst({ where: { slug }, select: { id: true } })
+  ) {
     slug = `${base.slice(0, 70)}-${n}`;
     n += 1;
   }
@@ -222,7 +299,9 @@ async function persistFeedRow(
       data: {
         externalCategoryRaw: row.externalCategoryRaw,
         payload: row.payload,
-        ...(line.status === "MATCHED" ? {} : { status: "PENDING_PRODUCT_CREATION" }),
+        ...(line.status === "MATCHED"
+          ? {}
+          : { status: "PENDING_PRODUCT_CREATION" }),
       },
     });
     if (line.status === "PENDING_PRODUCT_CREATION") {
@@ -263,9 +342,15 @@ async function upsertFeedOffer(
     ? existingOffer.externalCategoryRaw !== row.externalCategoryRaw
     : true;
   const mapping = rawChanged
-    ? await findCategoryMapping(tx, feed.profile.network, row.externalCategoryRaw)
+    ? await findCategoryMapping(
+        tx,
+        feed.profile.network,
+        row.externalCategoryRaw,
+      )
     : null;
-  const reconciled = mapping ? { reconciledCategoryId: mapping.categoryId } : {};
+  const reconciled = mapping
+    ? { reconciledCategoryId: mapping.categoryId }
+    : {};
 
   let offerId: string;
   if (existingOffer) {
@@ -303,7 +388,10 @@ async function upsertFeedOffer(
         where: { id: productId },
         data: { categoryId: mapping.categoryId },
       });
-    } else if (product?.categoryId && product.categoryId !== mapping.categoryId) {
+    } else if (
+      product?.categoryId &&
+      product.categoryId !== mapping.categoryId
+    ) {
       report.categoryConflicts += 1;
     }
   }
