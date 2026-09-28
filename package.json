@@ -14,6 +14,7 @@
     "format": "prettier --write .",
     "seed": "prisma db seed",
     "import-categories": "tsx scripts/import-categories.ts",
+    "import-pos": "tsx scripts/import-pos.ts",
     "import-affiliation-feed": "tsx scripts/import-affiliation-feed.ts",
     "verify-affiliation-feed": "tsx scripts/verify-affiliation-feed.ts",
     "promote-merchant": "tsx scripts/promote-merchant.ts",
@@ -60,6 +61,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.1141.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "eslint-config-prettier": "^10.1.8",
