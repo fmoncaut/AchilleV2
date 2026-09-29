@@ -9,6 +9,7 @@ type AdminHeaderProps = {
   showOffers: boolean;
   showPlatform: boolean;
   showPending?: boolean;
+  showMerchantStores?: boolean;
   unreadReservations?: number;
 };
 
@@ -17,6 +18,7 @@ export function AdminHeader({
   showOffers,
   showPlatform,
   showPending = false,
+  showMerchantStores = false,
   unreadReservations = 0,
 }: AdminHeaderProps) {
   return (
@@ -57,6 +59,11 @@ export function AdminHeader({
           ) : null}
           {showOffers ? (
             <>
+              {showMerchantStores ? (
+                <Button asChild variant="ghost" size="sm">
+                  <Link href="/admin/mes-magasins">Mes magasins</Link>
+                </Button>
+              ) : null}
               <Button asChild variant="ghost" size="sm">
                 <Link href="/admin/offres">Offres</Link>
               </Button>

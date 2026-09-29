@@ -61,6 +61,7 @@ export default async function AdminLayout({
         showOffers={canManageOffers(actor)}
         showPlatform={isPlatformAdmin(actor)}
         showPending={actor.role === "MERCHANT"}
+        showMerchantStores={Boolean(actor.merchantId)}
         unreadReservations={
           actor.merchantId
             ? await countUnreadForMerchant(actor.merchantId)

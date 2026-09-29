@@ -76,6 +76,9 @@ model Pos {
   logoUrl                 String?
   /// Clé d'idempotence de l'import. place_id Google, ou legacy:{enseigne}:{nom}:{lat},{lng} si le fichier n'en a pas.
   placeId                 String?
+  /// Fermeture douce marchand (A.3.5). Orthogonal au tri-état status/statusSource.
+  /// Non-null → hors vitrine quel que soit status (préséance physique).
+  merchantClosedAt        DateTime?
   offers                  Offer[]
   offerLinks              OfferPos[]
   reservations            Reservation[]
@@ -86,6 +89,7 @@ model Pos {
   @@index([city])
   @@index([status])
   @@index([merchantId, statusSource])
+  @@index([merchantClosedAt])
 }
 
 model Brand {

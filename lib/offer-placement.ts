@@ -1,13 +1,14 @@
 import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
+import { publicPosWhere, sqlPosPublicVisible } from "@/lib/pos-visibility";
 
 /** Jointure LIA : une ligne par magasin où l'offre est réellement diffusée. */
 export function sqlOfferPlacementJoin(): Prisma.Sql {
   return Prisma.sql`
     INNER JOIN "Pos" p
       ON p."merchantId" = o."merchantId"
-      AND p.status = 'ACTIVE_VISIBLE'
+      AND ${sqlPosPublicVisible()}
       AND (
         (o.kind = 'DIRECT' AND p.id = o."posId")
         OR (o.kind = 'AFFILIATION' AND o.scope = 'ENSEIGNE')
@@ -42,18 +43,25 @@ export const publicOfferWhere = {
   merchant: { isActive: true },
   AND: [publicFeedWhere],
   OR: [
-    { kind: "DIRECT" as const, pos: { status: "ACTIVE_VISIBLE" as const } },
-    { kind: "AFFILIATION" as const, scope: "ENSEIGNE" as const },
+    { kind: "DIRECT" as const, pos: publicPosWhere },
+    {
+      kind: "AFFILIATION" as const,
+      scope: "ENSEIGNE" as const,
+      merchant: {
+        isActive: true,
+        pos: { some: publicPosWhere },
+      },
+    },
     {
       kind: "AFFILIATION" as const,
       scope: "POS_CIBLES" as const,
-      targetedPos: { some: { pos: { status: "ACTIVE_VISIBLE" as const } } },
+      targetedPos: { some: { pos: publicPosWhere } },
     },
     {
       kind: "AFFILIATION" as const,
       scope: "POS_CIBLES" as const,
       targetedPos: { none: {} },
-      pos: { status: "ACTIVE_VISIBLE" as const },
+      pos: publicPosWhere,
     },
   ],
 } satisfies Prisma.OfferWhereInput;

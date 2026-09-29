@@ -247,6 +247,12 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
                   <p className="font-body-sm text-on-surface-variant mt-1 text-xs">
                     {pos.statusSource === "MANUAL" ? "Manuel" : "Règle enseigne"}
                   </p>
+                  {pos.merchantClosedAt ? (
+                    <p className="font-label-xs text-error mt-1 font-bold">
+                      Fermé par le marchand le{" "}
+                      {pos.merchantClosedAt.toLocaleDateString("fr-FR")}
+                    </p>
+                  ) : null}
                 </td>
                 <td className="px-3 py-2">
                   <div className="flex flex-wrap items-center gap-2">

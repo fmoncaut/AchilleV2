@@ -112,6 +112,7 @@ export async function findOffersNearby(
       )
     )`,
     Prisma.sql`p.status = 'ACTIVE_VISIBLE'`,
+    Prisma.sql`p."merchantClosedAt" IS NULL`,
     Prisma.sql`ST_DWithin(
       p.geog,
       ST_MakePoint(${lng}, ${lat})::geography,
@@ -259,6 +260,7 @@ export async function findUnavailablePosNearby(
     FROM "Pos" p
     JOIN "Merchant" m ON m.id = p."merchantId"
     WHERE p.status = 'INACTIVE_VISIBLE'
+      AND p."merchantClosedAt" IS NULL
       AND m."isActive" = true
       AND ST_DWithin(
         p.geog,

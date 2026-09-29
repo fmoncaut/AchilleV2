@@ -12,6 +12,7 @@ import { buildBrokerRedirectUrl } from "@/lib/broker-url";
 import { prisma } from "@/lib/db";
 import { isAbsoluteHttpUrl } from "@/lib/merchant-url";
 import { offerMatchesPos } from "@/lib/offer-placement";
+import { isPosPubliclyVisible, publicPosWhere } from "@/lib/pos-visibility";
 
 export const dynamic = "force-dynamic";
 
@@ -52,8 +53,20 @@ export async function GET(
       feed: { select: { status: true } },
       broker: { select: { urlTemplate: true } },
       merchant: { select: { isActive: true } },
-      pos: { select: { id: true, status: true, merchantId: true } },
-      targetedPos: { select: { posId: true, pos: { select: { status: true } } } },
+      pos: {
+        select: {
+          id: true,
+          status: true,
+          merchantId: true,
+          merchantClosedAt: true,
+        },
+      },
+      targetedPos: {
+        select: {
+          posId: true,
+          pos: { select: { status: true, merchantClosedAt: true } },
+        },
+      },
     },
   });
 
@@ -70,6 +83,7 @@ export async function GET(
         id: true,
         merchantId: true,
         status: true,
+        merchantClosedAt: true,
         merchant: { select: { isActive: true } },
       },
     });
@@ -85,13 +99,19 @@ export async function GET(
         },
         pos,
       );
-    if (!pos || pos.status !== "ACTIVE_VISIBLE" || !pos.merchant.isActive || !placed) {
+    if (
+      !pos ||
+      !isPosPubliclyVisible(pos) ||
+      !pos.merchant.isActive ||
+      !placed
+    ) {
       return jsonError(404, "Offre introuvable", anonId);
     }
   } else if (offer.kind === "DIRECT") {
     if (
       !offer.merchant.isActive ||
-      offer.pos?.status !== "ACTIVE_VISIBLE"
+      !offer.pos ||
+      !isPosPubliclyVisible(offer.pos)
     ) {
       return jsonError(404, "Offre introuvable", anonId);
     }
@@ -99,7 +119,7 @@ export async function GET(
     const visible = await prisma.pos.count({
       where: {
         merchantId: offer.merchantId,
-        status: "ACTIVE_VISIBLE",
+        ...publicPosWhere,
         merchant: { isActive: true },
       },
     });
@@ -107,10 +127,14 @@ export async function GET(
       return jsonError(404, "Offre introuvable", anonId);
     }
   } else {
-    const targeted = offer.targetedPos.map((link) => link.pos.status);
-    const anchor = offer.pos?.status;
-    const visible = [...targeted, ...(anchor && offer.targetedPos.length === 0 ? [anchor] : [])];
-    if (!offer.merchant.isActive || !visible.includes("ACTIVE_VISIBLE")) {
+    const targetedVisible = offer.targetedPos.some((link) =>
+      isPosPubliclyVisible(link.pos),
+    );
+    const anchorVisible =
+      offer.targetedPos.length === 0 &&
+      offer.pos != null &&
+      isPosPubliclyVisible(offer.pos);
+    if (!offer.merchant.isActive || (!targetedVisible && !anchorVisible)) {
       return jsonError(404, "Offre introuvable", anonId);
     }
   }

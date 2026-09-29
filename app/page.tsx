@@ -93,6 +93,7 @@ async function resolveOrigin(userId: string | undefined): Promise<{
         SELECT city, name
         FROM "Pos"
         WHERE status = 'ACTIVE_VISIBLE'
+          AND "merchantClosedAt" IS NULL
         ORDER BY geog <-> ST_MakePoint(${user.lastLng}, ${user.lastLat})::geography
         LIMIT 1
       `;
@@ -113,6 +114,7 @@ async function resolveOrigin(userId: string | undefined): Promise<{
     WHERE o."isOnline" = true
       AND o.stock > 0
       AND p.status = 'ACTIVE_VISIBLE'
+      AND p."merchantClosedAt" IS NULL
       AND m."isActive" = true
       AND (
         o."feedId" IS NULL
