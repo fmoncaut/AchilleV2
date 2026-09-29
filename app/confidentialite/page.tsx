@@ -16,7 +16,7 @@ export default function ConfidentialitePage() {
         Données collectées
       </h2>
       <ul className="list-disc space-y-1 pl-5">
-        <li>Compte : e-mail, nom éventuel (Auth.js — e-mail magique, Apple ou Google Identity).</li>
+        <li>Compte : e-mail, nom éventuel (Auth.js — code e-mail, Apple ou Google Identity).</li>
         <li>Favoris : identifiants de produits et de magasins, liés à votre compte uniquement.</li>
         <li>
           Renvois affiliation : <code>OfferClick</code> (offre, userId si

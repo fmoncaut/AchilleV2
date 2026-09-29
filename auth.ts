@@ -1,11 +1,12 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
 import Apple from "next-auth/providers/apple";
 import Google from "next-auth/providers/google";
 import Nodemailer from "next-auth/providers/nodemailer";
 import type { Provider } from "next-auth/providers";
 
-import { sendVerificationRequest } from "@/lib/auth-email";
+import { createAuthAdapter } from "@/lib/auth/adapter";
+import { generateOtpCode, OTP_TTL_MS } from "@/lib/auth/otp";
+import { sendOtpEmail } from "@/lib/auth-email";
 import {
   appleClientId,
   appleClientSecret,
@@ -21,7 +22,6 @@ import {
   smtpPort,
   smtpUser,
 } from "@/lib/auth-env";
-import { prisma } from "@/lib/db";
 
 function buildProviders(): Provider[] {
   const providers: Provider[] = [];
@@ -32,6 +32,8 @@ function buildProviders(): Provider[] {
         id: "email",
         name: "E-mail",
         from: emailFrom,
+        maxAge: OTP_TTL_MS / 1000,
+        generateVerificationToken: async () => generateOtpCode(),
         server: isSmtpConfigured
           ? {
               host: smtpHost,
@@ -42,7 +44,9 @@ function buildProviders(): Provider[] {
               },
             }
           : { host: "127.0.0.1", port: 25 },
-        sendVerificationRequest,
+        async sendVerificationRequest({ identifier, token }) {
+          await sendOtpEmail({ identifier, token });
+        },
       }),
     );
   }
@@ -52,6 +56,8 @@ function buildProviders(): Provider[] {
       Google({
         clientId: googleClientId,
         clientSecret: googleClientSecret,
+        // E-mail Google vérifié + OTP/Apple vérifiés → un User par e-mail.
+        allowDangerousEmailAccountLinking: true,
       }),
     );
   }
@@ -61,6 +67,9 @@ function buildProviders(): Provider[] {
       Apple({
         clientId: appleClientId,
         clientSecret: appleClientSecret,
+        allowDangerousEmailAccountLinking: true,
+        // Limitation connue U.1 : « Hide My Email » (@privaterelay.appleid.com)
+        // peut fragmenter un même humain en 2 User (relais ≠ e-mail OTP).
       }),
     );
   }
@@ -69,12 +78,12 @@ function buildProviders(): Provider[] {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter: createAuthAdapter(),
   session: { strategy: "database" },
   trustHost: true,
   pages: {
     signIn: "/login",
-    verifyRequest: "/login/envoye",
+    verifyRequest: "/login/otp",
     error: "/login",
   },
   providers: buildProviders(),

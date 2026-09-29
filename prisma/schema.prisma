@@ -567,6 +567,12 @@ model User {
   role                    UserRole                 @default(USER)
   merchantId              String?
   merchant                Merchant?                @relation(fields: [merchantId], references: [id])
+  /// Consentement CGU / confidentialité (inscription). Null = pas encore accepté.
+  termsAcceptedAt         DateTime?
+  /// Version CGU acceptée (ex. 2026-09-29) — redemande si les CGU changent.
+  termsVersion            String?
+  /// Skip ou submit onboarding intérêts. Null → gate /compte/onboarding.
+  onboardingCompletedAt   DateTime?
   accounts                Account[]
   sessions                Session[]
   favorites               Favorite[]
@@ -614,8 +620,11 @@ enum NotificationKind {
   DEAL_ALERTS
 }
 
-/// Préférences canal. ORDER_UPDATES : une ligne / user (interestCategoryId null).
-/// DEAL_ALERTS : une ligne / user / macro. Unicité via index partiels SQL.
+/// Préférences canal.
+/// ORDER_UPDATES : une ligne / user (interestCategoryId null) — transactionnel, on par défaut.
+/// DEAL_ALERTS global (interestCategoryId null) : master switch marketing (U.1).
+/// DEAL_ALERTS par macro (U.6) : overrides interprétés contre le master
+///   (envoi si master ON et override macro non-OFF).
 model NotificationPreference {
   id                 String            @id @default(cuid())
   userId             String
@@ -630,6 +639,30 @@ model NotificationPreference {
 
   @@index([userId])
   @@index([interestCategoryId])
+}
+
+/// Tentatives / TTL du challenge OTP en cours. Le code hashé est dans VerificationToken.
+model EmailOtpChallenge {
+  email      String   @id
+  ipHash     String?
+  attempts   Int      @default(0)
+  lastSentAt DateTime
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([ipHash, lastSentAt])
+}
+
+/// Journal d'envois OTP pour rate-limit par e-mail et par IP.
+model EmailOtpSendLog {
+  id        String   @id @default(cuid())
+  email     String
+  ipHash    String?
+  createdAt DateTime @default(now())
+
+  @@index([email, createdAt])
+  @@index([ipHash, createdAt])
 }
 
 model Account {

@@ -9,23 +9,21 @@ import {
   smtpUser,
 } from "@/lib/auth-env";
 
-type VerificationRequestParams = {
+type OtpMailParams = {
   identifier: string;
-  url: string;
+  token: string;
 };
 
-export async function sendVerificationRequest({
-  identifier,
-  url,
-}: VerificationRequestParams) {
+export async function sendOtpEmail({ identifier, token }: OtpMailParams) {
+  const subject = "Votre code Achille";
+  const text = `Votre code de connexion Achille : ${token}\n\nIl expire dans 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.`;
+  const html = `<p>Votre code de connexion Achille :</p><p style="font-size:28px;font-weight:700;letter-spacing:0.2em">${token}</p><p>Il expire dans 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.</p>`;
+
   if (!isSmtpConfigured) {
     if (process.env.NODE_ENV === "production") {
       throw new Error("SMTP n'est pas configuré.");
     }
-
-    console.info(
-      `[auth] Lien magique pour ${identifier} (non envoyé, SMTP absent) :\n${url}`,
-    );
+    console.info(`[auth] Code OTP pour ${identifier} (non envoyé, SMTP absent) : ${token}`);
     return;
   }
 
@@ -42,8 +40,8 @@ export async function sendVerificationRequest({
   await transport.sendMail({
     to: identifier,
     from: emailFrom,
-    subject: "Votre lien de connexion Achille",
-    text: `Cliquez pour vous connecter à Achille : ${url}`,
-    html: `<p>Cliquez pour vous connecter à Achille :</p><p><a href="${url}">Se connecter</a></p>`,
+    subject,
+    text,
+    html,
   });
 }

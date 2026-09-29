@@ -27,7 +27,7 @@ export default function CguPage() {
         L’inscription est facultative pour parcourir le catalogue. Un compte
         permet d’enregistrer des favoris (produits et magasins), isolés par
         utilisateur. Vous êtes responsable de l’accès à votre boîte e-mail
-        (lien magique).
+        (code à usage unique).
       </p>
       <h2 className="font-headline-sm text-headline-sm text-primary-container mt-2">
         Responsabilité

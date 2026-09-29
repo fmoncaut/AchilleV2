@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 import {
+  requestOtpAction,
   signInWithApple,
-  signInWithEmail,
   signInWithGoogle,
 } from "@/app/login/actions";
 import { UtilityCard } from "@/components/utility-page";
@@ -27,7 +27,7 @@ export const metadata = {
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const params = await searchParams;
-  const emailError = params.erreur === "email";
+  const erreur = params.erreur;
   const callbackUrl =
     params.callbackUrl?.startsWith("/") && !params.callbackUrl.startsWith("//")
       ? params.callbackUrl
@@ -36,18 +36,23 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   return (
     <UtilityCard kicker="Espace acheteur" title="Connexion" icon="login">
       <p className="font-body-sm text-body-sm text-on-surface-variant mt-3">
-        Un lien magique par e-mail, sans mot de passe. Ou continuez sans
+        Code à 6 chiffres par e-mail, sans mot de passe. Ou continuez sans
         compte pour explorer Achille.
       </p>
 
-      {emailError ? (
+      {erreur === "email" ? (
         <p className="font-body-sm bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2">
           Saisissez une adresse e-mail valide.
         </p>
       ) : null}
+      {erreur === "email_indisponible" || erreur === "envoi" ? (
+        <p className="font-body-sm bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2">
+          L’envoi du code est indisponible pour le moment. Réessayez plus tard.
+        </p>
+      ) : null}
 
       {isEmailAuthEnabled ? (
-        <form action={signInWithEmail} className="mt-8 flex flex-col gap-3">
+        <form action={requestOtpAction} className="mt-8 flex flex-col gap-3">
           <input type="hidden" name="callbackUrl" value={callbackUrl} />
           <label
             htmlFor="email"
@@ -65,7 +70,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             className="bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline focus-visible:ring-secondary-container h-11 w-full rounded-full border-0 px-4 outline-none focus-visible:ring-2"
           />
           <Button type="submit" size="lg" className="w-full">
-            Recevoir un lien de connexion
+            Recevoir un code
           </Button>
         </form>
       ) : (
