@@ -95,21 +95,41 @@ model Brand {
   products Product[]
 }
 
+/// Macro d'intérêt (onboarding + rattachement Category.macroId). Codes stables M01…M12.
+model InterestCategory {
+  id                      String                   @id @default(cuid())
+  code                    String                   @unique
+  name                    String
+  displayOrder            Int
+  icon                    String?
+  categories              Category[]
+  userInterests           UserInterest[]
+  notificationPreferences NotificationPreference[]
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+}
+
 model Category {
-  id                 String     @id @default(cuid())
+  id                 String            @id @default(cuid())
   name               String
-  slug               String     @unique
+  slug               String            @unique
   icon               String?
+  displayOrder       Int               @default(0)
   /// Code taxonomie Google Shopping, pour réconcilier les catégories externes.
   googleCategoryCode String?
   /// Clé d'import Arbo Achille : « FAMILLE::id ». Les ID du fichier sont réutilisés entre familles.
-  legacyCategoryCode String?    @unique
+  legacyCategoryCode String?           @unique
+  /// Macro posé explicitement. Null = héritage de l'ancêtre le plus proche (resolveCategoryMacro).
+  macroId            String?
+  macro              InterestCategory? @relation(fields: [macroId], references: [id], onDelete: SetNull)
   parentId           String?
-  parent             Category?  @relation("CategoryTree", fields: [parentId], references: [id])
-  children           Category[] @relation("CategoryTree")
+  parent             Category?         @relation("CategoryTree", fields: [parentId], references: [id])
+  children           Category[]        @relation("CategoryTree")
   products           Product[]
   reconciledOffers   Offer[]
   affiliationMappings AffiliationCategoryMapping[]
+
+  @@index([macroId])
 }
 
 model Product {
@@ -493,25 +513,79 @@ model ReservationCartItem {
 }
 
 model User {
-  id              String           @id @default(cuid())
-  email           String?          @unique
-  emailVerified   DateTime?
-  name            String?
-  image           String?
-  lastLat         Float?
-  lastLng         Float?
-  role            UserRole         @default(USER)
-  merchantId      String?
-  merchant        Merchant?        @relation(fields: [merchantId], references: [id])
-  accounts        Account[]
-  sessions        Session[]
-  favorites       Favorite[]
-  reservations    Reservation[]
-  reservationCart ReservationCart?
-  messages        Message[]
-  createdAt       DateTime         @default(now())
+  id                      String                   @id @default(cuid())
+  email                   String?                  @unique
+  emailVerified           DateTime?
+  name                    String?
+  image                   String?
+  lastLat                 Float?
+  lastLng                 Float?
+  role                    UserRole                 @default(USER)
+  merchantId              String?
+  merchant                Merchant?                @relation(fields: [merchantId], references: [id])
+  accounts                Account[]
+  sessions                Session[]
+  favorites               Favorite[]
+  reservations            Reservation[]
+  reservationCart         ReservationCart?
+  messages                Message[]
+  addresses               UserAddress[]
+  interests               UserInterest[]
+  notificationPreferences NotificationPreference[]
+  createdAt               DateTime                 @default(now())
 
   @@index([merchantId])
+}
+
+model UserInterest {
+  userId             String
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  interestCategoryId String
+  interestCategory   InterestCategory @relation(fields: [interestCategoryId], references: [id], onDelete: Cascade)
+  createdAt          DateTime         @default(now())
+
+  @@id([userId, interestCategoryId])
+  @@index([interestCategoryId])
+}
+
+model UserAddress {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label      String
+  street     String
+  postalCode String
+  city       String
+  country    String   @default("FR")
+  phone      String?
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+}
+
+enum NotificationKind {
+  ORDER_UPDATES
+  DEAL_ALERTS
+}
+
+/// Préférences canal. ORDER_UPDATES : une ligne / user (interestCategoryId null).
+/// DEAL_ALERTS : une ligne / user / macro. Unicité via index partiels SQL.
+model NotificationPreference {
+  id                 String            @id @default(cuid())
+  userId             String
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind               NotificationKind
+  interestCategoryId String?
+  interestCategory   InterestCategory? @relation(fields: [interestCategoryId], references: [id], onDelete: Cascade)
+  emailEnabled       Boolean           @default(true)
+  pushEnabled        Boolean           @default(false)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  @@index([userId])
+  @@index([interestCategoryId])
 }
 
 model Account {
