@@ -55,6 +55,9 @@ export function AdminHeader({
               <Button asChild variant="ghost" size="sm">
                 <Link href="/admin/affiliation/produits">Produits à créer</Link>
               </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/admin/affiliation/runs">Ingestion</Link>
+              </Button>
             </>
           ) : null}
           {showOffers ? (

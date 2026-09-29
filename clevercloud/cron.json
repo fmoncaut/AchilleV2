@@ -1,0 +1,3 @@
+[
+  "0 2 * * * $ROOT/clevercloud/affiliation-scheduler.sh"
+]

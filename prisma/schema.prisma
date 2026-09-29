@@ -254,6 +254,19 @@ model AffiliationProfile {
   updatedAt            DateTime                 @updatedAt
 }
 
+enum FeedRunTrigger {
+  SCHEDULED
+  MANUAL
+}
+
+enum FeedRunStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+  /// Config incomplète (ex. sourceUrl absent) — pas une alerte d'ingestion.
+  SKIPPED
+}
+
 model AffiliationFeed {
   id         String                  @id @default(cuid())
   merchantId String
@@ -264,11 +277,38 @@ model AffiliationFeed {
   status     AffiliationFeedStatus   @default(PAUSED)
   lines      AffiliationImportLine[]
   offers     Offer[]
+  runs       FeedRun[]
   createdAt  DateTime                @default(now())
   updatedAt  DateTime                @updatedAt
 
   @@index([merchantId])
   @@index([profileId])
+}
+
+/// Journal d'ingestion par flux. Au plus un RUNNING à la fois (index partiel SQL).
+model FeedRun {
+  id              String         @id @default(cuid())
+  feedId          String
+  feed            AffiliationFeed @relation(fields: [feedId], references: [id], onDelete: Cascade)
+  /// Regroupe les runs d'une même relance (cron ou bouton BO) pour le polling.
+  batchId         String?
+  trigger         FeedRunTrigger
+  status          FeedRunStatus
+  startedAt       DateTime       @default(now())
+  finishedAt      DateTime?
+  linesRead       Int?
+  offersOnline    Int?
+  offersWithdrawn Int?
+  pendingCreated  Int?
+  rejects         Int?
+  exclusions      Int?
+  /// Message d'échec tronqué (fetch, parse, lock…).
+  errorMessage    String?
+  createdAt       DateTime       @default(now())
+
+  @@index([feedId, startedAt])
+  @@index([batchId])
+  @@index([status, startedAt])
 }
 
 /// Ligne importée avant ou après création de l'offre. État durable si l'EAN ne matche aucun produit.
