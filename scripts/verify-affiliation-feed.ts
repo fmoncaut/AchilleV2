@@ -334,8 +334,8 @@ async function main() {
   );
   assert(
     af.rejects.some((reject) => reject.reason === "missing_price") &&
-      !af.rejects.some((reject) => reject.reason === "no_discount"),
-    "La ligne sans prix est rejetée, le filtre promo reste à part.",
+      af.rejects.every((reject) => reject.reason !== "missing_key"),
+    "La ligne sans prix est rejetée ; le filtre promo reste dans exclusions.",
   );
   const absent = await prisma.affiliationImportLine.findFirst({
     where: { feedId: feedAf.id, externalProductKey: "66666666" },
@@ -585,8 +585,8 @@ async function main() {
     "Une offre devenue sans promo est retirée.",
   );
   assert(
-    !withdrawn.rejects.some((reject) => reject.reason === "no_discount"),
-    "no_discount n'est pas un rejet.",
+    withdrawn.rejects.length === 0,
+    "Le retrait sans promo n'ajoute pas de rejet parse.",
   );
   const gone = await prisma.offer.findFirst({
     where: { feedId: feedAf.id, externalProductKey: "33333333" },
