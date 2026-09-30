@@ -17,7 +17,7 @@ Dans la [console Clever Cloud](https://console.clever-cloud.com/) :
 
 Clever Cloud installe les dépendances puis lance `npm start`. Il n’exécute pas `npm run build` tout seul. Le runtime Node ne lit pas de `clevercloud/node.json` : la ligne « No Clever Cloud specific configuration file detected » est normale. `CC_RUN_BUILD_STEP` n’est pas une variable documentée, elle est ignorée.
 
-`next build` est dans `clevercloud/pre-run.sh`, avant `npm start`. Le health check Clever Cloud attend le port 8080 dès le lancement : si le build reste dans `prestart`, le process n'écoute pas encore et le déploiement est coupé. Le hook ne reconstruit pas si `.next/standalone/server.js` existe déjà (redémarrage). `prestart` garde le même test, au cas où le standalone manquerait encore.
+`next build` est dans `clevercloud/pre-run.sh`, avant `npm start`. Le health check Clever Cloud attend le port 8080 dès le lancement : si le build reste dans `prestart`, le process n'écoute pas encore et le déploiement est coupé. Le hook **rebuild toujours** (déterministe) : un standalone en cache ne doit pas masquer un nouveau commit. `prestart` vérifie seulement que `.next/standalone/server.js` est présent (pas de build opportuniste).
 
 ## 2. Add-on PostgreSQL — plan dédié payant (obligatoire)
 
@@ -71,10 +71,10 @@ Le fichier versionné `clevercloud/pre-run.sh` exécute, dans l’ordre :
 
 ```bash
 npx prisma migrate deploy
-test -f .next/standalone/server.js || npm run build
+npm run build
 ```
 
-`npm start` trouve alors le standalone et écoute tout de suite le port 8080. Tailwind, TypeScript et les `@types` lus par `next build` sont en `dependencies` : avec `NODE_ENV=production`, les `devDependencies` ne sont pas installées.
+`npm start` trouve alors le standalone et écoute tout de suite le port 8080. `prestart` échoue franchement si le fichier manque (le build doit avoir eu lieu dans le hook). Tailwind, TypeScript et les `@types` lus par `next build` sont en `dependencies` : avec `NODE_ENV=production`, les `devDependencies` ne sont pas installées.
 
 Dans la console, variable :
 

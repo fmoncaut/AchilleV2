@@ -7,7 +7,7 @@
     "build": "next build",
     "build:webpack": "next build --webpack",
     "postbuild": "node scripts/copy-standalone-assets.mjs",
-    "prestart": "test -f .next/standalone/server.js || npm run build",
+    "prestart": "node -e \"require('fs').accessSync('.next/standalone/server.js')\"",
     "start": "node .next/standalone/server.js",
     "lint": "eslint",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json",
