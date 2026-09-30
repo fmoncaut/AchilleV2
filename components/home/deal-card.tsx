@@ -1,22 +1,45 @@
 import Link from "next/link";
+import type { ProductCondition } from "@prisma/client";
 
 import { Distance } from "@/components/distance";
 import { DiscountBadge } from "@/components/discount-badge";
 import { MaterialIcon } from "@/components/material-icon";
 import { ProductImage } from "@/components/product-image";
 import { ReserveButton } from "@/components/reserve-button";
-import type { NearbyOfferCard } from "@/lib/geo";
 import { discountPercent, formatEur, isStrictlyDiscounted } from "@/lib/money";
 import { offerPath } from "@/lib/urls";
+
+const CONDITION_LABEL: Record<ProductCondition, string> = {
+  NEUF: "Neuf",
+  OCCASION: "Occasion",
+  RECONDITIONNE: "Reconditionné",
+};
+
+export type HomeDealOffer = {
+  id: string;
+  priceRemise: string;
+  priceReference: string | null;
+  discountPct: number | null;
+  stock: number;
+  productName: string;
+  productSlug: string;
+  imageUrl: string | null;
+  kind: "DIRECT" | "AFFILIATION";
+  posId: string;
+  posName: string;
+  posSlug: string;
+  distanceM: number | null;
+  condition?: ProductCondition;
+};
 
 export function HomeDealCard({
   offer,
   lat,
   lng,
 }: {
-  offer: NearbyOfferCard;
-  lat: number;
-  lng: number;
+  offer: HomeDealOffer;
+  lat?: number | null;
+  lng?: number | null;
 }) {
   const href = offerPath(offer.productSlug, {
     posSlug: offer.posSlug || undefined,
@@ -32,6 +55,9 @@ export function HomeDealCard({
   const direct = offer.kind === "DIRECT";
   const saved = showCrossed
     ? Number(offer.priceReference) - Number(offer.priceRemise)
+    : null;
+  const conditionLabel = offer.condition
+    ? CONDITION_LABEL[offer.condition]
     : null;
 
   return (
@@ -81,6 +107,11 @@ export function HomeDealCard({
               {offer.productName}
             </h3>
           </Link>
+          {conditionLabel ? (
+            <p className="font-label-xs text-label-xs text-on-surface-variant mt-1">
+              {conditionLabel}
+            </p>
+          ) : null}
         </div>
         <div>
           <p className="flex flex-wrap items-baseline gap-2">
@@ -99,7 +130,7 @@ export function HomeDealCard({
             ) : null}
           </p>
           <div className="mt-3">
-            {direct ? (
+            {direct && lat != null && lng != null ? (
               <ReserveButton
                 offerId={offer.id}
                 posId={offer.posId}
@@ -115,7 +146,7 @@ export function HomeDealCard({
                 className="bg-surface-container-low font-label-md text-label-md text-primary-container hover:bg-surface-container inline-flex w-full items-center justify-center gap-1.5 rounded-full px-3 py-2"
               >
                 <MaterialIcon name="open_in_new" className="text-[16px]" />
-                Voir chez le marchand
+                {direct ? "Voir l’offre" : "Voir chez le marchand"}
               </Link>
             )}
           </div>
