@@ -81,17 +81,19 @@ export async function requestOtpAction(formData: FormData) {
   }
 
   try {
+    // Auth.js v5 server signIn(redirect:false) renvoie une URL (string), pas { error }.
+    // Succès e-mail → …/verify-request?… ; échec SMTP → throw ou URL d’erreur.
     const result = await signIn("email", {
       email,
       redirect: false,
     });
 
-    // Auth.js v5 : { error } si sendVerificationRequest a échoué.
-    if (result && typeof result === "object" && "error" in result && result.error) {
+    const resultUrl = typeof result === "string" ? result : null;
+    const looksOk = Boolean(resultUrl && resultUrl.includes("verify-request"));
+    if (!looksOk) {
       console.error("[auth] envoi OTP refusé par Auth.js", {
         email,
-        error: result.error,
-        code: "code" in result ? result.code : undefined,
+        result: resultUrl ?? result,
       });
       redirect("/login?erreur=envoi");
     }
