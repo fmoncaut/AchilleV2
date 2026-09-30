@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
 
 import {
-  emailFrom,
   isSmtpConfigured,
+  requireEmailFrom,
   smtpHost,
   smtpPassword,
   smtpPort,
@@ -34,7 +34,7 @@ export const emailChannel: NotificationChannel = {
     });
     await transport.sendMail({
       to,
-      from: emailFrom,
+      from: requireEmailFrom(),
       subject: message.subject,
       text: message.text,
     });
