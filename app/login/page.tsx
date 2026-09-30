@@ -47,7 +47,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       ) : null}
       {erreur === "email_indisponible" || erreur === "envoi" ? (
         <p className="font-body-sm bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2">
-          L’envoi du code est indisponible pour le moment. Réessayez plus tard.
+          Envoi impossible. Réessayez dans un instant.
         </p>
       ) : null}
 

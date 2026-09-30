@@ -1,5 +1,6 @@
 "use server";
 
+import { AuthError } from "next-auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -46,6 +47,17 @@ function otpPage(email: string, callbackUrl: string, erreur?: string) {
   return `/login/otp?${params.toString()}`;
 }
 
+function isNextRedirect(error: unknown): boolean {
+  const dig = error as { digest?: string };
+  return (
+    typeof dig?.digest === "string" && dig.digest.startsWith("NEXT_REDIRECT")
+  );
+}
+
+/**
+ * Demande d'OTP. N'enregistre le challenge / rate-limit QUE si l'envoi a réussi.
+ * Échec SMTP → message générique, pas de « code envoyé », pas de pénalité cooldown.
+ */
 export async function requestOtpAction(formData: FormData) {
   if (!isEmailAuthEnabled) {
     redirect("/login?erreur=email_indisponible");
@@ -69,22 +81,33 @@ export async function requestOtpAction(formData: FormData) {
   }
 
   try {
-    await signIn("email", {
+    const result = await signIn("email", {
       email,
       redirect: false,
     });
-  } catch (error) {
-    // Auth.js peut throw NEXT_REDIRECT même avec redirect:false selon version ;
-    // on ignore les redirects et on continue vers /login/otp.
-    const dig = error as { digest?: string };
-    if (typeof dig?.digest === "string" && dig.digest.startsWith("NEXT_REDIRECT")) {
-      // fall through
-    } else {
-      console.error("[auth] envoi OTP échoué", error);
+
+    // Auth.js v5 : { error } si sendVerificationRequest a échoué.
+    if (result && typeof result === "object" && "error" in result && result.error) {
+      console.error("[auth] envoi OTP refusé par Auth.js", {
+        email,
+        error: result.error,
+        code: "code" in result ? result.code : undefined,
+      });
       redirect("/login?erreur=envoi");
     }
+  } catch (error) {
+    if (isNextRedirect(error)) {
+      throw error;
+    }
+    console.error("[auth] envoi OTP échoué", {
+      email,
+      message: error instanceof Error ? error.message : String(error),
+      name: error instanceof AuthError ? error.type : undefined,
+    });
+    redirect("/login?erreur=envoi");
   }
 
+  // Uniquement après envoi réussi — sinon cooldown / rate-limit ne pénalisent pas.
   await recordOtpSent(email, ip);
   redirect(otpPage(email, callbackUrl));
 }
@@ -112,7 +135,6 @@ export async function verifyOtpAction(formData: FormData) {
     redirect(otpPage(email, callbackUrl, result.error));
   }
 
-  // Auth.js consomme le token (hashé via adapter) et crée la session DB.
   const params = new URLSearchParams({
     email,
     token: codeParsed.data,

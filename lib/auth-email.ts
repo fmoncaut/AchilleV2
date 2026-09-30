@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
 
 import {
-  emailFrom,
   isSmtpConfigured,
+  requireEmailFrom,
   smtpHost,
   smtpPassword,
   smtpPort,
@@ -14,16 +14,36 @@ type OtpMailParams = {
   token: string;
 };
 
+export const OTP_MAIL_SUBJECT = "Votre code Akwire";
+
+export function buildOtpMailContent(token: string): {
+  subject: string;
+  text: string;
+  html: string;
+} {
+  return {
+    subject: OTP_MAIL_SUBJECT,
+    text: `Votre code de connexion Akwire : ${token}\n\nIl expire dans 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.`,
+    html: `<p>Votre code de connexion Akwire :</p><p style="font-size:28px;font-weight:700;letter-spacing:0.2em">${token}</p><p>Il expire dans 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.</p>`,
+  };
+}
+
+/**
+ * Envoie le code OTP. Propage toute erreur SMTP / EMAIL_FROM manquant
+ * (pas de succès silencieux).
+ */
 export async function sendOtpEmail({ identifier, token }: OtpMailParams) {
-  const subject = "Votre code Achille";
-  const text = `Votre code de connexion Achille : ${token}\n\nIl expire dans 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.`;
-  const html = `<p>Votre code de connexion Achille :</p><p style="font-size:28px;font-weight:700;letter-spacing:0.2em">${token}</p><p>Il expire dans 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.</p>`;
+  const from = requireEmailFrom();
+  const { subject, text, html } = buildOtpMailContent(token);
 
   if (!isSmtpConfigured) {
     if (process.env.NODE_ENV === "production") {
-      throw new Error("SMTP n'est pas configuré.");
+      throw new Error("SMTP n'est pas configuré (host/user/password/EMAIL_FROM).");
     }
-    console.info(`[auth] Code OTP pour ${identifier} (non envoyé, SMTP absent) : ${token}`);
+    // Dev sans SMTP : log console uniquement, EMAIL_FROM déjà exigé ci-dessus.
+    console.info(
+      `[auth] Code OTP pour ${identifier} (non envoyé, SMTP absent) : ${token}`,
+    );
     return;
   }
 
@@ -39,7 +59,7 @@ export async function sendOtpEmail({ identifier, token }: OtpMailParams) {
 
   await transport.sendMail({
     to: identifier,
-    from: emailFrom,
+    from,
     subject,
     text,
     html,

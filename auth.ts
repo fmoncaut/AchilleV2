@@ -31,20 +31,21 @@ function buildProviders(): Provider[] {
       Nodemailer({
         id: "email",
         name: "E-mail",
-        from: emailFrom,
+        from: emailFrom ?? "",
         maxAge: OTP_TTL_MS / 1000,
         generateVerificationToken: async () => generateOtpCode(),
         server: isSmtpConfigured
           ? {
-              host: smtpHost,
+              host: smtpHost!,
               port: smtpPort,
               auth: {
-                user: smtpUser,
-                pass: smtpPassword,
+                user: smtpUser!,
+                pass: smtpPassword!,
               },
             }
           : { host: "127.0.0.1", port: 25 },
         async sendVerificationRequest({ identifier, token }) {
+          // Propage l'échec SMTP / EMAIL_FROM manquant à signIn (pas de succès silencieux).
           await sendOtpEmail({ identifier, token });
         },
       }),
