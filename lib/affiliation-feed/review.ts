@@ -3,6 +3,10 @@ import type { Prisma } from "@prisma/client";
 import { withdrawNonPromoOffer } from "@/lib/affiliation-feed/import";
 import { mapFeedRow } from "@/lib/affiliation-feed/map-row";
 import { findCategoryMapping } from "@/lib/affiliation-feed/mapping";
+import {
+  computeOfferMacroId,
+  syncOfferMacrosForProductCategory,
+} from "@/lib/categories/offer-macro";
 import { prisma } from "@/lib/db";
 import { discountPercent, isStrictlyDiscounted } from "@/lib/money";
 import { findFirstMerchantWithEmail } from "@/lib/notifications/recipients";
@@ -110,19 +114,31 @@ export async function publishPendingLine(lineId: string) {
     line.feed.profile.network,
     row.externalCategoryRaw,
   );
+  const productBefore = await prisma.product.findUnique({
+    where: { id: productId },
+    select: { categoryId: true },
+  });
   if (mapping?.categoryId) {
-    const product = await prisma.product.findUnique({
-      where: { id: productId },
-      select: { categoryId: true },
-    });
-    if (product && !product.categoryId) {
+    if (productBefore && !productBefore.categoryId) {
       await prisma.product.update({
         where: { id: productId },
         data: { categoryId: mapping.categoryId },
       });
+      await syncOfferMacrosForProductCategory(
+        prisma,
+        productId,
+        mapping.categoryId,
+      );
     }
   }
   const priceReference = row.priceReference;
+  const reconciledCategoryId = mapping ? mapping.categoryId : null;
+  const macroId = await computeOfferMacroId(prisma, {
+    reconciledCategoryId,
+    productCategoryId: mapping?.categoryId
+      ? (productBefore?.categoryId ?? mapping.categoryId)
+      : (productBefore?.categoryId ?? null),
+  });
   const offer = await prisma.offer.upsert({
     where: {
       feedId_externalProductKey: {
@@ -147,6 +163,7 @@ export async function publishPendingLine(lineId: string) {
       merchantUrl: row.merchantUrl,
       externalCategoryRaw: row.externalCategoryRaw,
       ...(mapping ? { reconciledCategoryId: mapping.categoryId } : {}),
+      macroId,
     },
     update: {
       productId,
@@ -158,6 +175,7 @@ export async function publishPendingLine(lineId: string) {
       merchantUrl: row.merchantUrl,
       externalCategoryRaw: row.externalCategoryRaw,
       ...(mapping ? { reconciledCategoryId: mapping.categoryId } : {}),
+      ...(mapping ? { macroId } : {}),
     },
     select: { id: true },
   });

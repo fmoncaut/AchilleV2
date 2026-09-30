@@ -5,6 +5,10 @@ import {
   type AdminActor,
 } from "@/lib/admin/actor";
 import { computedDiscountPct, type OfferFormInput } from "@/lib/admin/schemas";
+import {
+  computeOfferMacroId,
+  syncOfferMacrosForProductCategory,
+} from "@/lib/categories/offer-macro";
 import { prisma } from "@/lib/db";
 import { toDecimal } from "@/lib/money";
 import { slugify } from "@/lib/slug";
@@ -238,6 +242,13 @@ export async function saveOfferForMerchant(
     }
   }
 
+  const productBefore = await prisma.product.findUnique({
+    where: { ean: input.ean },
+    select: { id: true, categoryId: true },
+  });
+  const categoryChanged =
+    !productBefore || productBefore.categoryId !== input.categoryId;
+
   const product = await upsertProductByEan({
     ean: input.ean,
     name: input.name,
@@ -271,6 +282,23 @@ export async function saveOfferForMerchant(
     resolvedId = existing?.id;
   }
 
+  let reconciledCategoryId: string | null = null;
+  if (resolvedId) {
+    const existingOffer = await prisma.offer.findUnique({
+      where: { id: resolvedId },
+      select: { reconciledCategoryId: true },
+    });
+    reconciledCategoryId = existingOffer?.reconciledCategoryId ?? null;
+  }
+
+  const shouldSetMacro = !resolvedId || categoryChanged;
+  const macroId = shouldSetMacro
+    ? await computeOfferMacroId(prisma, {
+        reconciledCategoryId,
+        productCategoryId: input.categoryId,
+      })
+    : undefined;
+
   const payload = {
     productId: product.id,
     posId: anchorPosId,
@@ -287,6 +315,7 @@ export async function saveOfferForMerchant(
     condition: input.condition,
     isOnline: input.isOnline,
     merchantUrl,
+    ...(macroId !== undefined ? { macroId } : {}),
   };
 
   if (resolvedId) {
@@ -326,6 +355,13 @@ export async function saveOfferForMerchant(
         await tx.offerPos.createMany({
           data: posIds.map((posId) => ({ offerId: offer.id, posId })),
         });
+      }
+      if (categoryChanged) {
+        await syncOfferMacrosForProductCategory(
+          tx,
+          product.id,
+          input.categoryId,
+        );
       }
       return offer;
     });

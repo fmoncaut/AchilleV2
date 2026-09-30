@@ -6,6 +6,10 @@ import {
   type NormalizedFeedRow,
 } from "@/lib/affiliation-feed/map-row";
 import { parseFeedCsv, type FeedReject } from "@/lib/affiliation-feed/parse";
+import {
+  computeOfferMacroId,
+  syncOfferMacrosForProductCategory,
+} from "@/lib/categories/offer-macro";
 import { prisma } from "@/lib/db";
 import { discountPercent, isStrictlyDiscounted } from "@/lib/money";
 import { findFirstAdminWithEmail } from "@/lib/notifications/recipients";
@@ -336,7 +340,15 @@ async function upsertFeedOffer(
         externalProductKey: row.externalProductKey,
       },
     },
-    select: { id: true, externalCategoryRaw: true },
+    select: {
+      id: true,
+      externalCategoryRaw: true,
+      reconciledCategoryId: true,
+    },
+  });
+  const product = await tx.product.findUnique({
+    where: { id: productId },
+    select: { categoryId: true },
   });
   const rawChanged = existingOffer
     ? existingOffer.externalCategoryRaw !== row.externalCategoryRaw
@@ -352,11 +364,25 @@ async function upsertFeedOffer(
     ? { reconciledCategoryId: mapping.categoryId }
     : {};
 
+  // Macro uniquement à la création ou si reconciledCategoryId change.
+  const categoryTouched = !existingOffer || mapping !== null;
+  const reconciledForMacro = mapping
+    ? mapping.categoryId
+    : (existingOffer?.reconciledCategoryId ?? null);
+  const macroPatch = categoryTouched
+    ? {
+        macroId: await computeOfferMacroId(tx, {
+          reconciledCategoryId: reconciledForMacro,
+          productCategoryId: product?.categoryId ?? null,
+        }),
+      }
+    : {};
+
   let offerId: string;
   if (existingOffer) {
     await tx.offer.update({
       where: { id: existingOffer.id },
-      data: { ...commercial, ...reconciled },
+      data: { ...commercial, ...reconciled, ...macroPatch },
     });
     offerId = existingOffer.id;
   } else {
@@ -364,6 +390,7 @@ async function upsertFeedOffer(
       data: {
         ...commercial,
         ...reconciled,
+        ...macroPatch,
         productId,
         merchantId: feed.merchantId,
         feedId: feed.id,
@@ -379,15 +406,16 @@ async function upsertFeedOffer(
   }
 
   if (mapping?.categoryId) {
-    const product = await tx.product.findUnique({
-      where: { id: productId },
-      select: { categoryId: true },
-    });
     if (product && !product.categoryId) {
       await tx.product.update({
         where: { id: productId },
         data: { categoryId: mapping.categoryId },
       });
+      await syncOfferMacrosForProductCategory(
+        tx,
+        productId,
+        mapping.categoryId,
+      );
     } else if (
       product?.categoryId &&
       product.categoryId !== mapping.categoryId

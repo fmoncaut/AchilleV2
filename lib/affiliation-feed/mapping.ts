@@ -1,5 +1,9 @@
 import type { AffiliationNetwork, Prisma } from "@prisma/client";
 
+import {
+  recomputeOfferMacrosGroupedByProductCategory,
+} from "@/lib/categories/offer-macro";
+import { resolveCategoryMacro } from "@/lib/categories/resolve-macro";
 import { prisma } from "@/lib/db";
 
 export function categoryMappingKey(raw: string | null | undefined): string {
@@ -70,22 +74,48 @@ export async function applyCategoryMapping(network: AffiliationNetwork, raw: str
   }
 
   const where = offerWhere(network, raw);
-  const offers = await prisma.offer.updateMany({
-    where,
-    data: { reconciledCategoryId: mapping.categoryId },
-  });
 
   if (!mapping.categoryId) {
+    const offers = await prisma.offer.updateMany({
+      where,
+      data: { reconciledCategoryId: null },
+    });
+    await recomputeOfferMacrosGroupedByProductCategory(prisma, where);
     return { offers: offers.count, productsUpdated: 0, conflicts: 0 };
   }
 
-  const productsUpdated = await prisma.product.updateMany({
+  const macroId =
+    (await resolveCategoryMacro(prisma, mapping.categoryId))?.id ?? null;
+  const offers = await prisma.offer.updateMany({
+    where,
+    data: { reconciledCategoryId: mapping.categoryId, macroId },
+  });
+
+  const productsToFill = await prisma.product.findMany({
     where: {
       categoryId: null,
       offers: { some: where },
     },
-    data: { categoryId: mapping.categoryId },
+    select: { id: true },
   });
+  let productsUpdated = 0;
+  if (productsToFill.length > 0) {
+    const productIds = productsToFill.map((p) => p.id);
+    const filled = await prisma.product.updateMany({
+      where: { id: { in: productIds } },
+      data: { categoryId: mapping.categoryId },
+    });
+    productsUpdated = filled.count;
+    // Sœurs sans reconciled : même catégorie produit → même macro.
+    await prisma.offer.updateMany({
+      where: {
+        productId: { in: productIds },
+        reconciledCategoryId: null,
+      },
+      data: { macroId },
+    });
+  }
+
   const conflicts = await prisma.product.count({
     where: {
       AND: [
@@ -95,7 +125,7 @@ export async function applyCategoryMapping(network: AffiliationNetwork, raw: str
       ],
     },
   });
-  return { offers: offers.count, productsUpdated: productsUpdated.count, conflicts };
+  return { offers: offers.count, productsUpdated, conflicts };
 }
 
 export async function saveCategoryMapping(

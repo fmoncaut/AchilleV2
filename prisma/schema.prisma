@@ -107,6 +107,8 @@ model InterestCategory {
   displayOrder            Int
   icon                    String?
   categories              Category[]
+  /// Offres dont le macro résolu a été dénormalisé (Offer.macroId).
+  offers                  Offer[]
   userInterests           UserInterest[]
   notificationPreferences NotificationPreference[]
   createdAt               DateTime                 @default(now())
@@ -379,6 +381,10 @@ model Offer {
   /// Catégorie vitrine, remplie à partir d'A.4.3. Product.categoryId n'est pas touché ici.
   reconciledCategoryId String?
   reconciledCategory   Category?              @relation(fields: [reconciledCategoryId], references: [id], onDelete: SetNull)
+  /// Macro d'intérêt résolu (dénorm). Source : resolveCategoryMacro(reconciledCategoryId ?? product.categoryId).
+  /// Ne pas confondre avec Category.macroId (mapping direct sur le nœud). Recalculé à l'écriture catégorie.
+  macroId              String?
+  macro                InterestCategory?      @relation(fields: [macroId], references: [id], onDelete: SetNull)
   importLine           AffiliationImportLine?
   createdAt            DateTime               @default(now())
   updatedAt            DateTime               @updatedAt
@@ -396,6 +402,7 @@ model Offer {
   @@index([brokerId])
   @@index([feedId])
   @@index([reconciledCategoryId])
+  @@index([macroId])
 }
 
 /// POS ciblés d'une offre d'affiliation (scope POS_CIBLES). Pas de duplication de l'offre.

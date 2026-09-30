@@ -1,4 +1,6 @@
-import type { InterestCategory, PrismaClient } from "@prisma/client";
+import type { InterestCategory, Prisma, PrismaClient } from "@prisma/client";
+
+type CategoryWalkClient = PrismaClient | Prisma.TransactionClient;
 
 type CategoryWalkRow = {
   id: string;
@@ -11,7 +13,7 @@ type CategoryWalkRow = {
  * Un nœud reclassé (override) masque le macro de sa racine.
  */
 export async function resolveCategoryMacro(
-  db: PrismaClient,
+  db: CategoryWalkClient,
   categoryId: string,
 ): Promise<InterestCategory | null> {
   let currentId: string | null = categoryId;
