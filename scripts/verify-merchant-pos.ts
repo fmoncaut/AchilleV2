@@ -147,17 +147,17 @@ async function main() {
     }),
   });
   assert(!("duplicates" in created), "Create doit aboutir");
-  assert(
-    created.merchantId === merchantA.id,
-    "Create doit forcer merchantId = actor.merchantId (enseigne A).",
-  );
-  assert(
-    created.merchantId !== merchantB.id,
-    "Create ne peut pas viser l’enseigne B.",
-  );
   const createdRow = await db.pos.findUniqueOrThrow({
     where: { id: created.id },
   });
+  assert(
+    createdRow.merchantId === merchantA.id,
+    "Create doit forcer merchantId = actor.merchantId (enseigne A).",
+  );
+  assert(
+    createdRow.merchantId !== merchantB.id,
+    "Create ne peut pas viser l’enseigne B.",
+  );
   assert(createdRow.status === "INACTIVE_HIDDEN", "Create → INACTIVE_HIDDEN");
   assert(createdRow.statusSource === "MANUAL", "Create → MANUAL");
   assert(createdRow.merchantId === merchantA.id, "Ligne DB = enseigne A");

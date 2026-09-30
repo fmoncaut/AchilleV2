@@ -124,8 +124,11 @@ async function main() {
 
   // --- Linking par e-mail vérifié (simulation adapter) ---
   const userOtp = await adapter.createUser!({
+    id: crypto.randomUUID(),
     email,
     emailVerified: new Date(),
+    role: "USER",
+    merchantId: null,
   });
   assert(userOtp.emailVerified != null, "OTP pose emailVerified.");
 
@@ -145,9 +148,12 @@ async function main() {
   // Sens inverse : User Google puis « OTP » = getUserByEmail
   const email2 = `u1-g-${stamp}@example.com`;
   const userGoogle = await adapter.createUser!({
+    id: crypto.randomUUID(),
     email: email2,
     emailVerified: new Date(),
     name: "Google User",
+    role: "USER",
+    merchantId: null,
   });
   await adapter.linkAccount!({
     userId: userGoogle.id!,
