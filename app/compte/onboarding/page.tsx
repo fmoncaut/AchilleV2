@@ -45,7 +45,7 @@ export default async function OnboardingPage({ searchParams }: PageProps) {
     <UtilityCard
       kicker="Bienvenue"
       title="Personnalisez votre fil"
-      icon="interests"
+        icon="tune"
       className="max-w-lg"
     >
       <p className="font-body-sm text-body-sm text-on-surface-variant mt-3">
