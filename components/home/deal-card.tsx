@@ -3,11 +3,12 @@ import type { ProductCondition } from "@prisma/client";
 
 import { Distance } from "@/components/distance";
 import { DiscountBadge } from "@/components/discount-badge";
+import { FavoriteButton } from "@/components/favorite-button";
 import { MaterialIcon } from "@/components/material-icon";
 import { ProductImage } from "@/components/product-image";
 import { ReserveButton } from "@/components/reserve-button";
 import { discountPercent, formatEur, isStrictlyDiscounted } from "@/lib/money";
-import { offerPath } from "@/lib/urls";
+import { loginWithReturn, offerPath } from "@/lib/urls";
 
 const CONDITION_LABEL: Record<ProductCondition, string> = {
   NEUF: "Neuf",
@@ -17,6 +18,7 @@ const CONDITION_LABEL: Record<ProductCondition, string> = {
 
 export type HomeDealOffer = {
   id: string;
+  productId: string;
   priceRemise: string;
   priceReference: string | null;
   discountPct: number | null;
@@ -36,10 +38,14 @@ export function HomeDealCard({
   offer,
   lat,
   lng,
+  signedIn = false,
+  isProductFavorite = false,
 }: {
   offer: HomeDealOffer;
   lat?: number | null;
   lng?: number | null;
+  signedIn?: boolean;
+  isProductFavorite?: boolean;
 }) {
   const href = offerPath(offer.productSlug, {
     posSlug: offer.posSlug || undefined,
@@ -61,7 +67,17 @@ export function HomeDealCard({
     : null;
 
   return (
-    <article className="bg-surface-container-lowest shadow-navy-soft hover:shadow-navy group flex flex-col overflow-hidden rounded-xl transition-shadow">
+    <article className="bg-surface-container-lowest shadow-navy-soft hover:shadow-navy group relative flex flex-col overflow-hidden rounded-xl transition-shadow">
+      <div className="absolute top-2 right-2 z-10">
+        <FavoriteButton
+          kind="product"
+          targetId={offer.productId}
+          signedIn={signedIn}
+          isFavorite={isProductFavorite}
+          loginHref={loginWithReturn(href)}
+          variant="icon"
+        />
+      </div>
       <div className="relative">
         <Link href={href} className="block outline-none">
           <ProductImage
@@ -75,7 +91,7 @@ export function HomeDealCard({
             <DiscountBadge percent={discount} />
           </span>
         ) : null}
-        <span className="bg-primary-container/90 text-on-primary font-label-xs text-label-xs absolute top-2 right-2 inline-flex items-center gap-1 rounded-full px-2 py-1 font-bold backdrop-blur-sm">
+        <span className="bg-primary-container/90 text-on-primary font-label-xs text-label-xs absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-full px-2 py-1 font-bold backdrop-blur-sm">
           <MaterialIcon
             name={direct ? "store" : "open_in_new"}
             className="text-[12px]"

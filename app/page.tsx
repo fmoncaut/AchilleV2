@@ -15,6 +15,7 @@ import {
   toFeedOfferCard,
 } from "@/lib/feed";
 import type { FeedFacet } from "@/lib/feed/constants";
+import { getFavoriteProductIdsIn } from "@/lib/favorites";
 import { findUnavailablePosNearby, type NearbyOfferCard } from "@/lib/geo";
 import { getIgnMapConfig } from "@/lib/map-config";
 import {
@@ -186,6 +187,12 @@ export default async function Home({ searchParams }: PageProps) {
   if (filtre === "ouvert") {
     visible = visible.filter((offer) => openByPos.get(offer.posId) === true);
   }
+
+  const favoriteProductIds = await getFavoriteProductIdsIn(
+    userId,
+    visible.map((offer) => offer.productId),
+  );
+  const signedIn = Boolean(userId);
 
   const unavailable =
     origin != null
@@ -491,6 +498,8 @@ export default async function Home({ searchParams }: PageProps) {
                     offer={offer}
                     lat={origin?.lat}
                     lng={origin?.lng}
+                    signedIn={signedIn}
+                    isProductFavorite={favoriteProductIds.has(offer.productId)}
                   />
                 ))}
               </div>

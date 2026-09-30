@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
+import { useOptimistic, useTransition } from "react";
 
 import { toggleFavoriteAction } from "@/app/compte/favorites-actions";
 import { MaterialIcon } from "@/components/material-icon";
@@ -17,61 +18,6 @@ type FavoriteButtonProps = {
   className?: string;
 };
 
-function HeartSubmit({
-  isFavorite,
-  variant,
-}: {
-  isFavorite: boolean;
-  variant: "icon" | "label";
-}) {
-  const { pending } = useFormStatus();
-  const label = isFavorite ? "Retirer des favoris" : "Ajouter aux favoris";
-
-  if (variant === "label") {
-    return (
-      <button
-        type="submit"
-        disabled={pending}
-        aria-pressed={isFavorite}
-        className={cn(
-          "font-label-md text-label-md inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 font-bold",
-          isFavorite
-            ? "bg-secondary-container text-on-secondary-container shadow-navy"
-            : "bg-surface-container-lowest text-primary-container ring-outline-variant ring-1",
-        )}
-      >
-        <MaterialIcon
-          name="favorite"
-          filled={isFavorite}
-          className="text-[18px]"
-        />
-        {pending ? "…" : label}
-      </button>
-    );
-  }
-
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      aria-label={label}
-      aria-pressed={isFavorite}
-      className={cn(
-        "shadow-navy-soft inline-flex size-10 items-center justify-center rounded-full ring-1",
-        isFavorite
-          ? "bg-secondary-container text-on-secondary-container ring-secondary-container"
-          : "bg-surface-container-lowest/95 text-primary-container ring-outline-variant",
-      )}
-    >
-      <MaterialIcon
-        name="favorite"
-        filled={isFavorite}
-        className="text-[20px]"
-      />
-    </button>
-  );
-}
-
 export function FavoriteButton({
   kind,
   targetId,
@@ -81,6 +27,10 @@ export function FavoriteButton({
   variant = "icon",
   className,
 }: FavoriteButtonProps) {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  const [optimisticFavorite, setOptimisticFavorite] = useOptimistic(isFavorite);
+
   if (!signedIn) {
     const label = "Connectez-vous pour enregistrer ce favori";
     if (variant === "label") {
@@ -113,11 +63,66 @@ export function FavoriteButton({
     );
   }
 
+  const label = optimisticFavorite
+    ? "Retirer des favoris"
+    : "Ajouter aux favoris";
+
+  function onToggle() {
+    const next = !optimisticFavorite;
+    startTransition(async () => {
+      setOptimisticFavorite(next);
+      const result = await toggleFavoriteAction({ kind, id: targetId });
+      if (!result.ok || result.favorited !== next) {
+        router.refresh();
+      }
+    });
+  }
+
+  if (variant === "label") {
+    return (
+      <button
+        type="button"
+        onClick={onToggle}
+        disabled={pending}
+        aria-pressed={optimisticFavorite}
+        className={cn(
+          "font-label-md text-label-md inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 font-bold",
+          optimisticFavorite
+            ? "bg-secondary-container text-on-secondary-container shadow-navy"
+            : "bg-surface-container-lowest text-primary-container ring-outline-variant ring-1",
+          className,
+        )}
+      >
+        <MaterialIcon
+          name="favorite"
+          filled={optimisticFavorite}
+          className="text-[18px]"
+        />
+        {label}
+      </button>
+    );
+  }
+
   return (
-    <form action={toggleFavoriteAction} className={className}>
-      <input type="hidden" name="kind" value={kind} />
-      <input type="hidden" name="id" value={targetId} />
-      <HeartSubmit isFavorite={isFavorite} variant={variant} />
-    </form>
+    <button
+      type="button"
+      onClick={onToggle}
+      disabled={pending}
+      aria-label={label}
+      aria-pressed={optimisticFavorite}
+      className={cn(
+        "shadow-navy-soft inline-flex size-10 items-center justify-center rounded-full ring-1",
+        optimisticFavorite
+          ? "bg-secondary-container text-on-secondary-container ring-secondary-container"
+          : "bg-surface-container-lowest/95 text-primary-container ring-outline-variant",
+        className,
+      )}
+    >
+      <MaterialIcon
+        name="favorite"
+        filled={optimisticFavorite}
+        className="text-[20px]"
+      />
+    </button>
   );
 }

@@ -28,6 +28,7 @@ export const EMPTY_FAVORITE_FLAGS: FavoriteFlags = {
   posIds: [],
 };
 
+/** Tous les favoris user — fiche / compte. */
 export async function getFavoriteFlags(
   userId: string | undefined,
 ): Promise<FavoriteFlags> {
@@ -43,15 +44,51 @@ export async function getFavoriteFlags(
   const productIds: string[] = [];
   const posIds: string[] = [];
   for (const row of rows) {
-    if (row.productId) {
-      productIds.push(row.productId);
-    }
-    if (row.posId) {
-      posIds.push(row.posId);
-    }
+    if (row.productId) productIds.push(row.productId);
+    if (row.posId) posIds.push(row.posId);
   }
 
   return { signedIn: true, productIds, posIds };
+}
+
+/**
+ * État favori pour une page de cartes (feed) — 1 requête scopée IN (…).
+ * Pas de N+1.
+ */
+export async function getFavoriteProductIdsIn(
+  userId: string | undefined,
+  productIds: string[],
+): Promise<Set<string>> {
+  if (!userId || productIds.length === 0) {
+    return new Set();
+  }
+  const unique = [...new Set(productIds)];
+  const rows = await prisma.favorite.findMany({
+    where: { userId, productId: { in: unique } },
+    select: { productId: true },
+  });
+  return new Set(
+    rows
+      .map((row) => row.productId)
+      .filter((id): id is string => Boolean(id)),
+  );
+}
+
+export async function getFavoritePosIdsIn(
+  userId: string | undefined,
+  posIds: string[],
+): Promise<Set<string>> {
+  if (!userId || posIds.length === 0) {
+    return new Set();
+  }
+  const unique = [...new Set(posIds)];
+  const rows = await prisma.favorite.findMany({
+    where: { userId, posId: { in: unique } },
+    select: { posId: true },
+  });
+  return new Set(
+    rows.map((row) => row.posId).filter((id): id is string => Boolean(id)),
+  );
 }
 
 export async function listFavoritesForUser(userId: string) {
@@ -112,6 +149,7 @@ export async function listFavoritesForUser(userId: string) {
   };
 }
 
+/** Toggle idempotent côté UI cœur. */
 export async function toggleFavorite(
   userId: string,
   kind: FavoriteKind,
@@ -127,7 +165,7 @@ export async function toggleFavorite(
     }
 
     const existing = await prisma.favorite.findFirst({
-      where: { userId, productId: targetId, posId: null },
+      where: { userId, productId: targetId },
       select: { id: true },
     });
 
@@ -151,7 +189,7 @@ export async function toggleFavorite(
   }
 
   const existing = await prisma.favorite.findFirst({
-    where: { userId, posId: targetId, productId: null },
+    where: { userId, posId: targetId },
     select: { id: true },
   });
 

@@ -1,33 +1,43 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { favoriteInputSchema, toggleFavorite } from "@/lib/favorites";
 
-export async function toggleFavoriteAction(formData: FormData): Promise<void> {
+export type ToggleFavoriteResult =
+  | { ok: true; favorited: boolean }
+  | { ok: false; error: "unauthorized" | "invalid" | "failed" };
+
+export async function toggleFavoriteAction(input: {
+  kind: string;
+  id: string;
+}): Promise<ToggleFavoriteResult> {
   const session = await auth();
   const userId = session?.user?.id;
   if (!userId) {
-    redirect("/login?callbackUrl=/compte/favoris");
+    return { ok: false, error: "unauthorized" };
   }
 
-  const parsed = favoriteInputSchema.safeParse({
-    kind: formData.get("kind"),
-    id: formData.get("id"),
-  });
-
+  const parsed = favoriteInputSchema.safeParse(input);
   if (!parsed.success) {
-    return;
+    return { ok: false, error: "invalid" };
   }
 
   try {
-    await toggleFavorite(userId, parsed.data.kind, parsed.data.id);
+    const result = await toggleFavorite(
+      userId,
+      parsed.data.kind,
+      parsed.data.id,
+    );
+    revalidatePath("/compte/favoris");
+    revalidatePath("/compte");
+    revalidatePath("/");
+    revalidatePath("/recherche");
+    revalidatePath("/offre", "layout");
+    revalidatePath("/magasin", "layout");
+    return { ok: true, favorited: result.favorited };
   } catch {
-    return;
+    return { ok: false, error: "failed" };
   }
-
-  revalidatePath("/compte/favoris");
-  revalidatePath("/compte");
 }
