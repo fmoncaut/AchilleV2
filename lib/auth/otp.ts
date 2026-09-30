@@ -1,4 +1,4 @@
-import { createHash, createHmac, randomInt } from "node:crypto";
+import { createHash, randomInt } from "node:crypto";
 
 import { prisma } from "@/lib/db";
 
@@ -29,8 +29,19 @@ export function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
 }
 
+/**
+ * Même empreinte que Auth.js avant l’adapter :
+ * SHA-256(token + AUTH_SECRET) en hex.
+ */
+export function hashVerificationToken(plainToken: string): string {
+  return createHash("sha256")
+    .update(`${plainToken.trim()}${authPepper()}`)
+    .digest("hex");
+}
+
+/** @deprecated alias — préférer hashVerificationToken */
 export function hashOtpCode(code: string): string {
-  return createHmac("sha256", authPepper()).update(`otp:${code}`).digest("hex");
+  return hashVerificationToken(code);
 }
 
 export function hashIp(ip: string | null | undefined): string | null {
@@ -159,7 +170,7 @@ export async function verifyOtpAttempt(
     return { ok: false, error: "lockout" };
   }
 
-  const token = hashOtpCode(code.trim());
+  const token = hashVerificationToken(code);
   const stored = await prisma.verificationToken.findUnique({
     where: {
       identifier_token: { identifier: normalized, token },
