@@ -12,7 +12,7 @@ import { createAuthAdapter } from "../lib/auth/adapter";
 import {
   assertCanSendOtp,
   generateOtpCode,
-  hashVerificationToken,
+  hashOtpCode,
   invalidateOtp,
   OTP_MAX_ATTEMPTS,
   OTP_RESEND_COOLDOWN_MS,
@@ -68,17 +68,15 @@ async function main() {
   const can1 = await assertCanSendOtp(email, "ip-test");
   assert(can1.ok, "Premier envoi autorisé.");
   const code = generateOtpCode();
-  // Simule Auth.js : SHA-256(token + AUTH_SECRET) avant l’adapter.
-  const hashed = hashVerificationToken(code);
   await adapter.createVerificationToken!({
     identifier: email,
-    token: hashed,
+    token: hashOtpCode(code),
     expires: new Date(Date.now() + 10 * 60 * 1000),
   });
   await recordOtpSent(email, "ip-test");
 
   const stored = await db.verificationToken.findFirst({ where: { identifier: email } });
-  assert(stored?.token === hashed, "Code hashé au repos (empreinte Auth.js).");
+  assert(stored?.token === hashOtpCode(code), "Code hashé au repos.");
   assert(stored?.token !== code, "Pas de clair en base.");
 
   const cooldown = await assertCanSendOtp(email, "ip-test");
@@ -96,11 +94,10 @@ async function main() {
 
   // --- Succès usage unique ---
   const code2 = generateOtpCode();
-  const hashed2 = hashVerificationToken(code2);
   await recordOtpSent(email, "ip-test");
   await adapter.createVerificationToken!({
     identifier: email,
-    token: hashed2,
+    token: hashOtpCode(code2),
     expires: new Date(Date.now() + 10 * 60 * 1000),
   });
   await db.emailOtpChallenge.update({
@@ -116,12 +113,12 @@ async function main() {
   assert(ok.ok, "Vérif OTP OK.");
   const used = await adapter.useVerificationToken!({
     identifier: email,
-    token: hashed2,
+    token: hashOtpCode(code2),
   });
   assert(used != null, "Token consommé (usage unique).");
   const replay = await adapter.useVerificationToken!({
     identifier: email,
-    token: hashed2,
+    token: hashOtpCode(code2),
   });
   assert(replay == null, "Rejeu impossible.");
 

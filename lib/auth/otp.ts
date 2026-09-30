@@ -30,18 +30,14 @@ export function normalizeEmail(email: string): string {
 }
 
 /**
- * Même empreinte que Auth.js avant l’adapter :
- * SHA-256(token + AUTH_SECRET) en hex.
+ * Hash aligné sur Auth.js (`createHash(\`${token}${secret}\`)` → SHA-256 hex).
+ * Auth.js hashe avant createVerificationToken / useVerificationToken :
+ * l'adapter stocke ce hash tel quel (pas de second HMAC).
  */
-export function hashVerificationToken(plainToken: string): string {
-  return createHash("sha256")
-    .update(`${plainToken.trim()}${authPepper()}`)
-    .digest("hex");
-}
-
-/** @deprecated alias — préférer hashVerificationToken */
 export function hashOtpCode(code: string): string {
-  return hashVerificationToken(code);
+  return createHash("sha256")
+    .update(`${code}${authPepper()}`)
+    .digest("hex");
 }
 
 export function hashIp(ip: string | null | undefined): string | null {
@@ -170,7 +166,7 @@ export async function verifyOtpAttempt(
     return { ok: false, error: "lockout" };
   }
 
-  const token = hashVerificationToken(code);
+  const token = hashOtpCode(code.trim());
   const stored = await prisma.verificationToken.findUnique({
     where: {
       identifier_token: { identifier: normalized, token },

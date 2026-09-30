@@ -5,8 +5,8 @@ import { normalizeEmail } from "@/lib/auth/otp";
 import { prisma } from "@/lib/db";
 
 /**
- * Adapter Prisma pour OTP e-mail.
- * Auth.js hashe déjà le token (SHA-256(token + AUTH_SECRET)) avant
+ * Adapter Prisma + normalisation e-mail.
+ * Auth.js hashe déjà le token (SHA-256 de `${token}${secret}`) avant
  * createVerificationToken / useVerificationToken — on stocke tel quel.
  */
 export function createAuthAdapter(): Adapter {
