@@ -146,17 +146,16 @@ async function resolveOrigin(userId: string | undefined): Promise<{
   };
 }
 
-const WEEKDAYS = [
-  "sunday",
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday",
-] as const;
+type Weekday =
+  | "sunday"
+  | "monday"
+  | "tuesday"
+  | "wednesday"
+  | "thursday"
+  | "friday"
+  | "saturday";
 
-function parisNow(now = new Date()): { day: (typeof WEEKDAYS)[number]; minutes: number } {
+function parisNow(now = new Date()): { day: Weekday; minutes: number } {
   const parts = Object.fromEntries(
     new Intl.DateTimeFormat("en-GB", {
       timeZone: "Europe/Paris",
@@ -168,7 +167,7 @@ function parisNow(now = new Date()): { day: (typeof WEEKDAYS)[number]; minutes: 
       .formatToParts(now)
       .map((part) => [part.type, part.value]),
   );
-  const dayByShort: Record<string, (typeof WEEKDAYS)[number]> = {
+  const dayByShort: Record<string, Weekday> = {
     Sun: "sunday",
     Mon: "monday",
     Tue: "tuesday",

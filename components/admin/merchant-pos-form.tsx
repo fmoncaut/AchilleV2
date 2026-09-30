@@ -51,12 +51,14 @@ export function MerchantPosForm({
   const [city, setCity] = useState(defaults?.city ?? "");
   const [address, setAddress] = useState(defaults?.address ?? "");
 
+  const trimmedQuery = addressQuery.trim();
+  const suggestionHits = trimmedQuery.length < 3 ? [] : hits;
+
   useEffect(() => {
-    const q = addressQuery.trim();
-    if (q.length < 3) {
-      setHits([]);
+    if (trimmedQuery.length < 3) {
       return;
     }
+    const q = trimmedQuery;
     const timer = window.setTimeout(async () => {
       try {
         const response = await fetch(`/api/geocode?q=${encodeURIComponent(q)}`);
@@ -71,7 +73,7 @@ export function MerchantPosForm({
       }
     }, 280);
     return () => window.clearTimeout(timer);
-  }, [addressQuery]);
+  }, [trimmedQuery]);
 
   function pickHit(hit: GeocodeHit) {
     setBanLat(String(hit.lat));
@@ -158,9 +160,9 @@ export function MerchantPosForm({
           className={adminFieldClass}
           autoComplete="off"
         />
-        {hits.length > 0 ? (
+        {suggestionHits.length > 0 ? (
           <ul className="bg-surface-container-lowest shadow-navy-soft absolute top-full z-20 mt-1 max-h-56 w-full overflow-auto rounded-2xl border border-outline-variant/30">
-            {hits.map((hit) => (
+            {suggestionHits.map((hit) => (
               <li key={`${hit.lat}-${hit.lng}-${hit.label}`}>
                 <button
                   type="button"
