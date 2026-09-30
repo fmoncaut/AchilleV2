@@ -17,6 +17,7 @@ type LoginPageProps = {
   searchParams: Promise<{
     callbackUrl?: string;
     erreur?: string;
+    error?: string;
   }>;
 };
 
@@ -28,6 +29,7 @@ export const metadata = {
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const params = await searchParams;
   const erreur = params.erreur;
+  const authError = params.error;
   const callbackUrl =
     params.callbackUrl?.startsWith("/") && !params.callbackUrl.startsWith("//")
       ? params.callbackUrl
@@ -48,6 +50,11 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       {erreur === "email_indisponible" || erreur === "envoi" ? (
         <p className="font-body-sm bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2">
           Envoi impossible. Réessayez dans un instant.
+        </p>
+      ) : null}
+      {authError === "Verification" || authError === "CallbackRouteError" ? (
+        <p className="font-body-sm bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2">
+          Connexion expirée ou code déjà utilisé. Demandez un nouveau code.
         </p>
       ) : null}
 

@@ -13,6 +13,7 @@ import {
   recordOtpSent,
   verifyOtpAttempt,
 } from "@/lib/auth/otp";
+import { establishOtpSession } from "@/lib/auth/establish-otp-session";
 import { isEmailAuthEnabled, isSmtpConfigured } from "@/lib/auth-env";
 
 const emailSchema = z.string().trim().email();
@@ -137,12 +138,13 @@ export async function verifyOtpAction(formData: FormData) {
     redirect(otpPage(email, callbackUrl, result.error));
   }
 
-  const params = new URLSearchParams({
-    email,
-    token: codeParsed.data,
-    callbackUrl,
-  });
-  redirect(`/api/auth/callback/email?${params.toString()}`);
+  const session = await establishOtpSession(email, codeParsed.data);
+  if (!session.ok) {
+    console.error("[auth] session OTP impossible après code valide", { email });
+    redirect(otpPage(email, callbackUrl, "invalid"));
+  }
+
+  redirect(callbackUrl);
 }
 
 export async function signInWithGoogle(formData: FormData) {
