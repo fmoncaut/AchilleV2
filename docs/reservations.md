@@ -4,7 +4,7 @@ Une réservation concerne **un seul magasin** et uniquement des offres `kind = D
 
 ## Fenêtre de retrait
 
-`pickupDeadline` est calculée à la création : maintenant + `RESERVATION_PICKUP_HOURS` (défaut **48 h**, voir `.env.example`). Le stock est mis de côté pour cette fenêtre. L’empreinte Stripe suit la même échéance : à la date limite, elle est annulée avec le statut `EXPIRED`.
+`pickupDeadline` est calculée à la création : maintenant + `RESERVATION_PICKUP_HOURS` (défaut **48 h**, voir `.env.example`). Elle ne s’applique qu’après confirmation (`CONFIRMED` / `READY_FOR_PICKUP`). Les réservations `PENDING` (checkout démarré, empreinte `REQUIRES_ACTION`) expirent plutôt via un **TTL court** `RESERVATION_PENDING_TTL_MINUTES` (défaut **30 min**) sur `createdAt`, pour ne pas bloquer le stock si l’acheteur abandonne.
 
 ## Stock
 
@@ -18,11 +18,11 @@ On ne réserve pas au-delà du stock (`UPDATE` conditionnel `stock >= quantité`
 
 ## Expiration
 
-Les statuts `PENDING` et `CONFIRMED` dont `pickupDeadline` est dépassée passent à `EXPIRED`, le stock est rendu et l’empreinte est annulée (`cancel`, rien n’est débité). Si l’annulation Stripe échoue, la réservation reste en l’état pour un nouvel essai.
+- `PENDING` (checkout / `REQUIRES_ACTION`) dont `createdAt` dépasse `RESERVATION_PENDING_TTL_MINUTES` (défaut 30) → `EXPIRED`, stock rendu, hold annulé.
+- `CONFIRMED` dont `pickupDeadline` est dépassée → `EXPIRED`.
+- `READY_FOR_PICKUP` dépassée + POS ouvert (`merchantClosedAt` null) → `NO_SHOW` (hold annulé en mode `cancel` V1, pas de capture auto). Si le POS est fermé (`merchantClosedAt` non null à l’exécution) → `EXPIRED` (garde-fou : on ne pose pas de NO_SHOW pour une fermeture marchand).
 
-`READY_FOR_PICKUP` dépassée + POS ouvert (`merchantClosedAt` null) → `NO_SHOW` (hold annulé en mode `cancel` V1, pas de capture auto). Si le POS est fermé (`merchantClosedAt` non null à l’exécution) → `EXPIRED` (garde-fou : on ne pose pas de NO_SHOW pour une fermeture marchand).
-
-Le passage est paresseux (listes / transitions) **et** planifié chaque heure via le cron Clever `clevercloud/expire-reservations.sh` (`0 * * * *`). Manual :
+Le passage est paresseux (listes / transitions) **et** planifié chaque heure via le cron Clever `clevercloud/expire-reservations.sh` (`0 * * * *`). Côté UI, `abandonAuthorizationAction` est aussi appelé sur Annuler / unmount du Payment Element (best-effort). Manual :
 
 ```bash
 npx tsx scripts/expire-reservations.ts

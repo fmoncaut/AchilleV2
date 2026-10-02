@@ -2,7 +2,7 @@
 
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   abandonAuthorizationAction,
@@ -39,6 +39,14 @@ export function ReservationPayment({
       setClientSecret(result.clientSecret);
     } finally {
       setPending(false);
+    }
+  }
+
+  function resetHold(message?: string) {
+    setClientSecret(null);
+    setReservationId(null);
+    if (message) {
+      setError(message);
     }
   }
 
@@ -82,11 +90,7 @@ export function ReservationPayment({
             <HoldForm
               reservationId={reservationId}
               returnOrigin={returnOrigin}
-              onCardError={(message) => {
-                setClientSecret(null);
-                setReservationId(null);
-                setError(message);
-              }}
+              onAbandoned={(message) => resetHold(message)}
             />
           </Elements>
         </div>
@@ -98,16 +102,41 @@ export function ReservationPayment({
 function HoldForm({
   reservationId,
   returnOrigin,
-  onCardError,
+  onAbandoned,
 }: {
   reservationId: string;
   returnOrigin: string;
-  onCardError: (message: string) => void;
+  onAbandoned: (message?: string) => void;
 }) {
   const stripe = useStripe();
   const elements = useElements();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /** Empêche l’abandon unmount après succès ou abandon explicite. */
+  const settleRef = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      if (settleRef.current) {
+        return;
+      }
+      // Best-effort : fermeture onglet / navigation. Le TTL serveur reste la garantie.
+      void abandonAuthorizationAction(reservationId);
+    };
+  }, [reservationId]);
+
+  async function abandon(message?: string) {
+    if (settleRef.current) {
+      return;
+    }
+    settleRef.current = true;
+    setPending(true);
+    try {
+      await abandonAuthorizationAction(reservationId);
+    } finally {
+      onAbandoned(message);
+    }
+  }
 
   async function confirm() {
     if (!stripe || !elements) {
@@ -125,16 +154,17 @@ function HoldForm({
     if (result.error) {
       const message = result.error.message ?? "L’empreinte a été refusée.";
       if (result.error.type === "card_error") {
-        await abandonAuthorizationAction(reservationId);
-        onCardError(message);
+        await abandon(message);
         return;
       }
       setError(message);
       setPending(false);
       return;
     }
+    settleRef.current = true;
     const finalized = await finalizeAuthorizationAction(reservationId);
     if (finalized && !finalized.ok) {
+      settleRef.current = false;
       setError(finalized.error);
       setPending(false);
     }
@@ -146,9 +176,27 @@ function HoldForm({
       {error ? (
         <p className="font-body-sm text-error font-medium">{error}</p>
       ) : null}
-      <Button type="button" size="lg" disabled={!stripe || pending} onClick={confirm}>
-        {pending ? "Autorisation…" : "Confirmer l’empreinte"}
-      </Button>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <Button
+          type="button"
+          size="lg"
+          disabled={!stripe || pending}
+          onClick={confirm}
+          className="sm:flex-1"
+        >
+          {pending ? "Autorisation…" : "Confirmer l’empreinte"}
+        </Button>
+        <Button
+          type="button"
+          size="lg"
+          variant="secondary"
+          disabled={pending}
+          onClick={() => void abandon()}
+          className="sm:flex-1"
+        >
+          Annuler
+        </Button>
+      </div>
     </div>
   );
 }

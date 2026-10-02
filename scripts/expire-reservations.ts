@@ -47,7 +47,10 @@ async function main() {
         event: "expire_reservations_done",
         ...summary,
         treated:
-          summary.expired + summary.noShow + summary.expiredClosedPos,
+          summary.expired +
+          summary.expiredPending +
+          summary.noShow +
+          summary.expiredClosedPos,
       }),
     );
     if (summary.errors > 0) {

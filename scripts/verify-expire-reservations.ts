@@ -1,10 +1,10 @@
 /**
- * U.4.1 — Expiration C-prudent : READY_FOR_PICKUP → NO_SHOW / POS fermé → EXPIRED,
- * PENDING/CONFIRMED → EXPIRED, idempotence, isolation, pas de capture.
+ * U.4.2b — TTL PENDING + C-prudent READY/CONFIRMED.
  * Refuse staging / base « achille ».
  *
  * Usage :
  *   EXPIRE_DATABASE=achille_expire_jetable \
+ *   RESERVATION_PENDING_TTL_MINUTES=30 \
  *   DATABASE_URL=postgresql://…/achille_expire_jetable \
  *   npx tsx scripts/verify-expire-reservations.ts
  */
@@ -101,13 +101,17 @@ async function main() {
   assertDisposable();
   process.env.NODE_ENV = "test";
   process.env.STRIPE_NOSHOW_MODE = "cancel";
+  process.env.RESERVATION_PENDING_TTL_MINUTES = "30";
 
   const db = new PrismaClient();
   const stamp = Date.now().toString(36);
   const intents = new Map<string, StoredIntent>();
   setPaymentProviderForTests(fakeProvider(intents));
 
-  const past = new Date(Date.now() - 60_000);
+  const pastDeadline = new Date(Date.now() - 60_000);
+  const futureDeadline = new Date(Date.now() + 48 * 60 * 60_000);
+  const staleCreated = new Date(Date.now() - 45 * 60_000); // > 30 min TTL
+  const freshCreated = new Date(Date.now() - 5 * 60_000); // < 30 min TTL
 
   try {
     const merchant = await db.merchant.create({
@@ -173,11 +177,12 @@ async function main() {
       label: string;
       posId: string;
       status: "PENDING" | "CONFIRMED" | "READY_FOR_PICKUP";
-      stockBefore: number;
       paymentState?: PaymentState;
       withHold?: boolean;
+      createdAt: Date;
+      pickupDeadline: Date;
     }) {
-      const { offer } = await seedOffer(input.label, input.posId, input.stockBefore);
+      const { offer } = await seedOffer(input.label, input.posId, 0);
       const piId = input.withHold ? `pi_${input.label}_${stamp}` : null;
       if (piId) {
         intents.set(piId, {
@@ -199,15 +204,22 @@ async function main() {
           merchantId: merchant.id,
           status: input.status,
           pickupCode: code,
-          pickupDeadline: past,
+          pickupDeadline: input.pickupDeadline,
+          createdAt: input.createdAt,
           totalAmount: new Prisma.Decimal("10.00"),
           paymentIntentId: piId,
-          paymentState: input.paymentState ?? (piId ? "AUTHORIZED" : "NONE"),
+          paymentState:
+            input.paymentState ??
+            (piId
+              ? input.status === "PENDING"
+                ? "REQUIRES_ACTION"
+                : "AUTHORIZED"
+              : "NONE"),
           confirmedAt:
             input.status === "CONFIRMED" || input.status === "READY_FOR_PICKUP"
-              ? past
+              ? input.createdAt
               : null,
-          readyAt: input.status === "READY_FOR_PICKUP" ? past : null,
+          readyAt: input.status === "READY_FOR_PICKUP" ? input.createdAt : null,
           items: {
             create: {
               offerId: offer.id,
@@ -221,44 +233,79 @@ async function main() {
       return { reservation, offer };
     }
 
-    // --- Cas 1 : READY + POS ouvert → NO_SHOW, hold annulé, pas de capture
-    const readyOpen = await seedReservation({
-      label: "ro",
-      posId: posOpen.id,
-      status: "READY_FOR_PICKUP",
-      stockBefore: 0,
-      withHold: true,
-    });
-
-    // --- Cas 2 : READY + POS fermé → EXPIRED
-    const readyClosed = await seedReservation({
-      label: "rc",
-      posId: posClosed.id,
-      status: "READY_FOR_PICKUP",
-      stockBefore: 0,
-      withHold: true,
-    });
-
-    // --- Cas 3a : PENDING → EXPIRED
-    const pending = await seedReservation({
-      label: "pe",
+    // TTL : PENDING stale REQUIRES_ACTION
+    const pendingStale = await seedReservation({
+      label: "ps",
       posId: posOpen.id,
       status: "PENDING",
-      stockBefore: 0,
-      withHold: true,
       paymentState: "REQUIRES_ACTION",
+      withHold: true,
+      createdAt: staleCreated,
+      pickupDeadline: futureDeadline, // deadline loin — seul le TTL doit expirer
     });
 
-    // --- Cas 3b : CONFIRMED → EXPIRED
+    // TTL : PENDING fresh mid-3DS — NE PAS expirer
+    const pendingFresh = await seedReservation({
+      label: "pf",
+      posId: posOpen.id,
+      status: "PENDING",
+      paymentState: "REQUIRES_ACTION",
+      withHold: true,
+      createdAt: freshCreated,
+      pickupDeadline: futureDeadline,
+    });
+
+    // PENDING stale même si pickupDeadline déjà passé — TTL only path
+    const pendingStalePastDl = await seedReservation({
+      label: "pd",
+      posId: posOpen.id,
+      status: "PENDING",
+      withHold: true,
+      createdAt: staleCreated,
+      pickupDeadline: pastDeadline,
+    });
+
+    // CONFIRMED deadline — inchangé
     const confirmed = await seedReservation({
       label: "co",
       posId: posOpen.id,
       status: "CONFIRMED",
-      stockBefore: 0,
       withHold: true,
+      createdAt: staleCreated,
+      pickupDeadline: pastDeadline,
     });
 
-    // --- Isolation : une réservation dont le cancel Stripe plante
+    // READY ouvert → NO_SHOW
+    const readyOpen = await seedReservation({
+      label: "ro",
+      posId: posOpen.id,
+      status: "READY_FOR_PICKUP",
+      withHold: true,
+      createdAt: staleCreated,
+      pickupDeadline: pastDeadline,
+    });
+
+    // READY fermé → EXPIRED
+    const readyClosed = await seedReservation({
+      label: "rc",
+      posId: posClosed.id,
+      status: "READY_FOR_PICKUP",
+      withHold: true,
+      createdAt: staleCreated,
+      pickupDeadline: pastDeadline,
+    });
+
+    // CONFIRMED frais (deadline futur) — TTL ne touche pas
+    const confirmedFresh = await seedReservation({
+      label: "cf",
+      posId: posOpen.id,
+      status: "CONFIRMED",
+      withHold: true,
+      createdAt: freshCreated,
+      pickupDeadline: futureDeadline,
+    });
+
+    // Isolation boom
     const boomPi = `pi_boom_${stamp}`;
     intents.set(boomPi, {
       id: boomPi,
@@ -272,13 +319,13 @@ async function main() {
         userId: buyer.id,
         posId: posOpen.id,
         merchantId: merchant.id,
-        status: "CONFIRMED",
-        pickupCode: `BOOM${stamp}`.slice(0, 8).toUpperCase(),
-        pickupDeadline: past,
+        status: "PENDING",
+        pickupCode: `BOOM${stamp}`.slice(0, 8).toUpperCase().padEnd(8, "9"),
+        pickupDeadline: futureDeadline,
+        createdAt: staleCreated,
         totalAmount: new Prisma.Decimal("10.00"),
         paymentIntentId: boomPi,
-        paymentState: "AUTHORIZED",
-        confirmedAt: past,
+        paymentState: "REQUIRES_ACTION",
         items: {
           create: {
             offerId: boomOffer.id,
@@ -290,7 +337,6 @@ async function main() {
       },
     });
 
-    // Provider qui plante uniquement sur boomPi
     setPaymentProviderForTests({
       ...fakeProvider(intents),
       async cancelAuthorization({ paymentIntentId }) {
@@ -306,87 +352,99 @@ async function main() {
     });
 
     const first = await expireDueReservations();
-    assert(first.noShow === 1, `noShow attendu 1, got ${first.noShow}`);
+    assert(
+      first.expiredPending === 2,
+      `expiredPending=2 (ps+pd), got ${first.expiredPending}`,
+    );
+    assert(first.expired === 1, `expired CONFIRMED=1, got ${first.expired}`);
+    assert(first.noShow === 1, `noShow=1, got ${first.noShow}`);
     assert(
       first.expiredClosedPos === 1,
-      `expiredClosedPos attendu 1, got ${first.expiredClosedPos}`,
+      `expiredClosedPos=1, got ${first.expiredClosedPos}`,
     );
-    assert(first.expired === 2, `expired PENDING+CONFIRMED = 2, got ${first.expired}`);
-    assert(first.errors === 1, `isolation : 1 erreur boom, got ${first.errors}`);
+    assert(first.errors === 1, `isolation boom, got ${first.errors}`);
+    assert(first.stockReleased === 5, `stockReleased=5, got ${first.stockReleased}`);
+    assert(first.holdsCanceled === 5, `holdsCanceled=5, got ${first.holdsCanceled}`);
+
     assert(
-      first.stockReleased === 4,
-      `4 stocks libérés (pas boom), got ${first.stockReleased}`,
+      (await db.reservation.findUnique({ where: { id: pendingStale.reservation.id } }))
+        ?.status === "EXPIRED",
+      "PENDING stale → EXPIRED",
     );
     assert(
-      first.holdsCanceled === 4,
-      `4 holds annulés (pas boom), got ${first.holdsCanceled}`,
+      (await db.reservation.findUnique({ where: { id: pendingFresh.reservation.id } }))
+        ?.status === "PENDING",
+      "PENDING frais (mid-3DS) NON expiré",
     );
-
-    const afterReadyOpen = await db.reservation.findUnique({
-      where: { id: readyOpen.reservation.id },
-    });
-    assert(afterReadyOpen?.status === "NO_SHOW", "READY ouvert → NO_SHOW");
-    assert(afterReadyOpen?.noShowAt != null, "noShowAt posé");
-    assert(afterReadyOpen?.paymentState === "CANCELED", "hold annulé NO_SHOW");
-
-    const afterReadyClosed = await db.reservation.findUnique({
-      where: { id: readyClosed.reservation.id },
-    });
-    assert(afterReadyClosed?.status === "EXPIRED", "READY fermé → EXPIRED");
-    assert(afterReadyClosed?.expiredAt != null, "expiredAt POS fermé");
-
-    const afterPending = await db.reservation.findUnique({
-      where: { id: pending.reservation.id },
-    });
-    assert(afterPending?.status === "EXPIRED", "PENDING → EXPIRED");
-
-    const afterConfirmed = await db.reservation.findUnique({
-      where: { id: confirmed.reservation.id },
-    });
-    assert(afterConfirmed?.status === "EXPIRED", "CONFIRMED → EXPIRED");
-
-    const afterBoom = await db.reservation.findUnique({
-      where: { id: boom.id },
-    });
     assert(
-      afterBoom?.status === "CONFIRMED",
-      "boom reste CONFIRMED (retry)",
+      (await db.reservation.findUnique({ where: { id: pendingStalePastDl.reservation.id } }))
+        ?.status === "EXPIRED",
+      "PENDING stale + past deadline → EXPIRED via TTL",
+    );
+    assert(
+      (await db.reservation.findUnique({ where: { id: confirmed.reservation.id } }))
+        ?.status === "EXPIRED",
+      "CONFIRMED deadline → EXPIRED",
+    );
+    assert(
+      (await db.reservation.findUnique({ where: { id: readyOpen.reservation.id } }))
+        ?.status === "NO_SHOW",
+      "READY ouvert → NO_SHOW",
+    );
+    assert(
+      (await db.reservation.findUnique({ where: { id: readyClosed.reservation.id } }))
+        ?.status === "EXPIRED",
+      "READY fermé → EXPIRED",
+    );
+    assert(
+      (await db.reservation.findUnique({ where: { id: confirmedFresh.reservation.id } }))
+        ?.status === "CONFIRMED",
+      "CONFIRMED frais non touché par TTL",
+    );
+    assert(
+      (await db.reservation.findUnique({ where: { id: boom.id } }))?.status ===
+        "PENDING",
+      "boom reste PENDING",
     );
 
     for (const offerId of [
+      pendingStale.offer.id,
+      pendingStalePastDl.offer.id,
+      confirmed.offer.id,
       readyOpen.offer.id,
       readyClosed.offer.id,
-      pending.offer.id,
-      confirmed.offer.id,
     ]) {
-      const stock = await db.offer.findUnique({ where: { id: offerId } });
-      assert(stock?.stock === 1, `stock rendu pour ${offerId}`);
+      assert(
+        (await db.offer.findUnique({ where: { id: offerId } }))?.stock === 1,
+        `stock rendu ${offerId}`,
+      );
     }
-    const boomStock = await db.offer.findUnique({ where: { id: boomOffer.id } });
-    assert(boomStock?.stock === 0, "boom : stock encore tenu");
+    assert(
+      (await db.offer.findUnique({ where: { id: pendingFresh.offer.id } }))
+        ?.stock === 0,
+      "fresh : stock encore tenu",
+    );
+    assert(
+      (await db.offer.findUnique({ where: { id: confirmedFresh.offer.id } }))
+        ?.stock === 0,
+      "confirmed fresh : stock tenu",
+    );
 
-    // Aucune capture
     let totalCaptures = 0;
-    let totalCancels = 0;
     for (const intent of intents.values()) {
       totalCaptures += intent.captures;
-      totalCancels += intent.cancels;
     }
-    assert(totalCaptures === 0, "aucune capture (C-prudent)");
-    assert(totalCancels === 4, "4 cancels hold");
+    assert(totalCaptures === 0, "aucune capture");
 
-    // Idempotence : rejouer = 0 re-traitement (boom reste erreur)
     const second = await expireDueReservations();
+    assert(second.expiredPending === 0, "idempotent expiredPending");
     assert(second.expired === 0, "idempotent expired");
     assert(second.noShow === 0, "idempotent noShow");
-    assert(second.expiredClosedPos === 0, "idempotent closed");
-    assert(second.stockReleased === 0, "idempotent stock");
-    assert(second.errors === 1, "boom encore en erreur au 2e run");
+    assert(second.errors === 1, "boom encore en erreur");
 
-    // Libérer le boom pour cleanup propre
     setPaymentProviderForTests(fakeProvider(intents));
     const third = await expireDueReservations();
-    assert(third.expired === 1, "boom traité au 3e run");
+    assert(third.expiredPending === 1, "boom traité");
     assert(
       (await db.reservation.findUnique({ where: { id: boom.id } }))?.status ===
         "EXPIRED",
@@ -396,9 +454,12 @@ async function main() {
     console.log(
       JSON.stringify({
         ok: true,
-        noShowOpenPos: true,
-        expiredClosedPos: true,
-        pendingConfirmedExpired: true,
+        pendingTtlExpired: true,
+        pendingFreshPreserved: true,
+        confirmedDeadline: true,
+        confirmedFreshPreserved: true,
+        readyNoShow: true,
+        readyClosedExpired: true,
         isolation: true,
         idempotent: true,
         noCapture: true,

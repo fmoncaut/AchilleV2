@@ -146,20 +146,21 @@ async function main() {
       posId: pos.id,
       quantity: 1,
     });
+    // PENDING : TTL createdAt (pas pickupDeadline)
     await prisma.reservation.update({
       where: { id: expiring.id },
-      data: { pickupDeadline: new Date(Date.now() - 60_000) },
+      data: { createdAt: new Date(Date.now() - 60 * 60_000) },
     });
     const expireSummary = await expireDueReservations();
     const expired = await prisma.reservation.findUnique({ where: { id: expiring.id } });
     const restored = await prisma.offer.findUnique({ where: { id: offer.id } });
     if (
-      expireSummary.expired < 1 ||
+      expireSummary.expiredPending < 1 ||
       expired?.status !== "EXPIRED" ||
       restored?.stock !== 1
     ) {
       throw new Error(
-        `L’expiration n’a pas rendu le stock (statut ${expired?.status}, stock ${restored?.stock}, expired=${expireSummary.expired}).`,
+        `L’expiration PENDING n’a pas rendu le stock (statut ${expired?.status}, stock ${restored?.stock}, expiredPending=${expireSummary.expiredPending}).`,
       );
     }
 
