@@ -198,9 +198,16 @@ export default async function ReservationConfirmationPage({
             </span>
           </li>
         </ul>
-        <Button asChild>
-          <Link href="/compte/reservations">Voir mes réservations</Link>
-        </Button>
+        <div className="flex flex-wrap gap-3">
+          <Button asChild>
+            <Link href="/compte/reservations">Voir mes réservations</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href={`/compte/reservations/${reservation.id}`}>
+              Voir le détail
+            </Link>
+          </Button>
+        </div>
       </BuyerSection>
     </BuyerMain>
   );

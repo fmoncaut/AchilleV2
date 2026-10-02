@@ -29,9 +29,12 @@ function safeReturnPath(value: string): string {
   return "/compte/reservations";
 }
 
-function revalidateStock() {
+function revalidateStock(reservationId?: string) {
   updateTag("catalog");
   revalidatePath("/compte/reservations");
+  if (reservationId) {
+    revalidatePath(`/compte/reservations/${reservationId}`);
+  }
   revalidatePath("/admin/reservations");
 }
 
@@ -90,6 +93,6 @@ export async function cancelReservationAction(formData: FormData) {
   } catch (error) {
     console.error("[notifications] annulation", error);
   }
-  revalidateStock();
+  revalidateStock(parsed.data.id);
   redirect("/compte/reservations?annulee=1");
 }

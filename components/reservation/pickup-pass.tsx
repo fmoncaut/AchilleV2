@@ -14,6 +14,7 @@ export function PickupPass({
   amount,
   deadline,
   status,
+  directionsHref,
 }: {
   code: string;
   svg: string;
@@ -24,6 +25,7 @@ export function PickupPass({
   amount: string;
   deadline: string;
   status: string;
+  directionsHref?: string | null;
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -45,13 +47,25 @@ export function PickupPass({
             Présentez ce pass au comptoir de {storeName}. Le QR contient le
             code de retrait. Le magasin le saisit pour encaisser.
           </p>
-          <button
-            type="button"
-            className="bg-secondary-container text-on-secondary-container font-label-md text-label-md mt-3 rounded-full px-3.5 py-1.5 font-bold"
-            onClick={() => dialogRef.current?.showModal()}
-          >
-            Afficher le pass
-          </button>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              className="bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full px-3.5 py-1.5 font-bold"
+              onClick={() => dialogRef.current?.showModal()}
+            >
+              Afficher le pass
+            </button>
+            {directionsHref ? (
+              <a
+                href={directionsHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-label-md text-label-md text-secondary-container rounded-full px-3.5 py-1.5 font-bold underline-offset-4 hover:underline"
+              >
+                Itinéraire
+              </a>
+            ) : null}
+          </div>
         </div>
       </div>
       <dialog

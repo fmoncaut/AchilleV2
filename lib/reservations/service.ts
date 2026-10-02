@@ -104,7 +104,7 @@ const reservationInclude = {
         select: {
           id: true,
           tvaRate: true,
-          product: { select: { name: true, slug: true } },
+          product: { select: { name: true, slug: true, imageUrl: true } },
         },
       },
     },
@@ -117,6 +117,8 @@ const reservationInclude = {
       address: true,
       postalCode: true,
       city: true,
+      lat: true,
+      lng: true,
       openingHours: true,
     },
   },

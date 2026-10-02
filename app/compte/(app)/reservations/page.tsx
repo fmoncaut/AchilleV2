@@ -1,13 +1,14 @@
 import Link from "next/link";
 
-import { cancelReservationAction } from "@/app/compte/reservation-actions";
 import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
+import { ProductImage } from "@/components/product-image";
+import { CancelReservationButton } from "@/components/reservation/cancel-reservation-button";
 import { PickupCountdown } from "@/components/reservation/pickup-countdown";
 import { PickupPass } from "@/components/reservation/pickup-pass";
 import { ReservationBoard } from "@/components/reservation/reservation-board";
 import { EmptyState } from "@/components/search/empty-state";
-import { Button } from "@/components/ui/button";
 import { auth } from "@/auth";
+import { mapsDirectionsUrl } from "@/lib/geo";
 import { unreadReservationIds } from "@/lib/messages/service";
 import { formatEur } from "@/lib/money";
 import { parseOpeningHours } from "@/lib/opening-hours";
@@ -85,16 +86,30 @@ function ReservationCard({
 }) {
   const product = productLabel(reservation);
   const store = `${reservation.merchant.name} · ${reservation.pos.name}`;
+  const thumb = reservation.items[0]?.offer.product;
+  const directionsHref = mapsDirectionsUrl(
+    reservation.pos.lat,
+    reservation.pos.lng,
+  );
 
   return (
     <li className="bg-surface-container-lowest shadow-navy-soft flex flex-col gap-3 rounded-2xl p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="font-headline-sm text-primary-container">{product}</p>
-          <p className="font-body-sm text-on-surface-variant mt-1">
-            {store}
-            {reservation.pos.city ? ` (${reservation.pos.city})` : ""}
-          </p>
+        <div className="flex min-w-0 flex-1 items-start gap-3">
+          {thumb ? (
+            <ProductImage
+              src={thumb.imageUrl}
+              name={thumb.name}
+              variant="thumb"
+            />
+          ) : null}
+          <div className="min-w-0">
+            <p className="font-headline-sm text-primary-container">{product}</p>
+            <p className="font-body-sm text-on-surface-variant mt-1">
+              {store}
+              {reservation.pos.city ? ` (${reservation.pos.city})` : ""}
+            </p>
+          </div>
         </div>
         <span className="font-label-xs text-label-xs bg-primary-container text-on-primary rounded-full px-2.5 py-1 font-bold">
           {STATUS_LABELS[reservation.status]}
@@ -129,6 +144,7 @@ function ReservationCard({
           amount={formatEur(reservation.totalAmount)}
           deadline={formatWhen(reservation.pickupDeadline)}
           status={STATUS_LABELS[reservation.status]}
+          directionsHref={directionsHref}
         />
       ) : CANCELABLE.has(reservation.status) ? (
         <p className="font-body-sm text-primary-container">
@@ -138,27 +154,38 @@ function ReservationCard({
           </span>
         </p>
       ) : null}
-      <Link
-        href={`/compte/reservations/${reservation.id}`}
-        className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
-      >
-        {unread ? "Message non lu" : "Messages"}
-      </Link>
-      {reservation.status === "PICKED_UP" ? (
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <Link
-          href={`/compte/reservations/${reservation.id}/facture`}
+          href={`/compte/reservations/${reservation.id}`}
           className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
         >
-          Voir la facture
+          Voir la réservation
         </Link>
-      ) : null}
+        <Link
+          href={`/compte/reservations/${reservation.id}`}
+          className="font-label-md text-on-surface-variant underline-offset-4 hover:underline"
+        >
+          {unread ? "Message non lu" : "Messages"}
+        </Link>
+        <a
+          href={directionsHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-label-md text-on-surface-variant underline-offset-4 hover:underline"
+        >
+          Itinéraire
+        </a>
+        {reservation.status === "PICKED_UP" ? (
+          <Link
+            href={`/compte/reservations/${reservation.id}/facture`}
+            className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+          >
+            Voir la facture
+          </Link>
+        ) : null}
+      </div>
       {CANCELABLE.has(reservation.status) ? (
-        <form action={cancelReservationAction}>
-          <input type="hidden" name="id" value={reservation.id} />
-          <Button type="submit" variant="outline" size="sm">
-            Annuler
-          </Button>
-        </form>
+        <CancelReservationButton reservationId={reservation.id} />
       ) : null}
     </li>
   );

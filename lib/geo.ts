@@ -5,6 +5,11 @@ import { discountPercent } from "@/lib/money";
 import { sqlOfferPlacementJoin } from "@/lib/offer-placement";
 import { SEARCH_RESULT_LIMIT } from "@/lib/search";
 
+/** Deep-link navigation vers un POS (Google Maps directions). */
+export function mapsDirectionsUrl(lat: number, lng: number): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+}
+
 export type NearbyOffer = {
   id: string;
   priceRemise: Prisma.Decimal;
