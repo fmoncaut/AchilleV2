@@ -18,15 +18,15 @@ On ne réserve pas au-delà du stock (`UPDATE` conditionnel `stock >= quantité`
 
 ## Expiration
 
-Les statuts `PENDING` et `CONFIRMED` dont `pickupDeadline` est dépassée passent à `EXPIRED`, le stock est rendu et l’empreinte est annulée (`cancel`, rien n’est débité). Si l’annulation Stripe échoue, la réservation reste en l’état pour un nouvel essai. `READY_FOR_PICKUP` n’expire pas toute seule : le vendeur marque `NO_SHOW` après la date limite.
+Les statuts `PENDING` et `CONFIRMED` dont `pickupDeadline` est dépassée passent à `EXPIRED`, le stock est rendu et l’empreinte est annulée (`cancel`, rien n’est débité). Si l’annulation Stripe échoue, la réservation reste en l’état pour un nouvel essai.
 
-Le passage est paresseux : il s’exécute à l’affichage des listes acheteur et vendeur, et avant chaque transition. On peut aussi le lancer à la main :
+`READY_FOR_PICKUP` dépassée + POS ouvert (`merchantClosedAt` null) → `NO_SHOW` (hold annulé en mode `cancel` V1, pas de capture auto). Si le POS est fermé (`merchantClosedAt` non null à l’exécution) → `EXPIRED` (garde-fou : on ne pose pas de NO_SHOW pour une fermeture marchand).
+
+Le passage est paresseux (listes / transitions) **et** planifié chaque heure via le cron Clever `clevercloud/expire-reservations.sh` (`0 * * * *`). Manual :
 
 ```bash
 npx tsx scripts/expire-reservations.ts
 ```
-
-Pas de cron dans cet incrément.
 
 ## Tunnel acheteur (incrément 2.2)
 

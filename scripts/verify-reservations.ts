@@ -150,12 +150,16 @@ async function main() {
       where: { id: expiring.id },
       data: { pickupDeadline: new Date(Date.now() - 60_000) },
     });
-    const expiredCount = await expireDueReservations();
+    const expireSummary = await expireDueReservations();
     const expired = await prisma.reservation.findUnique({ where: { id: expiring.id } });
     const restored = await prisma.offer.findUnique({ where: { id: offer.id } });
-    if (expiredCount < 1 || expired?.status !== "EXPIRED" || restored?.stock !== 1) {
+    if (
+      expireSummary.expired < 1 ||
+      expired?.status !== "EXPIRED" ||
+      restored?.stock !== 1
+    ) {
       throw new Error(
-        `L’expiration n’a pas rendu le stock (statut ${expired?.status}, stock ${restored?.stock}, count ${expiredCount}).`,
+        `L’expiration n’a pas rendu le stock (statut ${expired?.status}, stock ${restored?.stock}, expired=${expireSummary.expired}).`,
       );
     }
 

@@ -161,99 +161,222 @@ function paymentPatch(result: ReleaseResult): {
   return {};
 }
 
+export type ExpireDueSummary = {
+  /** PENDING / CONFIRMED → EXPIRED */
+  expired: number;
+  /** READY_FOR_PICKUP + POS ouvert → NO_SHOW (hold annulé, pas de capture en V1) */
+  noShow: number;
+  /** READY_FOR_PICKUP + POS fermé (merchantClosedAt) → EXPIRED */
+  expiredClosedPos: number;
+  stockReleased: number;
+  holdsCanceled: number;
+  errors: number;
+};
+
+function emptyExpireSummary(): ExpireDueSummary {
+  return {
+    expired: 0,
+    noShow: 0,
+    expiredClosedPos: 0,
+    stockReleased: 0,
+    holdsCanceled: 0,
+    errors: 0,
+  };
+}
+
+type ExpireDecision = {
+  fromStatus: "PENDING" | "CONFIRMED" | "READY_FOR_PICKUP";
+  terminal: "EXPIRED" | "NO_SHOW";
+  holdReason: "expire" | "noshow";
+  bucket: "expired" | "noShow" | "expiredClosedPos";
+};
+
+/**
+ * Décide le statut terminal à partir de l’état courant + POS.
+ * V1 : merchantClosedAt != null à l’exécution = POS fermé (pas « au deadline » exact).
+ */
+function decideExpire(
+  status: ReservationStatus,
+  merchantClosedAt: Date | null,
+): ExpireDecision | null {
+  if (status === "PENDING" || status === "CONFIRMED") {
+    return {
+      fromStatus: status,
+      terminal: "EXPIRED",
+      holdReason: "expire",
+      bucket: "expired",
+    };
+  }
+  if (status === "READY_FOR_PICKUP") {
+    if (merchantClosedAt != null) {
+      return {
+        fromStatus: "READY_FOR_PICKUP",
+        terminal: "EXPIRED",
+        holdReason: "expire",
+        bucket: "expiredClosedPos",
+      };
+    }
+    return {
+      fromStatus: "READY_FOR_PICKUP",
+      terminal: "NO_SHOW",
+      holdReason: "noshow",
+      bucket: "noShow",
+    };
+  }
+  return null;
+}
+
 /**
  * PENDING / CONFIRMED dont la date limite est dépassée → EXPIRED, stock rendu.
- * L’empreinte est annulée avant le changement de statut. READY_FOR_PICKUP
- * n’expire pas automatiquement (no-show vendeur).
+ * READY_FOR_PICKUP dépassée + POS ouvert → NO_SHOW (hold annulé en mode cancel).
+ * READY_FOR_PICKUP dépassée + POS fermé (merchantClosedAt) → EXPIRED (pas de NO_SHOW).
+ * Isolation : une réservation en erreur n’interrompt pas les autres.
+ * Lazy backstop + déclencheur cron autoritaire (U.4.1).
  */
-export async function expireDueReservations(): Promise<number> {
+export async function expireDueReservations(): Promise<ExpireDueSummary> {
   const now = new Date();
+  const summary = emptyExpireSummary();
   const due = await prisma.reservation.findMany({
     where: {
-      status: { in: ["PENDING", "CONFIRMED"] },
+      status: { in: ["PENDING", "CONFIRMED", "READY_FOR_PICKUP"] },
       pickupDeadline: { lt: now },
     },
     select: { id: true },
   });
 
-  let expired = 0;
   for (const row of due) {
-    const preview = await prisma.reservation.findUnique({
-      where: { id: row.id },
-      include: { merchant: { select: { feeRate: true } } },
-    });
-    if (
-      !preview ||
-      (preview.status !== "PENDING" && preview.status !== "CONFIRMED") ||
-      preview.pickupDeadline >= now
-    ) {
-      continue;
-    }
-
-    let released: ReleaseResult = { kind: "none" };
     try {
-      released = await releaseHold(
-        {
-          id: preview.id,
-          paymentIntentId: preview.paymentIntentId,
-          paymentState: preview.paymentState,
-          totalAmount: preview.totalAmount,
-          merchantFeeRate: preview.merchant.feeRate,
+      const preview = await prisma.reservation.findUnique({
+        where: { id: row.id },
+        include: {
+          merchant: { select: { feeRate: true } },
+          pos: { select: { merchantClosedAt: true } },
         },
-        "expire",
-      );
-    } catch (error) {
-      if (error instanceof PaymentError) {
+      });
+      if (!preview || preview.pickupDeadline >= now) {
         continue;
       }
-      throw error;
-    }
+      const decision = decideExpire(
+        preview.status,
+        preview.pos.merchantClosedAt,
+      );
+      if (!decision) {
+        continue;
+      }
 
-    const done = await prisma.$transaction(async (tx) => {
-      const current = await tx.reservation.findUnique({
-        where: { id: row.id },
-        include: { items: true },
-      });
-      if (
-        !current ||
-        (current.status !== "PENDING" && current.status !== "CONFIRMED") ||
-        current.pickupDeadline >= now
-      ) {
-        return false;
-      }
-      const updated = await tx.reservation.updateMany({
-        where: {
-          id: row.id,
-          status: { in: ["PENDING", "CONFIRMED"] },
-          pickupDeadline: { lt: now },
-        },
-        data: {
-          status: "EXPIRED",
-          expiredAt: now,
-          ...paymentPatch(released),
-        },
-      });
-      if (updated.count !== 1) {
-        return false;
-      }
-      await restoreStock(tx, current.items);
-      return true;
-    });
-    if (done) {
-      expired += 1;
+      let released: ReleaseResult = { kind: "none" };
       try {
-        await notifyReservationEvent(
-          row.id,
-          "Réservation expirée",
-          "Le délai de retrait est dépassé. L’empreinte est libérée et le stock est rendu.",
-          "buyer",
+        released = await releaseHold(
+          {
+            id: preview.id,
+            paymentIntentId: preview.paymentIntentId,
+            paymentState: preview.paymentState,
+            totalAmount: preview.totalAmount,
+            merchantFeeRate: preview.merchant.feeRate,
+          },
+          decision.holdReason,
         );
+      } catch (error) {
+        if (error instanceof PaymentError) {
+          summary.errors += 1;
+          console.error(
+            JSON.stringify({
+              event: "expire_reservation_hold_error",
+              reservationId: row.id,
+              error: error.message,
+            }),
+          );
+          continue;
+        }
+        throw error;
+      }
+
+      const stamp =
+        decision.terminal === "NO_SHOW"
+          ? { status: "NO_SHOW" as const, noShowAt: now }
+          : { status: "EXPIRED" as const, expiredAt: now };
+
+      const done = await prisma.$transaction(async (tx) => {
+        const current = await tx.reservation.findUnique({
+          where: { id: row.id },
+          include: {
+            items: true,
+            pos: { select: { merchantClosedAt: true } },
+          },
+        });
+        if (!current || current.pickupDeadline >= now) {
+          return false;
+        }
+        const again = decideExpire(
+          current.status,
+          current.pos.merchantClosedAt,
+        );
+        if (
+          !again ||
+          again.terminal !== decision.terminal ||
+          again.fromStatus !== decision.fromStatus
+        ) {
+          return false;
+        }
+        const updated = await tx.reservation.updateMany({
+          where: {
+            id: row.id,
+            status: decision.fromStatus,
+            pickupDeadline: { lt: now },
+          },
+          data: {
+            ...stamp,
+            ...paymentPatch(released),
+          },
+        });
+        if (updated.count !== 1) {
+          return false;
+        }
+        await restoreStock(tx, current.items);
+        return true;
+      });
+
+      if (!done) {
+        continue;
+      }
+
+      summary[decision.bucket] += 1;
+      summary.stockReleased += 1;
+      if (released.kind === "canceled") {
+        summary.holdsCanceled += 1;
+      }
+
+      try {
+        if (decision.terminal === "NO_SHOW") {
+          await notifyReservationEvent(
+            row.id,
+            "Réservation non retirée",
+            "Le délai de retrait est dépassé. L’empreinte est libérée et le stock est rendu.",
+            "buyer",
+          );
+        } else {
+          await notifyReservationEvent(
+            row.id,
+            "Réservation expirée",
+            "Le délai de retrait est dépassé. L’empreinte est libérée et le stock est rendu.",
+            "buyer",
+          );
+        }
       } catch (error) {
         console.error("[notifications] expiration", error);
       }
+    } catch (error) {
+      summary.errors += 1;
+      console.error(
+        JSON.stringify({
+          event: "expire_reservation_error",
+          reservationId: row.id,
+          error: error instanceof Error ? error.message : String(error),
+        }),
+      );
     }
   }
-  return expired;
+  return summary;
 }
 
 type ReservationLineInput = {

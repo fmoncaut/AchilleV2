@@ -27,6 +27,7 @@
     "verify-offer-macro": "tsx scripts/verify-offer-macro.ts",
     "verify-home-feed": "tsx scripts/verify-home-feed.ts",
     "verify-favorites": "tsx scripts/verify-favorites.ts",
+    "verify-expire-reservations": "tsx scripts/verify-expire-reservations.ts",
     "backfill-offer-macro": "tsx scripts/backfill-offer-macro.ts",
     "promote-merchant": "tsx scripts/promote-merchant.ts",
     "verify-admin-isolation": "tsx scripts/verify-tenant-isolation.ts",

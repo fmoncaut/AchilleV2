@@ -1,3 +1,4 @@
 [
-  "0 2 * * * $ROOT/clevercloud/affiliation-scheduler.sh"
+  "0 2 * * * $ROOT/clevercloud/affiliation-scheduler.sh",
+  "0 * * * * $ROOT/clevercloud/expire-reservations.sh"
 ]
