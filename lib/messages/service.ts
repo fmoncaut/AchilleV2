@@ -157,6 +157,8 @@ async function notifyOtherParty(viewer: ThreadViewer, body: string) {
       recipient: { userId: merchantUser.id, email: merchantUser.email },
       subject: `Nouveau message — ${reservation.merchant.name}`,
       text: `Un acheteur a écrit sur une réservation :\n${excerpt}\n\n${getSiteUrl()}/admin/reservations/${reservation.id}`,
+      // Opérationnel marchand — pas de gate prefs acheteur.
+      preferenceKind: null,
     });
     return;
   }
@@ -167,6 +169,7 @@ async function notifyOtherParty(viewer: ThreadViewer, body: string) {
     recipient: { userId: reservation.user.id, email: reservation.user.email },
     subject: `Message de ${reservation.merchant.name}`,
     text: `${reservation.merchant.name} a écrit :\n${excerpt}\n\n${getSiteUrl()}/compte/reservations/${reservation.id}`,
+    preferenceKind: "ORDER_UPDATES",
   });
 }
 
@@ -249,5 +252,6 @@ export async function notifyReservationEvent(
     recipient: { userId: recipient.id, email: recipient.email },
     subject,
     text,
+    preferenceKind: audience === "buyer" ? "ORDER_UPDATES" : null,
   });
 }

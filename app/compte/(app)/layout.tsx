@@ -20,8 +20,11 @@ export default async function CompteAppLayout({
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { onboardingCompletedAt: true },
+    select: { onboardingCompletedAt: true, deletedAt: true },
   });
+  if (user?.deletedAt) {
+    redirect("/login?callbackUrl=/compte");
+  }
   if (!user?.onboardingCompletedAt) {
     redirect("/compte/onboarding");
   }

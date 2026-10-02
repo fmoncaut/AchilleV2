@@ -5,8 +5,10 @@ import { auth } from "@/auth";
 import { signOutAction } from "@/app/compte/actions";
 import { UtilityCard } from "@/components/utility-page";
 import { Button } from "@/components/ui/button";
+import { displayUserName } from "@/lib/account/profile";
 import { getDashboardActor } from "@/lib/admin/actor";
 import { countUnreadForBuyer } from "@/lib/messages/service";
+import { prisma } from "@/lib/db";
 
 export const metadata = {
   title: "Mon compte — Achille",
@@ -16,12 +18,18 @@ export default async function AccountPage() {
   const session = await auth();
   const user = session?.user;
 
-  if (!user) {
+  if (!user?.id) {
     redirect("/login?callbackUrl=/compte");
   }
 
-  const actor = await getDashboardActor();
-  const unread = user.id ? await countUnreadForBuyer(user.id) : 0;
+  const [actor, unread, dbUser] = await Promise.all([
+    getDashboardActor(),
+    countUnreadForBuyer(user.id),
+    prisma.user.findUnique({
+      where: { id: user.id },
+      select: { name: true, email: true },
+    }),
+  ]);
 
   return (
     <UtilityCard kicker="Compte" title="Bonjour" icon="person">
@@ -31,7 +39,7 @@ export default async function AccountPage() {
             Nom
           </dt>
           <dd className="font-headline-sm text-primary-container text-[16px]">
-            {user.name ?? "Non renseigné"}
+            {displayUserName(dbUser?.name ?? user.name)}
           </dd>
         </div>
         <div>
@@ -39,7 +47,7 @@ export default async function AccountPage() {
             E-mail
           </dt>
           <dd className="font-headline-sm text-primary-container text-[16px]">
-            {user.email ?? "Non renseigné"}
+            {dbUser?.email ?? user.email ?? "Non renseigné"}
           </dd>
         </div>
       </dl>
@@ -54,6 +62,11 @@ export default async function AccountPage() {
             Mes réservations
             {unread > 0 ? ` (${unread} non lu${unread > 1 ? "s" : ""})` : ""}
           </Link>
+        </Button>
+      </p>
+      <p className="mt-3">
+        <Button asChild variant="outline" className="w-full">
+          <Link href="/compte/reglages">Réglages</Link>
         </Button>
       </p>
       {actor?.role === "ADMIN" ? (

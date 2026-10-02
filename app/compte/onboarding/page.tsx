@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { completeOnboardingAction } from "@/app/compte/onboarding/actions";
 import { auth } from "@/auth";
+import { InterestPicker } from "@/components/account/interest-picker";
 import { UtilityCard } from "@/components/utility-page";
 import { Button } from "@/components/ui/button";
 import { MAX_ONBOARDING_INTERESTS } from "@/lib/auth/terms";
@@ -45,7 +46,7 @@ export default async function OnboardingPage({ searchParams }: PageProps) {
     <UtilityCard
       kicker="Bienvenue"
       title="Personnalisez votre fil"
-        icon="tune"
+      icon="tune"
       className="max-w-lg"
     >
       <p className="font-body-sm text-body-sm text-on-surface-variant mt-3">
@@ -72,29 +73,7 @@ export default async function OnboardingPage({ searchParams }: PageProps) {
       <form action={completeOnboardingAction} className="mt-6 flex flex-col gap-5">
         <input type="hidden" name="callbackUrl" value={callbackUrl} />
 
-        {macros.length > 0 ? (
-          <fieldset>
-            <legend className="font-label-md text-label-md text-primary-container mb-3">
-              Centres d’intérêt
-            </legend>
-            <div className="flex flex-wrap gap-2">
-              {macros.map((macro) => (
-                <label
-                  key={macro.id}
-                  className="bg-surface-container-low has-[:checked]:bg-primary-container has-[:checked]:text-on-primary-container font-label-md text-label-md text-on-surface inline-flex cursor-pointer items-center gap-2 rounded-full px-3 py-2"
-                >
-                  <input
-                    type="checkbox"
-                    name="interestCategoryId"
-                    value={macro.id}
-                    className="sr-only"
-                  />
-                  {macro.name}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-        ) : null}
+        {macros.length > 0 ? <InterestPicker macros={macros} /> : null}
 
         <label className="font-body-sm text-body-sm text-on-surface flex items-start gap-3">
           <input

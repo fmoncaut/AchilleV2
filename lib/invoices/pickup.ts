@@ -60,7 +60,8 @@ type InvoiceRow = {
   pickedUpAt: Date | null;
   totalAmount: Prisma.Decimal;
   commissionAmount: Prisma.Decimal | null;
-  user: { name: string | null; email: string | null };
+  buyerName: string | null;
+  buyerEmail: string | null;
   merchant: { name: string };
   pos: {
     name: string;
@@ -109,7 +110,10 @@ export function toPickupInvoice(
     sellerName: row.merchant.name,
     storeName: row.pos.name,
     storeAddress: addressOf(row.pos),
-    buyerName: row.user.name ?? row.user.email ?? "Acheteur",
+    buyerName:
+      row.buyerName?.trim() ||
+      row.buyerEmail?.trim() ||
+      "Acheteur",
     lines,
     totalTtc: row.totalAmount,
     totalHt,
@@ -124,7 +128,8 @@ const invoiceSelect = {
   pickedUpAt: true,
   totalAmount: true,
   commissionAmount: true,
-  user: { select: { name: true, email: true } },
+  buyerName: true,
+  buyerEmail: true,
   merchant: { select: { name: true } },
   pos: {
     select: { name: true, address: true, postalCode: true, city: true },

@@ -29,6 +29,17 @@ export async function establishOtpSession(
   }
 
   const now = new Date();
+
+  // Compte déjà anonymisé : l’e-mail d’origine n’existe plus (tombstone).
+  // Un nouveau compte peut être créé avec le même e-mail.
+  const existing = await prisma.user.findUnique({
+    where: { email: identifier },
+    select: { id: true, deletedAt: true },
+  });
+  if (existing?.deletedAt) {
+    return { ok: false };
+  }
+
   const user = await prisma.user.upsert({
     where: { email: identifier },
     create: {

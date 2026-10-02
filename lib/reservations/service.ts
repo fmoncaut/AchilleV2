@@ -595,6 +595,16 @@ export async function insertPendingReservation(
     new Prisma.Decimal(0),
   );
 
+  const buyer = await tx.user.findUnique({
+    where: { id: userId },
+    select: { name: true, email: true },
+  });
+  if (!buyer) {
+    throw new ReservationError("Compte introuvable.");
+  }
+  const buyerName =
+    buyer.name?.trim() || buyer.email?.trim() || "Acheteur";
+
   const reservation = await tx.reservation.create({
     data: {
       userId,
@@ -604,6 +614,8 @@ export async function insertPendingReservation(
       pickupCode: pickupCode(),
       pickupDeadline: computePickupDeadline(),
       totalAmount,
+      buyerName,
+      buyerEmail: buyer.email,
       items: {
         create: held.map((line) => ({
           offerId: line.offerId,

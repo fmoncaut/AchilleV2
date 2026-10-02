@@ -482,6 +482,9 @@ model Reservation {
   feeAmount        Decimal?          @db.Decimal(10, 2)
   paymentIntentId  String?           @unique
   paymentState     PaymentState      @default(NONE)
+  /// Snapshot identité acheteur à la création (survit à l’anonymisation du User).
+  buyerName        String?
+  buyerEmail       String?
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   confirmedAt      DateTime?
@@ -591,6 +594,8 @@ model User {
   addresses               UserAddress[]
   interests               UserInterest[]
   notificationPreferences NotificationPreference[]
+  /// Compte anonymisé / fermé (U.6b). Non null → accès refusé.
+  deletedAt               DateTime?
   createdAt               DateTime                 @default(now())
 
   @@index([merchantId])
