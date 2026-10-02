@@ -79,7 +79,6 @@ function fakeProvider(intents: Map<string, StoredIntent>): PaymentProvider {
       if (!intent) throw new Error(`Intent inconnu ${paymentIntentId}`);
       intent.status = "canceled";
       intent.cancels += 1;
-      return { paymentIntentId, status: "canceled" };
     },
     async captureAuthorization({ paymentIntentId }) {
       const intent = intents.get(paymentIntentId);
@@ -88,7 +87,7 @@ function fakeProvider(intents: Map<string, StoredIntent>): PaymentProvider {
       intent.captures += 1;
       return {
         paymentIntentId,
-        status: "succeeded",
+        status: "succeeded" as const,
         amountCents: 1000,
         applicationFeeCents: 80,
         amountReceivedCents: 1000,
@@ -99,7 +98,6 @@ function fakeProvider(intents: Map<string, StoredIntent>): PaymentProvider {
 
 async function main() {
   assertDisposable();
-  process.env.NODE_ENV = "test";
   process.env.STRIPE_NOSHOW_MODE = "cancel";
   process.env.RESERVATION_PENDING_TTL_MINUTES = "30";
 

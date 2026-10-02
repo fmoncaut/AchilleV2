@@ -6,7 +6,7 @@ import { prisma } from "../lib/db";
 import { expireDueReservations } from "../lib/reservations/service";
 
 /** Clé stable pg_advisory_lock (bigint) — expire-reservations only. */
-const EXPIRE_LOCK_KEY = 804_141_001n;
+const EXPIRE_LOCK_KEY = BigInt(804_141_001);
 
 async function tryLock(): Promise<boolean> {
   const rows = await prisma.$queryRaw<Array<{ locked: boolean }>>`
