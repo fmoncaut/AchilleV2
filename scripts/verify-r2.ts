@@ -13,6 +13,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 
 import {
   findActiveEmptyPosNearby,
+  findMapPosPinsNearby,
   findOffersNearby,
   findUnavailablePosNearby,
 } from "../lib/geo";
@@ -240,6 +241,19 @@ async function runDisposableTests(): Promise<boolean> {
     assert(
       !offersNearby.some((row) => row.posId === activeEmpty.id && row.stock > 0),
       "Aucune offre stock>0 sur un pin R2 → non réservable.",
+    );
+
+    const mapPins = await findMapPosPinsNearby(PARIS.lat, PARIS.lng, 50_000);
+    const r2Pin = mapPins.find((pin) => pin.posId === activeEmpty.id);
+    assert(
+      r2Pin?.state === "active_empty" && r2Pin.offerCount === 0,
+      "Carte V2 : pin R2 = state active_empty, offerCount 0.",
+    );
+    assert(
+      !mapPins.some(
+        (pin) => pin.state === "active" && pin.posId === activeEmpty.id,
+      ),
+      "Carte V2 : un pin R2 n'est pas active.",
     );
 
     console.log(

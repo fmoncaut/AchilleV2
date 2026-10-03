@@ -1,27 +1,22 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type {
   Map as MapLibreMap,
   Marker,
   StyleSpecification,
 } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { formatDistance } from "@/components/distance";
+
+import { PosDrawer } from "@/components/map/pos-drawer";
 import { EmptyState } from "@/components/search/empty-state";
-import type { NearbyOfferCard, UnavailablePos } from "@/lib/geo";
-import { formatEur } from "@/lib/money";
-import { offerPath } from "@/lib/urls";
+import type { MapPosPin, NearbyOfferCard } from "@/lib/geo";
 
 type MapLibreRuntime = Pick<
   typeof import("maplibre-gl"),
   "Map" | "Marker" | "NavigationControl" | "Popup"
 >;
 
-// MapLibre 4.7 inlines its worker by stringifying factory functions. Next rewrites
-// those functions, so the blob worker never starts. The published UMD file is
-// loaded as a classic script so that worker string stays intact.
 function loadMapLibre(): Promise<MapLibreRuntime> {
   const current = (window as Window & { maplibregl?: MapLibreRuntime })
     .maplibregl;
@@ -47,22 +42,14 @@ function loadMapLibre(): Promise<MapLibreRuntime> {
 }
 
 type OffersMapProps = {
-  offers: NearbyOfferCard[];
-  unavailable?: UnavailablePos[];
+  pins: MapPosPin[];
   centerLat: number;
   centerLng: number;
-  selectedOfferId: string;
   styleUrl: string | null;
   tilesUrl: string | null;
-  recherchePath: string;
-};
-
-type PosGroup = {
-  posId: string;
-  posName: string;
-  lat: number;
-  lng: number;
-  offers: NearbyOfferCard[];
+  signedIn?: boolean;
+  favoriteProductIds?: string[];
+  loginHref?: string;
 };
 
 function rasterStyle(tilesUrl: string): StyleSpecification {
@@ -86,51 +73,110 @@ function rasterStyle(tilesUrl: string): StyleSpecification {
   };
 }
 
-function groupByPos(offers: NearbyOfferCard[]): PosGroup[] {
-  const groups = new Map<string, PosGroup>();
-  for (const offer of offers) {
-    const existing = groups.get(offer.posId);
-    if (existing) {
-      existing.offers.push(offer);
-      continue;
-    }
-    groups.set(offer.posId, {
-      posId: offer.posId,
-      posName: offer.posName,
-      lat: offer.lat,
-      lng: offer.lng,
-      offers: [offer],
-    });
+function merchantInitial(name: string): string {
+  const trimmed = name.trim();
+  return (trimmed[0] ?? "?").toLocaleUpperCase("fr-FR");
+}
+
+function createLogoMarkerElement(pin: MapPosPin): HTMLButtonElement {
+  const isActive = pin.state === "active";
+  const element = document.createElement("button");
+  element.type = "button";
+  element.className = [
+    "relative flex size-11 items-center justify-center overflow-hidden rounded-full border-2 border-[#002642] shadow-[0_2px_6px_rgba(0,38,66,0.15)]",
+    isActive ? "bg-white" : "bg-[#e6e8ec]",
+  ].join(" ");
+  element.setAttribute(
+    "aria-label",
+    isActive
+      ? `${pin.name}, ${pin.offerCount} offre${pin.offerCount > 1 ? "s" : ""}`
+      : pin.state === "active_empty"
+        ? `${pin.name}, plus d'offres disponibles en ce moment`
+        : `${pin.name}, magasin non disponible actuellement`,
+  );
+
+  if (pin.merchantLogoUrl) {
+    const img = document.createElement("img");
+    img.src = pin.merchantLogoUrl;
+    img.alt = "";
+    img.decoding = "async";
+    img.loading = "lazy";
+    img.className = [
+      "size-full object-cover",
+      isActive ? "" : "grayscale opacity-70",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    element.append(img);
+  } else {
+    element.classList.add("bg-[#002642]", "text-white");
+    element.textContent = merchantInitial(pin.merchantName || pin.name);
+    element.classList.add("text-sm", "font-extrabold");
   }
-  return [...groups.values()];
+
+  if (isActive && pin.offerCount > 0) {
+    const badge = document.createElement("span");
+    badge.className =
+      "absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#fe9800] px-1 text-[10px] font-extrabold text-[#002642] ring-2 ring-white";
+    badge.textContent =
+      pin.offerCount > 99 ? "99+" : String(pin.offerCount);
+    element.append(badge);
+  }
+
+  return element;
 }
 
 export function OffersMap({
-  offers,
-  unavailable = [],
+  pins,
   centerLat,
   centerLng,
-  selectedOfferId,
   styleUrl,
   tilesUrl,
-  recherchePath,
+  signedIn = false,
+  favoriteProductIds = [],
+  loginHref,
 }: OffersMapProps) {
-  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const markersRef = useRef<Marker[]>([]);
-  const groups = useMemo(() => groupByPos(offers), [offers]);
-  const groupsRef = useRef(groups);
-  const unavailableRef = useRef(unavailable);
-  const selectedRef = useRef(selectedOfferId);
-  const pathRef = useRef(recherchePath);
+  const pinsRef = useRef(pins);
+  const [selectedPin, setSelectedPin] = useState<MapPosPin | null>(null);
+  const [drawerOffers, setDrawerOffers] = useState<NearbyOfferCard[] | null>(
+    null,
+  );
+  const [drawerLoading, setDrawerLoading] = useState(false);
 
   useEffect(() => {
-    groupsRef.current = groups;
-    unavailableRef.current = unavailable;
-    selectedRef.current = selectedOfferId;
-    pathRef.current = recherchePath;
-  }, [groups, recherchePath, selectedOfferId, unavailable]);
+    pinsRef.current = pins;
+  }, [pins]);
+
+  const closeDrawer = useCallback(() => {
+    setSelectedPin(null);
+    setDrawerOffers(null);
+    setDrawerLoading(false);
+  }, []);
+
+  const openActiveDrawer = useCallback((pin: MapPosPin) => {
+    setSelectedPin(pin);
+    setDrawerOffers(null);
+    setDrawerLoading(true);
+    void fetch(`/api/map/pos/${encodeURIComponent(pin.posId)}/offers`)
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error("offers");
+        }
+        return (await res.json()) as { offers: NearbyOfferCard[] };
+      })
+      .then((data) => {
+        setDrawerOffers(data.offers);
+      })
+      .catch(() => {
+        setDrawerOffers([]);
+      })
+      .finally(() => {
+        setDrawerLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     const node = containerRef.current;
@@ -173,102 +219,34 @@ export function OffersMap({
         );
         mapRef.current = created;
 
-        const selectOffer = (offerId: string) => {
-          const url = new URL(pathRef.current, window.location.origin);
-          url.searchParams.set("vue", "carte");
-          url.searchParams.set("offre", offerId);
-          router.replace(`${url.pathname}?${url.searchParams.toString()}`, {
-            scroll: false,
-          });
-        };
-
         const renderMarkers = () => {
           for (const marker of markersRef.current) {
             marker.remove();
           }
           markersRef.current = [];
 
-          for (const group of groupsRef.current) {
-            const element = document.createElement("button");
-            element.type = "button";
-            element.className =
-              "flex h-8 min-w-8 items-center justify-center rounded-full border-2 border-[#002642] bg-[#fe9800] px-1.5 text-xs font-extrabold text-[#002642] shadow-[0_2px_6px_rgba(0,38,66,0.15)]";
-            element.textContent = String(group.offers.length);
-            element.setAttribute(
-              "aria-label",
-              `${group.posName}, ${group.offers.length} offre${group.offers.length > 1 ? "s" : ""}`,
-            );
+          for (const pin of pinsRef.current) {
+            const element = createLogoMarkerElement(pin);
+            const isActive = pin.state === "active";
 
-            const popupNode = document.createElement("div");
-            popupNode.className = "min-w-48 max-w-64 text-sm text-[#191c1e]";
-            const title = document.createElement("p");
-            title.className = "font-bold text-[#002642]";
-            title.textContent = group.posName;
-            popupNode.append(title);
-
-            for (const offer of group.offers) {
-              const row = document.createElement("a");
-              row.href = offerPath(offer.productSlug, {
-                posSlug: offer.posSlug || undefined,
+            if (isActive) {
+              const marker = new Marker({ element })
+                .setLngLat([pin.lng, pin.lat])
+                .addTo(created);
+              element.addEventListener("click", (event) => {
+                event.stopPropagation();
+                openActiveDrawer(pin);
               });
-              row.className =
-                "mt-2 block rounded-full px-2 py-1 text-[#002642] underline-offset-2 hover:bg-[#f2f4f7] hover:underline";
-              const distanceLabel =
-                offer.distanceM != null
-                  ? formatDistance(offer.distanceM)
-                  : offer.city;
-              row.textContent = distanceLabel
-                ? `${offer.productName} — ${formatEur(offer.priceRemise)} · ${distanceLabel}`
-                : `${offer.productName} — ${formatEur(offer.priceRemise)}`;
-              row.addEventListener("click", () => {
-                selectOffer(offer.id);
-              });
-              popupNode.append(row);
+              markersRef.current.push(marker);
+              continue;
             }
 
-            const popup = new Popup({
-              offset: 18,
-              closeButton: true,
-            }).setDOMContent(popupNode);
-
-            const marker = new Marker({ element })
-              .setLngLat([group.lng, group.lat])
-              .setPopup(popup)
-              .addTo(created);
-
-            element.addEventListener("click", () => {
-              const preferred =
-                group.offers.find(
-                  (offer) => offer.id === selectedRef.current,
-                ) ?? group.offers[0];
-              if (preferred) {
-                selectOffer(preferred.id);
-              }
-            });
-
-            markersRef.current.push(marker);
-          }
-
-          for (const pos of unavailableRef.current) {
-            const isActiveEmpty = pos.reason === "active_empty";
-            const element = document.createElement("button");
-            element.type = "button";
-            element.className =
-              "flex h-8 min-w-8 items-center justify-center rounded-full border-2 border-[#002642] bg-[#e6e8ec] px-1.5 text-xs font-extrabold text-[#002642] shadow-[0_2px_6px_rgba(0,38,66,0.15)]";
-            element.textContent = "–";
-            element.setAttribute(
-              "aria-label",
-              isActiveEmpty
-                ? `${pos.name}, plus d'offres disponibles en ce moment`
-                : `${pos.name}, magasin non disponible actuellement`,
-            );
-
             const popupNode = document.createElement("div");
             popupNode.className = "min-w-48 max-w-64 text-sm text-[#191c1e]";
             const title = document.createElement("p");
             title.className = "font-bold text-[#002642]";
-            title.textContent = pos.name;
-            if (isActiveEmpty) {
+            title.textContent = pin.name;
+            if (pin.state === "active_empty") {
               const message = document.createElement("p");
               message.className = "mt-2";
               message.textContent =
@@ -290,9 +268,9 @@ export function OffersMap({
               closeButton: true,
             }).setDOMContent(popupNode);
 
-            // Pastille grise : popup seule, aucun selectOffer / router.push.
+            // R2 / inactive : popup seule, aucun drawer / navigation.
             const marker = new Marker({ element })
-              .setLngLat([pos.lng, pos.lat])
+              .setLngLat([pin.lng, pin.lat])
               .setPopup(popup)
               .addTo(created);
 
@@ -330,30 +308,26 @@ export function OffersMap({
       map?.remove();
       mapRef.current = null;
     };
-  }, [centerLat, centerLng, groups, router, styleUrl, tilesUrl, unavailable]);
+  }, [centerLat, centerLng, openActiveDrawer, pins, styleUrl, tilesUrl]);
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map?.loaded()) {
+    if (!map?.loaded() || !selectedPin) {
       return;
     }
-    const selected = offers.find((offer) => offer.id === selectedOfferId);
-    const target = selected
-      ? { lat: selected.lat, lng: selected.lng }
-      : { lat: centerLat, lng: centerLng };
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
     const camera = {
-      center: [target.lng, target.lat] as [number, number],
-      zoom: selected ? 13 : 11,
+      center: [selectedPin.lng, selectedPin.lat] as [number, number],
+      zoom: 13,
     };
     if (reduceMotion) {
       map.jumpTo(camera);
     } else {
       map.flyTo({ ...camera, essential: true, duration: 800 });
     }
-  }, [centerLat, centerLng, offers, selectedOfferId]);
+  }, [selectedPin]);
 
   if (!styleUrl && !tilesUrl) {
     return (
@@ -364,28 +338,21 @@ export function OffersMap({
     );
   }
 
-  const selected = offers.find((offer) => offer.id === selectedOfferId) ?? null;
-
   return (
-    <div className="flex flex-col gap-4">
+    <div className="relative flex flex-col gap-4">
       <div
         ref={containerRef}
         className="ring-outline-variant h-[min(70vh,36rem)] min-h-80 w-full overflow-hidden rounded-2xl ring-1"
       />
-      {selected ? (
-        <p className="font-body-sm text-body-sm text-on-surface-variant">
-          Offre mise en avant :{" "}
-          <a
-            href={offerPath(selected.productSlug, {
-              posSlug: selected.posSlug || undefined,
-            })}
-            className="text-primary-container font-semibold underline-offset-4 hover:underline"
-          >
-            {selected.productName}
-          </a>{" "}
-          chez {selected.merchantName}.
-        </p>
-      ) : null}
+      <PosDrawer
+        pin={selectedPin}
+        offers={drawerOffers}
+        loading={drawerLoading}
+        onClose={closeDrawer}
+        signedIn={signedIn}
+        favoriteProductIds={favoriteProductIds}
+        loginHref={loginHref}
+      />
     </div>
   );
 }

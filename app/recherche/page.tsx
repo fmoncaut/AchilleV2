@@ -20,7 +20,7 @@ import { prisma } from "@/lib/db";
 import { getFavoriteFlags } from "@/lib/favorites";
 import {
   findOffersNearby,
-  findMapGreyPinsNearby,
+  findMapPosPinsNearby,
   toOfferCard,
   type NearbyOfferCard,
 } from "@/lib/geo";
@@ -136,9 +136,10 @@ export default async function RecherchePage({
         })
       ).map(toOfferCard)
     : [];
-  const unavailable = origin
-    ? await findMapGreyPinsNearby(origin.lat, origin.lng, query.radiusKm * 1000)
+  const pins = origin
+    ? await findMapPosPinsNearby(origin.lat, origin.lng, query.radiusKm * 1000)
     : [];
+  const greyPinCount = pins.filter((pin) => pin.state !== "active").length;
 
   const ign = getIgnMapConfig();
   const recherchePath = searchHref(query);
@@ -215,18 +216,18 @@ export default async function RecherchePage({
                     ? `Aucune offre dans un rayon de ${query.radiusKm} km autour de ${locationLabel}.`
                     : `${offers.length} offre${offers.length > 1 ? "s" : ""} dans un rayon de ${query.radiusKm} km autour de ${locationLabel}.`}
                 </p>
-                {unavailable.length > 0 ? (
+                {greyPinCount > 0 ? (
                   <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                    {unavailable.length} magasin
-                    {unavailable.length > 1 ? "s" : ""} non disponible
-                    {unavailable.length > 1 ? "s" : ""} sur la carte.
+                    {greyPinCount} magasin
+                    {greyPinCount > 1 ? "s" : ""} sans offre cliquable sur la
+                    carte.
                   </p>
                 ) : null}
               </div>
               <ViewToggle query={query} />
             </div>
 
-            {offers.length === 0 && unavailable.length === 0 ? (
+            {offers.length === 0 && pins.length === 0 ? (
               <EmptyState
                 title="Aucune offre dans ce rayon"
                 description="Élargissez la zone, changez de lieu ou retirez des filtres (catégorie, prix, mot-clé)."
@@ -242,14 +243,14 @@ export default async function RecherchePage({
               />
             ) : query.vue === "carte" ? (
               <OffersMapLoader
-                offers={offers}
-                unavailable={unavailable}
+                pins={pins}
                 centerLat={origin.lat}
                 centerLng={origin.lng}
-                selectedOfferId={query.offre}
                 styleUrl={ign.styleUrl}
                 tilesUrl={ign.tilesUrl}
-                recherchePath={recherchePath}
+                signedIn={favorites.signedIn}
+                favoriteProductIds={favorites.productIds}
+                loginHref={loginHref}
               />
             ) : offers.length === 0 ? (
               <EmptyState

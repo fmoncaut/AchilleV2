@@ -16,7 +16,7 @@ import {
 } from "@/lib/feed";
 import type { FeedFacet } from "@/lib/feed/constants";
 import { getFavoriteProductIdsIn } from "@/lib/favorites";
-import { findMapGreyPinsNearby, type NearbyOfferCard } from "@/lib/geo";
+import { findMapPosPinsNearby } from "@/lib/geo";
 import { getIgnMapConfig } from "@/lib/map-config";
 import {
   DEFAULT_RADIUS_KM,
@@ -25,7 +25,7 @@ import {
   type RadiusKm,
   type SearchQuery,
 } from "@/lib/search";
-import { magasinPath } from "@/lib/urls";
+import { loginWithReturn, magasinPath } from "@/lib/urls";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -194,34 +194,10 @@ export default async function Home({ searchParams }: PageProps) {
   );
   const signedIn = Boolean(userId);
 
-  const unavailable =
+  const pins =
     origin != null
-      ? await findMapGreyPinsNearby(origin.lat, origin.lng, radiusKm * 1000)
+      ? await findMapPosPinsNearby(origin.lat, origin.lng, radiusKm * 1000)
       : [];
-
-  const mapOffers: NearbyOfferCard[] = visible.map((offer) => ({
-    id: offer.id,
-    priceRemise: offer.priceRemise,
-    priceReference: offer.priceReference,
-    discountPct: offer.discountPct,
-    stock: offer.stock,
-    productId: offer.productId,
-    productName: offer.productName,
-    productSlug: offer.productSlug,
-    imageUrl: offer.imageUrl,
-    brandName: offer.brandName,
-    categorySlug: null,
-    categoryName: null,
-    merchantName: offer.merchantName,
-    kind: offer.kind,
-    posId: offer.posId,
-    posName: offer.posName,
-    posSlug: offer.posSlug,
-    city: offer.city,
-    lat: offer.lat,
-    lng: offer.lng,
-    distanceM: offer.distanceM,
-  }));
 
   const stores = new Map<string, (typeof visible)[number]>();
   for (const offer of visible) {
@@ -569,14 +545,14 @@ export default async function Home({ searchParams }: PageProps) {
               Stocks synchronisés en direct
             </p>
             <OffersMapLoader
-              offers={mapOffers}
-              unavailable={unavailable}
+              pins={pins}
               centerLat={origin.lat}
               centerLng={origin.lng}
-              selectedOfferId={visible[0]?.id ?? ""}
               styleUrl={mapConfig.styleUrl}
               tilesUrl={mapConfig.tilesUrl}
-              recherchePath={searchHref(searchQuery, { vue: "carte" })}
+              signedIn={signedIn}
+              favoriteProductIds={[...favoriteProductIds]}
+              loginHref={loginWithReturn(searchHref(searchQuery))}
             />
           </div>
         ) : null}

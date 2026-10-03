@@ -112,7 +112,7 @@ export function serializePosOfferCard(
       brand: { name: string } | null;
       category: { name: string; slug: string } | null;
     };
-    merchant: { name: string };
+    merchant: { name: string; logoUrl?: string | null };
     kind: "DIRECT" | "AFFILIATION";
   },
   pos: {
@@ -140,6 +140,7 @@ export function serializePosOfferCard(
     categorySlug: offer.product.category?.slug ?? null,
     categoryName: offer.product.category?.name ?? null,
     merchantName: offer.merchant.name,
+    merchantLogoUrl: offer.merchant.logoUrl ?? null,
     kind: offer.kind,
     posId: pos.id,
     posName: pos.name,
@@ -257,7 +258,7 @@ export const getCachedPosPage = unstable_cache(
       where: offerVisibleAtPosWhere(pos),
       include: {
         product: { include: { brand: true, category: true } },
-        merchant: { select: { name: true, slug: true } },
+        merchant: { select: { name: true, slug: true, logoUrl: true } },
       },
       orderBy: { priceRemise: "asc" },
     });
