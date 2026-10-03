@@ -471,7 +471,7 @@ async function countElectrodepot(
     activeVisible: statusCounts.ACTIVE_VISIBLE ?? 0,
     inactiveVisible: statusCounts.INACTIVE_VISIBLE ?? 0,
     inactiveHidden: statusCounts.INACTIVE_HIDDEN ?? 0,
-    activeEmptyTotal: Number(activeEmptyTotalRow[0]?.count ?? 0n),
+    activeEmptyTotal: Number(activeEmptyTotalRow[0]?.count ?? 0),
     activeEmptyPins: pins.filter((row) => row.reason === "active_empty").length,
     inactivePins: pins.filter((row) => row.reason === "inactive_visible").length,
     offerPosPins: pins.filter((row) => row.reason === "offer").length,

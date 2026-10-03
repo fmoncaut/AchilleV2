@@ -10,7 +10,11 @@
  * Soft-launch : force statusSource=MANUAL (R3 — visible sans dépendre de l'AUTO / offres).
  * Ne copie jamais Stripe Connect / feeRate / logoUrl POS.
  */
-import { PrismaClient, type PosStatus } from "@prisma/client";
+import {
+  PrismaClient,
+  type PosStatus,
+  type PosStatusSource,
+} from "@prisma/client";
 
 const EXCLUDED_MERCHANT_SLUGS = new Set([
   "adbb",
@@ -53,7 +57,7 @@ type SourcePos = {
   placeId: string;
   name: string;
   status: PosStatus;
-  statusSource: string;
+  statusSource: PosStatusSource;
 };
 
 async function main(): Promise<void> {
