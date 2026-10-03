@@ -16,7 +16,7 @@ import {
 } from "@/lib/feed";
 import type { FeedFacet } from "@/lib/feed/constants";
 import { getFavoriteProductIdsIn } from "@/lib/favorites";
-import { findUnavailablePosNearby, type NearbyOfferCard } from "@/lib/geo";
+import { findMapGreyPinsNearby, type NearbyOfferCard } from "@/lib/geo";
 import { getIgnMapConfig } from "@/lib/map-config";
 import {
   DEFAULT_RADIUS_KM,
@@ -196,7 +196,7 @@ export default async function Home({ searchParams }: PageProps) {
 
   const unavailable =
     origin != null
-      ? await findUnavailablePosNearby(origin.lat, origin.lng, radiusKm * 1000)
+      ? await findMapGreyPinsNearby(origin.lat, origin.lng, radiusKm * 1000)
       : [];
 
   const mapOffers: NearbyOfferCard[] = visible.map((offer) => ({

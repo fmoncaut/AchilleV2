@@ -89,6 +89,7 @@ model Pos {
   @@unique([merchantId, placeId])
   @@index([city])
   @@index([status])
+  @@index([status, merchantClosedAt])
   @@index([merchantId, statusSource])
   @@index([merchantClosedAt])
 }

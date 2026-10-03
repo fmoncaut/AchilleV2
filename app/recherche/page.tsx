@@ -20,7 +20,7 @@ import { prisma } from "@/lib/db";
 import { getFavoriteFlags } from "@/lib/favorites";
 import {
   findOffersNearby,
-  findUnavailablePosNearby,
+  findMapGreyPinsNearby,
   toOfferCard,
   type NearbyOfferCard,
 } from "@/lib/geo";
@@ -137,7 +137,7 @@ export default async function RecherchePage({
       ).map(toOfferCard)
     : [];
   const unavailable = origin
-    ? await findUnavailablePosNearby(origin.lat, origin.lng, query.radiusKm * 1000)
+    ? await findMapGreyPinsNearby(origin.lat, origin.lng, query.radiusKm * 1000)
     : [];
 
   const ign = getIgnMapConfig();

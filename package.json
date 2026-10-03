@@ -16,6 +16,7 @@
     "import-categories": "tsx scripts/import-categories.ts",
     "import-pos": "tsx scripts/import-pos.ts",
     "verify-pos-activation": "tsx scripts/verify-pos-activation.ts",
+    "verify-r2": "tsx scripts/verify-r2.ts",
     "seed-interest-macros": "tsx scripts/seed-interest-macros.ts",
     "verify-interest-macros": "tsx scripts/verify-interest-macros.ts",
     "verify-merchant-pos": "tsx scripts/verify-merchant-pos.ts",

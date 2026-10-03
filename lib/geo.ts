@@ -237,6 +237,8 @@ export async function findOffersNearby(
   });
 }
 
+export type UnavailablePosReason = "inactive_visible" | "active_empty";
+
 export type UnavailablePos = {
   id: string;
   name: string;
@@ -244,17 +246,81 @@ export type UnavailablePos = {
   city: string | null;
   lat: number;
   lng: number;
+  reason: UnavailablePosReason;
 };
 
 const UNAVAILABLE_PIN_LIMIT = 200;
 
-/** Magasins encore sur la carte, sans offre ni lien. */
+/**
+ * Offre éligible placée sur le POS `p` (même règles que la jointure LIA /
+ * findOffersNearby). Utilisé en anti-join NOT EXISTS — pas de scan Offer naïf.
+ */
+function sqlEligibleOfferExistsAtPos(): Prisma.Sql {
+  return Prisma.sql`
+    EXISTS (
+      SELECT 1
+      FROM "Offer" o
+      WHERE o."merchantId" = p."merchantId"
+        AND o."isOnline" = true
+        AND o.stock > 0
+        AND (
+          o."feedId" IS NULL
+          OR EXISTS (
+            SELECT 1 FROM "AffiliationFeed" f
+            WHERE f.id = o."feedId" AND f.status = 'ACTIVE'
+          )
+        )
+        AND (
+          (o.kind = 'DIRECT' AND o."posId" = p.id)
+          OR (o.kind = 'AFFILIATION' AND o.scope = 'ENSEIGNE')
+          OR (
+            o.kind = 'AFFILIATION'
+            AND o.scope = 'POS_CIBLES'
+            AND (
+              EXISTS (
+                SELECT 1 FROM "OfferPos" op
+                WHERE op."offerId" = o.id AND op."posId" = p.id
+              )
+              OR (
+                o."posId" = p.id
+                AND NOT EXISTS (
+                  SELECT 1 FROM "OfferPos" op2 WHERE op2."offerId" = o.id
+                )
+              )
+            )
+          )
+        )
+    )
+  `;
+}
+
+type UnavailablePosRow = Omit<UnavailablePos, "reason" | "lat" | "lng"> & {
+  lat: number | string;
+  lng: number | string;
+};
+
+function mapUnavailableRows(
+  rows: UnavailablePosRow[],
+  reason: UnavailablePosReason,
+): UnavailablePos[] {
+  return rows.map((row) => ({
+    id: row.id,
+    name: row.name,
+    slug: row.slug,
+    city: row.city,
+    lat: Number(row.lat),
+    lng: Number(row.lng),
+    reason,
+  }));
+}
+
+/** Magasins INACTIVE_VISIBLE encore sur la carte (fermeture temporaire). */
 export async function findUnavailablePosNearby(
   lat: number,
   lng: number,
   radiusM: number,
 ): Promise<UnavailablePos[]> {
-  const rows = await prisma.$queryRaw<UnavailablePos[]>`
+  const rows = await prisma.$queryRaw<UnavailablePosRow[]>`
     SELECT
       p.id,
       p.name,
@@ -278,11 +344,57 @@ export async function findUnavailablePosNearby(
     ) ASC
     LIMIT ${UNAVAILABLE_PIN_LIMIT}
   `;
-  return rows.map((row) => ({
-    ...row,
-    lat: Number(row.lat),
-    lng: Number(row.lng),
-  }));
+  return mapUnavailableRows(rows, "inactive_visible");
+}
+
+/**
+ * R2 — magasins ACTIVE_VISIBLE sans offre éligible stock>0 dans le rayon.
+ * Rester pinnés, non-cliquables (distinct de INACTIVE_VISIBLE).
+ */
+export async function findActiveEmptyPosNearby(
+  lat: number,
+  lng: number,
+  radiusM: number,
+): Promise<UnavailablePos[]> {
+  const rows = await prisma.$queryRaw<UnavailablePosRow[]>`
+    SELECT
+      p.id,
+      p.name,
+      p.slug,
+      p.city,
+      p.lat,
+      p.lng
+    FROM "Pos" p
+    JOIN "Merchant" m ON m.id = p."merchantId"
+    WHERE p.status = 'ACTIVE_VISIBLE'
+      AND p."merchantClosedAt" IS NULL
+      AND m."isActive" = true
+      AND ST_DWithin(
+        p.geog,
+        ST_MakePoint(${lng}, ${lat})::geography,
+        ${radiusM}
+      )
+      AND NOT ${sqlEligibleOfferExistsAtPos()}
+    ORDER BY ST_Distance(
+      p.geog,
+      ST_MakePoint(${lng}, ${lat})::geography
+    ) ASC
+    LIMIT ${UNAVAILABLE_PIN_LIMIT}
+  `;
+  return mapUnavailableRows(rows, "active_empty");
+}
+
+/** Pastilles grises carte : fermeture temporaire + actifs à 0 offre (R2). */
+export async function findMapGreyPinsNearby(
+  lat: number,
+  lng: number,
+  radiusM: number,
+): Promise<UnavailablePos[]> {
+  const [inactive, empty] = await Promise.all([
+    findUnavailablePosNearby(lat, lng, radiusM),
+    findActiveEmptyPosNearby(lat, lng, radiusM),
+  ]);
+  return [...inactive, ...empty];
 }
 
 export async function distancesToPos(

@@ -64,7 +64,7 @@ export default async function EditEnseignePage({
           </h2>
           <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
             {publication.eligibleOffers === 0
-              ? "Aucune offre active (flux enseigne ou vente directe). Le ciblage magasin n’est pas pris en compte."
+              ? "Aucune offre active (flux enseigne ou vente directe). Republier ne masque pas les magasins déjà visibles ; aucun nouveau POS AUTO n’est activé. Le ciblage magasin n’est pas pris en compte."
               : publication.enseigneOffers > 0
                 ? `${publication.enseigneOffers} offre${publication.enseigneOffers > 1 ? "s" : ""} de flux enseigne : tous les magasins en règle seront publiés.`
                 : `${publication.directOffers} vente${publication.directOffers > 1 ? "s" : ""} directe${publication.directOffers > 1 ? "s" : ""} : seuls les magasins qui portent une offre seront publiés.`}
@@ -82,10 +82,7 @@ export default async function EditEnseignePage({
               name="posPublished"
               value={publication.posPublished ? "false" : "true"}
             />
-            <Button
-              type="submit"
-              disabled={!publication.posPublished && publication.eligibleOffers === 0}
-            >
+            <Button type="submit">
               {publication.posPublished
                 ? "Masquer les POS de cette enseigne"
                 : "Publier les POS de cette enseigne"}

@@ -1,8 +1,12 @@
 import { Prisma } from "@prisma/client";
 
 import { prisma } from "../lib/db";
-import { findOffersNearby, findUnavailablePosNearby } from "../lib/geo";
-import { PosPublishError, publishMerchantPos } from "../lib/pos-publish";
+import {
+  findActiveEmptyPosNearby,
+  findOffersNearby,
+  findUnavailablePosNearby,
+} from "../lib/geo";
+import { publishMerchantPos } from "../lib/pos-publish";
 
 const STAGING_DATABASE_NAME = "bwljfjzai3tw8itz8ilf";
 const LOCAL_DATABASE_NAME = "achille";
@@ -144,13 +148,21 @@ async function main() {
       },
     });
 
-    let refused = false;
-    try {
-      await publishMerchantPos(enseigne.id, true);
-    } catch (error) {
-      refused = error instanceof PosPublishError;
-    }
-    assert(refused, "Publier sans offre active doit être refusé.");
+    const beforeEmptyPublish = await prisma.pos.findUnique({
+      where: { id: auto.id },
+      select: { status: true, isActive: true },
+    });
+    const emptyPublish = await publishMerchantPos(enseigne.id, true);
+    assert(emptyPublish.autoUpdated === 0, "Publier à 0 offre ne doit pas modifier les AUTO.");
+    const afterEmptyPublish = await prisma.pos.findUnique({
+      where: { id: auto.id },
+      select: { status: true, isActive: true },
+    });
+    assert(
+      afterEmptyPublish?.status === beforeEmptyPublish?.status &&
+        afterEmptyPublish?.isActive === beforeEmptyPublish?.isActive,
+      "Publier à 0 offre est un no-op sur les statuts AUTO (R2).",
+    );
 
     const product = await prisma.product.create({
       data: { name: "Produit A34", slug: `a34-produit-${stamp}` },
@@ -197,8 +209,10 @@ async function main() {
     assert(nearbyIds.has(auto.id) && nearbyIds.has(manualVisible.id), "La recherche doit lire les magasins publiés.");
     assert(!nearbyIds.has(manualHidden.id) && !nearbyIds.has(onMap.id), "Un magasin non publié ne doit pas porter d'offre.");
     const pins = await findUnavailablePosNearby(LYON.lat, LYON.lng, 20_000);
-    assert(pins.some((pin) => pin.id === onMap.id), "Le magasin INACTIVE_VISIBLE doit rester sur la carte.");
+    assert(pins.some((pin) => pin.id === onMap.id && pin.reason === "inactive_visible"), "Le magasin INACTIVE_VISIBLE doit rester sur la carte.");
     assert(!pins.some((pin) => pin.id === auto.id), "Un magasin publié n'est pas une pastille indisponible.");
+    const emptyPinsWithStock = await findActiveEmptyPosNearby(LYON.lat, LYON.lng, 20_000);
+    assert(!emptyPinsWithStock.some((pin) => pin.id === auto.id), "Un POS avec stock n'est pas un pin R2.");
 
     await publishMerchantPos(enseigne.id, false);
     const hiddenAgain = await prisma.pos.findUnique({
@@ -255,13 +269,17 @@ async function main() {
       },
     });
     await prisma.offerPos.create({ data: { offerId: cibleOffer.id, posId: ciblePos.id } });
-    let cibleRefused = false;
-    try {
-      await publishMerchantPos(cible.id, true);
-    } catch (error) {
-      cibleRefused = error instanceof PosPublishError;
-    }
-    assert(cibleRefused, "Un ciblage magasin seul ne doit pas débloquer la publication.");
+    const cibleBefore = await prisma.pos.findUnique({
+      where: { id: ciblePos.id },
+      select: { status: true },
+    });
+    const ciblePublish = await publishMerchantPos(cible.id, true);
+    assert(ciblePublish.autoUpdated === 0, "Un ciblage magasin seul ne débloque pas la publication AUTO.");
+    const cibleAfter = await prisma.pos.findUnique({
+      where: { id: ciblePos.id },
+      select: { status: true },
+    });
+    assert(cibleAfter?.status === cibleBefore?.status, "Le ciblage seul laisse les AUTO inchangés (R2 no-op).");
 
     await prisma.$executeRaw`
       INSERT INTO "Pos" (

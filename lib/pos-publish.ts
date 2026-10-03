@@ -55,10 +55,16 @@ export async function publishMerchantPos(merchantId: string, published: boolean)
   if (!snapshot) {
     throw new PosPublishError("Enseigne introuvable.");
   }
+
+  // R2 — publier à 0 offre : ne masque pas les AUTO déjà visibles (no-op statut).
+  // Dépublier (published=false) continue de basculer les AUTO en INACTIVE_HIDDEN.
+  // MANUAL jamais touché.
   if (published && snapshot.eligibleOffers === 0) {
-    throw new PosPublishError(
-      "Aucune offre active (flux enseigne ou vente directe). Le ciblage magasin n’est pas pris en compte.",
-    );
+    await prisma.merchant.update({
+      where: { id: merchantId },
+      data: { posPublished: true },
+    });
+    return { autoUpdated: 0, manualKept: snapshot.manualCount };
   }
 
   const autoUpdated = await prisma.$transaction(async (tx) => {

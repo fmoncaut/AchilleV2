@@ -250,6 +250,7 @@ export function OffersMap({
           }
 
           for (const pos of unavailableRef.current) {
+            const isActiveEmpty = pos.reason === "active_empty";
             const element = document.createElement("button");
             element.type = "button";
             element.className =
@@ -257,7 +258,9 @@ export function OffersMap({
             element.textContent = "–";
             element.setAttribute(
               "aria-label",
-              `${pos.name}, magasin non disponible actuellement`,
+              isActiveEmpty
+                ? `${pos.name}, plus d'offres disponibles en ce moment`
+                : `${pos.name}, magasin non disponible actuellement`,
             );
 
             const popupNode = document.createElement("div");
@@ -265,20 +268,29 @@ export function OffersMap({
             const title = document.createElement("p");
             title.className = "font-bold text-[#002642]";
             title.textContent = pos.name;
-            const message = document.createElement("p");
-            message.className = "mt-2";
-            message.textContent = "Magasin non disponible actuellement";
-            const invite = document.createElement("p");
-            invite.className = "mt-2 text-[#3d4948]";
-            invite.textContent =
-              "Ce point de vente n’est pas ouvert sur Akwire. Rejoignez Akwire pour y proposer vos stocks.";
-            popupNode.append(title, message, invite);
+            if (isActiveEmpty) {
+              const message = document.createElement("p");
+              message.className = "mt-2";
+              message.textContent =
+                "Désolé, plus d'offres disponibles en ce moment, n'hésitez pas à lui parler d'Akwire.";
+              popupNode.append(title, message);
+            } else {
+              const message = document.createElement("p");
+              message.className = "mt-2";
+              message.textContent = "Magasin non disponible actuellement";
+              const invite = document.createElement("p");
+              invite.className = "mt-2 text-[#3d4948]";
+              invite.textContent =
+                "Ce point de vente n’est pas ouvert sur Akwire. Rejoignez Akwire pour y proposer vos stocks.";
+              popupNode.append(title, message, invite);
+            }
 
             const popup = new Popup({
               offset: 18,
               closeButton: true,
             }).setDOMContent(popupNode);
 
+            // Pastille grise : popup seule, aucun selectOffer / router.push.
             const marker = new Marker({ element })
               .setLngLat([pos.lng, pos.lat])
               .setPopup(popup)
