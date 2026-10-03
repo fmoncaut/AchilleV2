@@ -30,6 +30,7 @@
     "verify-expire-reservations": "tsx scripts/verify-expire-reservations.ts",
     "backfill-offer-macro": "tsx scripts/backfill-offer-macro.ts",
     "promote-merchant": "tsx scripts/promote-merchant.ts",
+    "promote-pos-to-prod": "tsx scripts/promote-pos-to-prod.ts",
     "verify-admin-isolation": "tsx scripts/verify-tenant-isolation.ts",
     "verify-affiliation": "tsx scripts/verify-affiliation.ts",
     "verify-affiliation-http": "tsx scripts/verify-affiliation-http.ts",
