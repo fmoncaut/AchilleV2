@@ -9,7 +9,7 @@ import { loadUserInterestMacroIds } from "@/lib/feed/index";
 import { prisma } from "@/lib/db";
 
 export const metadata = {
-  title: "Intérêts — Réglages — Achille",
+  title: "Intérêts — Réglages — Akwire",
 };
 
 type PageProps = {

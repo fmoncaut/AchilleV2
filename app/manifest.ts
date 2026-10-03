@@ -2,25 +2,25 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Achille — Think global, shop local",
-    short_name: "Achille",
+    name: "Akwire",
+    short_name: "Akwire",
     description:
-      "Bonnes affaires locales géolocalisées. Achille vous renvoie vers le marchand.",
+      "Bonnes affaires locales géolocalisées. Akwire vous renvoie vers le marchand.",
     start_url: "/",
     scope: "/",
     display: "standalone",
-    background_color: "#002642",
-    theme_color: "#002642",
+    background_color: "#F6F5F1",
+    theme_color: "#13263F",
     lang: "fr",
     icons: [
       {
-        src: "/icon-192",
+        src: "/icons/icon-192.png",
         sizes: "192x192",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/icon-512",
+        src: "/icons/icon-512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",

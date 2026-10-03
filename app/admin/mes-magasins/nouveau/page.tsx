@@ -7,7 +7,7 @@ import { requireAdminActor } from "@/lib/admin/actor";
 import { emptyMerchantHours } from "@/lib/admin/merchant-pos-schemas";
 
 export const metadata = {
-  title: "Nouveau magasin | Back-office Achille",
+  title: "Nouveau magasin | Back-office Akwire",
 };
 
 export default async function NouveauMesMagasinPage() {
@@ -22,7 +22,7 @@ export default async function NouveauMesMagasinPage() {
             Ajouter un magasin
           </h1>
           <p className="font-body-sm text-on-surface-variant mt-1">
-            Démarre masqué. Choisissez une adresse BAN. Achille publie ensuite.
+            Démarre masqué. Choisissez une adresse BAN. Akwire publie ensuite.
           </p>
         </div>
         <Button asChild variant="ghost" size="sm">

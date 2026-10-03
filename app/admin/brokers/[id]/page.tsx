@@ -10,7 +10,7 @@ import { requireSuperAdmin } from "@/lib/admin/actor";
 import { getBroker } from "@/lib/admin/brokers";
 
 export const metadata = {
-  title: "Éditer un broker | Back-office Achille",
+  title: "Éditer un broker | Back-office Akwire",
 };
 
 type EditBrokerPageProps = {
@@ -33,7 +33,7 @@ export default async function EditBrokerPage({
   return (
     <AdminMain width="form">
       <div>
-        <AdminKicker>Console Achille</AdminKicker>
+        <AdminKicker>Console Akwire</AdminKicker>
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Éditer le broker
         </h1>

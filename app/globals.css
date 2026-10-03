@@ -4,7 +4,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Tokens Achille — source : docs/design-system.md (Material 3). Pas de CDN Tailwind. */
+/* Tokens — source : docs/design-system.md (Material 3). Pas de CDN Tailwind. */
+
+.brand-wordmark {
+  font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: #13263f;
+}
+
 @theme {
   --color-surface: #f8f9fc;
   --color-surface-dim: #d8dadd;

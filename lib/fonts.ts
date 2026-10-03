@@ -1,4 +1,13 @@
+import { Space_Grotesk } from "next/font/google";
 import localFont from "next/font/local";
+
+/** Wordmark Akwire uniquement (next/font auto-héberge les fichiers au build). */
+export const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
 
 /** Latin, auto-hébergé via Fontsource. Le build ne télécharge plus Google Fonts. */
 export const bricolage = localFont({

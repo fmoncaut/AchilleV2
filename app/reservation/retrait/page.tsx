@@ -15,7 +15,7 @@ import { getSiteUrl } from "@/lib/site";
 import { loginWithReturn } from "@/lib/urls";
 
 export const metadata = {
-  title: "Réservation — retrait | Achille",
+  title: "Réservation — retrait | Akwire",
 };
 
 type PageProps = {

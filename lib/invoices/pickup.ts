@@ -196,7 +196,7 @@ export function renderInvoiceHtml(invoice: PickupInvoice): string {
     .join("");
   const commission =
     invoice.audience === "seller" && invoice.commissionAmount
-      ? `<p>Commission Achille : ${escapeHtml(formatEur(invoice.commissionAmount))}. Elle est prélevée sur l’encaissement, pas ajoutée au total client.</p>`
+      ? `<p>Commission Akwire : ${escapeHtml(formatEur(invoice.commissionAmount))}. Elle est prélevée sur l’encaissement, pas ajoutée au total client.</p>`
       : "";
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -223,7 +223,7 @@ export function renderInvoiceHtml(invoice: PickupInvoice): string {
   <p>Total HT ${escapeHtml(formatEur(invoice.totalHt))} · TVA ${escapeHtml(formatEur(invoice.totalVat))}</p>
   <p class="total">Total TTC ${escapeHtml(formatEur(invoice.totalTtc))}</p>
   ${commission}
-  <p>Document établi par Achille à la remise au comptoir. Aucun service externe.</p>
+  <p>Document établi par Akwire à la remise au comptoir. Aucun service externe.</p>
 </body>
 </html>`;
 }

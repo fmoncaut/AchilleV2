@@ -119,7 +119,7 @@ export function ConsentBanner({ analytics }: ConsentBannerProps) {
             Cookies et mesure
           </h2>
           <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-            Achille pose un cookie technique <strong>anonId</strong> (1 an,
+            Akwire pose un cookie technique <strong>anonId</strong> (1 an,
             httpOnly) pour attribuer les renvois vers les marchands, sans vous
             identifier. Session de connexion : cookie Auth.js.
             {analytics

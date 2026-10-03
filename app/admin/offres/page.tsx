@@ -23,7 +23,7 @@ import { formatEur } from "@/lib/money";
 import { toggleOfferAction } from "@/app/admin/actions";
 
 export const metadata = {
-  title: "Offres | Back-office Achille",
+  title: "Offres | Back-office Akwire",
 };
 
 type OffresPageProps = {

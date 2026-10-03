@@ -21,7 +21,7 @@ import {
 } from "@/lib/reservations/service";
 
 export const metadata = {
-  title: "Réservation — Achille",
+  title: "Réservation — Akwire",
 };
 
 type PageProps = { params: Promise<{ id: string }> };

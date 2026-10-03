@@ -1,14 +1,14 @@
 import { LegalPage } from "@/components/legal-page";
 
 export const metadata = {
-  title: "Mentions légales | Achille",
+  title: "Mentions légales | Akwire",
 };
 
 export default function MentionsLegalesPage() {
   return (
     <LegalPage title="Mentions légales">
       <p>
-        <strong>Achille</strong> est une place de marché d’affiliation : nous
+        <strong>Akwire</strong> est une place de marché d’affiliation : nous
         présentons des offres locales et renvoyons vers le site du marchand. Nous
         n’encaissons aucun paiement à ce stade.
       </p>

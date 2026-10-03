@@ -1,14 +1,14 @@
 import { LegalPage } from "@/components/legal-page";
 
 export const metadata = {
-  title: "Conditions générales d’utilisation | Achille",
+  title: "Conditions générales d’utilisation | Akwire",
 };
 
 export default function CguPage() {
   return (
     <LegalPage title="Conditions générales d’utilisation">
       <p>
-        En utilisant Achille, vous accédez à une vitrine d’offres locales. Le
+        En utilisant Akwire, vous accédez à une vitrine d’offres locales. Le
         contrat de vente, le paiement et le service après-vente relèvent du
         marchand vers lequel vous êtes redirigé.
       </p>
@@ -16,8 +16,8 @@ export default function CguPage() {
         Objet
       </h2>
       <p>
-        Achille met en relation un acheteur et un point de vente physique via
-        une fiche offre et un lien d’affiliation tracké. Aucun panier Achille,
+        Akwire met en relation un acheteur et un point de vente physique via
+        une fiche offre et un lien d’affiliation tracké. Aucun panier Akwire,
         aucun paiement sur la plateforme (phase affiliation).
       </p>
       <h2 className="font-headline-sm text-headline-sm text-primary-container mt-2">
@@ -34,7 +34,7 @@ export default function CguPage() {
       </h2>
       <p>
         Les prix, stocks et disponibilités sont fournis par les enseignes et
-        peuvent changer. Achille n’est pas partie au contrat de vente. Textes
+        peuvent changer. Akwire n’est pas partie au contrat de vente. Textes
         juridiques à faire relire avant mise en production commerciale.
       </p>
     </LegalPage>

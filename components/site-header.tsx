@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { BrandLockup } from "@/components/brand-lockup";
 import { MaterialIcon } from "@/components/material-icon";
 import { auth } from "@/auth";
 import { headerCartCount } from "@/lib/reservations/cart-session";
@@ -17,12 +18,7 @@ export async function SiteHeader() {
   return (
     <header className="bg-surface-container-lowest/95 shadow-navy-soft sticky top-0 z-50 w-full backdrop-blur-md">
       <div className="mx-auto flex max-w-[1680px] items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-          className="font-headline-md text-headline-md text-primary-container shrink-0 font-bold tracking-tight"
-        >
-          Achille
-        </Link>
+        <BrandLockup className="shrink-0" />
         <form
           action="/recherche"
           className="bg-surface-container-low mx-auto hidden min-w-0 max-w-md flex-1 items-center rounded-full py-1 pr-1 pl-3 lg:flex"

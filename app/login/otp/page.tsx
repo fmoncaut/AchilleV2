@@ -14,7 +14,7 @@ type OtpPageProps = {
 };
 
 export const metadata = {
-  title: "Code de connexion — Achille",
+  title: "Code de connexion — Akwire",
 };
 
 function errorMessage(code: string | undefined): string | null {

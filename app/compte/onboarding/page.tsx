@@ -10,7 +10,7 @@ import { MAX_ONBOARDING_INTERESTS } from "@/lib/auth/terms";
 import { prisma } from "@/lib/db";
 
 export const metadata = {
-  title: "Bienvenue — Achille",
+  title: "Bienvenue — Akwire",
 };
 
 type PageProps = {

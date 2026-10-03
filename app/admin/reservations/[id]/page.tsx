@@ -9,7 +9,7 @@ import { formatEur } from "@/lib/money";
 import { STATUS_LABELS } from "@/lib/reservations/service";
 
 export const metadata = {
-  title: "Réservation | Back-office Achille",
+  title: "Réservation | Back-office Akwire",
 };
 
 type PageProps = { params: Promise<{ id: string }> };

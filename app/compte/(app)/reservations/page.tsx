@@ -20,7 +20,7 @@ import {
 } from "@/lib/reservations/service";
 
 export const metadata = {
-  title: "Mes réservations — Achille",
+  title: "Mes réservations — Akwire",
 };
 
 type PageProps = {

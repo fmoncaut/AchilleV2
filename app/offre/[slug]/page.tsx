@@ -19,7 +19,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const page = await getCachedProductPage(slug);
   if (!page) {
-    return { title: "Offre introuvable | Achille" };
+    return { title: "Offre introuvable | Akwire" };
   }
 
   const description =
@@ -29,15 +29,15 @@ export async function generateMetadata({
   const url = `${getSiteUrl()}/offre/${page.slug}`;
 
   return {
-    title: `${page.name} | Achille`,
+    title: `${page.name} | Akwire`,
     description,
     alternates: { canonical: url },
     openGraph: {
-      title: `${page.name} | Achille`,
+      title: `${page.name} | Akwire`,
       description,
       locale: "fr_FR",
       type: "website",
-      siteName: "Achille",
+      siteName: "Akwire",
       url,
       images: page.imageUrl
         ? [{ url: page.imageUrl, alt: page.name }]

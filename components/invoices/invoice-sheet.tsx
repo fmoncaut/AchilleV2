@@ -60,7 +60,7 @@ export function InvoiceSheet({
       </p>
       {invoice.audience === "seller" && invoice.commissionAmount ? (
         <p className="font-body-sm text-primary-container mt-3">
-          Commission Achille : {formatEur(invoice.commissionAmount)}. Elle est
+          Commission Akwire : {formatEur(invoice.commissionAmount)}. Elle est
           prélevée sur l’encaissement, pas ajoutée au total client.
         </p>
       ) : null}

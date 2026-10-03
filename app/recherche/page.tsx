@@ -84,8 +84,8 @@ export async function generateMetadata({
   const where = query.lieu || "près de chez vous";
   return {
     title: query.q
-      ? `${query.q} — offres ${where} | Achille`
-      : `Offres ${where} | Achille`,
+      ? `${query.q} — offres ${where} | Akwire`
+      : `Offres ${where} | Akwire`,
     description:
       "Trouvez des produits en déstockage dans les magasins autour de vous.",
   };

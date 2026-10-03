@@ -1,14 +1,14 @@
 import { LegalPage } from "@/components/legal-page";
 
 export const metadata = {
-  title: "Politique de confidentialité | Achille",
+  title: "Politique de confidentialité | Akwire",
 };
 
 export default function ConfidentialitePage() {
   return (
     <LegalPage title="Politique de confidentialité">
       <p>
-        Achille minimise les données : pas de panier interne, pas de paiement,
+        Akwire minimise les données : pas de panier interne, pas de paiement,
         pas de profilage publicitaire. Les comptes vivent dans notre base
         PostgreSQL hébergée en UE.
       </p>

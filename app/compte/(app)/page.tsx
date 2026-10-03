@@ -11,7 +11,7 @@ import { countUnreadForBuyer } from "@/lib/messages/service";
 import { prisma } from "@/lib/db";
 
 export const metadata = {
-  title: "Mon compte — Achille",
+  title: "Mon compte — Akwire",
 };
 
 export default async function AccountPage() {
@@ -72,7 +72,7 @@ export default async function AccountPage() {
       {actor?.role === "ADMIN" ? (
         <p className="mt-3">
           <Button asChild variant="outline" className="w-full">
-            <Link href="/admin">Console Achille</Link>
+            <Link href="/admin">Console Akwire</Link>
           </Button>
         </p>
       ) : null}

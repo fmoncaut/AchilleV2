@@ -7,7 +7,7 @@ import { requireAdminActor } from "@/lib/admin/actor";
 import { loadSellerInvoice } from "@/lib/invoices/pickup";
 
 export const metadata = {
-  title: "Facture | Back-office Achille",
+  title: "Facture | Back-office Akwire",
 };
 
 type PageProps = { params: Promise<{ id: string }> };

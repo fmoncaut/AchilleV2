@@ -17,7 +17,7 @@ import {
 } from "@/lib/reservations/service";
 
 export const metadata = {
-  title: "Réservations | Back-office Achille",
+  title: "Réservations | Back-office Akwire",
 };
 
 const PAYMENT_LABELS = {

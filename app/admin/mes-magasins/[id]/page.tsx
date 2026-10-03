@@ -17,7 +17,7 @@ import { emptyMerchantHours } from "@/lib/admin/merchant-pos-schemas";
 import { WEEK_DAYS } from "@/lib/admin/platform-schemas";
 
 export const metadata = {
-  title: "Éditer magasin | Back-office Achille",
+  title: "Éditer magasin | Back-office Akwire",
 };
 
 type PageProps = {
@@ -74,7 +74,7 @@ export default async function EditMesMagasinPage({
             {pos.name}
           </h1>
           <p className="font-body-sm text-on-surface-variant mt-1">
-            Le statut de publication reste géré par Achille.
+            Le statut de publication reste géré par Akwire.
           </p>
         </div>
         <Button asChild variant="ghost" size="sm">
@@ -107,7 +107,7 @@ export default async function EditMesMagasinPage({
             <p className="font-body-sm text-on-surface-variant mt-1">
               {pos.merchantClosedAt
                 ? `Fermé depuis le ${pos.merchantClosedAt.toLocaleString("fr-FR")}. Hors vitrine quel que soit le statut admin.`
-                : "Ouvert côté enseigne. Ne remplace pas la validation de publication Achille."}
+                : "Ouvert côté enseigne. Ne remplace pas la validation de publication Akwire."}
             </p>
           </div>
           {pos.merchantClosedAt ? (

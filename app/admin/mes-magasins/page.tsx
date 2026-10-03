@@ -11,7 +11,7 @@ import { requireAdminActor } from "@/lib/admin/actor";
 import { listMerchantPosPage } from "@/lib/admin/merchant-pos";
 
 export const metadata = {
-  title: "Mes magasins | Back-office Achille",
+  title: "Mes magasins | Back-office Akwire",
 };
 
 type PageProps = {
@@ -63,7 +63,7 @@ export default async function MesMagasinsPage({ searchParams }: PageProps) {
           </h1>
           <p className="font-body-sm text-on-surface-variant mt-1">
             {result.total} point{result.total > 1 ? "s" : ""} de vente. La
-            publication vitrine reste gérée par Achille.
+            publication vitrine reste gérée par Akwire.
           </p>
         </div>
         <Button asChild size="sm">

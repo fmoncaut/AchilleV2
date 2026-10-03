@@ -3,7 +3,7 @@ import { AdminCard, AdminKicker, AdminMain } from "@/components/admin/admin-shel
 import { requireSuperAdmin } from "@/lib/admin/actor";
 
 export const metadata = {
-  title: "Nouvelle enseigne | Back-office Achille",
+  title: "Nouvelle enseigne | Back-office Akwire",
 };
 
 export default async function NouvelleEnseignePage() {
@@ -12,7 +12,7 @@ export default async function NouvelleEnseignePage() {
   return (
     <AdminMain width="form">
       <div>
-        <AdminKicker>Console Achille</AdminKicker>
+        <AdminKicker>Console Akwire</AdminKicker>
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Nouvelle enseigne
         </h1>

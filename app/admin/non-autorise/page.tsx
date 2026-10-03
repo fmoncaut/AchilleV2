@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const metadata = {
-  title: "Accès refusé | Back-office Achille",
+  title: "Accès refusé | Back-office Akwire",
   robots: { index: false, follow: false },
 };
 

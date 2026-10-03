@@ -9,7 +9,7 @@ import { listBrokerOptions } from "@/lib/admin/brokers";
 import { listCategories, listMerchantPos } from "@/lib/admin/offers";
 
 export const metadata = {
-  title: "Nouvelle offre | Back-office Achille",
+  title: "Nouvelle offre | Back-office Akwire",
 };
 
 export default async function NouvelleOffrePage() {

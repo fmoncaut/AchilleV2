@@ -13,7 +13,7 @@ import { requireSuperAdmin } from "@/lib/admin/actor";
 import { listPendingFeeds, listPendingLines } from "@/lib/affiliation-feed/queues";
 
 export const metadata = {
-  title: "Produits d'affiliation à créer | Back-office Achille",
+  title: "Produits d'affiliation à créer | Back-office Akwire",
 };
 
 function textOf(payload: Prisma.JsonValue, column: string | null, fallback: string) {
@@ -39,7 +39,7 @@ export default async function AffiliationProductsPage({
   return (
     <AdminMain>
       <div>
-        <AdminKicker>Console Achille</AdminKicker>
+        <AdminKicker>Console Akwire</AdminKicker>
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Produits à créer
         </h1>

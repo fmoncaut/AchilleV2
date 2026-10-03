@@ -19,7 +19,7 @@ import {
 } from "@/lib/reservations/service";
 
 export const metadata = {
-  title: "Réservation confirmée | Achille",
+  title: "Réservation confirmée | Akwire",
 };
 
 type PageProps = {

@@ -1,7 +1,7 @@
-const CACHE_SHELL = "achille-shell-v1";
-const CACHE_PAGES = "achille-pages-v1";
+const CACHE_SHELL = "akwire-shell-v1";
+const CACHE_PAGES = "akwire-pages-v1";
 const OFFLINE_URL = "/offline";
-const PRECACHE = ["/", OFFLINE_URL, "/icon-192", "/icon-512"];
+const PRECACHE = ["/", OFFLINE_URL, "/icons/icon-192.png", "/icons/icon-512.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

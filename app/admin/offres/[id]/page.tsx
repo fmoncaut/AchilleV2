@@ -16,7 +16,7 @@ import {
 } from "@/lib/admin/offers";
 
 export const metadata = {
-  title: "Éditer une offre | Back-office Achille",
+  title: "Éditer une offre | Back-office Akwire",
 };
 
 type EditOffrePageProps = {

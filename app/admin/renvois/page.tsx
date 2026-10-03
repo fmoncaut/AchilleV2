@@ -15,7 +15,7 @@ import { getClickDashboard, parseClickPeriod } from "@/lib/admin/clicks";
 import { cn } from "@/lib/utils";
 
 export const metadata = {
-  title: "Renvois | Back-office Achille",
+  title: "Renvois | Back-office Akwire",
 };
 
 type RenvoisPageProps = {
@@ -69,7 +69,7 @@ export default async function AdminRenvoisPage({
           </h1>
           <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
             Clics trackés sur « Voir l’offre chez le marchand » — {periodLabel}.
-            Aucun paiement chez Achille.
+            Aucun paiement chez Akwire.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

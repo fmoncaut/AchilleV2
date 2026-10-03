@@ -10,7 +10,7 @@ import { getPlatformCounts } from "@/lib/admin/platform";
 import { redirect } from "next/navigation";
 
 export const metadata = {
-  title: "Vue d’ensemble | Back-office Achille",
+  title: "Vue d’ensemble | Back-office Akwire",
 };
 
 export default async function AdminIndexPage() {
@@ -38,13 +38,13 @@ export default async function AdminIndexPage() {
   return (
     <AdminMain>
       <div>
-        <AdminKicker>Console Achille</AdminKicker>
+        <AdminKicker>Console Akwire</AdminKicker>
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Vue d’ensemble
         </h1>
         <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
           Enseignes, magasins et rattachement des vendeurs. Réservé aux
-          collaborateurs Achille.
+          collaborateurs Akwire.
         </p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

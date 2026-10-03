@@ -43,7 +43,7 @@ export function CategoryPicker({
         value={query}
         placeholder={picked ? picked.name : "Chercher une catégorie"}
         onChange={(event) => setQuery(event.target.value)}
-        aria-label="Catégorie Achille"
+        aria-label="Catégorie Akwire"
       />
       {picked ? (
         <p className="text-on-surface-variant text-xs">

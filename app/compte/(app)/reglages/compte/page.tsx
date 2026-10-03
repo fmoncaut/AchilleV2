@@ -5,7 +5,7 @@ import { DeleteAccountButton } from "@/components/account/delete-account-button"
 import { countActiveReservations } from "@/lib/account/deletion";
 
 export const metadata = {
-  title: "Compte — Réglages — Achille",
+  title: "Compte — Réglages — Akwire",
 };
 
 type PageProps = {
@@ -32,7 +32,7 @@ export default async function AccountDangerSettingsPage({
       <div>
         <h2 className="font-headline-sm text-primary-container">Compte</h2>
         <p className="font-body-sm text-on-surface-variant mt-1">
-          Gestion de votre compte Achille.
+          Gestion de votre compte Akwire.
         </p>
       </div>
 

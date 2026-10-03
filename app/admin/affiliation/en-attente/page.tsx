@@ -13,7 +13,7 @@ import { requireDashboardActor } from "@/lib/admin/actor";
 import { listPendingFeeds, listPendingLines } from "@/lib/affiliation-feed/queues";
 
 export const metadata = {
-  title: "Affiliation en attente | Back-office Achille",
+  title: "Affiliation en attente | Back-office Akwire",
 };
 
 function textOf(payload: Prisma.JsonValue, column: string | null, fallback: string) {
@@ -47,7 +47,7 @@ export default async function MerchantPendingPage({
           Produits en attente
         </h1>
         <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-          Ces lignes attendent la création du produit par Achille. Lecture seule.
+          Ces lignes attendent la création du produit par Akwire. Lecture seule.
         </p>
       </div>
       <AdminTable>

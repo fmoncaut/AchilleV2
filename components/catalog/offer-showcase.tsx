@@ -257,7 +257,7 @@ function OfferShowcaseView({
               <p className="font-body-sm text-body-sm text-surface-variant mt-1">
                 {current?.kind === "DIRECT"
                   ? "Vous réservez ici. Une empreinte du montant est prise, le débit n’a lieu qu’au retrait en magasin, avec le code."
-                  : "Achille compare les offres locales puis vous renvoie vers le site du marchand (lien sécurisé et tracké)."}
+                  : "Akwire compare les offres locales puis vous renvoie vers le site du marchand (lien sécurisé et tracké)."}
               </p>
             </div>
           </div>

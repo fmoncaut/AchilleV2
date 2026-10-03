@@ -36,7 +36,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const pos = await getCachedPosPage(slug);
   if (!pos) {
-    return { title: "Magasin introuvable | Achille" };
+    return { title: "Magasin introuvable | Akwire" };
   }
 
   const where = [pos.name, pos.city].filter(Boolean).join(", ");
@@ -44,15 +44,15 @@ export async function generateMetadata({
   const url = `${getSiteUrl()}/magasin/${pos.slug}`;
 
   return {
-    title: `${pos.name} | Achille`,
+    title: `${pos.name} | Akwire`,
     description,
     alternates: { canonical: url },
     openGraph: {
-      title: `${pos.name} | Achille`,
+      title: `${pos.name} | Akwire`,
       description,
       locale: "fr_FR",
       type: "website",
-      siteName: "Achille",
+      siteName: "Akwire",
       url,
       images: pos.merchantLogoUrl
         ? [{ url: pos.merchantLogoUrl, alt: pos.merchantName }]

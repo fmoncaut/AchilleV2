@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { getGlobalNotificationPreference } from "@/lib/account/notifications";
 
 export const metadata = {
-  title: "Notifications — Réglages — Achille",
+  title: "Notifications — Réglages — Akwire",
 };
 
 type PageProps = {

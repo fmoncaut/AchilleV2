@@ -11,7 +11,7 @@ import { loginWithReturn, magasinPath, offerPath } from "@/lib/urls";
 import { cn } from "@/lib/utils";
 
 export const metadata = {
-  title: "Mes favoris — Achille",
+  title: "Mes favoris — Akwire",
 };
 
 type FavorisPageProps = {

@@ -92,7 +92,7 @@ export function MerchantCta({
       >
         {compact
           ? "Lien sécurisé et tracké"
-          : "Lien sécurisé et tracké. Vous serez redirigé vers le site du marchand pour finaliser. Achille ne prend ni panier ni paiement."}
+          : "Lien sécurisé et tracké. Vous serez redirigé vers le site du marchand pour finaliser. Akwire ne prend ni panier ni paiement."}
       </p>
     </div>
   );

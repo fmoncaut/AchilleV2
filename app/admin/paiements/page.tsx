@@ -17,7 +17,7 @@ import { syncConnectAccount } from "@/lib/payments/connect";
 import { PaymentError } from "@/lib/payments/types";
 
 export const metadata = {
-  title: "Paiements | Back-office Achille",
+  title: "Paiements | Back-office Akwire",
 };
 
 type PageProps = {
@@ -83,7 +83,7 @@ export default async function AdminPaymentsPage({ searchParams }: PageProps) {
     <AdminMain>
       <div>
         <AdminKicker>
-          {actor.role === "ADMIN" ? "Console Achille" : actor.merchantName}
+          {actor.role === "ADMIN" ? "Console Akwire" : actor.merchantName}
         </AdminKicker>
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Paiements

@@ -7,7 +7,7 @@ import { displayUserName } from "@/lib/account/profile";
 import { prisma } from "@/lib/db";
 
 export const metadata = {
-  title: "Profil — Réglages — Achille",
+  title: "Profil — Réglages — Akwire",
 };
 
 type PageProps = {

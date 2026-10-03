@@ -22,8 +22,8 @@ type LoginPageProps = {
 };
 
 export const metadata = {
-  title: "Connexion — Achille",
-  description: "Connectez-vous à Achille pour retrouver vos bonnes affaires.",
+  title: "Connexion — Akwire",
+  description: "Connectez-vous à Akwire pour retrouver vos bonnes affaires.",
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
@@ -39,7 +39,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     <UtilityCard kicker="Espace acheteur" title="Connexion" icon="login">
       <p className="font-body-sm text-body-sm text-on-surface-variant mt-3">
         Code à 6 chiffres par e-mail, sans mot de passe. Ou continuez sans
-        compte pour explorer Achille.
+        compte pour explorer Akwire.
       </p>
 
       {erreur === "email" ? (

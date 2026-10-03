@@ -32,15 +32,15 @@ export async function generateMetadata({
 }: VilleCategoriePageProps): Promise<Metadata> {
   const { ville, categorie } = await params;
   if (RESERVED_VILLE_SLUGS.has(ville)) {
-    return { title: "Page introuvable | Achille" };
+    return { title: "Page introuvable | Akwire" };
   }
 
   const page = await getCachedCityCategoryPage(ville, categorie);
   if (!page) {
-    return { title: "Page introuvable | Achille" };
+    return { title: "Page introuvable | Akwire" };
   }
 
-  const title = `${page.categoryName} à ${page.cityName} | Achille`;
+  const title = `${page.categoryName} à ${page.cityName} | Akwire`;
   const description = `Bonnes affaires ${page.categoryName.toLowerCase()} en magasin à ${page.cityName}.`;
   const url = `${getSiteUrl()}/${ville}/${page.categorySlug}`;
 
@@ -53,7 +53,7 @@ export async function generateMetadata({
       description,
       locale: "fr_FR",
       type: "website",
-      siteName: "Achille",
+      siteName: "Akwire",
       url,
     },
   };

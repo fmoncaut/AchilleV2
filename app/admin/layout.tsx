@@ -15,7 +15,7 @@ import { countUnreadForMerchant } from "@/lib/messages/service";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Back-office | Achille",
+  title: "Back-office | Akwire",
   robots: { index: false, follow: false },
 };
 

@@ -7,7 +7,7 @@ import {
 import { requireSuperAdmin } from "@/lib/admin/actor";
 
 export const metadata = {
-  title: "Nouveau broker | Back-office Achille",
+  title: "Nouveau broker | Back-office Akwire",
 };
 
 export default async function NouveauBrokerPage() {
@@ -16,7 +16,7 @@ export default async function NouveauBrokerPage() {
   return (
     <AdminMain width="form">
       <div>
-        <AdminKicker>Console Achille</AdminKicker>
+        <AdminKicker>Console Akwire</AdminKicker>
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Nouveau broker
         </h1>

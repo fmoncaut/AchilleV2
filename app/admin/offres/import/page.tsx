@@ -7,7 +7,7 @@ import {
 import { requireAdminActor } from "@/lib/admin/actor";
 
 export const metadata = {
-  title: "Import CSV | Back-office Achille",
+  title: "Import CSV | Back-office Akwire",
 };
 
 export default async function ImportOffresPage() {

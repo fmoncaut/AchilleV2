@@ -14,7 +14,7 @@ import { pickupWindowHours } from "@/lib/reservations/service";
 import { currentCartOwner } from "@/lib/reservations/cart-session";
 
 export const metadata = {
-  title: "Réservation — récapitulatif | Achille",
+  title: "Réservation — récapitulatif | Akwire",
 };
 
 type PageProps = {

@@ -13,7 +13,7 @@ import { requireSuperAdmin } from "@/lib/admin/actor";
 import { prisma } from "@/lib/db";
 
 export const metadata = {
-  title: "Ingestion affiliation | Back-office Achille",
+  title: "Ingestion affiliation | Back-office Akwire",
 };
 
 function formatDate(value: Date | null | undefined): string {

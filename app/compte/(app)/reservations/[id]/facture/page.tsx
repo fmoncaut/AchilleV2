@@ -7,7 +7,7 @@ import { InvoiceSheet } from "@/components/invoices/invoice-sheet";
 import { loadBuyerInvoice } from "@/lib/invoices/pickup";
 
 export const metadata = {
-  title: "Facture — Achille",
+  title: "Facture — Akwire",
 };
 
 type PageProps = { params: Promise<{ id: string }> };

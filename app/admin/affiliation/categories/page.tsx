@@ -23,7 +23,7 @@ import { prisma } from "@/lib/db";
 import type { AffiliationNetwork } from "@prisma/client";
 
 export const metadata = {
-  title: "Catégories d'affiliation | Back-office Achille",
+  title: "Catégories d'affiliation | Back-office Akwire",
 };
 
 const NETWORKS: AffiliationNetwork[] = [
@@ -74,7 +74,7 @@ export default async function AffiliationCategoriesPage({
   return (
     <AdminMain>
       <div>
-        <AdminKicker>Console Achille</AdminKicker>
+        <AdminKicker>Console Akwire</AdminKicker>
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Catégories d&apos;affiliation
         </h1>

@@ -11,7 +11,7 @@ import { requireSuperAdmin } from "@/lib/admin/actor";
 import { listBrokers } from "@/lib/admin/brokers";
 
 export const metadata = {
-  title: "Brokers | Back-office Achille",
+  title: "Brokers | Back-office Akwire",
 };
 
 export default async function BrokersPage() {
@@ -22,7 +22,7 @@ export default async function BrokersPage() {
     <AdminMain>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <AdminKicker>Console Achille</AdminKicker>
+          <AdminKicker>Console Akwire</AdminKicker>
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
             Flux d’affiliation
           </h1>

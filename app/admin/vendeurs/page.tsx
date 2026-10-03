@@ -13,7 +13,7 @@ import { requireSuperAdmin } from "@/lib/admin/actor";
 import { listMerchantOptions, listUsers } from "@/lib/admin/platform";
 
 export const metadata = {
-  title: "Vendeurs | Back-office Achille",
+  title: "Vendeurs | Back-office Akwire",
 };
 
 type VendeursPageProps = {
@@ -43,12 +43,12 @@ export default async function VendeursPage({ searchParams }: VendeursPageProps) 
   return (
     <AdminMain>
       <div>
-        <AdminKicker>Console Achille</AdminKicker>
+        <AdminKicker>Console Akwire</AdminKicker>
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Vendeurs
         </h1>
         <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-          Le compte doit déjà exister (connexion sur Achille). Rattachez-le à
+          Le compte doit déjà exister (connexion sur Akwire). Rattachez-le à
           une enseigne en vendeur, ou donnez-lui le rôle administrateur.
         </p>
       </div>
