@@ -11,7 +11,6 @@ import {
 import { OffersMapLoader } from "@/components/map/offers-map-loader";
 import { MaterialIcon } from "@/components/material-icon";
 import { OfferCard } from "@/components/offer-card";
-import { EmptyState } from "@/components/search/empty-state";
 import { SearchForm } from "@/components/search/search-form";
 import { ViewToggle } from "@/components/search/view-toggle";
 import { Distance } from "@/components/distance";
@@ -25,7 +24,11 @@ import {
   type NearbyOfferCard,
 } from "@/lib/geo";
 import { geocodeAddress } from "@/lib/geocode";
-import { getIgnMapConfig } from "@/lib/map-config";
+import {
+  FRANCE_MAP_CENTER,
+  FRANCE_MAP_ZOOM,
+  getIgnMapConfig,
+} from "@/lib/map-config";
 import { formatEur } from "@/lib/money";
 import { parseSearchParams, searchHref, type SearchQuery } from "@/lib/search";
 import { loginWithReturn, magasinPath, offerPath } from "@/lib/urls";
@@ -35,6 +38,42 @@ export const dynamic = "force-dynamic";
 type RecherchePageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
+
+function MapOverlay({
+  title,
+  description,
+  actionHref,
+  actionLabel,
+}: {
+  title: string;
+  description: string;
+  actionHref?: string;
+  actionLabel?: string;
+}) {
+  return (
+    <div className="pointer-events-none absolute top-3 left-3 z-10 max-h-[40%] w-[min(320px,calc(100%-1.5rem))]">
+      <div
+        className="bg-surface-container-lowest shadow-navy-soft pointer-events-auto max-h-full overflow-y-auto rounded-2xl p-3"
+        role="status"
+      >
+        <p className="font-label-md text-label-md text-primary-container font-bold">
+          {title}
+        </p>
+        <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
+          {description}
+        </p>
+        {actionHref && actionLabel ? (
+          <Link
+            href={actionHref}
+            className="font-label-md text-label-md text-secondary mt-2 inline-flex font-bold hover:underline"
+          >
+            {actionLabel}
+          </Link>
+        ) : null}
+      </div>
+    </div>
+  );
+}
 
 function formValues(query: SearchQuery) {
   return {
@@ -81,7 +120,10 @@ export async function generateMetadata({
   searchParams,
 }: RecherchePageProps): Promise<Metadata> {
   const query = parseSearchParams(await searchParams);
-  const where = query.lieu || "près de chez vous";
+  const where =
+    query.lat != null && query.lng != null && query.lieu
+      ? query.lieu
+      : "près de chez vous";
   return {
     title: query.q
       ? `${query.q} — offres ${where} | Akwire`
@@ -137,19 +179,55 @@ export default async function RecherchePage({
       ).map(toOfferCard)
     : [];
   const pins = origin
-    ? await findMapPosPinsNearby(origin.lat, origin.lng, query.radiusKm * 1000)
+    ? await findMapPosPinsNearby(
+        origin.lat,
+        origin.lng,
+        query.radiusKm * 1000,
+      )
     : [];
-  const greyPinCount = pins.filter((pin) => pin.state !== "active").length;
-
   const ign = getIgnMapConfig();
   const recherchePath = searchHref(query);
   const locationLabel = query.lieu || "votre position";
-  const city = cityFromLieu(query.lieu);
+  const city = origin ? cityFromLieu(query.lieu) : null;
   const session = await auth();
   const favorites = await getFavoriteFlags(session?.user?.id);
   const loginHref = loginWithReturn(recherchePath);
+  const greyPinCount = pins.filter((pin) => pin.state !== "active").length;
   const stores = uniqueStores(offers);
   const vendorGroups = multiVendorGroups(offers);
+  const showList = Boolean(origin) && query.vue === "liste" && offers.length > 0;
+  const widenHref =
+    origin && offers.length === 0 && pins.length === 0
+      ? searchHref({
+          ...query,
+          q: "",
+          cat: "",
+          prixMin: null,
+          prixMax: null,
+          radiusKm: 50,
+        })
+      : null;
+  const overlay = geocodeFailed
+    ? {
+        title: "Lieu introuvable",
+        description:
+          "Cette localisation n’a pas été reconnue. Essayez une ville ou une adresse plus précise (service BAN).",
+      }
+    : !origin
+      ? {
+          title: "Indiquez où chercher",
+          description:
+            "Saisissez une ville ou une adresse, ou utilisez la géolocalisation du navigateur, puis choisissez un rayon.",
+        }
+      : offers.length === 0
+        ? {
+            title: "Aucune offre trouvée",
+            description:
+              pins.length === 0
+                ? "Élargissez la zone, changez de lieu ou retirez des filtres (catégorie, prix, mot-clé)."
+                : "La liste est vide avec ces filtres. La carte montre les magasins qui ont encore au moins une offre.",
+          }
+        : null;
 
   return (
     <BuyerMain>
@@ -193,71 +271,53 @@ export default async function RecherchePage({
       </section>
 
       <BuyerSection className="flex flex-1 flex-col gap-8 py-6 lg:py-8">
-        {geocodeFailed ? (
-          <EmptyState
-            title="Lieu introuvable"
-            description="Cette localisation n’a pas été reconnue. Essayez une ville ou une adresse plus précise (service BAN)."
-          />
-        ) : null}
-
-        {!origin && !geocodeFailed ? (
-          <EmptyState
-            title="Indiquez où chercher"
-            description="Saisissez une ville ou une adresse, ou utilisez la géolocalisation du navigateur, puis choisissez un rayon."
-          />
-        ) : null}
-
         {origin ? (
-          <>
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <p className="font-body-sm text-body-sm text-primary-container font-semibold">
-                  {offers.length === 0
-                    ? `Aucune offre dans un rayon de ${query.radiusKm} km autour de ${locationLabel}.`
-                    : `${offers.length} offre${offers.length > 1 ? "s" : ""} dans un rayon de ${query.radiusKm} km autour de ${locationLabel}.`}
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="font-body-sm text-body-sm text-primary-container font-semibold">
+                {offers.length === 0
+                  ? `Aucune offre dans un rayon de ${query.radiusKm} km autour de ${locationLabel}.`
+                  : `${offers.length} offre${offers.length > 1 ? "s" : ""} dans un rayon de ${query.radiusKm} km autour de ${locationLabel}.`}
+              </p>
+              {greyPinCount > 0 ? (
+                <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                  {greyPinCount} magasin
+                  {greyPinCount > 1 ? "s" : ""} sans offre cliquable sur la
+                  carte.
                 </p>
-                {greyPinCount > 0 ? (
-                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                    {greyPinCount} magasin
-                    {greyPinCount > 1 ? "s" : ""} sans offre cliquable sur la
-                    carte.
-                  </p>
-                ) : null}
-              </div>
-              <ViewToggle query={query} />
+              ) : null}
             </div>
+            <ViewToggle query={query} />
+          </div>
+        ) : null}
 
-            {offers.length === 0 && pins.length === 0 ? (
-              <EmptyState
-                title="Aucune offre dans ce rayon"
-                description="Élargissez la zone, changez de lieu ou retirez des filtres (catégorie, prix, mot-clé)."
-                actionHref={searchHref({
-                  ...query,
-                  q: "",
-                  cat: "",
-                  prixMin: null,
-                  prixMax: null,
-                  radiusKm: 50,
-                })}
-                actionLabel="Élargir à 50 km sans filtre"
+        {showList ? null : (
+          <div className="relative">
+            <OffersMapLoader
+              pins={pins}
+              centerLat={origin?.lat ?? null}
+              centerLng={origin?.lng ?? null}
+              defaultCenter={FRANCE_MAP_CENTER}
+              defaultZoom={FRANCE_MAP_ZOOM}
+              styleUrl={ign.styleUrl}
+              tilesUrl={ign.tilesUrl}
+              signedIn={favorites.signedIn}
+              favoriteProductIds={favorites.productIds}
+              loginHref={loginHref}
+            />
+            {overlay ? (
+              <MapOverlay
+                title={overlay.title}
+                description={overlay.description}
+                actionHref={widenHref ?? undefined}
+                actionLabel={widenHref ? "Élargir à 50 km sans filtre" : undefined}
               />
-            ) : query.vue === "carte" ? (
-              <OffersMapLoader
-                pins={pins}
-                centerLat={origin.lat}
-                centerLng={origin.lng}
-                styleUrl={ign.styleUrl}
-                tilesUrl={ign.tilesUrl}
-                signedIn={favorites.signedIn}
-                favoriteProductIds={favorites.productIds}
-                loginHref={loginHref}
-              />
-            ) : offers.length === 0 ? (
-              <EmptyState
-                title="Aucune offre dans ce rayon"
-                description="Des magasins non disponibles sont visibles en vue carte."
-              />
-            ) : (
+            ) : null}
+          </div>
+        )}
+
+        {showList && origin ? (
+          <>
               <section className="flex flex-col gap-4">
                 <div className="flex items-center gap-2">
                   <span className="bg-secondary-container font-headline-sm text-primary-container flex size-7 items-center justify-center rounded-lg text-sm">
@@ -285,9 +345,8 @@ export default async function RecherchePage({
                   ))}
                 </ul>
               </section>
-            )}
 
-            {stores.length > 0 && query.vue === "liste" ? (
+            {stores.length > 0 ? (
               <section className="flex flex-col gap-4">
                 <h2 className="font-headline-sm text-headline-sm text-primary-container">
                   Enseignes autour de toi
@@ -331,7 +390,7 @@ export default async function RecherchePage({
               </section>
             ) : null}
 
-            {vendorGroups.length > 0 && query.vue === "liste" ? (
+            {vendorGroups.length > 0 ? (
               <section className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5">
                 <h2 className="font-headline-sm text-headline-sm text-primary-container">
                   Plusieurs vendeurs près de toi
@@ -369,6 +428,7 @@ export default async function RecherchePage({
                           href={offerPath(first.productSlug, {
                             lat: origin.lat,
                             lng: origin.lng,
+                            tri: "distance",
                           })}
                           className="font-label-md text-label-md bg-primary-container text-on-primary inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 font-bold"
                         >

@@ -11,6 +11,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { PosDrawer } from "@/components/map/pos-drawer";
 import { EmptyState } from "@/components/search/empty-state";
 import type { MapPosPin, NearbyOfferCard } from "@/lib/geo";
+import { FRANCE_MAP_CENTER, FRANCE_MAP_ZOOM } from "@/lib/map-config";
 
 type MapLibreRuntime = Pick<
   typeof import("maplibre-gl"),
@@ -41,10 +42,17 @@ function loadMapLibre(): Promise<MapLibreRuntime> {
   });
 }
 
+/** Zoom ville quand une position utilisateur est connue. */
+const LOCAL_MAP_ZOOM = 11;
+
 type OffersMapProps = {
   pins: MapPosPin[];
-  centerLat: number;
-  centerLng: number;
+  /** Position utilisateur. Null → `defaultCenter` / `defaultZoom`. */
+  centerLat?: number | null;
+  centerLng?: number | null;
+  /** [lng, lat]. Défaut : France métropolitaine. */
+  defaultCenter?: [number, number];
+  defaultZoom?: number;
   styleUrl: string | null;
   tilesUrl: string | null;
   signedIn?: boolean;
@@ -128,14 +136,20 @@ function createLogoMarkerElement(pin: MapPosPin): HTMLButtonElement {
 
 export function OffersMap({
   pins,
-  centerLat,
-  centerLng,
+  centerLat = null,
+  centerLng = null,
+  defaultCenter = FRANCE_MAP_CENTER,
+  defaultZoom = FRANCE_MAP_ZOOM,
   styleUrl,
   tilesUrl,
   signedIn = false,
   favoriteProductIds = [],
   loginHref,
 }: OffersMapProps) {
+  const hasUserLocation = centerLat != null && centerLng != null;
+  const cameraLng = hasUserLocation ? centerLng : defaultCenter[0];
+  const cameraLat = hasUserLocation ? centerLat : defaultCenter[1];
+  const cameraZoom = hasUserLocation ? LOCAL_MAP_ZOOM : defaultZoom;
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const markersRef = useRef<Marker[]>([]);
@@ -201,8 +215,8 @@ export function OffersMap({
         const created = new maplibregl.Map({
           container: node,
           style: tilesUrl ? rasterStyle(tilesUrl) : styleUrl!,
-          center: [centerLng, centerLat],
-          zoom: 11,
+          center: [cameraLng, cameraLat],
+          zoom: cameraZoom,
           fadeDuration: reduceMotion ? 0 : 300,
         });
         map = created;
@@ -308,7 +322,15 @@ export function OffersMap({
       map?.remove();
       mapRef.current = null;
     };
-  }, [centerLat, centerLng, openActiveDrawer, pins, styleUrl, tilesUrl]);
+  }, [
+    cameraLat,
+    cameraLng,
+    cameraZoom,
+    openActiveDrawer,
+    pins,
+    styleUrl,
+    tilesUrl,
+  ]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -352,6 +374,8 @@ export function OffersMap({
         signedIn={signedIn}
         favoriteProductIds={favoriteProductIds}
         loginHref={loginHref}
+        lat={hasUserLocation ? centerLat : null}
+        lng={hasUserLocation ? centerLng : null}
       />
     </div>
   );
