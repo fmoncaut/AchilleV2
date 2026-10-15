@@ -18,6 +18,8 @@ type PosDrawerProps = {
   signedIn?: boolean;
   favoriteProductIds?: string[];
   loginHref?: string;
+  lat?: number | null;
+  lng?: number | null;
 };
 
 export function PosDrawer({
@@ -28,6 +30,8 @@ export function PosDrawer({
   signedIn = false,
   favoriteProductIds = [],
   loginHref,
+  lat = null,
+  lng = null,
 }: PosDrawerProps) {
   useEffect(() => {
     if (!pin) {
@@ -127,6 +131,8 @@ export function PosDrawer({
                     signedIn={signedIn}
                     isProductFavorite={favoriteSet.has(offer.productId)}
                     loginHref={loginHref}
+                    lat={lat}
+                    lng={lng}
                   />
                 </li>
               ))}
@@ -136,7 +142,7 @@ export function PosDrawer({
 
         <footer className="border-outline-variant/40 border-t px-4 py-3">
           <Link
-            href={magasinPath(pin.slug)}
+            href={magasinPath(pin.slug, lat, lng)}
             className="bg-primary-container text-on-primary hover:bg-primary inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-bold"
           >
             Voir la fiche magasin

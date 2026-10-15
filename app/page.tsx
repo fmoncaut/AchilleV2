@@ -17,7 +17,11 @@ import {
 import type { FeedFacet } from "@/lib/feed/constants";
 import { getFavoriteProductIdsIn } from "@/lib/favorites";
 import { findMapPosPinsNearby } from "@/lib/geo";
-import { getIgnMapConfig } from "@/lib/map-config";
+import {
+  FRANCE_MAP_CENTER,
+  FRANCE_MAP_ZOOM,
+  getIgnMapConfig,
+} from "@/lib/map-config";
 import {
   DEFAULT_RADIUS_KM,
   RADIUS_KM_OPTIONS,
@@ -398,14 +402,14 @@ export default async function Home({ searchParams }: PageProps) {
         as="div"
         className={cn(
           "grid items-start gap-6 py-4",
-          vue === "split" && origin && "lg:grid-cols-12",
+          vue === "split" && "lg:grid-cols-12",
         )}
       >
         {vue !== "carte" ? (
           <div
             className={cn(
               "flex min-w-0 flex-col gap-6",
-              vue === "split" && origin && "lg:col-span-7",
+              vue === "split" && "lg:col-span-7",
             )}
           >
             <div className="flex gap-2 overflow-x-auto">
@@ -533,7 +537,7 @@ export default async function Home({ searchParams }: PageProps) {
             ) : null}
           </div>
         ) : null}
-        {vue !== "liste" && origin ? (
+        {vue !== "liste" ? (
           <div
             className={cn(
               "min-w-0",
@@ -546,8 +550,10 @@ export default async function Home({ searchParams }: PageProps) {
             </p>
             <OffersMapLoader
               pins={pins}
-              centerLat={origin.lat}
-              centerLng={origin.lng}
+              centerLat={origin?.lat ?? null}
+              centerLng={origin?.lng ?? null}
+              defaultCenter={FRANCE_MAP_CENTER}
+              defaultZoom={FRANCE_MAP_ZOOM}
               styleUrl={mapConfig.styleUrl}
               tilesUrl={mapConfig.tilesUrl}
               signedIn={signedIn}
