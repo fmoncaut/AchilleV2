@@ -548,6 +548,47 @@ export async function findMapPosPinsNearby(
   return pins.slice(0, MAP_PIN_LIMIT);
 }
 
+const NATIONAL_MAP_PIN_LIMIT = 1000;
+
+/**
+ * Tous les POS ACTIVE_VISIBLE, avec ou sans offre.
+ * Carte France sans compte ni position : pas de rayon.
+ */
+export async function findActiveVisiblePosPins(): Promise<MapPosPin[]> {
+  const rows = await prisma.$queryRaw<ActivePosPinRow[]>`
+    SELECT
+      p.id AS "posId",
+      p.slug,
+      p.name,
+      p.lat,
+      p.lng,
+      m."logoUrl" AS "merchantLogoUrl",
+      m.name AS "merchantName",
+      ${sqlEligibleOfferCountAtPos()} AS "offerCount"
+    FROM "Pos" p
+    JOIN "Merchant" m ON m.id = p."merchantId"
+    WHERE p.status = 'ACTIVE_VISIBLE'
+      AND p."merchantClosedAt" IS NULL
+      AND m."isActive" = true
+    ORDER BY p.name ASC
+    LIMIT ${NATIONAL_MAP_PIN_LIMIT}
+  `;
+  return rows.map((row) => {
+    const offerCount = Number(row.offerCount);
+    return {
+      posId: row.posId,
+      slug: row.slug,
+      name: row.name,
+      lat: Number(row.lat),
+      lng: Number(row.lng),
+      merchantLogoUrl: row.merchantLogoUrl,
+      merchantName: row.merchantName,
+      state: offerCount > 0 ? ("active" as const) : ("active_empty" as const),
+      offerCount,
+    };
+  });
+}
+
 /** Offres stock>0 d’un POS (drawer carte) — hors plafond SEARCH_RESULT_LIMIT. */
 export async function findOffersAtPos(
   posId: string,

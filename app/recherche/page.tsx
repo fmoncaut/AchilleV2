@@ -18,6 +18,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { getFavoriteFlags } from "@/lib/favorites";
 import {
+  findActiveVisiblePosPins,
   findOffersNearby,
   findMapPosPinsNearby,
   toOfferCard,
@@ -184,7 +185,7 @@ export default async function RecherchePage({
         origin.lng,
         query.radiusKm * 1000,
       )
-    : [];
+    : await findActiveVisiblePosPins();
   const ign = getIgnMapConfig();
   const recherchePath = searchHref(query);
   const locationLabel = query.lieu || "votre position";
