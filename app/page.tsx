@@ -16,7 +16,7 @@ import {
 } from "@/lib/feed";
 import type { FeedFacet } from "@/lib/feed/constants";
 import { getFavoriteProductIdsIn } from "@/lib/favorites";
-import { findMapPosPinsNearby } from "@/lib/geo";
+import { findActiveVisiblePosPins, findMapPosPinsNearby } from "@/lib/geo";
 import {
   FRANCE_MAP_CENTER,
   FRANCE_MAP_ZOOM,
@@ -201,7 +201,7 @@ export default async function Home({ searchParams }: PageProps) {
   const pins =
     origin != null
       ? await findMapPosPinsNearby(origin.lat, origin.lng, radiusKm * 1000)
-      : [];
+      : await findActiveVisiblePosPins();
 
   const stores = new Map<string, (typeof visible)[number]>();
   for (const offer of visible) {
@@ -546,7 +546,7 @@ export default async function Home({ searchParams }: PageProps) {
           >
             <p className="font-label-xs text-label-xs text-on-tertiary-container mb-2 flex items-center gap-1.5 font-bold">
               <span className="bg-on-tertiary-container inline-flex size-2 rounded-full" />
-              Stocks synchronisés en direct
+              Offres synchronisées en direct
             </p>
             <OffersMapLoader
               pins={pins}
