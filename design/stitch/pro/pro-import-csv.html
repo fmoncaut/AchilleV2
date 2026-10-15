@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'surface': '#f8f9fc', 'secondary-fixed': '#ffdcbd', 'tertiary': '#001309', 'inverse-primary': '#abc9ed', 'on-error': '#ffffff', 'tertiary-fixed': '#8ef7c2', 'on-tertiary': '#ffffff', 'on-primary-fixed-variant': '#2a4967', 'surface-bright': '#f8f9fc', 'on-primary': '#ffffff', 'on-tertiary-fixed': '#002113', 'surface-tint': '#436180', 'secondary': '#8a5100', 'tertiary-container': '#002b1a', 'inverse-on-surface': '#eff1f4', 'surface-container': '#eceef1', 'primary': '#001020', 'error': '#ba1a1a', 'background': '#f8f9fc', 'on-primary-container': '#708eaf', 'surface-container-highest': '#e0e3e6', 'on-tertiary-container': '#2f9d70', 'on-secondary': '#ffffff', 'error-container': '#ffdad6', 'primary-container': '#002642', 'surface-dim': '#d8dadd', 'surface-container-high': '#e6e8eb', 'outline': '#73777e', 'tertiary-fixed-dim': '#72daa8', 'surface-container-lowest': '#ffffff', 'on-background': '#191c1e', 'on-secondary-fixed-variant': '#693c00', 'on-secondary-fixed': '#2c1600', 'primary-fixed-dim': '#abc9ed', 'primary-fixed': '#d0e4ff', 'inverse-surface': '#2d3133', 'on-error-container': '#93000a', 'on-primary-fixed': '#001d34', 'on-surface-variant': '#43474d', 'on-tertiary-fixed-variant': '#005235', 'on-secondary-container': '#643900', 'on-surface': '#191c1e', 'surface-variant': '#e0e3e6', 'surface-container-low': '#f2f4f7', 'secondary-container': '#fe9800', 'secondary-fixed-dim': '#ffb86f', 'outline-variant': '#c3c7ce' }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' }, spacing: { 'space-md': '1rem', 'margin': '1rem', 'margin-desktop': '2rem', 'gutter-desktop': '1.5rem', 'space-sm': '0.5rem', 'space-lg': '1.5rem', 'margin-tablet': '1.5rem', 'gutter': '1rem', 'space-xs': '0.25rem', 'space-xl': '2rem' }, fontFamily: { 'display-mobile': ['Bricolage Grotesque'], 'price-hero': ['Bricolage Grotesque'], 'display': ['Bricolage Grotesque'], 'body-lg': ['Manrope'], 'body-sm': ['Manrope'], 'label-lg': ['Manrope'], 'headline-lg-mobile': ['Bricolage Grotesque'], 'headline-sm': ['Bricolage Grotesque'], 'label-md': ['Manrope'], 'price-card': ['Bricolage Grotesque'], 'headline-md': ['Bricolage Grotesque'], 'body-md': ['Manrope'], 'headline-lg': ['Bricolage Grotesque'], 'label-xs': ['Manrope'] }, fontSize: { 'display-mobile': ['34px', { lineHeight: '40px', fontWeight: '800' }], 'price-hero': ['28px', { lineHeight: '32px', fontWeight: '800' }], 'display': ['48px', { lineHeight: '56px', fontWeight: '800' }], 'body-lg': ['18px', { lineHeight: '28px', fontWeight: '400' }], 'body-sm': ['13px', { lineHeight: '18px', fontWeight: '500' }], 'label-lg': ['14px', { lineHeight: '20px', fontWeight: '700' }], 'headline-lg-mobile': ['26px', { lineHeight: '32px', fontWeight: '700' }], 'headline-sm': ['20px', { lineHeight: '26px', fontWeight: '600' }], 'label-md': ['12px', { lineHeight: '16px', fontWeight: '700' }], 'price-card': ['20px', { lineHeight: '24px', fontWeight: '800' }], 'headline-md': ['24px', { lineHeight: '30px', fontWeight: '700' }], 'body-md': ['15px', { lineHeight: '22px', fontWeight: '500' }], 'headline-lg': ['32px', { lineHeight: '38px', fontWeight: '700' }], 'label-xs': ['10px', { lineHeight: '12px', fontWeight: '800' }] } } } };</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between select-none"><div class="flex flex-col flex-1 overflow-y-auto"><div class="p-space-lg flex flex-col gap-space-sm bg-surface-container-low/60"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #002642 - Font: bricolageGrotesque - Mode: light - Roundness: rounded-md" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WeW9itNWPqLrCKP7ORkIHy8WEUKqKS19C_quIbkXj2PMxoq6b78y_zegB0NJhzWqY38755YEACDqoBTllzubbVilkEzbPRTzGmlVatZBjKJCVtvRQFphq2L4-EQKe1RxqnMKP1yvrX-te9-rqWmsqCigswynG-gCRBZsi2JAtGwhiD2Zl2s2AMp1ExW43Yv2xTWlfsvce9WCcYOOMWG9R3FKtuJE0zU12qbDNPeDK9"/><div class="flex flex-col"><div class="flex items-center gap-1.5"><span class="font-headline-sm text-headline-sm text-primary-container tracking-tight leading-none">Achille</span><span class="px-1.5 py-0.5 rounded-full bg-secondary-container text-primary-container font-label-xs text-label-xs uppercase font-extrabold tracking-wider">Pro</span></div><span class="font-label-xs text-label-xs text-on-surface-variant">Club Marchands V2</span></div></div><div class="mt-space-xs p-space-sm rounded-lg bg-surface-container-lowest shadow-[0_1px_4px_rgba(0,0,0,0.03)] flex items-center justify-between cursor-pointer hover:bg-surface-container-high transition-colors"><div class="flex items-center gap-2 overflow-hidden"><span class="material-symbols-outlined text-secondary-container text-[18px]">storefront</span><div class="flex flex-col truncate"><span class="font-label-md text-label-md text-on-surface truncate">Bricomarché Nice Ouest</span><span class="font-label-xs text-label-xs text-on-surface-variant">Rayon actif 5 km</span></div></div><span class="material-symbols-outlined text-outline text-[16px]">unfold_more</span></div></div><nav class="flex flex-col gap-1 p-space-md flex-1" data-active-classes="bg-primary-container text-on-primary font-bold shadow-sm"><a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="achille-pro-v2-tableau-de-bord" href="#"><span>Tableau de bord</span></a><a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="achille-pro-v2-commandes-et-retraits" href="#"><span>Commandes &amp; Retraits</span><span class="px-2 py-0.5 rounded-full bg-secondary-container text-primary-container font-label-xs text-label-xs font-extrabold">14</span></a><a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="achille-pro-v2-gestion-des-stocks" href="#"><span>Gestion des stocks &amp; Lieux</span></a><a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="achille-pro-v2-mon-catalogue-destockage" href="#"><span>Mon catalogue Déstockage</span></a><a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all pl-7 text-[13px]" data-path="achille-pro-v2-fiche-produit-unitaire-destockage" href="#"><span>↳ Fiche Produit Unitaire</span></a><a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all pl-7 text-[13px]" data-path="achille-pro-v2-modale-d-import-csv-erp" href="#"><span>↳ Import CSV / ERP</span></a><div class="my-2 px-3"><div class="h-px w-full bg-surface-container-high"></div></div><a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="achille-pro-v2-terminal-quai-vendeur" href="#"><span>Terminal Quai / Vendeur</span></a><a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="achille-pro-v2-parametres-et-horaires" href="#"><span>Paramètres &amp; Horaires</span></a><a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="achille-pro-v2-aide-et-support" href="#"><span>Aide &amp; Support</span></a></nav></div><div class="p-space-md border-t-0 bg-surface-container-low/70 flex flex-col gap-space-sm"><div class="px-2.5 py-2 rounded-lg bg-surface-container-lowest flex items-center justify-between shadow-[0_1px_4px_rgba(0,0,0,0.02)]"><div class="flex items-center gap-2"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed-dim opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-on-tertiary-container"></span></span><span class="font-label-xs text-label-xs text-on-surface-variant">Flux ERP sync</span></div><span class="font-label-xs text-label-xs font-extrabold text-on-tertiary-container">99.8%</span></div><div class="flex items-center justify-between px-2 pt-1"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[14px]">badge</span></div><div class="flex flex-col"><span class="font-label-xs text-label-xs font-bold text-on-surface">Poste #04 • Quai B</span><span class="font-label-xs text-label-xs text-outline">Session sécurisée</span></div></div><button class="text-outline hover:text-error transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">power_settings_new</span></button></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-gutter-desktop"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full"><span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span><input class="w-full h-10 pl-10 pr-12 rounded-full bg-surface-container-low text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-primary-container transition-all" placeholder="Rechercher commande, SKU, client, EAN..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-tertiary-container/10"><span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span><span class="font-label-xs text-label-xs font-bold text-on-tertiary-container uppercase tracking-wide">Magasin Ouvert</span></div><div class="flex items-center gap-1"><button class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" title="Notifications" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary-container"></span></button><button class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" title="Messagerie" type="button"><span class="material-symbols-outlined text-[20px]">chat_bubble</span></button></div><div class="h-6 w-px bg-surface-container-high"></div><div class="flex items-center gap-space-sm pl-1"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden lg:flex flex-col"><span class="font-label-md text-label-md text-on-surface leading-snug">Marc L.</span><span class="font-label-xs text-label-xs text-outline leading-tight">Chef de rayon</span></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen px-gutter-desktop py-space-xl"><div class="flex flex-col w-full relative">
+<!-- ARRIÈRE-PLAN : VUE DU CATALOGUE DÉSTOCKAGE ACHILLE PRO V2 -->
+<div class="w-full flex flex-col gap-space-lg select-none opacity-40 pointer-events-none filter blur-[1px]">
+<!-- En-tête de page Catalogue & Commandes d'action -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-lg text-headline-lg text-on-surface">Mon Catalogue Déstockage</span>
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-primary-container font-label-md text-label-md font-extrabold tracking-wider">
+            342 Références en ligne
+          </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Gérez vos lots à forte décote, ruptures de gammes et modèles expo visibles sur Nice &amp; environs (5 km).
+        </p>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="px-space-md py-2 rounded-full bg-surface-container-highest text-on-surface font-label-lg text-label-lg flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+          Filtres avancés
+        </button>
+<button class="px-space-md py-2 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">file_upload</span>
+          Importer CSV / ERP
+        </button>
+</div>
+</div>
+<!-- Métriques rapides de performance déstockage -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-space-md">
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Valeur totale stockée</span>
+<span class="material-symbols-outlined text-outline text-[18px]">inventory_2</span>
+</div>
+<span class="font-price-hero text-price-hero text-on-surface">42 850 €</span>
+<div class="flex items-center gap-1 text-on-tertiary-container font-label-xs text-label-xs">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>+8.4% ce mois</span>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Remise moyenne</span>
+<span class="material-symbols-outlined text-secondary-container text-[18px]">percent</span>
+</div>
+<span class="font-price-hero text-price-hero text-secondary-container">-42.6%</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">Attractivité locale forte</span>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Retraits Click&amp;Collect</span>
+<span class="material-symbols-outlined text-on-tertiary-container text-[18px]">storefront</span>
+</div>
+<span class="font-price-hero text-price-hero text-on-surface">19 commandes</span>
+<span class="font-label-xs text-label-xs text-on-tertiary-container font-bold">En attente quai Nice Ouest</span>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Rotation moyenne</span>
+<span class="material-symbols-outlined text-outline text-[18px]">schedule</span>
+</div>
+<span class="font-price-hero text-price-hero text-on-surface">4.8 jours</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">Délai d'écoulement moyen</span>
+</div>
+</div>
+<!-- Grille de produits du catalogue en arrière-plan -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<div class="rounded-xl bg-surface-container-lowest overflow-hidden shadow-sm flex flex-col">
+<div class="h-44 bg-surface-container-high relative">
+<img class="w-full h-full object-cover" data-alt="BOSCH professional cordless drill impact hammer tool placed inside hard case on warehouse workshop workbench" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYwe-uXbCcWtZxOia2aCjfUAjOymx8QUJpXgGjjYwg2EvBX_-nIvFfEHmlIq9Zc99n8UwdcsC4ervYXkiCCfsEvYXq_f-kq0Lla0-ncD8a7UbxHgco2_JN0spr0TDU6_tIHJfLeNEuiRH7vzi31SOMtzWehCAmkWlmaHcLXpjRtfg1hW6iZ8xU3-z6e6JnZ6nZqyNZUjjJhPMnrdGNKaks6MMPsCS2SSsucgg6G4U"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-primary-container text-secondary-container font-headline-sm text-headline-sm leading-none">-46%</span>
+<span class="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-surface-container-lowest text-on-surface font-label-xs text-label-xs font-bold uppercase">Fin de série</span>
+</div>
+<div class="p-space-md flex flex-col gap-space-xs">
+<span class="font-label-xs text-label-xs text-on-surface-variant">BOSCH-GSB-1821-PRO</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1">Perceuse Bosch Pro 18V Li-Ion</h4>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-price-hero text-price-hero text-primary-container">69,90 €</span>
+<span class="line-through text-outline font-label-md text-label-md">129,00 €</span>
+</div>
+</div>
+</div>
+<div class="rounded-xl bg-surface-container-lowest overflow-hidden shadow-sm flex flex-col">
+<div class="h-44 bg-surface-container-high relative">
+<img class="w-full h-full object-cover" data-alt="Einhell electric angle grinder tool with red accent handle resting on clean concrete floor in construction store" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMltnuD-9Myv5IcpcmioqwIKDatpE10mXbKsgYMKi532wHwt1rM4dyks2o5G_CcB3GqtDG2qrdO5wn2Z6QQSExr9vgQCROKxGzvqhhsVffv8zYMW3YQJRkJOsd5GfDFM4wAKNez3-hYAx7G4HpZeXkaZtdgjBm7hoOdOdZEur1go-jz65goX-Go9uuMNFpIbehFnbiC7HQAhOSXUaoie2WUskDGRugF1HSe2j0Rk4"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-primary-container text-secondary-container font-headline-sm text-headline-sm leading-none">-50%</span>
+<span class="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-surface-container-lowest text-on-surface font-label-xs text-label-xs font-bold uppercase">Modèle expo</span>
+</div>
+<div class="p-space-md flex flex-col gap-space-xs">
+<span class="font-label-xs text-label-xs text-on-surface-variant">EINH-AG18-LI-SOLO</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1">Meuleuse d'angle Einhell 125mm</h4>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-price-hero text-price-hero text-primary-container">14,90 €</span>
+<span class="line-through text-outline font-label-md text-label-md">29,95 €</span>
+</div>
+</div>
+</div>
+<div class="rounded-xl bg-surface-container-lowest overflow-hidden shadow-sm flex flex-col">
+<div class="h-44 bg-surface-container-high relative">
+<img class="w-full h-full object-cover" data-alt="Ryobi lawn mower 18V ONE cordless gardening machine standing in a sunny garden center showroom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuMGOAOdF02bmz6lLmUqRH5MyNp-DLHiRfw7E0QQdjI_LyDzl5EUWRjn9rft6i-sXs_AfpIPnIelODg2RZR9waoUJGk9opBTmEdvHLMIyrdBsEtK9AnvkIaXouELHY0_wi7jXvsXR-yVyfB0arlG_K3SYNc8f7WhI6NB5V0S0Zv6U_V7pnTm1leLSy_IFg3Sgmj9DKXNKPje3LYslirukcYpFW15uBtK5ocCyO8Uk"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-primary-container text-secondary-container font-headline-sm text-headline-sm leading-none">-36%</span>
+<span class="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-surface-container-lowest text-on-surface font-label-xs text-label-xs font-bold uppercase">Emballage abîmé</span>
+</div>
+<div class="p-space-md flex flex-col gap-space-xs">
+<span class="font-label-xs text-label-xs text-on-surface-variant">RYO-OLM1833H</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1">Tondeuse Ryobi 18V ONE+</h4>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-price-hero text-price-hero text-primary-container">159,00 €</span>
+<span class="line-through text-outline font-label-md text-label-md">249,00 €</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- OVERLAY SOMBRE TRANSLUCIDE & MODALE D'IMPORTATION AU PREMIER PLAN -->
+<div class="fixed inset-0 top-16 left-72 z-50 bg-primary/70 backdrop-blur-md flex items-center justify-center p-space-md overflow-y-auto" id="modal-container">
+<div class="relative w-full max-w-4xl max-h-[942px] flex flex-col bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden my-auto">
+<!-- ENTÊTE DE LA MODALE -->
+<div class="p-space-lg bg-surface-container-low flex items-start justify-between gap-space-md">
+<div class="flex flex-col gap-1 pr-6">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-primary-container text-secondary-container font-label-xs text-label-xs font-extrabold uppercase tracking-wide">
+              Module Déstockage
+            </span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">Connecteur Bricomarché POS</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">
+            Importer un catalogue déstockage ou synchroniser un fichier CSV / Excel
+          </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Ajoutez ou mettez à jour en masse vos références déstockées, prix barrés, remises et motifs de décote pour Bricomarché Nice Ouest.
+          </p>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container-highest hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-transform hover:scale-105" title="Fermer" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- STEPPER D'IMPORTATION -->
+<div class="px-space-lg py-3 bg-surface-container-lowest shadow-sm flex items-center justify-between gap-2 overflow-x-auto">
+<div class="flex items-center gap-2.5 shrink-0">
+<div class="w-6 h-6 rounded-full bg-on-tertiary-container text-on-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">1. Fichier source</span>
+</div>
+<div class="h-0.5 flex-1 bg-on-tertiary-container/30 min-w-[24px]"></div>
+<div class="flex items-center gap-2.5 shrink-0">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary font-label-xs text-label-xs flex items-center justify-center font-bold">
+            2
+          </div>
+<span class="font-label-md text-label-md text-on-surface font-bold">2. Correspondance des colonnes (Mapping)</span>
+</div>
+<div class="h-0.5 flex-1 bg-surface-container-highest min-w-[24px]"></div>
+<div class="flex items-center gap-2.5 shrink-0">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest text-outline font-label-xs text-label-xs flex items-center justify-center font-bold">
+            3
+          </div>
+<span class="font-label-md text-label-md text-outline">3. Prévisualisation &amp; Validation</span>
+</div>
+</div>
+<!-- CORPS DE LA MODALE DÉROULABLE -->
+<div class="p-space-lg overflow-y-auto flex flex-col gap-space-lg max-h-[calc(92vh-180px)]">
+<!-- SECTION DRAG & DROP & FICHIER CHARGÉ -->
+<div class="flex flex-col gap-space-sm">
+<div class="rounded-xl p-space-lg bg-surface-container-low flex flex-col items-center justify-center text-center gap-2 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest text-primary-container flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[26px]">upload_file</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<p class="font-label-lg text-label-lg text-on-surface">
+                Glissez-déposez votre fichier d'inventaire ici, ou <span class="text-secondary-container underline">cliquez pour parcourir vos dossiers</span>
+</p>
+<p class="font-body-sm text-body-sm text-outline">Formats supportés : .CSV, .XLSX, .TXT (séparateur point-virgule ou tabulation)</p>
+</div>
+</div>
+<!-- CARTE DU FICHIER CHARGÉ -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">description</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">inventaire_destockage_bricomarche_nice_mars2025.csv</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/15 text-on-tertiary-container font-label-xs text-label-xs font-extrabold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">check_circle</span>
+                    Format valide
+                  </span>
+</div>
+<span class="font-body-sm text-body-sm text-outline">Taille : 248 Ko • 86 lignes détectées • Codage UTF-8</span>
+</div>
+</div>
+<button class="text-outline hover:text-error transition-colors p-1.5 rounded self-end sm:self-center" title="Supprimer ce fichier" type="button">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+<div class="flex items-center justify-between px-1">
+<a class="font-label-md text-label-md text-primary-container hover:text-secondary-container font-bold flex items-center gap-1 transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">download</span>
+              Télécharger notre modèle CSV type Achille Pro (.xlsx / .csv)
+            </a>
+<span class="font-label-xs text-label-xs text-outline">Mis à jour v2.4</span>
+</div>
+</div>
+<!-- SECTION OPTIONS D'IMPORTATION & RÈGLES -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-container text-[20px]">tune</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Options d'importation &amp; Règles d'application</h4>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Comportement du stock -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface">Comportement du stock</label>
+<div class="p-space-sm rounded-lg bg-surface-container-lowest flex items-center gap-2.5 shadow-sm cursor-pointer">
+<input checked="" class="accent-secondary-container w-4 h-4 cursor-pointer" id="rule-update" name="stock-rule" type="radio"/>
+<label class="font-body-sm text-body-sm text-on-surface cursor-pointer select-none" for="rule-update">
+                  Mettre à jour les stocks existants et ajouter les nouveaux articles
+                </label>
+</div>
+</div>
+<!-- Motif de déstockage par défaut -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface">Motif de déstockage par défaut pour ce lot</label>
+<div class="relative">
+<select class="w-full h-10 px-3 pr-8 rounded-lg bg-surface-container-lowest font-body-sm text-body-sm text-on-surface shadow-sm focus:outline-none focus:ring-1 focus:ring-primary-container appearance-none cursor-pointer">
+<option selected="">Fin de série / Remplacement gamme</option>
+<option>Modèle d'exposition magasin</option>
+<option>Emballage abîmé ou ouvert</option>
+<option>Surstock saisonnier quai Bricomarché</option>
+<option>Retour client contrôlé fonctionnel</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]">
+                  expand_more
+                </span>
+</div>
+</div>
+</div>
+<!-- Règle de remise calculée -->
+<div class="p-space-sm rounded-lg bg-surface-container-lowest shadow-sm flex items-start gap-2.5">
+<span class="material-symbols-outlined text-secondary-container text-[20px] shrink-0 mt-0.5">auto_fix_high</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Règle de décote automatique</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Si remise non spécifiée dans le fichier : appliquer automatiquement <strong class="text-secondary-container font-extrabold">-30% sur le prix de vente conseillé</strong>.
+              </p>
+</div>
+</div>
+<!-- Cases à cocher de publication et flux ERP -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pt-1">
+<label class="flex items-center gap-2 cursor-pointer select-none">
+<input checked="" class="accent-primary-container w-4 h-4 rounded cursor-pointer" type="checkbox"/>
+<span class="font-label-md text-label-md text-on-surface">
+                Activer la mise en ligne immédiate sur l'application Achille Nice Ouest (visibilité 5km)
+              </span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer select-none">
+<input checked="" class="accent-primary-container w-4 h-4 rounded cursor-pointer" type="checkbox"/>
+<span class="font-label-md text-label-md text-on-surface">
+                Synchroniser avec connecteur ERP Sage 100 / POS
+              </span>
+</label>
+</div>
+</div>
+<!-- SECTION APERÇU RAPIDE DES 3 PREMIÈRES LIGNES DÉTECTÉES -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">
+              Aperçu rapide des 3 premières lignes détectées
+            </h4>
+<span class="font-label-xs text-label-xs text-on-surface-variant">Colonnes mappées automatiquement (7/7)</span>
+</div>
+<div class="rounded-xl overflow-hidden bg-surface-container-lowest shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-body-sm">
+<thead class="bg-surface-container-high text-on-surface-variant font-label-md text-label-md">
+<tr>
+<th class="py-2.5 px-3">SKU</th>
+<th class="py-2.5 px-3">Libellé article</th>
+<th class="py-2.5 px-3 text-right">Prix Réf (€)</th>
+<th class="py-2.5 px-3 text-right">Prix Déstocké (€)</th>
+<th class="py-2.5 px-3 text-center">Remise</th>
+<th class="py-2.5 px-3 text-center">Stock</th>
+<th class="py-2.5 px-3">Motif</th>
+<th class="py-2.5 px-3 text-center">État</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-on-surface font-body-sm">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-3 font-mono font-bold text-label-md text-primary-container">BOSCH-GSB-1821-PRO</td>
+<td class="py-2.5 px-3 font-bold">Perceuse Bosch Pro 18V</td>
+<td class="py-2.5 px-3 text-right line-through text-outline">129,00 €</td>
+<td class="py-2.5 px-3 text-right font-price-card text-primary-container font-extrabold">69,90 €</td>
+<td class="py-2.5 px-3 text-center">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-primary-container font-label-xs text-label-xs font-black">-46%</span>
+</td>
+<td class="py-2.5 px-3 text-center font-bold">4</td>
+<td class="py-2.5 px-3 font-label-sm text-outline">Fin de série</td>
+<td class="py-2.5 px-3 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-tertiary-container/15 text-on-tertiary-container font-label-xs text-label-xs font-bold">
+                        OK
+                      </span>
+</td>
+</tr>
+<tr class="bg-surface-container-low/40 hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-3 font-mono font-bold text-label-md text-primary-container">EINH-AG18-LI-SOLO</td>
+<td class="py-2.5 px-3 font-bold">Meuleuse Einhell 125mm</td>
+<td class="py-2.5 px-3 text-right line-through text-outline">29,95 €</td>
+<td class="py-2.5 px-3 text-right font-price-card text-primary-container font-extrabold">14,90 €</td>
+<td class="py-2.5 px-3 text-center">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-primary-container font-label-xs text-label-xs font-black">-50%</span>
+</td>
+<td class="py-2.5 px-3 text-center font-bold">8</td>
+<td class="py-2.5 px-3 font-label-sm text-outline">Modèle expo</td>
+<td class="py-2.5 px-3 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-tertiary-container/15 text-on-tertiary-container font-label-xs text-label-xs font-bold">
+                        OK
+                      </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-3 font-mono font-bold text-label-md text-primary-container">RYO-OLM1833H</td>
+<td class="py-2.5 px-3 font-bold">Tondeuse Ryobi 18V ONE+</td>
+<td class="py-2.5 px-3 text-right line-through text-outline">249,00 €</td>
+<td class="py-2.5 px-3 text-right font-price-card text-primary-container font-extrabold">159,00 €</td>
+<td class="py-2.5 px-3 text-center">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-primary-container font-label-xs text-label-xs font-black">-36%</span>
+</td>
+<td class="py-2.5 px-3 text-center font-bold">2</td>
+<td class="py-2.5 px-3 font-label-sm text-outline">Emballage abîmé</td>
+<td class="py-2.5 px-3 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-tertiary-container/15 text-on-tertiary-container font-label-xs text-label-xs font-bold">
+                        OK
+                      </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- PIED DE PAGE DE LA MODALE AVEC INDICATEUR ET BOUTONS -->
+<div class="px-space-lg py-space-md bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-on-tertiary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-on-tertiary-container"></span>
+</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">
+            86 articles prêts à être importés <span class="font-normal text-on-tertiary-container">(0 erreur de syntaxe)</span>
+</span>
+</div>
+<div class="flex items-center justify-end gap-space-sm">
+<button class="px-5 py-2.5 rounded-full bg-surface-container-lowest text-on-surface hover:bg-surface-container-high font-label-lg text-label-lg transition-colors shadow-sm" type="button">
+            Annuler
+          </button>
+<button class="px-6 py-2.5 rounded-full bg-secondary-container text-primary-container hover:brightness-105 active:scale-95 font-label-lg text-label-lg font-extrabold flex items-center gap-2 shadow-md transition-all" type="button">
+<span>Lancer l'importation de 86 articles</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div></main></div></body></html>
