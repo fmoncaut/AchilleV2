@@ -13,7 +13,7 @@ Dans la [console Clever Cloud](https://console.clever-cloud.com/) :
 1. **Create** → **an application** → **Node.js**.
 2. Nom : `achille` (ou équivalent). Zone : **Paris (par)**.
 3. Taille d’instance : **S** (ou plus) pour le run. Pour le **build Next.js**, passer le *build flavor* à **M** (Scalability / build instance) — un build Next.js manque souvent de mémoire en XS.
-4. Version Node : **22** (`CC_NODE_VERSION=22`).
+4. Version Node : **22** (`CC_NODE_VERSION=22`). `engines.node` dans `package.json` doit rester `22.x` : avec `>=20`, Clever Cloud a démarré l'app en Node 24 malgré `CC_NODE_VERSION=22` (octobre 2026), et les crons, qui vérifient le majeur, s'arrêtaient à chaque passage. `clevercloud/pre-run.sh` fait désormais échouer le déploiement si les deux divergent.
 
 Clever Cloud installe les dépendances puis lance `npm start`. Il n’exécute pas `npm run build` tout seul. Le runtime Node ne lit pas de `clevercloud/node.json` : la ligne « No Clever Cloud specific configuration file detected » est normale. `CC_RUN_BUILD_STEP` n’est pas une variable documentée, elle est ignorée.
 
