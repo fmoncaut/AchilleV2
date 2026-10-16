@@ -63,14 +63,14 @@ export default async function ReservationPickupPage({ searchParams }: PageProps)
             {error}
           </p>
         ) : null}
-        <section className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5">
+        <section className="bg-surface-container-lowest shadow-sm rounded-2xl p-5">
           <p className="font-label-xs text-label-xs text-on-surface-variant font-extrabold tracking-wider uppercase">
             {cart.merchantName}
           </p>
           <h2 className="font-headline-sm text-primary-container mt-1 flex items-center gap-2">
             <MaterialIcon
               name="storefront"
-              className="text-secondary-container text-[20px]"
+              className="text-secondary text-[20px]"
             />
             {cart.posName}
           </h2>

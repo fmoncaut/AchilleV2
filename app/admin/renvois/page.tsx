@@ -255,7 +255,7 @@ function PeriodLink({
       className={cn(
         "font-label-md text-label-md inline-flex h-11 items-center rounded-full px-5 font-bold",
         active
-          ? "bg-primary-container text-on-primary shadow-navy-soft"
+          ? "bg-primary-container text-on-primary shadow-sm"
           : "bg-surface-container-lowest text-primary-container ring-outline-variant ring-1",
       )}
     >

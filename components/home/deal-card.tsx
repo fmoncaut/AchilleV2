@@ -67,7 +67,7 @@ export function HomeDealCard({
     : null;
 
   return (
-    <article className="bg-surface-container-lowest shadow-navy-soft hover:shadow-navy group relative flex flex-col overflow-hidden rounded-xl transition-shadow">
+    <article className="bg-surface-container-lowest shadow-sm hover:shadow-md group relative flex flex-col overflow-hidden rounded-xl transition-shadow">
       <div className="absolute top-2 right-2 z-10">
         <FavoriteButton
           kind="product"
@@ -110,7 +110,7 @@ export function HomeDealCard({
             <span className="text-primary-container flex min-w-0 items-center gap-1 truncate font-bold">
               <MaterialIcon
                 name="location_on"
-                className="text-secondary-container text-[14px]"
+                className="text-secondary text-[14px]"
               />
               {offer.posName}
             </span>
@@ -131,7 +131,7 @@ export function HomeDealCard({
         </div>
         <div>
           <p className="flex flex-wrap items-baseline gap-2">
-            <span className="font-price-card text-price-card text-secondary-container font-extrabold">
+            <span className="font-price-card text-price-card text-secondary font-extrabold">
               {formatEur(offer.priceRemise)}
             </span>
             {showCrossed && offer.priceReference ? (

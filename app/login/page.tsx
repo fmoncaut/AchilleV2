@@ -74,7 +74,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             autoComplete="email"
             required
             placeholder="vous@exemple.fr"
-            className="bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline focus-visible:ring-secondary-container h-11 w-full rounded-full border-0 px-4 outline-none focus-visible:ring-2"
+            className="bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline focus-visible:ring-primary-container h-11 w-full rounded-full border-0 px-4 outline-none focus-visible:ring-2"
           />
           <Button type="submit" size="lg" className="w-full">
             Recevoir un code

@@ -51,7 +51,7 @@ export function ReservationPayment({
   }
 
   return (
-    <section className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5">
+    <section className="bg-surface-container-lowest shadow-sm rounded-2xl p-5">
       <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
         Empreinte carte
       </p>

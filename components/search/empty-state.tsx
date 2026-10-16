@@ -17,8 +17,8 @@ export function EmptyState({
   actionLabel,
 }: EmptyStateProps) {
   return (
-    <div className="bg-surface-container-lowest shadow-navy-soft rounded-2xl px-6 py-10 text-center">
-      <div className="bg-secondary-fixed text-secondary-container mx-auto mb-4 flex size-12 items-center justify-center rounded-full">
+    <div className="bg-surface-container-lowest shadow-sm rounded-2xl px-6 py-10 text-center">
+      <div className="bg-secondary-fixed text-secondary mx-auto mb-4 flex size-12 items-center justify-center rounded-full">
         <MaterialIcon name="search_off" className="text-[24px]" />
       </div>
       <h2 className="font-headline-sm text-headline-sm text-primary-container">

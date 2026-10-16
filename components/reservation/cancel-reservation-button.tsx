@@ -24,7 +24,7 @@ export function CancelReservationButton({
       </Button>
       <dialog
         ref={dialogRef}
-        className="bg-surface-container-lowest text-on-surface shadow-navy-soft fixed inset-0 m-auto max-h-[90vh] w-[min(100%,24rem)] rounded-2xl p-0 backdrop:bg-primary-container/40"
+        className="bg-surface-container-lowest text-on-surface shadow-sm fixed inset-0 m-auto max-h-[90vh] w-[min(100%,24rem)] rounded-2xl p-0 backdrop:bg-primary-container/40"
       >
         <form
           action={cancelReservationAction}

@@ -24,12 +24,12 @@ export function UtilityCard({
       <BuyerSection className="flex flex-1 flex-col items-center justify-center py-12 lg:py-16">
         <div
           className={cn(
-            "bg-surface-container-lowest shadow-navy-soft w-full max-w-md rounded-2xl p-6 sm:p-8",
+            "bg-surface-container-lowest shadow-sm w-full max-w-md rounded-2xl p-6 sm:p-8",
             className,
           )}
         >
           {icon ? (
-            <div className="bg-surface-container text-secondary-container mx-auto mb-4 flex size-12 items-center justify-center rounded-full">
+            <div className="bg-surface-container text-secondary mx-auto mb-4 flex size-12 items-center justify-center rounded-full">
               <MaterialIcon name={icon} className="text-[24px]" />
             </div>
           ) : null}
@@ -66,7 +66,7 @@ export function UtilityMessage({
   return (
     <BuyerMain>
       <BuyerSection className="flex flex-1 flex-col items-center justify-center py-16 text-center">
-        <div className="bg-surface-container text-secondary-container mx-auto mb-4 flex size-14 items-center justify-center rounded-full">
+        <div className="bg-surface-container text-secondary mx-auto mb-4 flex size-14 items-center justify-center rounded-full">
           <MaterialIcon name={icon} className="text-[28px]" />
         </div>
         <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">

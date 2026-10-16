@@ -21,8 +21,8 @@ export function PriceTag({
     : null;
   const priceClass =
     size === "lg"
-      ? "font-price-hero text-price-hero font-extrabold text-secondary-container"
-      : "font-price-card text-price-card font-extrabold text-secondary-container";
+      ? "font-price-hero text-price-hero font-extrabold text-secondary"
+      : "font-price-card text-price-card font-extrabold text-secondary";
   const refClass =
     size === "lg"
       ? "font-body-md text-body-md text-on-surface-variant line-through"

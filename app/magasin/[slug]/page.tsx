@@ -92,10 +92,10 @@ export default async function MagasinPage({ params }: MagasinPageProps) {
         as="article"
         className="flex flex-1 flex-col gap-8 py-6 lg:py-8"
       >
-        <header className="bg-primary-container text-on-primary shadow-navy overflow-hidden rounded-2xl">
+        <header className="bg-primary-container text-on-primary shadow-md overflow-hidden rounded-2xl">
           <div className="flex flex-col gap-6 p-6 md:flex-row md:items-end md:justify-between md:p-8">
             <div className="flex items-start gap-4">
-              <div className="border-primary bg-surface-container-lowest shadow-navy flex size-24 shrink-0 flex-col items-center justify-center rounded-2xl border-4 p-2 text-center">
+              <div className="border-primary bg-surface-container-lowest shadow-md flex size-24 shrink-0 flex-col items-center justify-center rounded-2xl border-4 p-2 text-center">
                 <span className="font-headline-sm text-primary leading-tight font-extrabold tracking-tighter uppercase">
                   {pos.merchantName.length > 8
                     ? pos.merchantName.slice(0, 5)

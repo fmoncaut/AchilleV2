@@ -168,7 +168,7 @@ export default async function AdminOffresPage({ searchParams }: OffresPageProps)
                     {offer.scopeLabel} · {offer.posName}
                   </p>
                 </td>
-                <td className="font-headline-sm text-secondary-container px-3 py-2 font-extrabold">
+                <td className="font-headline-sm text-secondary px-3 py-2 font-extrabold">
                   {formatEur(offer.priceRemise)}
                 </td>
                 <td className="font-body-sm text-on-surface-variant px-3 py-2 line-through">

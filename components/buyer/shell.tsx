@@ -28,7 +28,7 @@ export function BuyerSection({
   return (
     <Tag
       className={cn(
-        "mx-auto w-full max-w-[1680px] px-4 sm:px-6 lg:px-8",
+        "mx-auto w-full max-w-page px-4 sm:px-6 lg:px-8",
         className,
       )}
     >

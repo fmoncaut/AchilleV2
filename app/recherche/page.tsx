@@ -54,7 +54,7 @@ function MapOverlay({
   return (
     <div className="pointer-events-none absolute top-3 left-3 z-10 max-h-[40%] w-[min(320px,calc(100%-1.5rem))]">
       <div
-        className="bg-surface-container-lowest shadow-navy-soft pointer-events-auto max-h-full overflow-y-auto rounded-2xl p-3"
+        className="bg-surface-container-lowest shadow-sm pointer-events-auto max-h-full overflow-y-auto rounded-2xl p-3"
         role="status"
       >
         <p className="font-label-md text-label-md text-primary-container font-bold">
@@ -365,7 +365,7 @@ export default async function RecherchePage({
                             origin.lat,
                             origin.lng,
                           )}
-                          className="bg-surface-container-lowest shadow-navy-soft hover:shadow-navy flex items-center gap-3 rounded-xl p-3 transition-shadow"
+                          className="bg-surface-container-lowest shadow-sm hover:shadow-md flex items-center gap-3 rounded-xl p-3 transition-shadow"
                         >
                           <span className="bg-primary-fixed font-headline-sm text-primary-container flex size-10 shrink-0 items-center justify-center rounded-lg font-extrabold">
                             {store.merchantName.slice(0, 1)}
@@ -392,7 +392,7 @@ export default async function RecherchePage({
             ) : null}
 
             {vendorGroups.length > 0 ? (
-              <section className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5">
+              <section className="bg-surface-container-lowest shadow-sm rounded-2xl p-5">
                 <h2 className="font-headline-sm text-headline-sm text-primary-container">
                   Plusieurs vendeurs près de toi
                 </h2>
@@ -420,7 +420,7 @@ export default async function RecherchePage({
                           </p>
                           <p className="font-body-sm text-body-sm text-on-surface-variant">
                             Chez {posCount} vendeurs · dès{" "}
-                            <span className="text-secondary-container font-bold">
+                            <span className="text-secondary font-bold">
                               {formatEur(cheapest.priceRemise)}
                             </span>
                           </p>
