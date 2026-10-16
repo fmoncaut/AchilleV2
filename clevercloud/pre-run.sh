@@ -19,7 +19,21 @@ case "${DATABASE_URL:-}" in
     fi
     ;;
 esac
+# Même garde que les crons : un runtime Node différent de CC_NODE_VERSION
+# doit faire échouer le déploiement, pas casser les crons en silence.
+EXPECTED_NODE="${CC_NODE_VERSION:-22}"
+NODE_MAJOR="$(node -p "process.versions.node.split('.')[0]")"
+if [ "${NODE_MAJOR}" != "${EXPECTED_NODE}" ]; then
+  echo "[pre-run] Node majeur ${NODE_MAJOR} != CC_NODE_VERSION ${EXPECTED_NODE} (voir engines dans package.json)." >&2
+  exit 1
+fi
+
 npx prisma migrate deploy
 
+# Un build normal prend ~1 min. Sans limite, un build figé bloque le
+# déploiement ~30 min avant que Clever ne le coupe.
 echo "[pre-run] next build (déterministe)"
-npm run build
+if ! timeout --kill-after=30s 15m npm run build; then
+  echo "[pre-run] next build a échoué ou dépassé 15 min." >&2
+  exit 1
+fi
