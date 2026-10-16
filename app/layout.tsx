@@ -1,10 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
-import { ConsentBanner } from "@/components/consent-banner";
-import { PwaRegister } from "@/components/pwa-register";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
+import { AppShell } from "@/components/ui/app-shell";
 import { getAnalyticsConfig } from "@/lib/analytics";
 import { materialSymbols, spaceGrotesk } from "@/lib/fonts";
 import { getSiteUrl } from "@/lib/site";
@@ -60,11 +57,7 @@ export default function RootLayout({
       )}
     >
       <body className="bg-background font-body text-body-md text-on-surface flex min-h-svh w-full flex-col antialiased">
-        <SiteHeader />
-        {children}
-        <SiteFooter />
-        <ConsentBanner analytics={analytics} />
-        <PwaRegister />
+        <AppShell analytics={analytics}>{children}</AppShell>
       </body>
     </html>
   );

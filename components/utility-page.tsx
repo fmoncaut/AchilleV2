@@ -1,9 +1,8 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { MaterialIcon } from "@/components/material-icon";
 import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
-import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
 
 export function UtilityCard({
@@ -66,23 +65,14 @@ export function UtilityMessage({
   return (
     <BuyerMain>
       <BuyerSection className="flex flex-1 flex-col items-center justify-center py-16 text-center">
-        <div className="bg-surface-container text-secondary mx-auto mb-4 flex size-14 items-center justify-center rounded-full">
-          <MaterialIcon name={icon} className="text-[28px]" />
-        </div>
-        <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
-          {kicker}
-        </p>
-        <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-2">
-          {title}
-        </h1>
-        <p className="font-body-md text-body-md text-on-surface-variant mt-3 max-w-md">
-          {description}
-        </p>
-        <p className="mt-8">
-          <Button asChild size="lg">
-            <Link href={actionHref}>{actionLabel}</Link>
-          </Button>
-        </p>
+        <EmptyState
+          heading="h1"
+          icon={icon}
+          kicker={kicker}
+          title={title}
+          description={description}
+          action={{ href: actionHref, label: actionLabel }}
+        />
       </BuyerSection>
     </BuyerMain>
   );
