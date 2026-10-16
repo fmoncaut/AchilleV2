@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState, type FormEvent } from "react";
 
 import {
   addToCartAction,
@@ -33,10 +33,31 @@ export function ReserveButton({
     addToCartAction,
     {},
   );
+  const maxQty = Math.max(Math.min(stock, 99), 1);
+  const [qty, setQty] = useState(1);
+  const [qtyMessage, setQtyMessage] = useState<string | null>(null);
+  const [hideConflict, setHideConflict] = useState(false);
   const disabled = stock < 1 || pending;
+  const showConflict = Boolean(state.conflictPosName) && !hideConflict;
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    setHideConflict(false);
+    if (compact || stock < 1) {
+      return;
+    }
+    const submitter = (event.nativeEvent as SubmitEvent).submitter;
+    if (submitter instanceof HTMLButtonElement && submitter.name === "replace") {
+      return;
+    }
+    if (qty > stock) {
+      event.preventDefault();
+      setQty(maxQty);
+      setQtyMessage(`Il reste ${stock} en magasin.`);
+    }
+  }
 
   return (
-    <form action={action} className="flex flex-col gap-1.5">
+    <form action={action} onSubmit={onSubmit} noValidate className="flex flex-col gap-1.5">
       <input type="hidden" name="offerId" value={offerId} />
       <input type="hidden" name="posId" value={posId} />
       {lat != null && lng != null ? (
@@ -54,8 +75,13 @@ export function ReserveButton({
             name="quantity"
             type="number"
             min={1}
-            max={Math.max(Math.min(stock, 99), 1)}
-            defaultValue={1}
+            max={maxQty}
+            value={qty}
+            onChange={(event) => {
+              const next = Number(event.target.value);
+              setQty(Number.isFinite(next) ? next : 1);
+              setQtyMessage(null);
+            }}
             disabled={stock < 1}
             className="bg-surface-container-low w-20 rounded-full border-0 px-3 py-2 text-center"
           />
@@ -70,27 +96,44 @@ export function ReserveButton({
         <MaterialIcon name="shopping_bag" className="text-[18px]" />
         {stock < 1 ? "Rupture" : pending ? "Ajout…" : ctaLabel}
       </Button>
-      {state.conflictPosName ? (
+      {showConflict ? (
         <div className="bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
           <p className="font-body-sm text-body-sm">
             Votre panier concerne {state.conflictPosName}. Une réservation est
             mono-magasin. Vider ce panier et réserver ici ?
           </p>
-          <Button
-            type="submit"
-            name="replace"
-            value="1"
-            variant="secondary"
-            size="sm"
-            className="mt-2"
-            disabled={pending}
-          >
-            Vider et remplacer
-          </Button>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Button
+              type="submit"
+              name="replace"
+              value="1"
+              variant="secondary"
+              size="sm"
+              disabled={pending}
+            >
+              Vider et remplacer
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={pending}
+              onClick={() => setHideConflict(true)}
+            >
+              Annuler
+            </Button>
+          </div>
         </div>
       ) : null}
+      {qtyMessage ? (
+        <p className="font-body-sm text-error font-medium" role="alert">
+          {qtyMessage}
+        </p>
+      ) : null}
       {state.error ? (
-        <p className="font-body-sm text-error font-medium">{state.error}</p>
+        <p className="font-body-sm text-error font-medium" role="alert">
+          {state.error}
+        </p>
       ) : null}
       {compact || state.conflictPosName ? null : (
         <p className="font-body-sm text-body-sm text-on-surface-variant">

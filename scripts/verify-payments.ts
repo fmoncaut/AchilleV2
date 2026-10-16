@@ -244,6 +244,23 @@ async function main() {
       "retrait magasin",
     );
 
+    await expectError(
+      () =>
+        addOfferToCart(owner, {
+          offerId: offer.id,
+          posId: pos.id,
+          quantity: 1,
+          replace: false,
+          viewerLat: null,
+          viewerLng: null,
+        }),
+      "encaissement",
+    );
+
+    await prisma.merchant.update({
+      where: { id: pos.merchantId },
+      data: { stripeAccountId: accountId, chargesEnabled: true, feeRate: new Prisma.Decimal("0.0800") },
+    });
     await refillCart();
     await prisma.merchant.update({
       where: { id: pos.merchantId },

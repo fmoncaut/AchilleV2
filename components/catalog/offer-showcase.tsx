@@ -229,6 +229,7 @@ function OfferShowcaseView({
                   posId={current.pos.id}
                   posSlug={current.pos.slug}
                   stock={current.stock}
+                  paymentsEnabled={current.paymentsEnabled}
                   lat={lat}
                   lng={lng}
                 />
@@ -407,6 +408,7 @@ function OfferShowcaseView({
                           posId={offer.pos.id}
                           posSlug={offer.pos.slug}
                           stock={offer.stock}
+                          paymentsEnabled={offer.paymentsEnabled}
                           lat={lat}
                           lng={lng}
                           compact

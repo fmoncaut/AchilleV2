@@ -44,6 +44,7 @@ export type FeedOffer = {
   lng: number;
   distanceM: number | null;
   updatedAt: Date;
+  paymentsEnabled?: boolean;
   /** Provenance après top-up. */
   bucket: "interest" | "discovery" | "all";
   source: "local" | "national";
@@ -100,6 +101,7 @@ type FeedRow = {
   lng: number;
   distanceM: number | string | Prisma.Decimal | null;
   updatedAt: Date;
+  paymentsEnabled: boolean;
 };
 
 function publicOfferSqlConditions(): Prisma.Sql[] {
@@ -283,7 +285,8 @@ async function queryFeedBucket(input: {
         p.lat,
         p.lng,
         ${distanceSelect},
-        o."updatedAt"
+        o."updatedAt",
+        (m."stripeAccountId" IS NOT NULL AND m."chargesEnabled" = true) AS "paymentsEnabled"
       FROM "Offer" o
       ${sqlOfferPlacementJoin()}
       JOIN "Product" pr ON pr.id = o."productId"
@@ -329,6 +332,7 @@ function mapRow(
     lat: Number(row.lat),
     lng: Number(row.lng),
     distanceM: row.distanceM == null ? null : Number(row.distanceM),
+    paymentsEnabled: Boolean(row.paymentsEnabled),
     updatedAt: new Date(row.updatedAt),
     bucket: meta.bucket,
     source: meta.source,

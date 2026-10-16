@@ -13,6 +13,7 @@ type MerchantCtaProps = {
   posId?: string;
   posSlug?: string;
   stock?: number;
+  paymentsEnabled?: boolean;
   compact?: boolean;
   lat?: number | null;
   lng?: number | null;
@@ -26,11 +27,37 @@ export function MerchantCta({
   posId,
   posSlug,
   stock = 0,
+  paymentsEnabled = true,
   compact = false,
   lat = null,
   lng = null,
 }: MerchantCtaProps) {
   if (kind === "DIRECT" && posId) {
+    if (!paymentsEnabled) {
+      return (
+        <div className="flex flex-col gap-2">
+          <Button
+            type="button"
+            size={compact ? "default" : "lg"}
+            disabled
+            className={cn(!compact && "h-12 px-6 text-base")}
+          >
+            Réserver en magasin
+          </Button>
+          {compact ? (
+            <p className="font-label-xs text-label-xs text-on-surface-variant max-w-full text-right leading-tight">
+              Encaissement non activé
+            </p>
+          ) : (
+            <p className="font-body-sm text-body-sm text-on-surface-variant">
+              Cette enseigne n’a pas encore activé l’encaissement. La
+              réservation n’est pas disponible.
+            </p>
+          )}
+        </div>
+      );
+    }
+
     return (
       <ReserveButton
         offerId={offerId}

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>Audit navigateur staging — Akwire — 12 octobre 2026</title>
+<style>
+  :root {
+    --navy: #002642;
+    --orange: #fe9800;
+    --green: #1f7a56;
+    --red: #9b2335;
+    --amber: #8a5a00;
+    --ink: #1c2430;
+    --muted: #5c6775;
+    --line: #e2e6ee;
+    --bg: #f4f6fb;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", Manrope, sans-serif;
+    color: var(--ink);
+    font-size: 10.5pt;
+    line-height: 1.45;
+    background: white;
+    padding: 0 14mm;
+  }
+  h1, h2, h3, h4 { font-family: "Segoe UI", "Bricolage Grotesque", sans-serif; color: var(--navy); line-height: 1.2; margin: 0 0 0.4em; }
+  h1 { font-size: 22pt; letter-spacing: -0.02em; }
+  h2 { font-size: 14pt; margin-top: 1.2em; padding-bottom: 0.25em; border-bottom: 2px solid var(--orange); page-break-after: avoid; }
+  h3 { font-size: 11.5pt; margin-top: 0.9em; page-break-after: avoid; }
+  p { margin: 0.35em 0 0.6em; }
+  ul, ol { margin: 0.3em 0 0.7em; padding-left: 1.15em; }
+  li { margin: 0.15em 0; }
+  a { color: var(--navy); }
+  code { font-family: Consolas, ui-monospace, monospace; font-size: 9pt; background: #eef2f7; padding: 0 0.25em; border-radius: 3px; }
+
+  .cover {
+    min-height: 277mm;
+    margin: 0 -14mm;
+    background: var(--navy);
+    color: white;
+    padding: 22mm 32mm 18mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    page-break-after: always;
+  }
+  .cover .kicker {
+    color: var(--orange);
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 10pt;
+  }
+  .cover h1 { color: white; font-size: 32pt; max-width: 16ch; margin-top: 0.35em; }
+  .cover .lead { font-size: 13pt; max-width: 38ch; color: #d7e2ee; margin-top: 0.8em; }
+  .cover .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-top: 28px; font-size: 10.5pt; }
+  .cover .meta span { display: block; color: #9fb0c3; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.06em; }
+  .cover .footer { color: #9fb0c3; font-size: 9pt; }
+
+  .page { padding: 0; }
+  .band {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin: 8px 0 12px;
+  }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 12px; font-size: 9.5pt; page-break-inside: auto; }
+  th, td { text-align: left; vertical-align: top; padding: 5px 7px; border-bottom: 1px solid var(--line); }
+  th { background: var(--navy); color: white; font-weight: 650; }
+  tr { page-break-inside: avoid; }
+  tr:nth-child(even) td { background: #f8fafc; }
+
+  .pill { display: inline-block; border-radius: 999px; padding: 1px 8px; font-size: 8.5pt; font-weight: 700; white-space: nowrap; }
+  .ok { background: #e5f6ee; color: var(--green); }
+  .part { background: #fff3dc; color: var(--amber); }
+  .ko { background: #fde8ec; color: var(--red); }
+  .na { background: #eef1f5; color: #4d5968; }
+  .p0 { background: #9b2335; color: white; }
+  .p1 { background: #fe9800; color: #002642; }
+  .p2 { background: #d9e3ef; color: var(--navy); }
+
+  .card {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--navy);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 8px 0;
+    page-break-inside: avoid;
+  }
+  .card.p0 { border-left-color: #9b2335; }
+  .card.p1 { border-left-color: var(--orange); }
+  .card h3 { margin-top: 0; }
+  .card .why { color: var(--muted); }
+
+  .small { color: var(--muted); font-size: 9pt; }
+  .keep { page-break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div>
+    <div class="kicker">Akwire · Audit navigateur</div>
+    <h1>Rapport de test staging</h1>
+    <p class="lead">Parcours visiteur et compte connecté, confrontés à la spécification marketplace du 21 novembre 2025.</p>
+    <div class="meta">
+      <div><span>Date</span>12 octobre 2026</div>
+      <div><span>Environnement</span>https://staging.akwire.fr</div>
+      <div><span>Référentiel</span>docs/prompts/00-5-audit test navigateur.md</div>
+      <div><span>Compte</span>fmoncaut@gmail.com (OTP)</div>
+      <div><span>Session 1</span>Invité, géolocalisation accordée (Chatou)</div>
+      <div><span>Session 2</span>Connecté, onboarding déjà terminé</div>
+    </div>
+  </div>
+  <div class="footer">Document interne. Aucun paiement n’a été confirmé. Le compte de test a été remis dans l’état observé au login.</div>
+</section>
+
+<h2>1. Synthèse</h2>
+<p>Le staging couvre le parcours visiteur (découverte, lieu, rayon, recherche, filtres, carte IGN, fiche, renvoi marchand) et un click &amp; collect (panier mono-magasin, retrait, empreinte Stripe test). Plusieurs exigences de la spec sont des écarts de produit assumables. Quatre sujets demandent un correctif, dont un bug bloquant sur les favoris magasin et un texte légal encore placeholder.</p>
+
+<table>
+  <thead><tr><th>Bloc</th><th>Verdict</th><th>En une ligne</th></tr></thead>
+  <tbody>
+    <tr><td>1. Découverte par lieu</td><td><span class="pill part">Partiel</span></td><td>Lieu, rayon et distances en liste OK. La fiche produit ne reprend pas le lieu.</td></tr>
+    <tr><td>2. Recherche et filtres</td><td><span class="pill part">Partiel</span></td><td>Mot-clé, prix, catégorie et tri OK. Pas de temps réel, pas de scan, pas de reset dédié.</td></tr>
+    <tr><td>3. Compte et onboarding</td><td><span class="pill part">Partiel</span></td><td>OTP, profil, intérêts et fil « Pour vous » OK. Pas le carrousel / Facebook / mot de passe de la spec.</td></tr>
+    <tr><td>4. Panier et paiement</td><td><span class="pill part">Partiel</span></td><td>Panier et conflit mono-magasin OK. Empreinte seulement si le magasin encaisse. Non soumise.</td></tr>
+    <tr><td>5. Réservations</td><td><span class="pill na">Non exécuté</span></td><td>Liste vide. QR, statuts et itinéraire non vus.</td></tr>
+    <tr><td>6. Notifications</td><td><span class="pill part">Partiel</span></td><td>E-mails de commande et alertes OK. Push explicitement « bientôt ».</td></tr>
+    <tr><td>7. Réglages</td><td><span class="pill ok">Réussi</span></td><td>Profil, intérêts, notifications, suppression (non confirmée).</td></tr>
+    <tr><td>8. Favoris</td><td><span class="pill ko">Échec magasin</span></td><td>Produit OK. Magasin refusé côté serveur, sans message.</td></tr>
+  </tbody>
+</table>
+
+<div class="band">
+  <strong>À traiter en premier.</strong>
+  <ol>
+    <li>Favori magasin : l’identifiant UUID importé est rejeté, l’interface fait semblant de réussir.</li>
+    <li>Fiche offre : le magasin mis en avant ignore la position de recherche, les distances en km n’apparaissent pas.</li>
+    <li>Politique de confidentialité : texte placeholder, et il nie le panier et le paiement alors que le click &amp; collect est en ligne.</li>
+    <li>Quantité supérieure au stock : la mise à jour est ignorée, sans message.</li>
+  </ol>
+</div>
+
+<h2>2. Méthode</h2>
+<ul>
+  <li>Navigateur réel sur le staging, parcours cliqués (lieu, rayon, recherche, filtres, carte, fiches, panier, login, réglages).</li>
+  <li>Session invité, puis connexion par code e-mail <code>551055</code>.</li>
+  <li>Géolocalisation accordée : adresse résolue « 4 Rue des Chardrottes 78400 Chatou ».</li>
+  <li>Paiement Stripe affiché en <code>pk_test</code> sur le magasin E2E. L’empreinte n’a pas été autorisée.</li>
+  <li>Nettoyage après test : nom effacé, intérêt Sport retiré (High-Tech conservé, déjà présent), alertes e-mail réactivées, favori US6a retiré, panier vidé.</li>
+</ul>
+<p class="small">Ce compte affiche « Console Akwire » : il a le rôle admin. L’admin n’a pas été audité.</p>
+
+<h2>3. Ce qui fonctionne</h2>
+<ul>
+  <li>Navigation invité : accueil, 12 macros, recherche, carte MapLibre / IGN, fiches, magasins, pages légales, page hors ligne.</li>
+  <li>Lieu manuel via la Base Adresse Nationale (suggestions « Paris ») et bouton « Ma position ».</li>
+  <li>Rayon 2 / 5 / 10 / 20 / 50 km. Paris 2 km : état vide et lien « Élargir à 50 km sans filtre ». Paris 10 km et 50 km : 100 offres, distance affichée (5,1 km).</li>
+  <li>Lieu inconnu <code>zzzznotacity</code> : « Lieu introuvable » et invitation à préciser.</li>
+  <li>Recherche <code>cable</code>, prix max 10 €, tri prix : 28 offres, prix affichés ≤ 10 €. Ajout de la catégorie « Accessoire batterie » : 0 offre (filtres en ET).</li>
+  <li>Offre affiliation : prix barré, remise, stock, multi-magasins, « Voir l'offre chez le marchand » en nouvel onglet.</li>
+  <li>Offre directe : quantité, « Réserver en magasin », pastille panier, conflit mono-magasin « Vider et remplacer ».</li>
+  <li>Compte : nom, e-mail en lecture seule, intérêts (plafond 5), fil « Pour vous » (~70 % High-Tech, 24 cartes), notifications e-mail, écran de suppression avec saisie SUPPRIMER.</li>
+  <li>Favori produit : ajout, liste, cœur déjà rempli sur l’accueil, retrait persisté après rechargement.</li>
+</ul>
+
+<h2>4. Scénarios de la spec</h2>
+<p class="small">Statut observé dans le navigateur. « Écart spec » = le produit fait autre chose que le texte d’acceptation, sans forcément être un bug.</p>
+
+<h3>User story 1 — Découverte par lieu</h3>
+<table>
+  <thead><tr><th>#</th><th>Attendu</th><th>Observé</th><th></th></tr></thead>
+  <tbody>
+    <tr><td>1.1</td><td>Permission lieu, offres dans 50 km, distance sur chaque produit</td><td>GPS OK (Chatou). Distances en liste. Défaut du rayon : 10 km, pastilles, pas un curseur 1–50. Sans lieu, fil national sans distance.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>1.2</td><td>Le rayon 1–50 km filtre la liste</td><td>2 km → aucune offre. 10 et 50 km → 100 offres (plafond). Pas de valeur 1 km.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>1.3</td><td>Tous les magasins du produit, prix et distances</td><td>Prix, stock, état, nombreux magasins. Pas de km. Recherche Paris / Bagnolet, fiche qui met en avant Fréjus.</td><td><span class="pill ko">Échec</span></td></tr>
+    <tr><td>1.4</td><td>Déplacement &gt; 1 km puis pull-to-refresh</td><td>Pas de geste pull-to-refresh. Un nouveau lieu relance la recherche.</td><td><span class="pill na">Hors web</span></td></tr>
+    <tr><td>1.5</td><td>Refus de géoloc, saisie ville, bannière</td><td>Saisie ville OK. Refus non rejoué (permission déjà accordée). Le message de refus existe dans le formulaire, pas de bannière persistante vers les réglages.</td><td><span class="pill part">Partiel</span></td></tr>
+  </tbody>
+</table>
+
+<h3>User story 2 — Recherche et filtres</h3>
+<table>
+  <thead><tr><th>#</th><th>Attendu</th><th>Observé</th><th></th></tr></thead>
+  <tbody>
+    <tr><td>2.1</td><td>Dès 3 caractères, résultats temps réel et compteur</td><td>Compteur présent (« 28 offres », « 100 offres »). Recherche au submit. <code>ab</code> (2 caractères) lance déjà une recherche.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>2.2</td><td>Scan code-barres vers la fiche</td><td>Aucun bouton caméra. L’EAN est affiché en texte sur la fiche.</td><td><span class="pill ko">Absent</span></td></tr>
+    <tr><td>2.3</td><td>Filtres catégorie, magasin, prix, logique ET</td><td>Catégorie, prix min/max, tri distance/prix, rayon. ET vérifié. Pas de multi-sélection magasins, pas de badge de filtres actifs.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>2.4</td><td>Reset filters</td><td>Pas de bouton reset. L’état vide propose « Élargir à 50 km sans filtre » quand il n’y a ni offre ni magasin. « Toutes les offres » retire la catégorie.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>2.5</td><td>Code-barres inconnu, message et recherche manuelle</td><td>Pas de scan.</td><td><span class="pill na">Non applicable</span></td></tr>
+  </tbody>
+</table>
+
+<h3>User story 3 — Onboarding et compte</h3>
+<table>
+  <thead><tr><th>#</th><th>Attendu</th><th>Observé</th><th></th></tr></thead>
+  <tbody>
+    <tr><td>3.1</td><td>Carrousel puis création de compte</td><td>Pas de carrousel. Lien « Continuer sans compte ». Login = code e-mail.</td><td><span class="pill ko">Écart spec</span></td></tr>
+    <tr><td>3.2</td><td>E-mail/mot de passe ou Facebook, CGU</td><td>OTP sans mot de passe. Facebook, Apple et Google absents sur ce staging. E-mail invalide bloqué par le navigateur.</td><td><span class="pill ko">Écart spec</span></td></tr>
+    <tr><td>3.3</td><td>1 à 5 catégories sur 12, coches</td><td>12 macros, plafond 5, choix facultatif. High-Tech déjà coché. Sport ajouté puis retiré. Coches visuelles OK.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>3.4</td><td>Étape lieu dans l’onboarding</td><td>Pas d’étape lieu. Le lieu se règle dans la recherche.</td><td><span class="pill ko">Absent</span></td></tr>
+    <tr><td>3.5</td><td>Étape notifications puis entrée dans l’app</td><td>Pas dans l’onboarding. Réglage ensuite dans le compte. Onboarding déjà terminé : redirection vers <code>/compte</code>.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>3.6</td><td>Fil filtré par intérêts et lieu</td><td>« Pour vous », « Sélection pour vous », « ~70 % High-Tech ». 24 cartes. Sans lieu : « partout en France ».</td><td><span class="pill part">Partiel</span></td></tr>
+  </tbody>
+</table>
+
+<h3>User story 4 — Panier et paiement</h3>
+<table>
+  <thead><tr><th>#</th><th>Attendu</th><th>Observé</th><th></th></tr></thead>
+  <tbody>
+    <tr><td>4.1</td><td>Ajout, quantité, pastille</td><td>US6a ajouté, pastille « Panier 1 », quantité modifiable. Quantité 2 avec stock 1 : la ligne reste × 1, aucun message.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>4.2</td><td>Dialogue autre magasin, Vider / Annuler</td><td>« Votre panier concerne Electro Depot - Fréjus… Vider et remplacer ». Pas de bouton Annuler. Le remplacement vers E2E POS a fonctionné.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>4.3</td><td>Commande puis adresse de facturation</td><td>Étapes Récapitulatif → Retrait → Paiement → Confirmation. L’étape retrait montre le magasin, pas un formulaire d’adresse.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>4.4</td><td>Carte valide, confirmation</td><td>Electro Depot Fréjus : « encaissement non activé ». E2E POS : formulaire Stripe test « Autoriser l’empreinte ». Non soumis. Pas de case CGU visible.</td><td><span class="pill na">Non soumis</span></td></tr>
+    <tr><td>4.5</td><td>Invité : login avant l’ajout</td><td>L’invité ajoute au panier. Le login n’est exigé qu’à « Se connecter pour confirmer ».</td><td><span class="pill ko">Écart spec</span></td></tr>
+    <tr><td>4.6</td><td>Numéro, retrait, animation de succès</td><td>Non atteint.</td><td><span class="pill na">Non exécuté</span></td></tr>
+  </tbody>
+</table>
+
+<h3>User stories 5 à 8</h3>
+<table>
+  <thead><tr><th>#</th><th>Attendu</th><th>Observé</th><th></th></tr></thead>
+  <tbody>
+    <tr><td>5.1–5.4</td><td>Liste, détail, statuts, QR, itinéraire</td><td>Connecté : « Aucune réservation ». Pas de commande pour ouvrir un détail.</td><td><span class="pill na">Non exécuté</span></td></tr>
+    <tr><td>5.5</td><td>État vide et appel à l’action</td><td>« Aucune réservation » + « Voir les offres ».</td><td><span class="pill ok">Réussi</span></td></tr>
+    <tr><td>6.1–6.4</td><td>Push commande, alertes, deep link, topics</td><td>Push désactivé, libellé « Bientôt (application mobile) ». Alertes e-mail enregistrables. E-mails de commande toujours activés.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>6.5</td><td>Permission refusée, mode d’emploi</td><td>Pas de push à activer. Page <code>/offline</code> : « Pas de connexion » et « Réessayer l’accueil ».</td><td><span class="pill na">Hors web</span></td></tr>
+    <tr><td>7.1</td><td>Profil, adresse, mot de passe</td><td>Nom enregistré et relu sur le compte. E-mail en lecture seule. Pas de mot de passe (OTP). Pas d’adresse de facturation dans les réglages.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>7.2–7.3</td><td>Intérêts modifiables, fil mis à jour</td><td>Grille identique à l’onboarding. Sport enregistré, le fil passe en « Pour vous ».</td><td><span class="pill ok">Réussi</span></td></tr>
+    <tr><td>7.4</td><td>Lieu et rayon dans les réglages</td><td>Lieu et rayon sont sur la recherche, pas dans les réglages.</td><td><span class="pill ko">Écart spec</span></td></tr>
+    <tr><td>7.5</td><td>Suppression de compte, 30 jours</td><td>Écran présent, confirmation SUPPRIMER. Non exécuté. Le texte dit que réservations et factures sont conservées pour obligation légale.</td><td><span class="pill part">Partiel</span></td></tr>
+    <tr><td>8.1</td><td>Cœur, animation, remplissage</td><td>Produit : le libellé passe à « Retirer des favoris » et l’état pressed tient au rechargement. Invité : redirection login.</td><td><span class="pill ok">Réussi</span></td></tr>
+    <tr><td>8.2</td><td>Liste produits</td><td>Onglet Produits (1) avec la carte US6a, puis 0 après retrait.</td><td><span class="pill ok">Réussi</span></td></tr>
+    <tr><td>8.3</td><td>Onglet magasins, distance, nombre d’offres</td><td>Onglet présent. L’ajout magasin ne persiste pas. Liste restée à 0.</td><td><span class="pill ko">Échec</span></td></tr>
+    <tr><td>8.4</td><td>Retrait du favori</td><td>Produit retiré, liste vide après rechargement.</td><td><span class="pill ok">Réussi</span></td></tr>
+    <tr><td>8.5</td><td>État vide</td><td>Produits et magasins : titre, texte, « Voir les offres ».</td><td><span class="pill ok">Réussi</span></td></tr>
+  </tbody>
+</table>
+
+<h2>5. Correctifs</h2>
+
+<div class="card p0">
+  <h3><span class="pill p0">P0</span> C1 — Favori magasin silencieusement refusé</h3>
+  <p>Sur Electro Depot Fréjus, le bouton passe à « Retirer des favoris » puis revient à « Ajouter ». <code>/compte/favoris?onglet=magasins</code> reste à 0. La réponse d’action est <code>{"ok":false,"error":"invalid"}</code>.</p>
+  <p><strong>Cause.</strong> <code>favoriteInputSchema</code> dans <code>lib/favorites.ts</code> n’accepte qu’un id alphanumérique de 8 à 40 caractères. L’import magasin (<code>scripts/import-pos.ts</code>) crée les points de vente avec <code>randomUUID()</code> (36 caractères, tirets). Les produits en cuid passent, les magasins UUID non. <code>toggleFavoriteAction</code> renvoie <code>invalid</code>, et <code>FavoriteButton</code> rafraîchit sans afficher l’erreur.</p>
+  <p><strong>Correctif.</strong> Accepter cuid et UUID (tirets inclus) dans le schéma. Afficher un message si l’action échoue, au lieu de revenir en arrière en silence. Retester l’ajout et le retrait d’Electro Depot Fréjus, puis l’onglet Magasins.</p>
+</div>
+
+<div class="card p0">
+  <h3><span class="pill p0">P0</span> C2 — La fiche offre ignore le lieu de recherche</h3>
+  <p>Depuis une recherche Paris, la carte pointe Electro Depot Paris / Bagnolet. La fiche <code>/offre/crochet-securite-protection-virus-…?pos=electrodepot-electro-depot-paris-bagnolet-93170</code> met en avant Electro Depot Fréjus et le comparateur n’affiche pas de distance en km. <code>app/offre/[slug]/page.tsx</code> ne lit pas la position.</p>
+  <p><strong>Correctif.</strong> Transmettre lat/lng (query ou préférence de recherche) à la fiche. Trier les offres par distance, afficher les km, et respecter le <code>pos</code> demandé quand il porte encore le produit. Retester Paris → fiche : le magasin le plus proche de Paris doit être en tête, avec une distance.</p>
+</div>
+
+<div class="card p0">
+  <h3><span class="pill p0">P0</span> C3 — Politique de confidentialité non publiable</h3>
+  <p><code>/confidentialite</code> indique elle-même « Texte placeholder à compléter avant publication commerciale » et « pas de panier interne, pas de paiement ». Le click &amp; collect et l’empreinte Stripe sont en ligne. Le compte, les favoris, la localisation de recherche et le cookie <code>anonId</code> sont décrits, le contact DPO non.</p>
+  <p><strong>Correctif.</strong> Réécrire la page avant toute ouverture commerciale : éditeur, hébergeur, DPO, finalités (compte, favoris, renvoi affiliation, réservation, empreinte), durées, droits, cookies. Aligner le texte avec les deux circuits (affiliation et retrait).</p>
+</div>
+
+<div class="card p1">
+  <h3><span class="pill p1">P1</span> C4 — Quantité au-dessus du stock, sans retour</h3>
+  <p>US6a a 1 pièce. Saisir 2 puis « Mettre à jour » laisse la ligne à 5,00 € × 1. Le champ reste à 2. Aucun message.</p>
+  <p><strong>Correctif.</strong> Borner le champ au stock (déjà prévu côté attribut <code>max</code>) et, si le serveur refuse, afficher « Il reste N en magasin » et ramener la valeur affichée. Retester stock 1 et stock 8 (E2E).</p>
+</div>
+
+<div class="card p1">
+  <h3><span class="pill p1">P1</span> C5 — Titre de page sur un lieu non reconnu</h3>
+  <p><code>/recherche?lieu=zzzznotacity</code> affiche à la fois « Lieu introuvable » et le titre « Bonnes affaires près de chez toi à zzzznotacity ».</p>
+  <p><strong>Correctif.</strong> Si le géocodage échoue, ne pas injecter la saisie brute dans le H1. Garder le message BAN.</p>
+</div>
+
+<div class="card p1">
+  <h3><span class="pill p1">P1</span> C6 — Encaissement magasin invisible trop tard</h3>
+  <p>Le panier Electro Depot Fréjus va jusqu’au retrait, puis : « Cette enseigne n’a pas encore activé l’encaissement. » Le visiteur l’apprend après avoir constitué le panier. E2E POS, lui, affiche Stripe test.</p>
+  <p><strong>Correctif.</strong> Sur la fiche directe, si <code>paymentsEnabled</code> est faux, ne pas proposer « Réserver en magasin », ou l’indiquer avant l’ajout. Vérifier quels magasins de démo doivent encaisser sur le staging.</p>
+</div>
+
+<h2>6. Décisions produit</h2>
+<p>Ces écarts ne sont pas des régressions tant que la spec mobile n’est pas recadrée pour le web. À trancher, puis à mettre à jour soit le produit, soit le document <code>00-5</code>.</p>
+
+<table>
+  <thead><tr><th></th><th>Spec</th><th>Staging aujourd’hui</th><th>Décision proposée</th></tr></thead>
+  <tbody>
+    <tr><td>D1</td><td>Recherche dès 3 caractères, temps réel</td><td>Submit du formulaire, dès 2 caractères</td><td>Garder le submit. Ignorer ou n’envoyer la requête qu’à partir de 3 caractères si le bruit des requêtes courtes gêne.</td></tr>
+    <tr><td>D2</td><td>Curseur 1–50 km, défaut 50</td><td>Pastilles 2/5/10/20/50, défaut 10</td><td>Garder les pastilles. Documenter le défaut 10 km. Le 50 km existe déjà.</td></tr>
+    <tr><td>D3</td><td>Login obligatoire avant l’ajout au panier</td><td>Ajout invité, login à la confirmation</td><td>Garder l’ajout invité : le cookie panier est déjà en place et la confirmation exige le compte.</td></tr>
+    <tr><td>D4</td><td>Mot de passe, reset, Facebook</td><td>Code e-mail. Apple/Google absents de cet environnement</td><td>Spec à réécrire en OTP. Activer Apple/Google seulement si les providers sont voulus en staging.</td></tr>
+    <tr><td>D5</td><td>Carrousel, lieu et notifications dans l’onboarding</td><td>Intérêts facultatifs + CGU après login. Lieu dans la recherche. Notifications dans les réglages</td><td>Conserver le parcours court. Le fil « Pour vous » est déjà branché.</td></tr>
+    <tr><td>D6</td><td>Adresse de facturation et case CGU avant paiement</td><td>Retrait magasin puis empreinte. Pas de formulaire d’adresse ni de case vus</td><td>Si l’empreinte est un click &amp; collect, une case CGU au moment d’autoriser suffit. L’adresse de facturation n’est utile que si une facture l’exige.</td></tr>
+    <tr><td>D7</td><td>Dialogue « Vider le panier » / « Annuler »</td><td>« Vider et remplacer », pas d’Annuler explicite</td><td>Ajouter « Annuler » (ferme le message). Le remplacement fonctionne déjà.</td></tr>
+    <tr><td>D8</td><td>Filtre magasins, badge, reset en un tap</td><td>Catégorie, prix, tri, rayon. Reset seulement dans certains états vides</td><td>Ajouter un « Effacer les filtres » dès qu’un filtre est actif, et un compteur. Le filtre magasin peut attendre.</td></tr>
+    <tr><td>D9</td><td>Scan EAN / UPC, push, pull-to-refresh, haptic</td><td>Absents. Push marqué « bientôt »</td><td>Hors périmètre web. Les retirer du critère de recette navigateur. EAN déjà visible sur la fiche.</td></tr>
+    <tr><td>D10</td><td>Pagination infinie de 24</td><td>Accueil : 24 cartes. Recherche : plafond 100, sans page suivante</td><td>Prévoir une suite au-delà de 100 avant d’élargir le catalogue utile.</td></tr>
+    <tr><td>D11</td><td>Galerie d’images swipe</td><td>Une image principale sur les fiches testées</td><td>À faire quand les produits ont plusieurs visuels. Pas bloquant sur le jeu de données actuel.</td></tr>
+    <tr><td>D12</td><td>Ville affichée dans l’en-tête en permanence</td><td>La ville est dans le H1 de recherche, pas dans la barre du haut</td><td>Acceptable. Le champ « Où chercher » porte déjà le lieu.</td></tr>
+  </tbody>
+</table>
+
+<h2>7. Plan d’actions</h2>
+<table>
+  <thead><tr><th>Ordre</th><th>Action</th><th>Preuve de fin</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>C1 — schéma favori UUID + message d’erreur</td><td>Electro Depot Fréjus apparaît dans Magasins (1), survit au rechargement, se retire.</td></tr>
+    <tr><td>2</td><td>C2 — distance et tri sur la fiche offre</td><td>Depuis Paris, le magasin d’Île-de-France est en tête, avec des km.</td></tr>
+    <tr><td>3</td><td>C3 — réécrire <code>/confidentialite</code></td><td>Plus de mention placeholder. Le click &amp; collect et l’empreinte sont décrits. Contact DPO présent.</td></tr>
+    <tr><td>4</td><td>C4 — retour explicite si quantité &gt; stock</td><td>Saisie 2 sur un stock 1 : message, quantité ramenée à 1.</td></tr>
+    <tr><td>5</td><td>C5 — H1 sans lieu invalide</td><td><code>zzzznotacity</code> n’apparaît plus dans le titre.</td></tr>
+    <tr><td>6</td><td>C6 — ne pas laisser réserver un magasin qui n’encaisse pas</td><td>La fiche Fréjus le dit avant l’ajout, ou le magasin de démo est activé.</td></tr>
+    <tr><td>7</td><td>D7 — bouton Annuler sur le conflit de panier</td><td>Le panier d’origine reste si on annule.</td></tr>
+    <tr><td>8</td><td>D8 — « Effacer les filtres » visible</td><td>Depuis une recherche filtrée à 0, un tap revient au rayon et au mot-clé vides.</td></tr>
+    <tr><td>9</td><td>Recette paiement test, sur un magasin qui encaisse</td><td>Carte <code>4242…</code>, confirmation, ligne dans Mes réservations, code ou QR, itinéraire. Carte refusée <code>4000…9995</code> : message, panier conservé.</td></tr>
+    <tr><td>10</td><td>Mettre à jour la spec <code>00-5</code> avec D1–D6 et D9–D12</td><td>Le prochain audit navigateur ne rejoue plus le scan, le push, Facebook ni le mot de passe.</td></tr>
+  </tbody>
+</table>
+
+<h2>8. Non couvert</h2>
+<ul>
+  <li>Autorisation de l’empreinte, 3-D Secure, échec de carte, confirmation, QR, itinéraire, annulation, expiration 48 h.</li>
+  <li>Refus explicite de la géolocalisation (permission déjà accordée dans le navigateur d’audit).</li>
+  <li>Suppression réelle du compte.</li>
+  <li>Apple et Google : boutons absents, donc non cliqués.</li>
+  <li>Premier onboarding : le compte l’avait déjà terminé.</li>
+  <li>Console admin, malgré le lien visible.</li>
+  <li>Performances chiffrées de la spec (2 s, 60 fps, 10 000 utilisateurs) : hors de ce passage navigateur.</li>
+</ul>
+
+<h2>9. Jeu d’essai utilisé</h2>
+<table>
+  <thead><tr><th>Élément</th><th>Rôle dans l’audit</th></tr></thead>
+  <tbody>
+    <tr><td>Paris 48.859, 2.347</td><td>Rayon, recherche, filtres, état vide à 2 km</td></tr>
+    <tr><td>Chatou (GPS)</td><td>Permission de localisation accordée</td></tr>
+    <tr><td>Crochet Securite Protection Virus</td><td>Fiche affiliation multi-magasins</td></tr>
+    <tr><td>US6a — Electro Depot Fréjus, 5,00 €, stock 1</td><td>Réservation directe, stock, favori produit</td></tr>
+    <tr><td>E2E Prod / E2E POS Lyon, 25,00 €, stock 8</td><td>Conflit de panier et formulaire Stripe test</td></tr>
+    <tr><td><code>cable</code>, prix max 10, catégorie batterie</td><td>Filtres ET</td></tr>
+  </tbody>
+</table>
+
+<p class="small">Rapport établi le 12 octobre 2026 à partir des deux sessions navigateur sur https://staging.akwire.fr. Les correctifs C1 à C6 sont des constats reproduits. Les lignes D sont des arbitrages, pas des bugs.</p>
+
+</body>
+</html>

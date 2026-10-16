@@ -37,7 +37,9 @@
     "verify-affiliation-http": "tsx scripts/verify-affiliation-http.ts",
     "verify-payments": "tsx scripts/verify-payments.ts",
     "postinstall": "prisma generate",
-    "gen-icons": "tsx scripts/gen-icons.ts"
+    "gen-icons": "tsx scripts/gen-icons.ts",
+    "capture:staging": "tsx scripts/capture-screens.ts staging",
+    "capture:prod": "tsx scripts/capture-screens.ts prod"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -78,10 +80,12 @@
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.1141.0",
+    "@playwright/test": "^1.63.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "eslint-config-prettier": "^10.1.8",
     "exceljs": "^4.4.0",
+    "playwright": "^1.63.0",
     "prettier": "^3.9.8",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "sharp": "^0.35.5"

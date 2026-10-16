@@ -36,6 +36,7 @@ export type NearbyOffer = {
   lat: number;
   lng: number;
   distanceM: number;
+  paymentsEnabled?: boolean;
 };
 
 export type NearbyOfferFilters = {
@@ -70,6 +71,8 @@ export type NearbyOfferCard = {
   lat: number;
   lng: number;
   distanceM: number | null;
+  /** Faux quand l’enseigne directe n’a pas activé l’encaissement Stripe. */
+  paymentsEnabled?: boolean;
 };
 
 type NearbyOfferRow = {
@@ -95,6 +98,7 @@ type NearbyOfferRow = {
   lat: number;
   lng: number;
   distanceM: number | string | Prisma.Decimal;
+  paymentsEnabled: boolean;
 };
 
 export function toOfferCard(offer: NearbyOffer): NearbyOfferCard {
@@ -199,7 +203,8 @@ export async function findOffersNearby(
       ST_Distance(
         p.geog,
         ST_MakePoint(${lng}, ${lat})::geography
-      ) AS "distanceM"
+      ) AS "distanceM",
+      (m."stripeAccountId" IS NOT NULL AND m."chargesEnabled" = true) AS "paymentsEnabled"
     FROM "Offer" o
     ${sqlOfferPlacementJoin()}
     JOIN "Product" pr ON pr.id = o."productId"
@@ -241,6 +246,7 @@ export async function findOffersNearby(
       lat: Number(row.lat),
       lng: Number(row.lng),
       distanceM: Number(row.distanceM),
+      paymentsEnabled: Boolean(row.paymentsEnabled),
     };
   });
 }
@@ -589,6 +595,11 @@ export async function findActiveVisiblePosPins(): Promise<MapPosPin[]> {
   });
 }
 
+/** Marqueurs affichés : uniquement les POS qui ont au moins une offre. */
+export function pinsWithOffers(pins: MapPosPin[]): MapPosPin[] {
+  return pins.filter((pin) => pin.state === "active" && pin.offerCount > 0);
+}
+
 /** Offres stock>0 d’un POS (drawer carte) — hors plafond SEARCH_RESULT_LIMIT. */
 export async function findOffersAtPos(
   posId: string,
@@ -605,7 +616,15 @@ export async function findOffersAtPos(
       lng: true,
       status: true,
       merchantClosedAt: true,
-      merchant: { select: { name: true, isActive: true, logoUrl: true } },
+      merchant: {
+        select: {
+          name: true,
+          isActive: true,
+          logoUrl: true,
+          stripeAccountId: true,
+          chargesEnabled: true,
+        },
+      },
     },
   });
   if (
@@ -654,6 +673,9 @@ export async function findOffersAtPos(
       lat: pos.lat,
       lng: pos.lng,
       distanceM: null,
+      paymentsEnabled: Boolean(
+        pos.merchant.stripeAccountId && pos.merchant.chargesEnabled,
+      ),
     };
   });
 }

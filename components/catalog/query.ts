@@ -43,9 +43,9 @@ export function parseCatalogQuery(params: URLSearchParams): CatalogQuery {
     lat,
     lng,
     tri:
-      params.get("tri") === "distance" && lat != null && lng != null
-        ? "distance"
-        : "prix",
+      params.get("tri") === "prix" || lat == null || lng == null
+        ? "prix"
+        : "distance",
     pos: params.get("pos")?.trim() ?? "",
     offre: params.get("offre")?.trim() ?? "",
   };
