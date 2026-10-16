@@ -240,7 +240,7 @@ export default async function Home({ searchParams }: PageProps) {
 
   return (
     <BuyerMain>
-      <section className="bg-surface-container-lowest shadow-navy-soft">
+      <section className="bg-surface-container-lowest shadow-sm">
         <BuyerSection className="flex flex-col gap-4 py-4 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between">
           <div>
             <p className="font-label-xs text-label-xs text-secondary flex items-center gap-2 font-extrabold tracking-wider uppercase">
@@ -466,7 +466,7 @@ export default async function Home({ searchParams }: PageProps) {
               </Link>
             </div>
             {visible.length === 0 ? (
-              <p className="font-body-sm text-on-surface-variant bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5">
+              <p className="font-body-sm text-on-surface-variant bg-surface-container-lowest shadow-sm rounded-2xl p-5">
                 Aucune offre avec ces filtres. Élargis le rayon, passe en vue
                 France, ou retire un filtre.
               </p>
@@ -499,7 +499,7 @@ export default async function Home({ searchParams }: PageProps) {
                       <Link
                         key={store.posId}
                         href={magasinPath(store.posSlug)}
-                        className="bg-surface-container-lowest shadow-navy-soft hover:bg-surface-container-low flex flex-col gap-2 rounded-2xl p-3"
+                        className="bg-surface-container-lowest shadow-sm hover:bg-surface-container-low flex flex-col gap-2 rounded-2xl p-3"
                       >
                         <div className="flex items-center justify-between gap-2">
                           <span className="bg-secondary-fixed text-on-secondary-fixed font-label-md flex size-9 items-center justify-center rounded-full font-bold">

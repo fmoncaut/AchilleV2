@@ -32,7 +32,7 @@ export function MessageThread({
   );
 
   return (
-    <section className="bg-surface-container-lowest shadow-navy-soft flex flex-col gap-4 rounded-2xl p-5">
+    <section className="bg-surface-container-lowest shadow-sm flex flex-col gap-4 rounded-2xl p-5">
       <div>
         <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
           Messagerie

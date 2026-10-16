@@ -42,7 +42,7 @@ export function AdminCard({
   return (
     <div
       className={cn(
-        "bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5 sm:p-6",
+        "bg-surface-container-lowest shadow-sm rounded-2xl p-5 sm:p-6",
         className,
       )}
     >
@@ -52,7 +52,7 @@ export function AdminCard({
 }
 
 export const adminFieldClass =
-  "bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline focus-visible:ring-secondary-container h-11 w-full rounded-full border-0 px-4 outline-none focus-visible:ring-2";
+  "bg-surface-container-low font-body-md text-body-md text-on-surface placeholder:text-outline focus-visible:ring-primary-container h-11 w-full rounded-full border-0 px-4 outline-none focus-visible:ring-2";
 
 export const adminLabelClass =
   "font-label-md text-label-md text-primary-container flex flex-col gap-1";
@@ -65,7 +65,7 @@ export function AdminTable({
   className?: string;
 }) {
   return (
-    <div className="bg-surface-container-lowest shadow-navy-soft overflow-x-auto rounded-2xl">
+    <div className="bg-surface-container-lowest shadow-sm overflow-x-auto rounded-2xl">
       <table className={cn("w-full text-left text-sm", className)}>{children}</table>
     </div>
   );

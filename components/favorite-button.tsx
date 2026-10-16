@@ -54,7 +54,7 @@ export function FavoriteButton({
         aria-label={label}
         title={label}
         className={cn(
-          "bg-surface-container-lowest/95 text-primary-container shadow-navy-soft ring-outline-variant inline-flex size-10 items-center justify-center rounded-full ring-1",
+          "bg-surface-container-lowest/95 text-primary-container shadow-sm ring-outline-variant inline-flex size-10 items-center justify-center rounded-full ring-1",
           className,
         )}
       >
@@ -88,7 +88,7 @@ export function FavoriteButton({
         className={cn(
           "font-label-md text-label-md inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 font-bold",
           optimisticFavorite
-            ? "bg-secondary-container text-on-secondary-container shadow-navy"
+            ? "bg-secondary-container text-on-secondary-container shadow-md"
             : "bg-surface-container-lowest text-primary-container ring-outline-variant ring-1",
           className,
         )}
@@ -111,9 +111,9 @@ export function FavoriteButton({
       aria-label={label}
       aria-pressed={optimisticFavorite}
       className={cn(
-        "shadow-navy-soft inline-flex size-10 items-center justify-center rounded-full ring-1",
+        "shadow-sm inline-flex size-10 items-center justify-center rounded-full ring-1",
         optimisticFavorite
-          ? "bg-secondary-container text-on-secondary-container ring-secondary-container"
+          ? "bg-secondary-container text-on-secondary-container ring-primary-container"
           : "bg-surface-container-lowest/95 text-primary-container ring-outline-variant",
         className,
       )}

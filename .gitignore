@@ -38,6 +38,9 @@ yarn-error.log*
 next-env.d.ts
 .cursor/mcp.json
 
+# captures QA/UX (avant / après), hors dépôt
+/screenshots/
+
 # Skills Stripe installés localement pour l’agent, pas le produit
 .agents/
 skills-lock.json

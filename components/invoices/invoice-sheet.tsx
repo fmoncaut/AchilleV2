@@ -18,7 +18,7 @@ export function InvoiceSheet({
   downloadHref: string;
 }) {
   return (
-    <article className="bg-surface-container-lowest text-on-surface shadow-navy-soft rounded-2xl p-6 print:shadow-none">
+    <article className="bg-surface-container-lowest text-on-surface shadow-sm rounded-2xl p-6 print:shadow-none">
       <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
         Facture
       </p>
@@ -55,7 +55,7 @@ export function InvoiceSheet({
       <p className="font-body-sm text-on-surface-variant mt-4">
         Total HT {formatEur(invoice.totalHt)} · TVA {formatEur(invoice.totalVat)}
       </p>
-      <p className="font-price-hero text-secondary-container mt-1 text-2xl font-extrabold">
+      <p className="font-price-hero text-secondary mt-1 text-2xl font-extrabold">
         Total TTC {formatEur(invoice.totalTtc)}
       </p>
       {invoice.audience === "seller" && invoice.commissionAmount ? (

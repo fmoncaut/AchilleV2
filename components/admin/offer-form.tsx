@@ -40,7 +40,7 @@ type OfferFormProps = {
 };
 
 const textareaClass =
-  "bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline focus-visible:ring-secondary-container w-full rounded-2xl border-0 px-4 py-3 outline-none focus-visible:ring-2";
+  "bg-surface-container-low font-body-md text-body-md text-on-surface placeholder:text-outline focus-visible:ring-primary-container w-full rounded-2xl border-0 px-4 py-3 outline-none focus-visible:ring-2";
 
 export function OfferForm({
   mode,

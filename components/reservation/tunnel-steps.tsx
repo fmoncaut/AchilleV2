@@ -22,7 +22,7 @@ export function TunnelSteps({ current }: { current: TunnelStep }) {
         const disabled = step.href == null && !done && !active;
         const className = cn(
           "font-label-md text-label-md inline-flex items-center gap-2 rounded-full px-3 py-1.5",
-          active && "bg-primary-container text-on-primary shadow-navy",
+          active && "bg-primary-container text-on-primary shadow-md",
           !active &&
             done &&
             "bg-surface-container text-primary-container hover:bg-surface-container-high",

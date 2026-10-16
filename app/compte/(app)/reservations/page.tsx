@@ -93,7 +93,7 @@ function ReservationCard({
   );
 
   return (
-    <li className="bg-surface-container-lowest shadow-navy-soft flex flex-col gap-3 rounded-2xl p-5">
+    <li className="bg-surface-container-lowest shadow-sm flex flex-col gap-3 rounded-2xl p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-1 items-start gap-3">
           {thumb ? (
@@ -115,7 +115,7 @@ function ReservationCard({
           {STATUS_LABELS[reservation.status]}
         </span>
       </div>
-      <p className="font-price-hero text-secondary-container text-2xl font-extrabold">
+      <p className="font-price-hero text-secondary text-2xl font-extrabold">
         {formatEur(reservation.totalAmount)}
       </p>
       {WITH_COUNTDOWN.has(reservation.status) ? (

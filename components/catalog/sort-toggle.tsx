@@ -26,7 +26,7 @@ export function SortToggle({
         className={cn(
           "font-label-md text-label-md rounded-full px-3.5 py-1.5",
           current === "prix"
-            ? "bg-primary-container text-on-primary shadow-navy-soft font-bold"
+            ? "bg-primary-container text-on-primary shadow-sm font-bold"
             : "text-on-surface-variant hover:text-on-surface",
         )}
       >
@@ -45,7 +45,7 @@ export function SortToggle({
           className={cn(
             "font-label-md text-label-md rounded-full px-3.5 py-1.5",
             current === "distance"
-              ? "bg-primary-container text-on-primary shadow-navy-soft font-bold"
+              ? "bg-primary-container text-on-primary shadow-sm font-bold"
               : "text-on-surface-variant hover:text-on-surface",
           )}
         >

@@ -103,7 +103,7 @@ export default async function AdminReservationsPage() {
                 <td className="font-body-sm text-on-surface-variant px-4 py-3">
                   {reservation.pos.name}
                 </td>
-                <td className="font-headline-sm text-secondary-container px-4 py-3 font-extrabold">
+                <td className="font-headline-sm text-secondary px-4 py-3 font-extrabold">
                   {formatEur(reservation.totalAmount)}
                 </td>
                 <td className="px-4 py-3">

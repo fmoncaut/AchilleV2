@@ -161,7 +161,7 @@ export function MerchantPosForm({
           autoComplete="off"
         />
         {suggestionHits.length > 0 ? (
-          <ul className="bg-surface-container-lowest shadow-navy-soft absolute top-full z-20 mt-1 max-h-56 w-full overflow-auto rounded-2xl border border-outline-variant/30">
+          <ul className="bg-surface-container-lowest shadow-sm absolute top-full z-20 mt-1 max-h-56 w-full overflow-auto rounded-2xl border border-outline-variant/30">
             {suggestionHits.map((hit) => (
               <li key={`${hit.lat}-${hit.lng}-${hit.label}`}>
                 <button

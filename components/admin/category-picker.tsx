@@ -52,7 +52,7 @@ export function CategoryPicker({
         </p>
       ) : null}
       {results.length > 0 ? (
-        <ul className="bg-surface-container-lowest shadow-navy-soft max-h-40 overflow-auto rounded-2xl">
+        <ul className="bg-surface-container-lowest shadow-sm max-h-40 overflow-auto rounded-2xl">
           {results.map((category) => (
             <li key={category.id}>
               <button

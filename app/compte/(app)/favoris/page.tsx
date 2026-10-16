@@ -78,7 +78,7 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
             <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {products.map((product) => (
                 <li key={product.id}>
-                  <article className="bg-surface-container-lowest shadow-navy-soft relative overflow-hidden rounded-2xl">
+                  <article className="bg-surface-container-lowest shadow-sm relative overflow-hidden rounded-2xl">
                     <div className="absolute top-3 right-3 z-10">
                       <FavoriteButton
                         kind="product"
@@ -123,7 +123,7 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
           <ul className="grid gap-4 sm:grid-cols-2">
             {poses.map((pos) => (
               <li key={pos.id}>
-                <article className="bg-surface-container-lowest shadow-navy-soft relative rounded-2xl p-5">
+                <article className="bg-surface-container-lowest shadow-sm relative rounded-2xl p-5">
                   <div className="absolute top-3 right-3">
                     <FavoriteButton
                       kind="pos"
@@ -187,7 +187,7 @@ function TabLink({
       className={cn(
         "font-label-md text-label-md rounded-full px-4 py-2 font-bold",
         active
-          ? "bg-primary-container text-on-primary shadow-navy-soft"
+          ? "bg-primary-container text-on-primary shadow-sm"
           : "text-primary-container",
       )}
     >

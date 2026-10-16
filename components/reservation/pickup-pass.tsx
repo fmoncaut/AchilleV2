@@ -30,7 +30,7 @@ export function PickupPass({
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   return (
-    <section className="bg-primary-container text-on-primary shadow-navy-soft rounded-2xl p-5">
+    <section className="bg-primary-container text-on-primary shadow-sm rounded-2xl p-5">
       <p className="font-label-md text-label-md text-surface-variant">
         Pass de retrait — comptoir
       </p>
