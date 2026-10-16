@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'surface': '#f8f9fc', 'secondary-fixed': '#ffdcbd', 'tertiary': '#001309', 'inverse-primary': '#abc9ed', 'on-error': '#ffffff', 'tertiary-fixed': '#8ef7c2', 'on-tertiary': '#ffffff', 'on-primary-fixed-variant': '#2a4967', 'surface-bright': '#f8f9fc', 'on-primary': '#ffffff', 'on-tertiary-fixed': '#002113', 'surface-tint': '#436180', 'secondary': '#8a5100', 'tertiary-container': '#002b1a', 'inverse-on-surface': '#eff1f4', 'surface-container': '#eceef1', 'primary': '#001020', 'error': '#ba1a1a', 'background': '#f8f9fc', 'on-primary-container': '#708eaf', 'surface-container-highest': '#e0e3e6', 'on-tertiary-container': '#2f9d70', 'on-secondary': '#ffffff', 'error-container': '#ffdad6', 'primary-container': '#002642', 'surface-dim': '#d8dadd', 'surface-container-high': '#e6e8eb', 'outline': '#73777e', 'tertiary-fixed-dim': '#72daa8', 'surface-container-lowest': '#ffffff', 'on-background': '#191c1e', 'on-secondary-fixed-variant': '#693c00', 'on-secondary-fixed': '#2c1600', 'primary-fixed-dim': '#abc9ed', 'primary-fixed': '#d0e4ff', 'inverse-surface': '#2d3133', 'on-error-container': '#93000a', 'on-primary-fixed': '#001d34', 'on-surface-variant': '#43474d', 'on-tertiary-fixed-variant': '#005235', 'on-secondary-container': '#643900', 'on-surface': '#191c1e', 'surface-variant': '#e0e3e6', 'surface-container-low': '#f2f4f7', 'secondary-container': '#fe9800', 'secondary-fixed-dim': '#ffb86f', 'outline-variant': '#c3c7ce' }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' }, spacing: { 'space-md': '1rem', 'margin': '1rem', 'margin-desktop': '2rem', 'gutter-desktop': '1.5rem', 'space-sm': '0.5rem', 'space-lg': '1.5rem', 'margin-tablet': '1.5rem', 'gutter': '1rem', 'space-xs': '0.25rem', 'space-xl': '2rem' }, fontFamily: { 'display-mobile': ['Bricolage Grotesque'], 'price-hero': ['Bricolage Grotesque'], 'display': ['Bricolage Grotesque'], 'body-lg': ['Manrope'], 'body-sm': ['Manrope'], 'label-lg': ['Manrope'], 'headline-lg-mobile': ['Bricolage Grotesque'], 'headline-sm': ['Bricolage Grotesque'], 'label-md': ['Manrope'], 'price-card': ['Bricolage Grotesque'], 'headline-md': ['Bricolage Grotesque'], 'body-md': ['Manrope'], 'headline-lg': ['Bricolage Grotesque'], 'label-xs': ['Manrope'] }, fontSize: { 'display-mobile': ['34px', { lineHeight: '40px', fontWeight: '800' }], 'price-hero': ['28px', { lineHeight: '32px', fontWeight: '800' }], 'display': ['48px', { lineHeight: '56px', fontWeight: '800' }], 'body-lg': ['18px', { lineHeight: '28px', fontWeight: '400' }], 'body-sm': ['13px', { lineHeight: '18px', fontWeight: '500' }], 'label-lg': ['14px', { lineHeight: '20px', fontWeight: '700' }], 'headline-lg-mobile': ['26px', { lineHeight: '32px', fontWeight: '700' }], 'headline-sm': ['20px', { lineHeight: '26px', fontWeight: '600' }], 'label-md': ['12px', { lineHeight: '16px', fontWeight: '700' }], 'price-card': ['20px', { lineHeight: '24px', fontWeight: '800' }], 'headline-md': ['24px', { lineHeight: '30px', fontWeight: '700' }], 'body-md': ['15px', { lineHeight: '22px', fontWeight: '500' }], 'headline-lg': ['32px', { lineHeight: '38px', fontWeight: '700' }], 'label-xs': ['10px', { lineHeight: '12px', fontWeight: '800' }] } } } };</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between select-none"><div class="flex flex-col flex-1 overflow-y-auto"><div class="p-space-lg flex flex-col gap-space-sm bg-surface-container-low/60"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #002642 - Font: bricolageGrotesque - Mode: light - Roundness: rounded-md" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WeW9itNWPqLrCKP7ORkIHy8WEUKqKS19C_quIbkXj2PMxoq6b78y_zegB0NJhzWqY38755YEACDqoBTllzubbVilkEzbPRTzGmlVatZBjKJCVtvRQFphq2L4-EQKe1RxqnMKP1yvrX-te9-rqWmsqCigswynG-gCRBZsi2JAtGwhiD2Zl2s2AMp1ExW43Yv2xTWlfsvce9WCcYOOMWG9R3FKtuJE0zU12qbDNPeDK9"/><div class="flex flex-col"><div class="flex items-center gap-1.5"><span class="font-headline-sm text-headline-sm text-primary-container tracking-tight leading-none">Achille</span><span class="px-1.5 py-0.5 rounded-full bg-secondary-container text-primary-container font-label-xs text-label-xs uppercase font-extrabold tracking-wider">Pro</span></div><span class="font-label-xs text-label-xs text-on-surface-variant">Club Marchands V2</span></div></div><div class="mt-space-xs p-space-sm rounded-lg bg-surface-container-lowest shadow-[0_1px_4px_rgba(0,0,0,0.03)] flex items-center justify-between cursor-pointer hover:bg-surface-container-high transition-colors"><div class="flex items-center gap-2 overflow-hidden"><span class="material-symbols-outlined text-secondary-container text-[18px]">storefront</span><div class="flex flex-col truncate"><span class="font-label-md text-label-md text-on-surface truncate">Bricomarché Nice Ouest</span><span class="font-label-xs text-label-xs text-on-surface-variant">Rayon actif 5 km</span></div></div><span class="material-symbols-outlined text-outline text-[16px]">unfold_more</span></div></div><nav class="flex flex-col gap-1 p-space-md flex-1" data-active-classes="bg-primary-container text-on-primary font-bold shadow-sm"><a class="group flex items-center gap-3 px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="tableau-de-bord" href="#"><span class="material-symbols-outlined text-[20px] text-outline group-hover:text-on-surface transition-colors">grid_view</span><span>Tableau de bord</span></a><a class="group flex items-center justify-between px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="commandes-et-retraits" href="#"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-[20px] text-outline group-hover:text-on-surface transition-colors">local_shipping</span><span>Commandes &amp; Retraits</span></div><span class="px-2 py-0.5 rounded-full bg-secondary-container text-primary-container font-label-xs text-label-xs font-extrabold">14</span></a><a aria-current="page" class="group flex items-center gap-3 px-3.5 py-2.5 rounded-lg transition-all bg-primary-container text-on-primary font-bold shadow-sm" data-path="gestion-des-stocks" href="#"><span class="material-symbols-outlined text-[20px] text-outline group-hover:text-on-surface transition-colors">inventory_2</span><span>Gestion des stocks &amp; Lieux</span></a><a class="group flex items-center gap-3 px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="catalogue-destockage" href="#"><span class="material-symbols-outlined text-[20px] text-outline group-hover:text-on-surface transition-colors">sell</span><span>Mon catalogue Déstockage</span></a><div class="my-2 px-3"><div class="h-px w-full bg-surface-container-high"></div></div><a class="group flex items-center justify-between px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="terminal-quai-vendeur" href="#"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-[20px] text-secondary-container">point_of_sale</span><span>Terminal Quai / Vendeur</span></div><span class="material-symbols-outlined text-[14px] text-outline">open_in_new</span></a><a class="group flex items-center gap-3 px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="parametres-et-horaires" href="#"><span class="material-symbols-outlined text-[20px] text-outline group-hover:text-on-surface transition-colors">store</span><span>Paramètres &amp; Horaires</span></a><a class="group flex items-center gap-3 px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="aide-et-support" href="#"><span class="material-symbols-outlined text-[20px] text-outline group-hover:text-on-surface transition-colors">contact_support</span><span>Aide &amp; Support</span></a></nav></div><div class="p-space-md border-t-0 bg-surface-container-low/70 flex flex-col gap-space-sm"><div class="px-2.5 py-2 rounded-lg bg-surface-container-lowest flex items-center justify-between shadow-[0_1px_4px_rgba(0,0,0,0.02)]"><div class="flex items-center gap-2"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed-dim opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-on-tertiary-container"></span></span><span class="font-label-xs text-label-xs text-on-surface-variant">Flux ERP sync</span></div><span class="font-label-xs text-label-xs font-extrabold text-on-tertiary-container">99.8%</span></div><div class="flex items-center justify-between px-2 pt-1"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[14px]">badge</span></div><div class="flex flex-col"><span class="font-label-xs text-label-xs font-bold text-on-surface">Poste #04 • Quai B</span><span class="font-label-xs text-label-xs text-outline">Session sécurisée</span></div></div><button class="text-outline hover:text-error transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">power_settings_new</span></button></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-gutter-desktop"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full"><span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span><input class="w-full h-10 pl-10 pr-12 rounded-full bg-surface-container-low text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-primary-container transition-all" placeholder="Rechercher commande, SKU, client, EAN..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-tertiary-container/10"><span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span><span class="font-label-xs text-label-xs font-bold text-on-tertiary-container uppercase tracking-wide">Magasin Ouvert</span></div><div class="flex items-center gap-1"><button class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" title="Notifications" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary-container"></span></button><button class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" title="Messagerie" type="button"><span class="material-symbols-outlined text-[20px]">chat_bubble</span></button></div><div class="h-6 w-px bg-surface-container-high"></div><div class="flex items-center gap-space-sm pl-1"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden lg:flex flex-col"><span class="font-label-md text-label-md text-on-surface leading-snug">Marc L.</span><span class="font-label-xs text-label-xs text-outline leading-tight">Chef de rayon</span></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen px-gutter-desktop py-space-xl"><div class="flex flex-col w-full gap-space-lg">
+<div class="flex flex-col xl:flex-row xl:items-center justify-between gap-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-lg text-headline-lg text-primary-container tracking-tight">Gestion des Stocks &amp; Emplacements Réserve</span>
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-xs text-label-xs uppercase font-extrabold tracking-wider">V2 Live</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+        Synchronisation des quantités disponibles et affectation des colis aux étagères et bacs de réserve pour une délivrance immédiate en magasin.
+      </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm">
+<button class="group flex items-center gap-2 px-4 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-on-surface shadow-sm hover:shadow-md transition-all" type="button">
+<span class="material-symbols-outlined text-[18px] text-outline group-hover:text-on-surface transition-colors">history</span>
+<span class="font-label-lg text-label-lg">Historique des mouvements</span>
+</button>
+<button class="group flex items-center gap-2 px-4 py-2.5 rounded-full bg-surface-container-high text-primary-container hover:bg-surface-container-highest transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary-container">file_upload</span>
+<span class="font-label-lg text-label-lg">Importer un inventaire physique</span>
+</button>
+<button class="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-primary-container text-on-primary shadow-sm hover:opacity-95 transition-all" type="button">
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/30">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary-fixed"></span>
+</span>
+<span class="font-label-xs text-label-xs font-bold text-tertiary-fixed tracking-wide uppercase">En direct</span>
+</div>
+<span class="font-label-lg text-label-lg">Synchroniser stock ERP</span>
+<span class="material-symbols-outlined text-[16px] text-primary-fixed-dim">sync</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-space-sm relative overflow-hidden group">
+<div class="absolute right-0 top-0 translate-x-3 -translate-y-3 w-20 h-20 bg-primary-fixed/20 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total références déstockage</span>
+<div class="w-9 h-9 rounded-lg bg-surface-container-low flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[20px]">category</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display text-display text-primary-container leading-none">302</span>
+<span class="font-label-md text-label-md text-outline">articles actifs</span>
+</div>
+<div class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-on-tertiary-container text-[16px]">verified</span>
+<span>Catalogue local Nice Ouest</span>
+</div>
+</div>
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-space-sm relative overflow-hidden group">
+<div class="absolute right-0 top-0 translate-x-3 -translate-y-3 w-20 h-20 bg-secondary-fixed/40 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Unités disponibles physiques</span>
+<div class="w-9 h-9 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">inventory</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display text-display text-primary leading-none">1 248</span>
+<span class="font-label-md text-label-md text-outline">pièces prêtes</span>
+</div>
+<div class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant">
+<div class="w-2 h-2 rounded-full bg-secondary-container"></div>
+<span>Comptoir + réserve arrière</span>
+</div>
+</div>
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-space-sm relative overflow-hidden group">
+<div class="absolute right-0 top-0 translate-x-3 -translate-y-3 w-20 h-20 bg-tertiary-fixed/30 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Unités réservées</span>
+<div class="w-9 h-9 rounded-lg bg-surface-container-low flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display text-display text-on-tertiary-container leading-none">18</span>
+<span class="font-label-md text-label-md text-outline">commandes actives</span>
+</div>
+<div class="flex items-center gap-1.5 font-body-sm text-body-sm text-on-tertiary-container font-semibold">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Retrait Click &amp; Collect express</span>
+</div>
+</div>
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-space-sm relative overflow-hidden group">
+<div class="absolute right-0 top-0 translate-x-3 -translate-y-3 w-20 h-20 bg-error-container/40 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Alertes stock faible</span>
+<div class="w-9 h-9 rounded-lg bg-error-container/20 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display text-display text-error leading-none">7</span>
+<span class="font-label-md text-label-md text-outline">références (&lt; 2 unités)</span>
+</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-error">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+<span>Réappro ou fin de déstockage</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<div class="relative flex-1 max-w-xl">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full h-11 pl-12 pr-10 rounded-full bg-surface-container-low text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="tableSearchInput" placeholder="Filtrer par référence, nom de produit, étagère ou bac..." type="text"/>
+<button class="absolute right-3.5 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface" title="Scanner code barre ou EAN" type="button">
+<span class="material-symbols-outlined text-[18px]">barcode_scanner</span>
+</button>
+</div>
+<div class="flex flex-wrap items-center gap-2" id="filterPills">
+<button class="filter-pill h-9 px-4 rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center gap-1.5 shadow-sm transition-all" data-filter="all" type="button">
+<span>Tous les stocks</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+</button>
+<button class="filter-pill h-9 px-4 rounded-full bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high font-label-md text-label-md flex items-center gap-1.5 transition-all" data-filter="reserved" type="button">
+<span>Unités réservées uniquement</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-highest text-primary font-bold text-label-xs">18</span>
+</button>
+<button class="filter-pill h-9 px-4 rounded-full bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high font-label-md text-label-md flex items-center gap-1.5 transition-all" data-filter="critical" type="button">
+<span>Stock critique (≤ 1)</span>
+<span class="w-2 h-2 rounded-full bg-error"></span>
+</button>
+<button class="filter-pill h-9 px-4 rounded-full bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high font-label-md text-label-md flex items-center gap-1.5 transition-all" data-filter="unassigned" type="button">
+<span>Non affectés en réserve</span>
+<span class="px-1.5 py-0.2 rounded-full bg-secondary-fixed text-on-secondary-fixed font-bold text-label-xs">1</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<div class="xl:col-span-8 flex flex-col rounded-xl bg-surface-container-lowest shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/80 text-on-surface-variant font-label-md text-label-md">
+<th class="py-3.5 px-4 font-bold">Article &amp; Référence</th>
+<th class="py-3.5 px-3 font-bold">Rayon &amp; EAN</th>
+<th class="py-3.5 px-3 font-bold text-center">Stock dispo</th>
+<th class="py-3.5 px-3 font-bold text-center">Réservé</th>
+<th class="py-3.5 px-3 font-bold">Emplacement réserve</th>
+<th class="py-3.5 px-3 font-bold">Statut Achille</th>
+<th class="py-3.5 px-4 font-bold text-right">Dernière synchro</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-on-surface" id="inventoryTableBody">
+<tr class="group hover:bg-surface-container-low/50 transition-colors" data-category="outillage" data-sku="BOSCH-GSB-18" data-state="reserved">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3 min-w-[240px]">
+<img class="w-12 h-12 rounded-lg object-cover bg-surface-container shrink-0" data-alt="Compact professional blue Bosch 18V cordless drill with dual lithium battery pack in rugged industrial packaging, bright warehouse product photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7J04sNCL8VyFENZqSQh2IoTHwGY1gmKNDFNr_HFvXD-GkIDPWsb8cKafQeVe4Hvp1c8huhb2KuM4cV_mRnlNVJQ_Op1JdsKVhxu8MY26xERcCAXlvDPyCx_ti_XhPkP6OIiHQAAWECW8Rt9lanCEc-01LPxvxHLiBmP-OU6H04qze6579I7fe9UuKr_O91W5s1ZS-jxdENeA0pyVXySmi2f9sQS1pwDUJX2yfVc4"/>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-body-md font-bold text-on-surface truncate group-hover:text-primary-container transition-colors">Perceuse Bosch Pro GSB 18V-21</span>
+<span class="font-body-sm text-body-sm text-outline">SKU: BOSCH-GSB-1821-PRO</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-md text-on-surface">Outillage Électroportatif</span>
+<span class="font-body-sm text-body-sm text-outline font-mono">3165140920452</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex items-center justify-center gap-1.5">
+<button class="qty-btn w-6 h-6 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface font-bold text-body-sm" data-action="decrease" title="Diminuer" type="button">-</button>
+<span class="qty-val font-price-card text-price-card text-primary-container w-7 text-center">4</span>
+<button class="qty-btn w-6 h-6 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface font-bold text-body-sm" data-action="increase" title="Augmenter" type="button">+</button>
+</div>
+</td>
+<td class="py-3.5 px-3 text-center whitespace-nowrap">
+<a class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-tertiary-container/15 text-on-tertiary-container hover:bg-tertiary-container/25 transition-colors font-label-md text-label-md" href="#">
+<span class="font-bold">1</span>
+<span class="text-label-xs font-mono">#ACH-88492</span>
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<button class="location-trigger group/loc flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors" data-loc="Étagère B3" data-prod="Perceuse Bosch Pro GSB 18V-21" data-sku="BOSCH-GSB-1821-PRO" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary-container">shelves</span>
+<span class="font-label-md text-label-md text-on-surface">Étagère B3</span>
+<span class="material-symbols-outlined text-[14px] text-outline group-hover/loc:text-on-surface">edit</span>
+</button>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-container/10 text-on-tertiary-container font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+<span>En ligne</span>
+</span>
+</td>
+<td class="py-3.5 px-4 text-right whitespace-nowrap">
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-on-surface">Il y a 3 min</span>
+<span class="font-label-xs text-label-xs text-on-tertiary-container font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+                    ERP OK
+                  </span>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-low/50 transition-colors bg-surface-container-lowest" data-category="outillage" data-sku="EINHELL-TE-AG" data-state="reserved">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3 min-w-[240px]">
+<img class="w-12 h-12 rounded-lg object-cover bg-surface-container shrink-0" data-alt="Red and black Einhell cordless angle grinder power tool displayed on industrial metallic workbench, high definition studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNHBM1t7_XV2lLotKsCcyicBvYdcmHixndFgRqNDNIWwmGDyahF0LUqtp1YqN4ElcKk1qr2UQ-143vW-lR-tOBQjqNIb9GFswSrZlfXdO0d-BEz0MEcIXLoCgeTXCz8318VcYwJko5He3GuMmumNhI2nfDvoLhQlGkehWsTEP_QGtzZCOuXSLV5mS39a5nbAlnhI_r5To8eQWdjD--sOJKI-XH-s44RK6RjZ_yfQg"/>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-body-md font-bold text-on-surface truncate group-hover:text-primary-container transition-colors">Meuleuse Einhell TE-AG 18</span>
+<span class="font-body-sm text-body-sm text-outline">SKU: EINH-AG18-LI-SOLO</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-md text-on-surface">Outillage Électroportatif</span>
+<span class="font-body-sm text-body-sm text-outline font-mono">4006825611235</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex items-center justify-center gap-1.5">
+<button class="qty-btn w-6 h-6 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface font-bold text-body-sm" data-action="decrease" title="Diminuer" type="button">-</button>
+<span class="qty-val font-price-card text-price-card text-primary-container w-7 text-center">8</span>
+<button class="qty-btn w-6 h-6 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface font-bold text-body-sm" data-action="increase" title="Augmenter" type="button">+</button>
+</div>
+</td>
+<td class="py-3.5 px-3 text-center whitespace-nowrap">
+<a class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-tertiary-container/15 text-on-tertiary-container hover:bg-tertiary-container/25 transition-colors font-label-md text-label-md" href="#">
+<span class="font-bold">1</span>
+<span class="text-label-xs font-mono">#ACH-88492</span>
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<button class="location-trigger group/loc flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors" data-loc="Bac 04" data-prod="Meuleuse Einhell TE-AG 18" data-sku="EINH-AG18-LI-SOLO" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary-container">inbox</span>
+<span class="font-label-md text-label-md text-on-surface">Bac 04</span>
+<span class="material-symbols-outlined text-[14px] text-outline group-hover/loc:text-on-surface">edit</span>
+</button>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-container/10 text-on-tertiary-container font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+<span>En ligne</span>
+</span>
+</td>
+<td class="py-3.5 px-4 text-right whitespace-nowrap">
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-on-surface">Il y a 3 min</span>
+<span class="font-label-xs text-label-xs text-on-tertiary-container font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+                    ERP OK
+                  </span>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-low/50 transition-colors" data-category="jardin" data-sku="RYOBI-MOW-33" data-state="reserved critical">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3 min-w-[240px]">
+<img class="w-12 h-12 rounded-lg object-cover bg-surface-container shrink-0" data-alt="Hyper green Ryobi cordless lawnmower 33cm compact cutting deck presented on clean warehouse surface, sharp natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3tbe_nTYA3NMCpwa8Sfg3hku5uNIlfpD90qOyjLfL8k1U2eGt5cxky9w3km_CZ6vXBm__ZjRXtZMLwGiAw3Fc4IeCAkmVvHLvllWpG6vJVgvjBBeSz77Rc97Vonqjp_6wbqwyZDXYviDYFHbpQXJLQgOg1GOwGP-elUdDrRbkikXsfa-sdvaTqWB9Z9hgILUjMWDGlFMImBBH9V3M0MLxPWTr9bbRXEz8AYiFi5Q"/>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-body-md font-bold text-on-surface truncate group-hover:text-primary-container transition-colors">Tondeuse Ryobi 18V 33cm</span>
+<span class="font-body-sm text-body-sm text-outline">SKU: RYO-OLM1833H</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-md text-on-surface">Jardin &amp; Motorisé</span>
+<span class="font-body-sm text-body-sm text-outline font-mono">4892210822550</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex items-center justify-center gap-1.5">
+<button class="qty-btn w-6 h-6 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface font-bold text-body-sm" data-action="decrease" title="Diminuer" type="button">-</button>
+<span class="qty-val font-price-card text-price-card text-secondary font-black w-7 text-center">2</span>
+<button class="qty-btn w-6 h-6 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface font-bold text-body-sm" data-action="increase" title="Augmenter" type="button">+</button>
+</div>
+</td>
+<td class="py-3.5 px-3 text-center whitespace-nowrap">
+<a class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-tertiary-container/15 text-on-tertiary-container hover:bg-tertiary-container/25 transition-colors font-label-md text-label-md" href="#">
+<span class="font-bold">1</span>
+<span class="text-label-xs font-mono">#ACH-88501</span>
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<button class="location-trigger group/loc flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors" data-loc="Zone Encombrants Z2" data-prod="Tondeuse Ryobi 18V 33cm" data-sku="RYO-OLM1833H" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary-container">pallet</span>
+<span class="font-label-md text-label-md text-on-surface">Zone Encombrants Z2</span>
+<span class="material-symbols-outlined text-[14px] text-outline group-hover/loc:text-on-surface">edit</span>
+</button>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-container/10 text-on-tertiary-container font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+<span>En ligne</span>
+</span>
+</td>
+<td class="py-3.5 px-4 text-right whitespace-nowrap">
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-on-surface">Il y a 12 min</span>
+<span class="font-label-xs text-label-xs text-on-tertiary-container font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+                    ERP OK
+                  </span>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-low/50 transition-colors" data-category="outillage" data-sku="BND-SANDER" data-state="normal">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3 min-w-[240px]">
+<img class="w-12 h-12 rounded-lg object-cover bg-surface-container shrink-0" data-alt="Orange and black Black+Decker electric orbital sander displayed on wood grain workshop bench, high detail commercial product shot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkwQVaRpc1mKr_UY8mBTy8uHxRBa6DSwLstPWXthQzx079VnW50dAORNtvSjS2neNLPPf1KLCby54mY-JHgIjKiwYuv7ba2N34Fc2cHUxEmzgzei18fBfVz8mDnMXheZ_bhfYNRlDBmKJDfdIigWTXttcRBEPt5a2Sg1QofcsIQDhbUIEXHChWMMUQNRAs9FvVBTuO83QW0VHBRwVDweLFcuZwOq38pUHutgrakUQ"/>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-body-md font-bold text-on-surface truncate group-hover:text-primary-container transition-colors">Ponceuse Black+Decker</span>
+<span class="font-body-sm text-body-sm text-outline">SKU: BND-KA191EK-QS</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-md text-on-surface">Outillage Électroportatif</span>
+<span class="font-body-sm text-body-sm text-outline font-mono">5035048188170</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex items-center justify-center gap-1.5">
+<button class="qty-btn w-6 h-6 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface font-bold text-body-sm" data-action="decrease" title="Diminuer" type="button">-</button>
+<span class="qty-val font-price-card text-price-card text-primary-container w-7 text-center">6</span>
+<button class="qty-btn w-6 h-6 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface font-bold text-body-sm" data-action="increase" title="Augmenter" type="button">+</button>
+</div>
+</td>
+<td class="py-3.5 px-3 text-center whitespace-nowrap">
+<span class="font-label-md text-label-md text-outline">0</span>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<button class="location-trigger group/loc flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors" data-loc="Étagère C1" data-prod="Ponceuse Black+Decker" data-sku="BND-KA191EK-QS" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary-container">shelves</span>
+<span class="font-label-md text-label-md text-on-surface">Étagère C1</span>
+<span class="material-symbols-outlined text-[14px] text-outline group-hover/loc:text-on-surface">edit</span>
+</button>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-container/10 text-on-tertiary-container font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+<span>En ligne</span>
+</span>
+</td>
+<td class="py-3.5 px-4 text-right whitespace-nowrap">
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-on-surface">Il y a 45 min</span>
+<span class="font-label-xs text-label-xs text-on-tertiary-container font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+                    ERP OK
+                  </span>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-low/50 transition-colors bg-secondary-fixed/10" data-category="nettoyage" data-sku="KARCHER-K4" data-state="critical unassigned">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3 min-w-[240px]">
+<img class="w-12 h-12 rounded-lg object-cover bg-surface-container shrink-0" data-alt="Yellow and black Kärcher K4 high pressure washer with hose and trigger gun, studio isolated product photograph for ecommerce" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpGy6H-3LiWYRIwydKpk0gMIiaorHRJSyYT4310usn3_gyrTquy2aW3IHsVS60mns0fyGtTWgJwhG_miVcoCCndrLcxsBaIG-QcyRkmVvgVM1_7E6qjFoAIRtze0WCFqUkOd6LS-qArUnq42yg-4_Fz0_2P79IX9Pr3yGzRI9lUDxBEYPdXO9k2WTBHcZd061MR_QbyA80D3whCDvsfKKYOY6FEyZrCQ_6Rvmvs3Y"/>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-body-md font-bold text-on-surface truncate group-hover:text-primary-container transition-colors">Nettoyeur haute pression Kärcher K4</span>
+<span class="font-body-sm text-body-sm text-outline">SKU: KARCH-K4-PWR-CONTROL</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-md text-on-surface">Nettoyage Extérieur</span>
+<span class="font-body-sm text-body-sm text-outline font-mono">4054278604107</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex items-center justify-center gap-1.5">
+<button class="qty-btn w-6 h-6 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface font-bold text-body-sm" data-action="decrease" title="Diminuer" type="button">-</button>
+<span class="qty-val font-price-card text-price-card text-error font-black w-7 text-center">1</span>
+<button class="qty-btn w-6 h-6 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface font-bold text-body-sm" data-action="increase" title="Augmenter" type="button">+</button>
+</div>
+</td>
+<td class="py-3.5 px-3 text-center whitespace-nowrap">
+<span class="font-label-md text-label-md text-outline">0</span>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<button class="location-trigger inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary-container text-primary-container font-label-md text-label-md font-extrabold hover:opacity-95 shadow-sm transition-all" data-loc="Non affecté" data-prod="Nettoyeur haute pression Kärcher K4" data-sku="KARCH-K4-PWR-CONTROL" type="button">
+<span class="material-symbols-outlined text-[16px]">add_location_alt</span>
+<span>+ Assigner emplacement</span>
+</button>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-container/10 text-on-tertiary-container font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+<span>En ligne</span>
+</span>
+</td>
+<td class="py-3.5 px-4 text-right whitespace-nowrap">
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-on-surface">Il y a 1 h</span>
+<span class="font-label-xs text-label-xs text-on-tertiary-container font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+                    ERP OK
+                  </span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-space-md bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Affichage de 5 sur 302 références déstockage</span>
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span class="font-label-xs text-label-xs text-on-surface-variant font-bold">Poste Bricomarché Nice Ouest</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="px-3 py-1 rounded-lg bg-surface-container text-outline hover:text-on-surface text-label-sm font-label-md" disabled="" type="button">Précédent</button>
+<button class="w-7 h-7 rounded-lg bg-primary-container text-on-primary font-bold text-label-xs" type="button">1</button>
+<button class="w-7 h-7 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-label-xs" type="button">2</button>
+<button class="w-7 h-7 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-label-xs" type="button">3</button>
+<button class="px-3 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm font-label-md" type="button">Suivant</button>
+</div>
+</div>
+</div>
+<div class="xl:col-span-4 flex flex-col gap-space-md">
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-md transition-all" id="drawerAssignation">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-container text-[22px]">shelves</span>
+<span class="font-headline-sm text-headline-sm text-primary-container">Affectation d'emplacement</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Guidage préparateur &amp; délivrance comptoir</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-low text-primary-container font-label-xs text-label-xs font-bold">Sans Casier</span>
+</div>
+<div class="p-3.5 rounded-lg bg-surface-container-low flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary-container shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[20px]" id="drawerIcon">construction</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate" id="drawerProdName">Nettoyeur haute pression Kärcher K4</span>
+<span class="font-body-sm text-body-sm text-outline truncate" id="drawerSku">SKU: KARCH-K4-PWR-CONTROL</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-bold flex items-center justify-between">
+<span>Emplacement actuel :</span>
+<span class="text-secondary font-bold" id="drawerCurrentLoc">Non affecté</span>
+</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[18px]">location_on</span>
+<input class="w-full h-10 pl-10 pr-4 rounded-lg bg-surface-container-low text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary-container" id="customLocationInput" placeholder="Saisir ou choisir un emplacement..." type="text" value=""/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Emplacements suggérés réserve</span>
+<div class="grid grid-cols-2 gap-2" id="suggestedLocationGrid">
+<button class="preset-loc-btn p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-left flex flex-col gap-0.5 transition-colors" data-target="Étagère B3" type="button">
+<span class="font-label-md text-label-md text-primary-container font-bold">Étagère B3</span>
+<span class="font-label-xs text-label-xs text-outline">3 colis électroportatif</span>
+</button>
+<button class="preset-loc-btn p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-left flex flex-col gap-0.5 transition-colors" data-target="Bac 04" type="button">
+<span class="font-label-md text-label-md text-primary-container font-bold">Bac 04</span>
+<span class="font-label-xs text-label-xs text-outline">Petits outillages</span>
+</button>
+<button class="preset-loc-btn p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-left flex flex-col gap-0.5 transition-colors" data-target="Zone Encombrants Z2" type="button">
+<span class="font-label-md text-label-md text-primary-container font-bold">Zone Encombrants Z2</span>
+<span class="font-label-xs text-label-xs text-on-tertiary-container font-bold">Idéal gros gabarit</span>
+</button>
+<button class="preset-loc-btn p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-left flex flex-col gap-0.5 transition-colors" data-target="Comptoir Pro A" type="button">
+<span class="font-label-md text-label-md text-primary-container font-bold">Comptoir Pro A</span>
+<span class="font-label-xs text-label-xs text-outline">Prêt à délivrer express</span>
+</button>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-tertiary-container/10 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-on-tertiary-container text-[20px] shrink-0">tips_and_updates</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-tertiary-container">Organisation sans casier</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">L'affectation permet au vendeur au comptoir de retrouver la pièce en moins de 30 secondes pour le client Click &amp; Collect.</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm pt-1">
+<button class="flex-1 h-10 rounded-full bg-secondary-container text-primary-container font-label-lg text-label-lg font-extrabold hover:opacity-95 shadow-sm transition-all flex items-center justify-center gap-2" id="saveLocationBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+<span>Valider l'affectation</span>
+</button>
+<button class="h-10 px-4 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg transition-colors" id="resetLocationBtn" type="button">
+            Annuler
+          </button>
+</div>
+</div>
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[20px]">map</span>
+<span class="font-headline-sm text-headline-sm text-primary-container">Plan de la réserve magasin</span>
+</div>
+<span class="font-label-xs text-label-xs text-outline font-bold">Nice Ouest (Zone Arrière)</span>
+</div>
+<div class="relative w-full h-44 rounded-xl bg-surface-container-low p-3 flex flex-col justify-between overflow-hidden">
+<div class="flex items-center justify-between z-10">
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest/90 font-label-xs text-label-xs font-bold text-primary-container shadow-xs">Zone A : Quai Retrait</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest/90 font-label-xs text-label-xs font-bold text-primary-container shadow-xs">Zone B : Rayonnages Hauts</span>
+</div>
+<div class="grid grid-cols-4 gap-2 my-auto z-10">
+<div class="h-14 rounded-lg bg-surface-container-lowest/80 p-1.5 flex flex-col justify-between hover:bg-surface-container-lowest transition-colors cursor-pointer shadow-xs">
+<span class="font-label-xs text-label-xs font-bold text-primary-container">Étagère B1</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">12 art.</span>
+</div>
+<div class="h-14 rounded-lg bg-secondary-fixed/50 p-1.5 flex flex-col justify-between ring-0 cursor-pointer shadow-xs">
+<span class="font-label-xs text-label-xs font-black text-on-secondary-fixed">Étagère B3</span>
+<span class="font-label-xs text-label-xs text-on-secondary-fixed font-bold">Actif (3)</span>
+</div>
+<div class="h-14 rounded-lg bg-surface-container-lowest/80 p-1.5 flex flex-col justify-between hover:bg-surface-container-lowest transition-colors cursor-pointer shadow-xs">
+<span class="font-label-xs text-label-xs font-bold text-primary-container">Bac 04</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">8 art.</span>
+</div>
+<div class="h-14 rounded-lg bg-tertiary-fixed-dim/40 p-1.5 flex flex-col justify-between hover:bg-surface-container-lowest transition-colors cursor-pointer shadow-xs">
+<span class="font-label-xs text-label-xs font-bold text-on-tertiary-fixed">Encombrants</span>
+<span class="font-label-xs text-label-xs text-on-tertiary-container font-bold">Zone Z2</span>
+</div>
+</div>
+<div class="flex items-center justify-between z-10">
+<div class="flex items-center gap-1 text-label-xs font-label-xs text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+<span>Sélection active</span>
+</div>
+<span class="font-label-xs text-label-xs text-outline">Capacité totale : 74%</span>
+</div>
+</div>
+<button class="w-full py-2 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-md text-label-md flex items-center justify-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">qr_code_scanner</span>
+<span>Imprimer les étiquettes d'emplacements</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const tableBody = document.getElementById('inventoryTableBody');
+    const searchInput = document.getElementById('tableSearchInput');
+    const filterButtons = document.querySelectorAll('.filter-pill');
+
+    const drawerProdName = document.getElementById('drawerProdName');
+    const drawerSku = document.getElementById('drawerSku');
+    const drawerCurrentLoc = document.getElementById('drawerCurrentLoc');
+    const customLocationInput = document.getElementById('customLocationInput');
+    const saveLocationBtn = document.getElementById('saveLocationBtn');
+    const resetLocationBtn = document.getElementById('resetLocationBtn');
+    const presetButtons = document.querySelectorAll('.preset-loc-btn');
+
+    let activeTriggerBtn = null;
+
+    tableBody.addEventListener('click', function(e) {
+      const qtyBtn = e.target.closest('.qty-btn');
+      if (qtyBtn) {
+        const row = qtyBtn.closest('tr');
+        const qtySpan = row.querySelector('.qty-val');
+        let currentQty = parseInt(qtySpan.textContent.trim(), 10) || 0;
+        const action = qtyBtn.getAttribute('data-action');
+
+        if (action === 'increase') {
+          currentQty += 1;
+        } else if (action === 'decrease' && currentQty > 0) {
+          currentQty -= 1;
+        }
+
+        qtySpan.textContent = currentQty;
+
+        if (currentQty <= 1) {
+          qtySpan.className = 'qty-val font-price-card text-price-card text-error font-black w-7 text-center';
+        } else {
+          qtySpan.className = 'qty-val font-price-card text-price-card text-primary-container w-7 text-center';
+        }
+        return;
+      }
+
+      const locBtn = e.target.closest('.location-trigger');
+      if (locBtn) {
+        activeTriggerBtn = locBtn;
+        const prod = locBtn.getAttribute('data-prod');
+        const loc = locBtn.getAttribute('data-loc');
+        const sku = locBtn.getAttribute('data-sku');
+
+        drawerProdName.textContent = prod;
+        drawerSku.textContent = 'SKU: ' + sku;
+        drawerCurrentLoc.textContent = loc;
+        customLocationInput.value = loc === 'Non affecté' ? '' : loc;
+        customLocationInput.focus();
+      }
+    });
+
+    presetButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetVal = this.getAttribute('data-target');
+        customLocationInput.value = targetVal;
+      });
+    });
+
+    saveLocationBtn.addEventListener('click', function() {
+      const newLoc = customLocationInput.value.trim() || 'Non affecté';
+      drawerCurrentLoc.textContent = newLoc;
+
+      if (activeTriggerBtn) {
+        activeTriggerBtn.setAttribute('data-loc', newLoc);
+        if (newLoc === 'Non affecté') {
+          activeTriggerBtn.className = 'location-trigger inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary-container text-primary-container font-label-md text-label-md font-extrabold hover:opacity-95 shadow-sm transition-all';
+          activeTriggerBtn.innerHTML = '<span class="material-symbols-outlined text-[16px]">add_location_alt</span><span>+ Assigner emplacement</span>';
+        } else {
+          activeTriggerBtn.className = 'location-trigger group/loc flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors';
+          activeTriggerBtn.innerHTML = '<span class="material-symbols-outlined text-[18px] text-primary-container">shelves</span><span class="font-label-md text-label-md text-on-surface">' + newLoc + '</span><span class="material-symbols-outlined text-[14px] text-outline group-hover/loc:text-on-surface">edit</span>';
+        }
+      }
+    });
+
+    resetLocationBtn.addEventListener('click', function() {
+      customLocationInput.value = '';
+    });
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        filterButtons.forEach(b => {
+          b.className = 'filter-pill h-9 px-4 rounded-full bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high font-label-md text-label-md flex items-center gap-1.5 transition-all';
+        });
+
+        this.className = 'filter-pill h-9 px-4 rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center gap-1.5 shadow-sm transition-all';
+
+        const filterType = this.getAttribute('data-filter');
+        const rows = tableBody.querySelectorAll('tr');
+
+        rows.forEach(row => {
+          const rowState = row.getAttribute('data-state') || '';
+          if (filterType === 'all') {
+            row.style.display = '';
+          } else if (filterType === 'reserved' && rowState.includes('reserved')) {
+            row.style.display = '';
+          } else if (filterType === 'critical' && rowState.includes('critical')) {
+            row.style.display = '';
+          } else if (filterType === 'unassigned' && rowState.includes('unassigned')) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    searchInput.addEventListener('input', function(e) {
+      const q = e.target.value.toLowerCase().trim();
+      const rows = tableBody.querySelectorAll('tr');
+
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(q)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  })();
+</script></main></div></body></html>

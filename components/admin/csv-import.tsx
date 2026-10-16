@@ -186,7 +186,7 @@ function StepChip({
       className={cn(
         "inline-flex items-center rounded-full px-3 py-1 font-bold",
         active
-          ? "bg-primary-container text-on-primary shadow-navy-soft"
+          ? "bg-primary-container text-on-primary shadow-sm"
           : done
             ? "bg-tertiary-fixed text-on-tertiary-container"
             : "bg-surface-container text-on-surface-variant",

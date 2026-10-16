@@ -76,7 +76,7 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
         ) : (
           <div className="grid items-start gap-6 lg:grid-cols-12">
             <div className="flex min-w-0 flex-col gap-4 lg:col-span-7">
-              <section className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5">
+              <section className="bg-surface-container-lowest shadow-sm rounded-2xl p-5">
                 <p className="font-label-xs text-label-xs text-on-surface-variant font-extrabold tracking-wider uppercase">
                   {cart.merchantName}
                 </p>
@@ -88,7 +88,7 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
                   <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 flex items-center gap-1">
                     <MaterialIcon
                       name="near_me"
-                      className="text-secondary-container text-[16px]"
+                      className="text-secondary text-[16px]"
                     />
                     À <Distance meters={cart.distanceM} variant="plain" />
                   </p>
@@ -102,7 +102,7 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
                 {cart.lines.map((line) => (
                   <li
                     key={line.offerId}
-                    className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5"
+                    className="bg-surface-container-lowest shadow-sm rounded-2xl p-5"
                   >
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
@@ -118,7 +118,7 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
                           {line.stock} en magasin
                         </p>
                       </div>
-                      <p className="font-price-card text-secondary-container font-extrabold">
+                      <p className="font-price-card text-secondary font-extrabold">
                         {formatEur(line.subtotal)}
                       </p>
                     </div>
@@ -144,7 +144,7 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
                 ))}
               </ul>
             </div>
-            <aside className="bg-surface-container-lowest shadow-navy-soft flex flex-col gap-4 rounded-2xl p-5 lg:col-span-5 lg:sticky lg:top-24">
+            <aside className="bg-surface-container-lowest shadow-sm flex flex-col gap-4 rounded-2xl p-5 lg:col-span-5 lg:sticky lg:top-24">
               <h2 className="font-headline-sm text-primary-container">Récapitulatif</h2>
               <dl className="font-body-sm text-body-sm flex flex-col gap-2">
                 <div className="flex justify-between gap-3">
@@ -161,7 +161,7 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
                   <dt className="font-label-md text-label-md text-primary-container font-bold">
                     Total à régler au retrait
                   </dt>
-                  <dd className="font-price-hero text-secondary-container font-extrabold">
+                  <dd className="font-price-hero text-secondary font-extrabold">
                     {formatEur(cart.total)}
                   </dd>
                 </div>

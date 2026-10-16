@@ -177,7 +177,7 @@ export default async function ReservationConfirmationPage({
             ) : null}
           </>
         ) : null}
-        <ul className="bg-surface-container-lowest shadow-navy-soft flex flex-col gap-3 rounded-2xl p-5">
+        <ul className="bg-surface-container-lowest shadow-sm flex flex-col gap-3 rounded-2xl p-5">
           {reservation.items.map((item) => (
             <li
               key={item.id}
@@ -186,14 +186,14 @@ export default async function ReservationConfirmationPage({
               <span className="font-body-md text-primary-container">
                 {item.offer.product.name} × {item.quantity}
               </span>
-              <span className="font-headline-sm text-secondary-container">
+              <span className="font-headline-sm text-secondary">
                 {formatEur(item.subtotal)}
               </span>
             </li>
           ))}
           <li className="border-surface-container-high flex items-baseline justify-between gap-3 border-t pt-3">
             <span className="font-label-md text-primary-container">Total</span>
-            <span className="font-price-hero text-secondary-container font-extrabold">
+            <span className="font-price-hero text-secondary font-extrabold">
               {formatEur(reservation.totalAmount)}
             </span>
           </li>

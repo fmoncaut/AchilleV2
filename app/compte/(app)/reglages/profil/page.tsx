@@ -27,7 +27,7 @@ export default async function ProfileSettingsPage({ searchParams }: PageProps) {
   const params = await searchParams;
 
   return (
-    <section className="bg-surface-container-lowest shadow-navy-soft flex flex-col gap-5 rounded-2xl p-5">
+    <section className="bg-surface-container-lowest shadow-sm flex flex-col gap-5 rounded-2xl p-5">
       <div>
         <h2 className="font-headline-sm text-primary-container">Profil</h2>
         <p className="font-body-sm text-on-surface-variant mt-1">

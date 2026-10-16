@@ -1,66 +1,30 @@
-import { Space_Grotesk } from "next/font/google";
 import localFont from "next/font/local";
 
-/** Wordmark Akwire uniquement (next/font auto-héberge les fichiers au build). */
-export const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["500", "600"],
-  variable: "--font-space-grotesk",
-  display: "swap",
-});
-
-/** Latin, auto-hébergé via Fontsource. Le build ne télécharge plus Google Fonts. */
-export const bricolage = localFont({
+/** Space Grotesk auto-hébergée (Fontsource). Une seule famille pour le wordmark, les titres et le corps. */
+export const spaceGrotesk = localFont({
   src: [
     {
-      path: "../node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-600-normal.woff2",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-700-normal.woff2",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-800-normal.woff2",
-      weight: "800",
-      style: "normal",
-    },
-  ],
-  variable: "--font-bricolage",
-  display: "swap",
-});
-
-export const manrope = localFont({
-  src: [
-    {
-      path: "../node_modules/@fontsource/manrope/files/manrope-latin-400-normal.woff2",
+      path: "../node_modules/@fontsource/space-grotesk/files/space-grotesk-latin-400-normal.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../node_modules/@fontsource/manrope/files/manrope-latin-500-normal.woff2",
+      path: "../node_modules/@fontsource/space-grotesk/files/space-grotesk-latin-500-normal.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../node_modules/@fontsource/manrope/files/manrope-latin-600-normal.woff2",
+      path: "../node_modules/@fontsource/space-grotesk/files/space-grotesk-latin-600-normal.woff2",
       weight: "600",
       style: "normal",
     },
     {
-      path: "../node_modules/@fontsource/manrope/files/manrope-latin-700-normal.woff2",
+      path: "../node_modules/@fontsource/space-grotesk/files/space-grotesk-latin-700-normal.woff2",
       weight: "700",
       style: "normal",
     },
-    {
-      path: "../node_modules/@fontsource/manrope/files/manrope-latin-800-normal.woff2",
-      weight: "800",
-      style: "normal",
-    },
   ],
-  variable: "--font-manrope",
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 

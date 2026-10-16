@@ -57,7 +57,7 @@ export function PosDrawer({
       <button
         type="button"
         aria-label="Fermer le panneau magasin"
-        className="fixed inset-0 z-40 bg-[#002642]/25 lg:bg-transparent"
+        className="fixed inset-0 z-overlay bg-primary-container/25 lg:bg-transparent"
         onClick={onClose}
       />
       <aside
@@ -65,7 +65,7 @@ export function PosDrawer({
         aria-modal="true"
         aria-labelledby="pos-drawer-title"
         className={cn(
-          "bg-surface-container-lowest shadow-navy-soft fixed z-50 flex flex-col overflow-hidden",
+          "bg-surface-container-lowest shadow-sm fixed z-drawer flex flex-col overflow-hidden",
           "inset-x-0 bottom-0 max-h-[75vh] rounded-t-3xl",
           "lg:inset-y-4 lg:right-4 lg:bottom-auto lg:left-auto lg:w-[24rem] lg:max-h-[calc(100vh-2rem)] lg:rounded-3xl",
         )}
@@ -85,7 +85,7 @@ export function PosDrawer({
             )}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="font-label-xs text-label-xs text-secondary-container font-extrabold tracking-wider uppercase">
+            <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
               {pin.merchantName}
             </p>
             <h2

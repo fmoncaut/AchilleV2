@@ -25,7 +25,7 @@ export function ViewToggle({ query }: ViewToggleProps) {
         className={cn(
           "font-label-md text-label-md inline-flex items-center gap-1 rounded-full px-3 py-1.5",
           query.vue === "liste"
-            ? "bg-primary-container text-on-primary shadow-navy-soft"
+            ? "bg-primary-container text-on-primary shadow-sm"
             : "text-on-surface-variant hover:text-on-surface",
         )}
       >
@@ -39,7 +39,7 @@ export function ViewToggle({ query }: ViewToggleProps) {
         className={cn(
           "font-label-md text-label-md inline-flex items-center gap-1 rounded-full px-3 py-1.5",
           query.vue === "carte"
-            ? "bg-primary-container text-on-primary shadow-navy-soft"
+            ? "bg-primary-container text-on-primary shadow-sm"
             : "text-on-surface-variant hover:text-on-surface",
         )}
       >

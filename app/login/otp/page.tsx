@@ -100,7 +100,7 @@ export default async function LoginOtpPage({ searchParams }: OtpPageProps) {
           maxLength={6}
           required
           placeholder="000000"
-          className="bg-surface-container-low font-display text-on-surface placeholder:text-outline focus-visible:ring-secondary-container h-14 w-full rounded-full border-0 px-4 text-center text-2xl tracking-[0.4em] outline-none focus-visible:ring-2"
+          className="bg-surface-container-low font-display text-on-surface placeholder:text-outline focus-visible:ring-primary-container h-14 w-full rounded-full border-0 px-4 text-center text-2xl tracking-[0.4em] outline-none focus-visible:ring-2"
         />
         <Button type="submit" size="lg" className="w-full">
           Valider

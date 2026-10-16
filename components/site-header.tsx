@@ -16,8 +16,8 @@ export async function SiteHeader() {
   const accountLabel = session?.user?.name?.split(" ")[0] || "Compte";
 
   return (
-    <header className="bg-surface-container-lowest/95 shadow-navy-soft sticky top-0 z-50 w-full backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1680px] items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
+    <header className="bg-surface-container-lowest/95 shadow-sm sticky top-0 z-header w-full backdrop-blur-md">
+      <div className="mx-auto flex max-w-page items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <BrandLockup className="shrink-0" />
         <form
           action="/recherche"
@@ -32,7 +32,7 @@ export async function SiteHeader() {
             name="q"
             type="search"
             placeholder="Rechercher un produit"
-            className="font-body-sm text-body-sm placeholder:text-outline min-w-0 flex-1 bg-transparent px-2 py-1 outline-none"
+            className="font-body-md text-body-md placeholder:text-outline min-w-0 flex-1 bg-transparent px-2 py-1 outline-none"
           />
           <Link
             href="/recherche?vue=carte"
@@ -52,7 +52,7 @@ export async function SiteHeader() {
         <nav className="ml-auto flex items-center gap-1 sm:gap-2">
           <Link
             href="/recherche?vue=carte"
-            className="bg-primary-container font-label-md text-label-md text-on-primary shadow-navy hover:bg-primary hidden items-center gap-1.5 rounded-full px-3.5 py-1.5 xl:inline-flex"
+            className="bg-primary-container font-label-md text-label-md text-on-primary shadow-md hover:bg-primary hidden items-center gap-1.5 rounded-full px-3.5 py-1.5 xl:inline-flex"
           >
             <MaterialIcon name="explore" className="text-[16px]" />
             Explorer la carte
@@ -64,7 +64,7 @@ export async function SiteHeader() {
             </Link>
           ) : null}
           <Link href="/reservation" className={iconLinkClass}>
-            <MaterialIcon name="shopping_bag" className="text-secondary-container text-[18px]" />
+            <MaterialIcon name="shopping_bag" className="text-secondary text-[18px]" />
             <span className="hidden sm:inline">Panier</span>
             {cartCount > 0 ? (
               <span className="bg-secondary-container text-on-secondary-container font-label-xs text-label-xs inline-flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 font-extrabold">

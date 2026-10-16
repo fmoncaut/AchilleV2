@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'surface': '#f8f9fc', 'secondary-fixed': '#ffdcbd', 'tertiary': '#001309', 'inverse-primary': '#abc9ed', 'on-error': '#ffffff', 'tertiary-fixed': '#8ef7c2', 'on-tertiary': '#ffffff', 'on-primary-fixed-variant': '#2a4967', 'surface-bright': '#f8f9fc', 'on-primary': '#ffffff', 'on-tertiary-fixed': '#002113', 'surface-tint': '#436180', 'secondary': '#8a5100', 'tertiary-container': '#002b1a', 'inverse-on-surface': '#eff1f4', 'surface-container': '#eceef1', 'primary': '#001020', 'error': '#ba1a1a', 'background': '#f8f9fc', 'on-primary-container': '#708eaf', 'surface-container-highest': '#e0e3e6', 'on-tertiary-container': '#2f9d70', 'on-secondary': '#ffffff', 'error-container': '#ffdad6', 'primary-container': '#002642', 'surface-dim': '#d8dadd', 'surface-container-high': '#e6e8eb', 'outline': '#73777e', 'tertiary-fixed-dim': '#72daa8', 'surface-container-lowest': '#ffffff', 'on-background': '#191c1e', 'on-secondary-fixed-variant': '#693c00', 'on-secondary-fixed': '#2c1600', 'primary-fixed-dim': '#abc9ed', 'primary-fixed': '#d0e4ff', 'inverse-surface': '#2d3133', 'on-error-container': '#93000a', 'on-primary-fixed': '#001d34', 'on-surface-variant': '#43474d', 'on-tertiary-fixed-variant': '#005235', 'on-secondary-container': '#643900', 'on-surface': '#191c1e', 'surface-variant': '#e0e3e6', 'surface-container-low': '#f2f4f7', 'secondary-container': '#fe9800', 'secondary-fixed-dim': '#ffb86f', 'outline-variant': '#c3c7ce' }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' }, spacing: { 'space-md': '1rem', 'margin': '1rem', 'margin-desktop': '2rem', 'gutter-desktop': '1.5rem', 'space-sm': '0.5rem', 'space-lg': '1.5rem', 'margin-tablet': '1.5rem', 'gutter': '1rem', 'space-xs': '0.25rem', 'space-xl': '2rem' }, fontFamily: { 'display-mobile': ['Bricolage Grotesque'], 'price-hero': ['Bricolage Grotesque'], 'display': ['Bricolage Grotesque'], 'body-lg': ['Manrope'], 'body-sm': ['Manrope'], 'label-lg': ['Manrope'], 'headline-lg-mobile': ['Bricolage Grotesque'], 'headline-sm': ['Bricolage Grotesque'], 'label-md': ['Manrope'], 'price-card': ['Bricolage Grotesque'], 'headline-md': ['Bricolage Grotesque'], 'body-md': ['Manrope'], 'headline-lg': ['Bricolage Grotesque'], 'label-xs': ['Manrope'] }, fontSize: { 'display-mobile': ['34px', { lineHeight: '40px', fontWeight: '800' }], 'price-hero': ['28px', { lineHeight: '32px', fontWeight: '800' }], 'display': ['48px', { lineHeight: '56px', fontWeight: '800' }], 'body-lg': ['18px', { lineHeight: '28px', fontWeight: '400' }], 'body-sm': ['13px', { lineHeight: '18px', fontWeight: '500' }], 'label-lg': ['14px', { lineHeight: '20px', fontWeight: '700' }], 'headline-lg-mobile': ['26px', { lineHeight: '32px', fontWeight: '700' }], 'headline-sm': ['20px', { lineHeight: '26px', fontWeight: '600' }], 'label-md': ['12px', { lineHeight: '16px', fontWeight: '700' }], 'price-card': ['20px', { lineHeight: '24px', fontWeight: '800' }], 'headline-md': ['24px', { lineHeight: '30px', fontWeight: '700' }], 'body-md': ['15px', { lineHeight: '22px', fontWeight: '500' }], 'headline-lg': ['32px', { lineHeight: '38px', fontWeight: '700' }], 'label-xs': ['10px', { lineHeight: '12px', fontWeight: '800' }] } } } };</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between select-none"><div class="flex flex-col flex-1 overflow-y-auto"><div class="p-space-lg flex flex-col gap-space-sm bg-surface-container-low/60"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #002642 - Font: bricolageGrotesque - Mode: light - Roundness: rounded-md" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WeW9itNWPqLrCKP7ORkIHy8WEUKqKS19C_quIbkXj2PMxoq6b78y_zegB0NJhzWqY38755YEACDqoBTllzubbVilkEzbPRTzGmlVatZBjKJCVtvRQFphq2L4-EQKe1RxqnMKP1yvrX-te9-rqWmsqCigswynG-gCRBZsi2JAtGwhiD2Zl2s2AMp1ExW43Yv2xTWlfsvce9WCcYOOMWG9R3FKtuJE0zU12qbDNPeDK9"/><div class="flex flex-col"><div class="flex items-center gap-1.5"><span class="font-headline-sm text-headline-sm text-primary-container tracking-tight leading-none">Achille</span><span class="px-1.5 py-0.5 rounded-full bg-secondary-container text-primary-container font-label-xs text-label-xs uppercase font-extrabold tracking-wider">Pro</span></div><span class="font-label-xs text-label-xs text-on-surface-variant">Club Marchands V2</span></div></div><div class="mt-space-xs p-space-sm rounded-lg bg-surface-container-lowest shadow-[0_1px_4px_rgba(0,0,0,0.03)] flex items-center justify-between cursor-pointer hover:bg-surface-container-high transition-colors"><div class="flex items-center gap-2 overflow-hidden"><span class="material-symbols-outlined text-secondary-container text-[18px]">storefront</span><div class="flex flex-col truncate"><span class="font-label-md text-label-md text-on-surface truncate">Bricomarché Nice Ouest</span><span class="font-label-xs text-label-xs text-on-surface-variant">Rayon actif 5 km</span></div></div><span class="material-symbols-outlined text-outline text-[16px]">unfold_more</span></div></div><nav class="flex flex-col gap-1 p-space-md flex-1" data-active-classes="bg-primary-container text-on-primary font-bold shadow-sm"><a class="group flex items-center gap-3 px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="tableau-de-bord" href="#"><span class="material-symbols-outlined text-[20px] text-outline group-hover:text-on-surface transition-colors">grid_view</span><span>Tableau de bord</span></a><a aria-current="page" class="group flex items-center justify-between px-3.5 py-2.5 rounded-lg transition-all bg-primary-container text-on-primary font-bold shadow-sm" data-path="commandes-et-retraits" href="#"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-[20px] text-outline group-hover:text-on-surface transition-colors">local_shipping</span><span>Commandes &amp; Retraits</span></div><span class="px-2 py-0.5 rounded-full bg-secondary-container text-primary-container font-label-xs text-label-xs font-extrabold">14</span></a><a class="group flex items-center gap-3 px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="gestion-des-stocks" href="#"><span class="material-symbols-outlined text-[20px] text-outline group-hover:text-on-surface transition-colors">inventory_2</span><span>Gestion des stocks &amp; Lieux</span></a><a class="group flex items-center gap-3 px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="catalogue-destockage" href="#"><span class="material-symbols-outlined text-[20px] text-outline group-hover:text-on-surface transition-colors">sell</span><span>Mon catalogue Déstockage</span></a><div class="my-2 px-3"><div class="h-px w-full bg-surface-container-high"></div></div><a class="group flex items-center justify-between px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="terminal-quai-vendeur" href="#"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-[20px] text-secondary-container">point_of_sale</span><span>Terminal Quai / Vendeur</span></div><span class="material-symbols-outlined text-[14px] text-outline">open_in_new</span></a><a class="group flex items-center gap-3 px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="parametres-et-horaires" href="#"><span class="material-symbols-outlined text-[20px] text-outline group-hover:text-on-surface transition-colors">store</span><span>Paramètres &amp; Horaires</span></a><a class="group flex items-center gap-3 px-3.5 py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="aide-et-support" href="#"><span class="material-symbols-outlined text-[20px] text-outline group-hover:text-on-surface transition-colors">contact_support</span><span>Aide &amp; Support</span></a></nav></div><div class="p-space-md border-t-0 bg-surface-container-low/70 flex flex-col gap-space-sm"><div class="px-2.5 py-2 rounded-lg bg-surface-container-lowest flex items-center justify-between shadow-[0_1px_4px_rgba(0,0,0,0.02)]"><div class="flex items-center gap-2"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed-dim opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-on-tertiary-container"></span></span><span class="font-label-xs text-label-xs text-on-surface-variant">Flux ERP sync</span></div><span class="font-label-xs text-label-xs font-extrabold text-on-tertiary-container">99.8%</span></div><div class="flex items-center justify-between px-2 pt-1"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[14px]">badge</span></div><div class="flex flex-col"><span class="font-label-xs text-label-xs font-bold text-on-surface">Poste #04 • Quai B</span><span class="font-label-xs text-label-xs text-outline">Session sécurisée</span></div></div><button class="text-outline hover:text-error transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">power_settings_new</span></button></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-gutter-desktop"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full"><span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span><input class="w-full h-10 pl-10 pr-12 rounded-full bg-surface-container-low text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-primary-container transition-all" placeholder="Rechercher commande, SKU, client, EAN..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-tertiary-container/10"><span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span><span class="font-label-xs text-label-xs font-bold text-on-tertiary-container uppercase tracking-wide">Magasin Ouvert</span></div><div class="flex items-center gap-1"><button class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" title="Notifications" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary-container"></span></button><button class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" title="Messagerie" type="button"><span class="material-symbols-outlined text-[20px]">chat_bubble</span></button></div><div class="h-6 w-px bg-surface-container-high"></div><div class="flex items-center gap-space-sm pl-1"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden lg:flex flex-col"><span class="font-label-md text-label-md text-on-surface leading-snug">Marc L.</span><span class="font-label-xs text-label-xs text-outline leading-tight">Chef de rayon</span></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen px-gutter-desktop py-space-xl"><div class="flex flex-col w-full gap-space-lg">
+<!-- En-tête de section -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs max-w-2xl">
+<div class="flex items-center gap-space-sm">
+<span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-secondary-container text-primary-container font-label-md">
+<span class="material-symbols-outlined text-[18px]">inventory</span>
+</span>
+<h1 class="font-headline-lg text-headline-lg text-primary-container tracking-tight">
+          Commandes Click &amp; Collect &amp; Retraits en Magasin
+        </h1>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        Suivez le cycle de vie complet des retraits : préparation en réserve, accueil comptoir et délivrance sécurisée.
+      </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm">
+<button class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-lowest text-primary-container font-label-md text-label-md shadow-sm hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary-container">file_download</span>
+<span>Exporter les bordereaux (PDF/Excel)</span>
+</button>
+<button class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-low text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors shadow-sm" id="btn-fullscreen-dock" type="button">
+<span class="material-symbols-outlined text-[18px] text-secondary-container">desktop_windows</span>
+<span>Mode Plein Écran Quai</span>
+</button>
+<button class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-secondary-container text-primary-container font-label-md text-label-md shadow-md hover:scale-[1.02] transition-transform active:scale-95 font-extrabold" type="button">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+<span>+ Nouvelle commande manuelle comptoir</span>
+</button>
+</div>
+</div>
+<!-- Résumé rapide opérationnel (Kpis vivants) -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-xs text-label-xs text-outline uppercase tracking-wider">Créneaux Aujourd'hui</span>
+<span class="font-headline-lg text-headline-lg text-primary-container mt-1">34</span>
+<span class="font-body-sm text-body-sm text-on-tertiary-container flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">bolt</span> Pic prévu 17h-19h
+        </span>
+</div>
+<div class="w-12 h-12 rounded-full bg-primary-container/5 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[26px]">schedule</span>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-xs text-label-xs text-outline uppercase tracking-wider">Temps moyen délivrance</span>
+<span class="font-headline-lg text-headline-lg text-primary-container mt-1">1m 42s</span>
+<span class="font-body-sm text-body-sm text-on-tertiary-container flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span> -18s vs hier
+        </span>
+</div>
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed/30 flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined text-[26px]">speed</span>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-xs text-label-xs text-outline uppercase tracking-wider">Taux de retrait conforme</span>
+<span class="font-headline-lg text-headline-lg text-primary-container mt-1">99.2%</span>
+<span class="font-body-sm text-body-sm text-outline flex items-center gap-1 mt-0.5">
+          Sur 1 450 retraits
+        </span>
+</div>
+<div class="w-12 h-12 rounded-full bg-secondary-fixed/40 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[26px]">verified</span>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-primary-container text-on-primary shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-xs text-label-xs text-on-primary-container uppercase tracking-wider">Scan Quai &amp; Émargement</span>
+<span class="font-headline-sm text-headline-sm text-on-primary mt-1">Terminal Prêt</span>
+<span class="font-body-sm text-body-sm text-on-primary-container flex items-center gap-1 mt-0.5">
+          Poste #04 • Synchronisé
+        </span>
+</div>
+<div class="w-12 h-12 rounded-full bg-on-primary/10 flex items-center justify-center text-secondary-container">
+<span class="material-symbols-outlined text-[26px]">barcode_scanner</span>
+</div>
+</div>
+</div>
+<!-- Barre d'onglets de filtrage par cycle de vie -->
+<div class="flex items-center overflow-x-auto no-scrollbar gap-2 p-1.5 rounded-full bg-surface-container-low shadow-inner">
+<button class="tab-filter-btn active inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-container text-on-primary font-label-md text-label-md transition-all shadow-sm" type="button">
+<span>Toutes les commandes</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-primary font-extrabold text-[11px]">142</span>
+</button>
+<button class="tab-filter-btn inline-flex items-center gap-2 px-4 py-2 rounded-full text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all" type="button">
+<span>À préparer en réserve</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-primary-container font-extrabold text-[11px] animate-pulse">3</span>
+</button>
+<button class="tab-filter-btn inline-flex items-center gap-2 px-4 py-2 rounded-full text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all" type="button">
+<span>Prêtes au guichet / En attente client</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-primary-container font-extrabold text-[11px]">6</span>
+</button>
+<button class="tab-filter-btn inline-flex items-center gap-2 px-4 py-2 rounded-full text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all" type="button">
+<span class="flex items-center gap-1 text-error">
+<span class="material-symbols-outlined text-[16px]">timer</span>
+        Retraits urgents (&lt; 2h restantes)
+      </span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-extrabold text-[11px]">1</span>
+</button>
+<button class="tab-filter-btn inline-flex items-center gap-2 px-4 py-2 rounded-full text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all" type="button">
+<span>Clôturées &amp; Remises</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-outline font-extrabold text-[11px]">128</span>
+</button>
+<button class="tab-filter-btn inline-flex items-center gap-2 px-4 py-2 rounded-full text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all" type="button">
+<span>Litiges / Annulations</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-outline font-extrabold text-[11px]">4</span>
+</button>
+</div>
+<!-- Barre de filtres multicritères avancée -->
+<div class="p-space-md rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col xl:flex-row xl:items-center justify-between gap-space-md">
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-space-md flex-1">
+<!-- Filtre Date -->
+<div class="flex flex-col gap-1">
+<label class="font-label-xs text-label-xs text-outline uppercase tracking-wider">Date de commande</label>
+<div class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container-low text-on-surface">
+<span class="material-symbols-outlined text-outline text-[18px]">calendar_today</span>
+<select class="bg-transparent font-body-sm text-body-sm text-on-surface focus:outline-none w-full cursor-pointer">
+<option>Aujourd'hui, 07/03/2025</option>
+<option>Hier, 06/03/2025</option>
+<option>Demain, 08/03/2025</option>
+<option>Cette semaine</option>
+<option>Personnalisée...</option>
+</select>
+</div>
+</div>
+<!-- Filtre Client / Téléphone -->
+<div class="flex flex-col gap-1">
+<label class="font-label-xs text-label-xs text-outline uppercase tracking-wider">Nom client ou téléphone</label>
+<div class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container-low text-on-surface">
+<span class="material-symbols-outlined text-outline text-[18px]">person_search</span>
+<input class="bg-transparent font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none w-full" placeholder="Ex: Renault, 06..." type="text"/>
+</div>
+</div>
+<!-- Filtre Numéro de commande -->
+<div class="flex flex-col gap-1">
+<label class="font-label-xs text-label-xs text-outline uppercase tracking-wider">Numéro de commande</label>
+<div class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container-low text-on-surface">
+<span class="material-symbols-outlined text-outline text-[18px]">tag</span>
+<input class="bg-transparent font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none w-full font-label-md" placeholder="#ACH-..." type="text"/>
+</div>
+</div>
+<!-- Filtre Créneau de passage -->
+<div class="flex flex-col gap-1">
+<label class="font-label-xs text-label-xs text-outline uppercase tracking-wider">Créneau de passage</label>
+<div class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container-low text-on-surface">
+<span class="material-symbols-outlined text-outline text-[18px]">access_time</span>
+<select class="bg-transparent font-body-sm text-body-sm text-on-surface focus:outline-none w-full cursor-pointer">
+<option value="">Tous les créneaux</option>
+<option>Matin (09h00 - 12h00)</option>
+<option selected="">Après-midi (14h00 - 17h00)</option>
+<option>Soir (17h00 - 19h30)</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Actions filtres -->
+<div class="flex items-center self-end xl:self-center gap-2 pt-2 xl:pt-4">
+<button class="px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span>
+<span>Réinitialiser</span>
+</button>
+<button class="px-5 py-2 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span>Filtrer (4)</span>
+</button>
+</div>
+</div>
+<!-- Layout Split : Tableau principal (gauche) + Panneau latéral escamotable (droite) -->
+<div class="flex flex-col xl:flex-row gap-space-lg items-start w-full">
+<!-- Tableau complet des commandes -->
+<div class="flex-1 w-full overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm">
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse min-w-[980px]">
+<thead>
+<tr class="bg-surface-container-low text-outline font-label-xs text-label-xs uppercase tracking-wider">
+<th class="py-3.5 px-4 font-bold">Réf &amp; Horodatage</th>
+<th class="py-3.5 px-4 font-bold">Client &amp; Contact</th>
+<th class="py-3.5 px-4 font-bold">Articles &amp; Qtés</th>
+<th class="py-3.5 px-4 font-bold">Montant</th>
+<th class="py-3.5 px-4 font-bold">Créneau &amp; Délai</th>
+<th class="py-3.5 px-4 font-bold">Emplacement</th>
+<th class="py-3.5 px-4 font-bold text-right">Statut &amp; Action</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-on-surface font-body-sm text-body-sm">
+<!-- Ligne 1 : #ACH-88492 (Prêt au guichet, Urgent, Sélectionné) -->
+<tr class="order-row group hover:bg-surface-container-low/80 cursor-pointer bg-primary-fixed/20 transition-colors" data-order-ref="ACH-88492">
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-primary-container group-hover:text-secondary-container transition-colors flex items-center gap-1.5">
+                    #ACH-88492
+                    <span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+</span>
+<span class="font-label-xs text-label-xs text-outline">Aujourd'hui, 13:42</span>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-primary-container">Alexandre RENAULT</span>
+<span class="px-1.5 py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-label-xs text-label-xs flex items-center gap-1" title="Délégation de retrait déclarée">
+<span class="material-symbols-outlined text-[12px]">verified_user</span> Porteur validé
+                    </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">06 45 22 89 **</span>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-lg overflow-hidden bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up professional cordless drill Bosch and angle grinder Einhell set on workbench hardware store industrial style warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3YgpUF66-jgVkb2iis-mZ0thgBrYt1AVjLOkwqtRW9a9JGisCfb-yOPf413LDruj6F8w9BBx48eLeKWV60X0JtpsMv5hCqEL4WUOsUqDFH_Wm4AnI5RZTXbdS9L7y2Il0cb4wFlrfZBdqFXTe7FZyajbAr0r_sa6k3xfn106dAdF8eRiAIt9l9dWDToW6sdqt3RrGQMDZ7qhMPQWTGJe2ItNuB7hh2WImOq_xO7g"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface truncate max-w-[170px]">Perceuse Bosch + Meuleuse...</span>
+<span class="font-label-xs text-label-xs text-outline">2 articles • Réf B-204</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<span class="font-price-card text-price-card text-primary-container">84,80 €</span>
+<span class="block font-label-xs text-label-xs text-on-tertiary-container font-semibold">Réglé en ligne</span>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">14h00 - 17h00</span>
+<div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-xs text-label-xs font-extrabold w-fit mt-0.5">
+<span class="material-symbols-outlined text-[12px]">timelapse</span> reste 28 min
+                  </div>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-container font-label-xs text-label-xs text-primary-container font-bold">
+<span class="material-symbols-outlined text-[15px] text-secondary-container">shelves</span>
+                  Étagère B3 / Bac 04
+                </div>
+</td>
+<td class="py-4 px-4 align-middle text-right">
+<div class="flex items-center justify-end gap-2">
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-xs text-label-xs font-extrabold inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-fixed"></span> Prêt au guichet
+                  </span>
+<button class="btn-open-delivery px-3.5 py-1.5 rounded-full bg-secondary-container hover:bg-secondary text-primary-container hover:text-on-secondary font-label-md text-label-md font-extrabold shadow-sm transition-all flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">qr_code_scanner</span>
+<span>Délivrer au client</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Ligne 2 : #ACH-88501 (En cours de préparation) -->
+<tr class="order-row group hover:bg-surface-container-low/80 cursor-pointer transition-colors" data-order-ref="ACH-88501">
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-primary-container group-hover:text-secondary-container transition-colors">#ACH-88501</span>
+<span class="font-label-xs text-label-xs text-outline">Aujourd'hui, 14:15</span>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-primary-container">Julien MERCIER</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">07 88 19 02 **</span>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-lg overflow-hidden bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Modern cordless electric lawn mower Ryobi in garden setting with bright sunlight green tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB6jGG6975NUPLM6XpwWdwcepf8KeENRRU5GM_TI2F1Gf-0evNk_iynnVna-jLZL_Ds1NyUuYmwT0qHcjIwl66CqJXkO5nZgY5q_P_snF7imLDnjF75qeokMqognZJjArr6wUEaiU7jja64sZf5xPMXjLiN8q2bO7JYvzRYRu6vjkPikeVxYEhdba3sJ7JfbvTn-GdvaP6vo9yhFGh0dP-RfphHlAHBv5yCT9mYcA"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface truncate max-w-[170px]">Tondeuse Ryobi 18V</span>
+<span class="font-label-xs text-label-xs text-outline">1 article volumineux</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<span class="font-price-card text-price-card text-primary-container">159,00 €</span>
+<span class="block font-label-xs text-label-xs text-on-tertiary-container font-semibold">Réglé en ligne</span>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">17h00 - 19h00</span>
+<span class="font-label-xs text-label-xs text-outline">Dans ~2h30</span>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-secondary-fixed text-on-secondary-fixed font-label-xs text-label-xs font-bold">
+<span class="material-symbols-outlined text-[15px]">warehouse</span>
+                  Zone Encombrants Z2
+                </div>
+</td>
+<td class="py-4 px-4 align-middle text-right">
+<div class="flex items-center justify-end gap-2">
+<span class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-xs text-label-xs font-extrabold inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> En cours
+                  </span>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-primary-container font-label-md text-label-md font-bold transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>Finaliser préparation</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Ligne 3 : #ACH-88514 (À préparer) -->
+<tr class="order-row group hover:bg-surface-container-low/80 cursor-pointer transition-colors" data-order-ref="ACH-88514">
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-primary-container group-hover:text-secondary-container transition-colors">#ACH-88514</span>
+<span class="font-label-xs text-label-xs text-outline">Aujourd'hui, 15:02</span>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-primary-container">Caroline VASSEUR</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">06 12 90 41 **</span>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-lg overflow-hidden bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Heavy duty rotary hammer drill Bosch tool resting on concrete workshop background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHxpnnJKfONp-YeJLeNcXEmvWRHn_0bXrPh4uts8AsEhnG3LX_2id3TrKYms1qtcUWVsjm3azBOWlLICz-JBNHpts9Jcl1dyTVtWHCJEtL3Xc1kJj0Mo95Z0dWyh-hMxiMrpXKAX_6O8T91GC0w28tnfnDrQFwXOW6rwWtdqyZtZxsNTrc-vYeHrsOVdfgITpjnhHGR_10U5okrWQ8yjYu-rr4SXRL9c-DbbANQbw"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface truncate max-w-[170px]">Perforateur Bosch GBH</span>
+<span class="font-label-xs text-label-xs text-outline">1 article</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<span class="font-price-card text-price-card text-primary-container">99,00 €</span>
+<span class="block font-label-xs text-label-xs text-on-tertiary-container font-semibold">Réglé en ligne</span>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Demain, 10h00 - 12h00</span>
+<span class="font-label-xs text-label-xs text-on-surface-variant">J+1 Matin</span>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<span class="inline-flex items-center gap-1 font-label-xs text-label-xs text-outline italic">
+<span class="material-symbols-outlined text-[14px]">help</span> Non affecté
+                </span>
+</td>
+<td class="py-4 px-4 align-middle text-right">
+<div class="flex items-center justify-end gap-2">
+<span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-xs text-label-xs font-extrabold">
+                    À préparer
+                  </span>
+<button class="px-3.5 py-1.5 rounded-full bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md font-bold transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">assignment_turned_in</span>
+<span>Préparer</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Ligne 4 : #ACH-88460 (Clôturé / Remis) -->
+<tr class="order-row group hover:bg-surface-container-low/80 cursor-pointer opacity-80 hover:opacity-100 transition-all" data-order-ref="ACH-88460">
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-outline group-hover:text-primary-container transition-colors">#ACH-88460</span>
+<span class="font-label-xs text-label-xs text-outline">06/03 à 16:45</span>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Nicolas BARDIN</span>
+<span class="font-body-sm text-body-sm text-outline">06 91 30 77 **</span>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[20px]">handyman</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface truncate max-w-[170px]">Lot 2 Outillage PRO</span>
+<span class="font-label-xs text-label-xs text-outline">2 articles</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<span class="font-price-card text-price-card text-on-surface">256,90 €</span>
+<span class="block font-label-xs text-label-xs text-outline">CB Payée</span>
+</td>
+<td class="py-4 px-4 align-middle">
+<span class="font-label-xs text-label-xs text-outline">Clôturé le 06/03</span>
+</td>
+<td class="py-4 px-4 align-middle">
+<span class="font-label-xs text-label-xs text-outline">Étagère A1 (Libéré)</span>
+</td>
+<td class="py-4 px-4 align-middle text-right">
+<div class="flex items-center justify-end gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-outline font-label-xs text-label-xs font-bold">
+                    Retiré par le client
+                  </span>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-label-xs text-label-xs font-bold transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[15px]">signature</span>
+<span>Consulter preuve</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Ligne 5 : #ACH-88432 (Clôturé / Facture) -->
+<tr class="order-row group hover:bg-surface-container-low/80 cursor-pointer opacity-80 hover:opacity-100 transition-all" data-order-ref="ACH-88432">
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-outline group-hover:text-primary-container transition-colors">#ACH-88432</span>
+<span class="font-label-xs text-label-xs text-outline">05/03 à 11:20</span>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Fabrice RIVIÈRE</span>
+<span class="font-body-sm text-body-sm text-outline">06 72 10 99 **</span>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[20px]">build</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface truncate max-w-[170px]">Perceuse Einhell</span>
+<span class="font-label-xs text-label-xs text-outline">1 article</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 align-middle">
+<span class="font-price-card text-price-card text-on-surface">74,90 €</span>
+<span class="block font-label-xs text-label-xs text-outline">CB Payée</span>
+</td>
+<td class="py-4 px-4 align-middle">
+<span class="font-label-xs text-label-xs text-outline">Clôturé le 05/03</span>
+</td>
+<td class="py-4 px-4 align-middle">
+<span class="font-label-xs text-label-xs text-outline">Comptoir A (Libéré)</span>
+</td>
+<td class="py-4 px-4 align-middle text-right">
+<div class="flex items-center justify-end gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-outline font-label-xs text-label-xs font-bold">
+                    Retiré par le client
+                  </span>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-label-xs text-label-xs font-bold transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[15px]">receipt_long</span>
+<span>Facture &amp; Reçu</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination du tableau -->
+<div class="p-space-md bg-surface-container-low/50 flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+<div class="font-body-sm text-body-sm text-on-surface-variant">
+          Affichage des commandes <strong class="text-on-surface font-bold">1 à 5</strong> sur <strong class="text-on-surface font-bold">142</strong> résultats
+        </div>
+<div class="flex items-center gap-1">
+<button class="p-2 rounded-lg bg-surface-container text-outline hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-primary-container text-on-primary font-label-sm text-label-sm font-bold flex items-center justify-center" type="button">1</button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container text-on-surface font-label-sm text-label-sm font-bold flex items-center justify-center transition-colors" type="button">2</button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container text-on-surface font-label-sm text-label-sm font-bold flex items-center justify-center transition-colors" type="button">3</button>
+<span class="px-1 text-outline">...</span>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container text-on-surface font-label-sm text-label-sm font-bold flex items-center justify-center transition-colors" type="button">29</button>
+<button class="p-2 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Volet latéral rétractable / Fiche de prévisualisation rapide (#ACH-88492) -->
+<div class="w-full xl:w-[420px] rounded-2xl bg-surface-container-lowest shadow-md flex flex-col overflow-hidden sticky top-20" id="quick-preview-panel">
+<!-- En-tête Volet -->
+<div class="p-space-md bg-primary-container text-on-primary flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="w-3 h-3 rounded-full bg-secondary-container animate-ping"></span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-primary leading-none">Détails #ACH-88492</span>
+<span class="font-label-xs text-label-xs text-on-primary-container mt-1">Prêt au guichet • Créneau en cours</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded-full hover:bg-on-primary/10 text-on-primary transition-colors" title="Imprimer bordereau de retrait" type="button">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+<button class="p-1.5 rounded-full hover:bg-on-primary/10 text-on-primary transition-colors" title="Fermer la prévisualisation" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<div class="p-space-md flex flex-col gap-space-md max-h-[calc(100vh-140px)] overflow-y-auto">
+<!-- Module Sécurité & Clé de délivrance (PIN Vendeur) -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-container text-[20px]">pin</span>
+<span class="font-label-md text-label-md text-primary-container uppercase tracking-wider">Code PIN de Retrait Client</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-xs text-label-xs font-bold">Actif</span>
+</div>
+<div class="flex items-center justify-between bg-surface-container-lowest p-3 rounded-lg shadow-inner">
+<div class="flex gap-2">
+<span class="w-10 h-10 rounded-lg bg-surface-container font-headline-sm text-headline-sm flex items-center justify-center font-extrabold text-primary-container">4</span>
+<span class="w-10 h-10 rounded-lg bg-surface-container font-headline-sm text-headline-sm flex items-center justify-center font-extrabold text-primary-container">8</span>
+<span class="w-10 h-10 rounded-lg bg-surface-container font-headline-sm text-headline-sm flex items-center justify-center font-extrabold text-primary-container">2</span>
+<span class="w-10 h-10 rounded-lg bg-surface-container font-headline-sm text-headline-sm flex items-center justify-center font-extrabold text-primary-container">9</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-xs text-label-xs text-outline">QR Code Quai</span>
+<span class="material-symbols-outlined text-[24px] text-primary-container">qr_code_2</span>
+</div>
+</div>
+<p class="font-label-xs text-label-xs text-on-surface-variant leading-relaxed">
+            Demandez ce code à 4 chiffres ou scannez le pass Apple Wallet/Google Pay du client avant de lui confier les colis.
+          </p>
+</div>
+<!-- Coordonnées Client & Porteur habilité -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-xs text-label-xs text-outline uppercase tracking-wider">Identité &amp; Procuration</span>
+<div class="p-space-sm rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-2">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-headline-sm text-headline-sm">
+                  AR
+                </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Alexandre RENAULT</span>
+<span class="font-body-sm text-body-sm text-outline">alex.renault@example.com</span>
+</div>
+</div>
+<a class="p-2 rounded-full bg-surface-container text-primary hover:bg-surface-container-high transition-colors" href="tel:0645228900" title="Appeler le client">
+<span class="material-symbols-outlined text-[16px]">call</span>
+</a>
+</div>
+<!-- Badge Procuration valide -->
+<div class="p-2 rounded-lg bg-tertiary-fixed/30 flex items-center gap-2 text-on-tertiary-container font-label-xs text-label-xs">
+<span class="material-symbols-outlined text-[16px]">badge</span>
+<span>Procuration autorisée : <strong>Mme Claire RENAULT</strong> (Pièce d'identité enregistrée)</span>
+</div>
+</div>
+</div>
+<!-- Emplacement Réserve & Picking -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-xs text-label-xs text-outline uppercase tracking-wider">Localisation en Stock</span>
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary-container text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">shelves</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-primary-container">Rayon Outillage Pro • Travée 3</span>
+<span class="font-headline-sm text-headline-sm text-primary-container font-extrabold">Étagère B3 / Bac 04</span>
+</div>
+</div>
+<button class="p-2 rounded-full bg-surface-container hover:bg-surface-container-high text-outline transition-colors" title="Modifier l'emplacement" type="button">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+</div>
+<!-- Détail des articles du retrait -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-outline uppercase tracking-wider">Colisage &amp; Articles (2)</span>
+<span class="font-label-xs text-label-xs text-on-tertiary-container font-bold">100% rassemblé</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="p-2.5 rounded-xl bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Bosch professional cordless drill set in black L-BOXX case clean product studio photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfZuOqetDykZ6bkMkeMuDMAyH9Mbf1qtoJTo3-0CYRrrBkGKwFs9l40i2rX63tnruO_4bCZnbALfWIGc97UKjkN3yliF7OW1OcQFfs2_vC9PNQklRM8-dwsdW1jX3w-j_-oIx6xbZZdFVRp9DTvl8OyJj7w0m95SnCqr4fGaYKyliENPiWmitsr7Hw5BMj7kz8hCg3lMO9hFOxDhwx9sj4RN_jcoiCSod_BzvSlkk"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Perceuse visseuse Bosch GSR 18V</span>
+<span class="font-label-xs text-label-xs text-outline">EAN: 3165140888241 • Qté: 1</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-primary-container font-bold">59,90 €</span>
+</div>
+<div class="p-2.5 rounded-xl bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Einhell angle grinder tool red casing with safety guard product shot on neutral studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD3eG1Rsgobpz_VXn1jcl8J8ZvFKJmXorqxN-Yg7f1qoZSoAFsy0cX_1ojQXtPHEO2VMV6Zz-pp1ClX1TD5r-_u2MrZuj48KS0e1zS-ICcuQqT2d5SCuwZtebWEsIRaVNM0XzWQ15KDgbLPixqEWlo18p-sM8axcZVFifz3y8YuLK09UIcx6eWL-kNJhCfb1gpl-2q1moUHW6av7N1ouRt1owt8k9sXJwNgxBMETw"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Meuleuse d'angle Einhell 115mm</span>
+<span class="font-label-xs text-label-xs text-outline">EAN: 4006825613320 • Qté: 1</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-primary-container font-bold">24,90 €</span>
+</div>
+</div>
+</div>
+<!-- Justificatif de règlement & Total -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant">
+<span>Sous-total articles TTC</span>
+<span>84,80 €</span>
+</div>
+<div class="flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant">
+<span>Option retrait Express (offert)</span>
+<span class="text-on-tertiary-container font-bold">0,00 €</span>
+</div>
+<div class="h-px bg-surface-container-high my-1"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-primary-container font-extrabold">Total réglé en ligne</span>
+<span class="font-price-hero text-price-hero text-primary-container font-extrabold">84,80 €</span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-label-xs text-label-xs text-outline">Stripe Ref: ch_3Mxx92014KL</span>
+<span class="font-label-xs text-label-xs text-on-tertiary-container font-extrabold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Sécurisé 3D-Secure
+            </span>
+</div>
+</div>
+<!-- Actions de validation comptoir -->
+<div class="flex flex-col gap-2 pt-space-xs">
+<button class="w-full py-3.5 px-4 rounded-full bg-secondary-container hover:bg-secondary text-primary-container hover:text-on-secondary font-label-lg text-label-lg font-extrabold shadow-md transition-all flex items-center justify-center gap-2 active:scale-95" type="button">
+<span class="material-symbols-outlined text-[20px]">how_to_reg</span>
+<span>Valider la remise &amp; Émarger</span>
+</button>
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2.5 px-3 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-bold transition-colors flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">sms</span>
+<span>Rappel SMS client</span>
+</button>
+<a class="py-2.5 px-3 rounded-full bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md font-bold transition-colors flex items-center justify-center gap-1.5" data-path="terminal-quai-vendeur" href="#">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+<span>Terminal Quai</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Modalité / Overlay interactif pour le Mode Plein Écran Quai (Simulé via JS) -->
+<div class="fixed inset-0 bg-primary/80 backdrop-blur-md z-50 hidden flex-col justify-between p-space-xl" id="dock-fullscreen-modal">
+<div class="flex items-center justify-between text-on-primary">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-secondary-container text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[28px]">barcode_scanner</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-lg text-headline-lg text-on-primary">Mode Plein Écran Borne Quai Retrait</h2>
+<span class="font-body-md text-body-md text-on-primary-container">Poste connecté : Bricomarché Nice Ouest • En attente de scan douchette</span>
+</div>
+</div>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-lowest/10 hover:bg-surface-container-lowest/20 text-on-primary font-label-md text-label-md flex items-center gap-2" id="btn-close-dock" type="button">
+<span class="material-symbols-outlined text-[20px]">fullscreen_exit</span>
+<span>Quitter le mode plein écran</span>
+</button>
+</div>
+<!-- Centre de commande tactile plein écran -->
+<div class="max-w-4xl w-full mx-auto p-space-xl rounded-3xl bg-surface-container-lowest shadow-2xl flex flex-col items-center text-center gap-space-lg my-auto">
+<div class="w-24 h-24 rounded-full bg-secondary-container/20 text-secondary-container flex items-center justify-center animate-bounce">
+<span class="material-symbols-outlined text-[48px]">qr_code_scanner</span>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-display text-display text-primary-container">Scannez le Bon de Retrait</span>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg mx-auto">
+          Passez le code-barres client ou saisissez manuellement le numéro à 6 chiffres pour déverrouiller le casier de stockage.
+        </p>
+</div>
+<div class="flex w-full max-w-md gap-2">
+<input class="w-full h-14 px-5 rounded-full bg-surface-container text-primary-container font-headline-sm text-headline-sm text-center placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-secondary-container" placeholder="Entrez code client (#ACH-...)" type="text"/>
+<button class="h-14 px-8 rounded-full bg-secondary-container text-primary-container font-label-lg text-label-lg font-extrabold shadow-md" type="button">
+          OK
+        </button>
+</div>
+</div>
+<div class="flex items-center justify-between text-on-primary-container font-label-md text-label-md">
+<span>Système Achille Pro v2.4 • Sync active en continu</span>
+<span class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container animate-pulse"></span>
+        Douchette Bluetooth Honeywell connectée
+      </span>
+</div>
+</div>
+<!-- Micro-interactions JavaScript légères -->
+<script>
+    (function() {
+      // Gestion des onglets de statut
+      const tabButtons = document.querySelectorAll('.tab-filter-btn');
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabButtons.forEach(b => {
+            b.classList.remove('bg-primary-container', 'text-on-primary', 'shadow-sm');
+            b.classList.add('text-on-surface-variant');
+          });
+          btn.classList.remove('text-on-surface-variant');
+          btn.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm');
+        });
+      });
+
+      // Gestion du mode Plein Écran Quai
+      const openDockBtn = document.getElementById('btn-fullscreen-dock');
+      const closeDockBtn = document.getElementById('btn-close-dock');
+      const dockModal = document.getElementById('dock-fullscreen-modal');
+
+      if (openDockBtn && closeDockBtn && dockModal) {
+        openDockBtn.addEventListener('click', () => {
+          dockModal.classList.remove('hidden');
+          dockModal.classList.add('flex');
+        });
+        closeDockBtn.addEventListener('click', () => {
+          dockModal.classList.add('hidden');
+          dockModal.classList.remove('flex');
+        });
+      }
+
+      // Sélection active des lignes du tableau
+      const rows = document.querySelectorAll('.order-row');
+      rows.forEach(row => {
+        row.addEventListener('click', (e) => {
+          if (e.target.closest('button')) return;
+          rows.forEach(r => r.classList.remove('bg-primary-fixed/30'));
+          row.classList.add('bg-primary-fixed/30');
+        });
+      });
+    })();
+  </script>
+</div></main></div></body></html>

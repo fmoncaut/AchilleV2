@@ -56,8 +56,8 @@ export function OfferCard({
     <article
       id={`offre-${offer.id}`}
       className={cn(
-        "bg-surface-container-lowest shadow-navy-soft hover:shadow-navy relative overflow-hidden rounded-xl transition-shadow",
-        selected && "ring-secondary-container shadow-navy ring-2",
+        "bg-surface-container-lowest shadow-sm hover:shadow-md relative overflow-hidden rounded-xl transition-shadow",
+        selected && "ring-primary-container shadow-md ring-2",
       )}
     >
       <div className="absolute top-3 right-3 z-10">
@@ -88,7 +88,7 @@ export function OfferCard({
             <span className="text-primary-container flex min-w-0 items-center gap-1 truncate font-bold">
               <MaterialIcon
                 name="storefront"
-                className="text-secondary-container text-[14px]"
+                className="text-secondary text-[14px]"
               />
               {offer.merchantName}
             </span>
@@ -105,7 +105,7 @@ export function OfferCard({
             {offer.productName}
           </h2>
           <p className="mt-auto flex flex-wrap items-baseline gap-x-2 gap-y-1">
-            <span className="font-price-card text-price-card text-secondary-container font-extrabold">
+            <span className="font-price-card text-price-card text-secondary font-extrabold">
               {formatEur(offer.priceRemise)}
             </span>
             {showCrossed && offer.priceReference ? (

@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
+import type React from "react";
 
+import { Section } from "@/components/ui/section";
 import { cn } from "@/lib/utils";
 
 export function BuyerMain({
@@ -20,20 +22,16 @@ export function BuyerSection({
   children,
   className,
   as: Tag = "section",
+  ...props
 }: {
   children: ReactNode;
   className?: string;
   as?: "section" | "div" | "article" | "header";
-}) {
+} & React.ComponentPropsWithoutRef<"section">) {
   return (
-    <Tag
-      className={cn(
-        "mx-auto w-full max-w-[1680px] px-4 sm:px-6 lg:px-8",
-        className,
-      )}
-    >
+    <Section as={Tag} className={className} {...props}>
       {children}
-    </Tag>
+    </Section>
   );
 }
 

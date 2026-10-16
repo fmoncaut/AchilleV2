@@ -139,7 +139,7 @@ function OfferShowcaseView({
       >
         <div className="grid items-start gap-8 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <div className="bg-surface-container-lowest shadow-navy-soft relative overflow-hidden rounded-2xl">
+            <div className="bg-surface-container-lowest shadow-sm relative overflow-hidden rounded-2xl">
               <ProductImage
                 src={product.imageUrl}
                 name={product.name}
@@ -182,13 +182,13 @@ function OfferShowcaseView({
             ) : null}
 
             {current ? (
-              <section className="bg-surface-container-lowest shadow-navy flex flex-col gap-4 rounded-2xl p-5 sm:p-6 md:flex-row md:items-center md:justify-between">
+              <section className="bg-surface-container-lowest shadow-md flex flex-col gap-4 rounded-2xl p-5 sm:p-6 md:flex-row md:items-center md:justify-between">
                 <div>
                   <p className="font-label-md text-label-md text-on-surface-variant font-bold tracking-wider uppercase">
                     Meilleur prix déstockage local
                   </p>
                   <p className="mt-1 flex flex-wrap items-baseline gap-2">
-                    <span className="font-price-hero text-price-hero text-secondary-container font-extrabold">
+                    <span className="font-price-hero text-price-hero text-secondary font-extrabold">
                       {formatEur(current.priceRemise)}
                     </span>
                     {currentCrossed && current.priceReference ? (
@@ -203,7 +203,7 @@ function OfferShowcaseView({
                   <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 flex items-center gap-1">
                     <MaterialIcon
                       name="storefront"
-                      className="text-secondary-container text-[16px]"
+                      className="text-secondary text-[16px]"
                     />
                     Chez{" "}
                     <Link
@@ -243,7 +243,7 @@ function OfferShowcaseView({
               />
             )}
 
-            <div className="bg-primary-container text-on-primary shadow-navy-soft rounded-2xl p-4">
+            <div className="bg-primary-container text-on-primary shadow-sm rounded-2xl p-4">
               <p className="font-headline-sm text-headline-sm flex items-center gap-2 font-bold">
                 <MaterialIcon
                   name={
@@ -298,7 +298,7 @@ function OfferShowcaseView({
               />
             </div>
 
-            <div className="bg-surface-container-lowest shadow-navy-soft overflow-hidden rounded-2xl">
+            <div className="bg-surface-container-lowest shadow-sm overflow-hidden rounded-2xl">
               <div className="font-label-md text-label-md bg-surface-container-high/60 text-on-surface-variant hidden px-6 py-3 tracking-wider uppercase lg:grid lg:grid-cols-12">
                 <div className="col-span-4">Vendeur &amp; localisation</div>
                 <div className="col-span-3">Disponibilité</div>
@@ -344,7 +344,7 @@ function OfferShowcaseView({
                           <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 flex items-center gap-1">
                             <MaterialIcon
                               name="near_me"
-                              className="text-secondary-container text-[16px]"
+                              className="text-secondary text-[16px]"
                             />
                             {offer.distanceM != null ? (
                               <Distance
@@ -388,7 +388,7 @@ function OfferShowcaseView({
                       </div>
                       <div className="flex min-w-0 flex-col gap-2 lg:col-span-3 lg:items-end">
                         <p className="flex items-baseline gap-1.5">
-                          <span className="font-price-hero text-headline-md text-secondary-container font-extrabold">
+                          <span className="font-price-hero text-headline-md text-secondary font-extrabold">
                             {formatEur(offer.priceRemise)}
                           </span>
                           {showCrossed && offer.priceReference ? (
@@ -420,7 +420,7 @@ function OfferShowcaseView({
               </ul>
             </div>
 
-            <section className="bg-surface-container-lowest shadow-navy-soft rounded-2xl p-5">
+            <section className="bg-surface-container-lowest shadow-sm rounded-2xl p-5">
               <h3 className="font-headline-sm text-headline-sm text-primary mb-3">
                 Horaires — {current.pos.name}
               </h3>

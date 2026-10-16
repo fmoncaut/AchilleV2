@@ -168,7 +168,7 @@ export function SearchForm({
   };
 
   const fieldClass =
-    "w-full border-0 bg-transparent font-body-sm text-body-sm text-on-surface outline-none placeholder:text-outline focus:ring-0";
+    "w-full border-0 bg-transparent font-body-md text-body-md text-on-surface outline-none placeholder:text-outline focus:ring-0";
 
   return (
     <form
@@ -180,7 +180,7 @@ export function SearchForm({
       className={cn(
         "flex flex-col gap-4",
         variant === "panel" &&
-          "bg-surface-container-lowest shadow-navy-soft rounded-2xl p-4 sm:p-5",
+          "bg-surface-container-lowest shadow-sm rounded-2xl p-4 sm:p-5",
       )}
     >
       <input type="hidden" name="lat" value={lat} />
@@ -197,7 +197,7 @@ export function SearchForm({
           <div className="bg-surface-container-low flex items-center gap-2 rounded-full px-3 py-1.5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]">
             <MaterialIcon
               name="location_on"
-              className="text-secondary-container text-[18px]"
+              className="text-secondary text-[18px]"
             />
             <input
               id="lieu"
@@ -231,7 +231,7 @@ export function SearchForm({
             <ul
               id={listId}
               role="listbox"
-              className="border-outline-variant bg-surface-container-lowest shadow-navy absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-xl border"
+              className="border-outline-variant bg-surface-container-lowest shadow-md absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-xl border"
             >
               {hits.map((hit) => (
                 <li
@@ -291,7 +291,7 @@ export function SearchForm({
         <span className="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
           <MaterialIcon
             name="near_me"
-            className="text-secondary-container text-[16px]"
+            className="text-secondary text-[16px]"
           />
           Rayon
         </span>
@@ -306,7 +306,7 @@ export function SearchForm({
                 className={cn(
                   "font-label-md text-label-md rounded-full px-3 py-1 transition-colors",
                   active
-                    ? "bg-primary-container text-on-primary shadow-navy-soft font-bold"
+                    ? "bg-primary-container text-on-primary shadow-sm font-bold"
                     : "text-on-surface-variant hover:bg-surface-container",
                 )}
               >
@@ -327,7 +327,7 @@ export function SearchForm({
           className={cn(
             "font-label-md text-label-md shrink-0 rounded-full px-3.5 py-1.5",
             cat === ""
-              ? "bg-primary-container text-on-primary shadow-navy-soft font-bold"
+              ? "bg-primary-container text-on-primary shadow-sm font-bold"
               : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container",
           )}
         >
@@ -343,7 +343,7 @@ export function SearchForm({
               className={cn(
                 "font-label-md text-label-md shrink-0 rounded-full px-3.5 py-1.5 whitespace-nowrap",
                 active
-                  ? "bg-primary-container text-on-primary shadow-navy-soft font-bold"
+                  ? "bg-primary-container text-on-primary shadow-sm font-bold"
                   : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container",
               )}
             >
@@ -367,7 +367,7 @@ export function SearchForm({
             inputMode="decimal"
             defaultValue={values.prixMin}
             placeholder="€"
-            className="bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline h-10 w-full rounded-full border-0 px-3 outline-none"
+            className="bg-surface-container-low font-body-md text-body-md text-on-surface placeholder:text-outline h-11 w-full rounded-full border-0 px-3 outline-none"
             suppressHydrationWarning
             {...ignorePasswordManagers}
           />
@@ -385,7 +385,7 @@ export function SearchForm({
             inputMode="decimal"
             defaultValue={values.prixMax}
             placeholder="€"
-            className="bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline h-10 w-full rounded-full border-0 px-3 outline-none"
+            className="bg-surface-container-low font-body-md text-body-md text-on-surface placeholder:text-outline h-11 w-full rounded-full border-0 px-3 outline-none"
             suppressHydrationWarning
             {...ignorePasswordManagers}
           />

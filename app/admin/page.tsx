@@ -50,7 +50,7 @@ export default async function AdminIndexPage() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => {
           const body = (
-            <AdminCard className="hover:shadow-navy h-full transition-shadow">
+            <AdminCard className="hover:shadow-md h-full transition-shadow">
               <p className="font-label-xs text-label-xs text-on-surface-variant font-extrabold tracking-wider uppercase">
                 {card.label}
               </p>
