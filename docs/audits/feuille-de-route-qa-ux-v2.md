@@ -8,7 +8,22 @@ Captures **avant** du 16 octobre 2026, avant la Vague 0 :
 - Staging public : `npm run capture:staging` — 26 fichiers OK, 0 échec. Auth sautée (`DATABASE_URL` absent, message Prisma dans la sortie). Des captures compte plus anciennes restent dans `screenshots/staging/` et ne sont pas de ce passage.
 - Production : `npm run capture:prod` — 22 fichiers OK, 0 échec. Soft-launch : pas d'offre ni de page ville dans le sitemap. Base `https://app-3c244888-8706-4ae8-9cb3-e480c257e386.cleverapps.io`.
 
-Les captures vivent dans `screenshots/` (gitignoré). La colonne Après sera remplie après déploiement staging de la Vague 0. Cette vague ne part pas en production.
+Les captures vivent dans `screenshots/` (gitignoré).
+
+Captures **après** : `npm run capture:staging` — 26 fichiers OK, 0 échec. Auth sautée (pas de `DATABASE_URL` postgres dans ce processus). Production non recapturée.
+
+Contrôle staging du 16 octobre 2026 au soir, après fusion des PR #4 et #5 (`d317a42`). Le CSS servi contient Crème `#F6F5F1`, Encre `#13263F`, Ambre `#F7A325` et Space Grotesk. Bricolage et Manrope n'y sont plus. L'ancien orange `#FE9800` est encore dans la feuille (pins carte).
+
+Vu dans le navigateur, 1440 px et 390 px :
+
+- Accueil : prix vendu en ambre foncé `rgb(138, 83, 0)`, Space Grotesk 20 px, badge `-XX %` ambre / Encre. Lisible. La ligne de prix ajoute aussi un écart en euros (`−54,45 €`).
+- Fiche `/offre/…?pos=electrodepot-electro-depot-saint-avold-57740` : le magasin Saint-Avold est en avant, prix `4,00 €` en ambre foncé. Pas de km : aucune position dans l'URL.
+- `/recherche?lieu=zzzznotacity` : H1 « Bonnes affaires près de chez toi », message « Lieu introuvable ».
+- Carte US6a sur l'accueil : « Cette enseigne n'a pas encore activé l'encaissement. »
+- Anneau de focus Encre : non confirmé au clavier. Le champ de recherche du header a `outline-none`.
+- Pass de retrait, favori magasin connecté, quantité au-dessus du stock, conflit de panier, admin : non rejoués, session absente.
+
+P0 ouverts pour la suite : pins carte (Vague 2), prix encore en ambre foncé et écart en euros sur la carte (Vague 2), focus du header (Vague 1), e-mails (Vague 1), Payment Element (Vague 4).
 
 La Vague 0 change la peau (tokens, police, primitives, états de chargement). Elle ne rebranche pas chaque écran sur les primitives. Aucun écran ne devient illisible : le texte ambre clair sur fond clair est remplacé par l'ambre foncé `#8A5300`. Les P0 ci-dessous sont les dettes visuelles reportées.
 
