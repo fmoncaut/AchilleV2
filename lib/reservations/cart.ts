@@ -109,7 +109,7 @@ function lineIssue(
     return "Cette offre n’est plus réservable dans ce magasin.";
   }
   if (item.quantity > offer.stock) {
-    return `Stock insuffisant : il en reste ${offer.stock}.`;
+    return `Il reste ${offer.stock} en magasin.`;
   }
   return null;
 }
@@ -247,7 +247,9 @@ async function loadReservableOffer(offerId: string, posId: string) {
       posId: true,
       merchantId: true,
       stock: true,
-      merchant: { select: { isActive: true } },
+      merchant: {
+        select: { isActive: true, stripeAccountId: true, chargesEnabled: true },
+      },
       pos: { select: { id: true, name: true, isActive: true } },
     },
   });
@@ -266,6 +268,11 @@ async function loadReservableOffer(offerId: string, posId: string) {
   }
   if (offer.stock < 1) {
     throw new ReservationError("Cette offre est en rupture.");
+  }
+  if (!offer.merchant.stripeAccountId || !offer.merchant.chargesEnabled) {
+    throw new ReservationError(
+      "Cette enseigne n’a pas encore activé l’encaissement.",
+    );
   }
   return offer;
 }
@@ -341,9 +348,7 @@ export async function addOfferToCart(
     throw new ReservationError("Quantité maximale : 99.");
   }
   if (nextQty > offer.stock) {
-    throw new ReservationError(
-      `Stock insuffisant : il en reste ${offer.stock}.`,
-    );
+    throw new ReservationError(`Il reste ${offer.stock} en magasin.`);
   }
 
   if (current) {
@@ -376,9 +381,7 @@ export async function updateCartQuantity(
     throw new ReservationError("Cette offre n’est pas dans le panier.");
   }
   if (quantity > item.offer.stock) {
-    throw new ReservationError(
-      `Stock insuffisant : il en reste ${item.offer.stock}.`,
-    );
+    throw new ReservationError(`Il reste ${item.offer.stock} en magasin.`);
   }
   await prisma.reservationCartItem.update({
     where: { id: item.id },

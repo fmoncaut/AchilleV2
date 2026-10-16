@@ -45,7 +45,12 @@ export function OfferCard({
     : null;
   const destination =
     href ??
-    offerPath(offer.productSlug, { posSlug: offer.posSlug || undefined });
+    offerPath(offer.productSlug, {
+      posSlug: offer.posSlug || undefined,
+      lat,
+      lng,
+      tri: lat != null && lng != null ? "distance" : undefined,
+    });
 
   return (
     <article
@@ -113,14 +118,20 @@ export function OfferCard({
       </Link>
       {offer.kind === "DIRECT" ? (
         <div className="px-4 pb-4">
-          <ReserveButton
-            offerId={offer.id}
-            posId={offer.posId}
-            stock={offer.stock}
-            compact
-            lat={lat}
-            lng={lng}
-          />
+          {offer.paymentsEnabled === false ? (
+            <p className="font-body-sm text-body-sm text-on-surface-variant">
+              Cette enseigne n’a pas encore activé l’encaissement.
+            </p>
+          ) : (
+            <ReserveButton
+              offerId={offer.id}
+              posId={offer.posId}
+              stock={offer.stock}
+              compact
+              lat={lat}
+              lng={lng}
+            />
+          )}
         </div>
       ) : null}
     </article>

@@ -8,9 +8,10 @@ export default function MentionsLegalesPage() {
   return (
     <LegalPage title="Mentions légales">
       <p>
-        <strong>Akwire</strong> est une place de marché d’affiliation : nous
-        présentons des offres locales et renvoyons vers le site du marchand. Nous
-        n’encaissons aucun paiement à ce stade.
+        <strong>Akwire</strong> présente des offres locales. Deux circuits :
+        le renvoi vers le site du marchand (affiliation) et, pour les enseignes
+        qui l’ont activé, la réservation avec retrait en magasin (empreinte du
+        montant, débit au retrait).
       </p>
       <p>
         <strong>Éditeur (à compléter) :</strong> [raison sociale], [forme

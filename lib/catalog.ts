@@ -70,7 +70,15 @@ async function loadProductShowcase(slug: string) {
           AND: [publicFeedWhere],
         },
         include: {
-          merchant: { select: { id: true, name: true, slug: true } },
+          merchant: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              stripeAccountId: true,
+              chargesEnabled: true,
+            },
+          },
           pos: { select: posSelect },
           targetedPos: { include: { pos: { select: posSelect } } },
         },
@@ -216,6 +224,9 @@ async function expandProductOffers(offers: LoadedOffer[]): Promise<ShowcaseOffer
         condition: offer.condition,
         isOnline: offer.isOnline,
         kind: offer.kind,
+        paymentsEnabled: Boolean(
+          offer.merchant.stripeAccountId && offer.merchant.chargesEnabled,
+        ),
         merchantUrl: offer.merchantUrl,
         merchantName: offer.merchant.name,
         pos: toShowcasePos(pos),
@@ -241,7 +252,7 @@ export const getCachedProductPage = unstable_cache(
       offers: await expandProductOffers(product.offers),
     };
   },
-  ["catalog-product-page-v8"],
+  ["catalog-product-page-v9"],
   catalogCache,
 );
 

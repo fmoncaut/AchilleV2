@@ -5,9 +5,14 @@ import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
 type LegalPageProps = {
   title: string;
   children: ReactNode;
+  showDraftNotice?: boolean;
 };
 
-export function LegalPage({ title, children }: LegalPageProps) {
+export function LegalPage({
+  title,
+  children,
+  showDraftNotice = true,
+}: LegalPageProps) {
   return (
     <BuyerMain>
       <BuyerSection className="py-12">
@@ -21,10 +26,12 @@ export function LegalPage({ title, children }: LegalPageProps) {
           <div className="font-body-md text-body-md text-on-surface-variant flex flex-col gap-4">
             {children}
           </div>
-          <p className="font-body-sm text-body-sm text-on-surface-variant">
-            Texte placeholder à compléter avant publication commerciale (éditeur,
-            hébergeur, DPO, SIREN).
-          </p>
+          {showDraftNotice ? (
+            <p className="font-body-sm text-body-sm text-on-surface-variant">
+              Texte placeholder à compléter avant publication commerciale (éditeur,
+              hébergeur, DPO, SIREN).
+            </p>
+          ) : null}
         </article>
       </BuyerSection>
     </BuyerMain>

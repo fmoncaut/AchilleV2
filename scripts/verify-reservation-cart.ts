@@ -80,6 +80,24 @@ async function main() {
     }),
   ]);
 
+  const merchantIds = [...new Set([lyon.merchantId, nantes.merchantId])];
+  const previousMerchants = await prisma.merchant.findMany({
+    where: { id: { in: merchantIds } },
+    select: { id: true, stripeAccountId: true, chargesEnabled: true },
+  });
+  for (const merchant of previousMerchants) {
+    if (!merchant.stripeAccountId || !merchant.chargesEnabled) {
+      await prisma.merchant.update({
+        where: { id: merchant.id },
+        data: {
+          stripeAccountId:
+            merchant.stripeAccountId ?? `acct_cart_${stamp}_${merchant.id.slice(0, 6)}`,
+          chargesEnabled: true,
+        },
+      });
+    }
+  }
+
   const owner = { userId: buyer.id, sessionKey: null as string | null };
 
   try {
@@ -171,7 +189,7 @@ async function main() {
     await updateCartQuantity(owner, offerA.id, 3);
     await expectError(
       () => updateCartQuantity(owner, offerA.id, 9),
-      "Stock insuffisant",
+      "Il reste",
     );
     await addOfferToCart(owner, {
       offerId: offerB.id,
@@ -246,6 +264,15 @@ async function main() {
       where: { id: { in: [productA.id, productB.id, productC.id] } },
     });
     await prisma.user.delete({ where: { id: buyer.id } });
+    for (const merchant of previousMerchants) {
+      await prisma.merchant.update({
+        where: { id: merchant.id },
+        data: {
+          stripeAccountId: merchant.stripeAccountId,
+          chargesEnabled: merchant.chargesEnabled,
+        },
+      });
+    }
   }
 }
 

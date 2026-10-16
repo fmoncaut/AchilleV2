@@ -27,6 +27,7 @@ export type HomeDealOffer = {
   productSlug: string;
   imageUrl: string | null;
   kind: "DIRECT" | "AFFILIATION";
+  paymentsEnabled?: boolean;
   posId: string;
   posName: string;
   posSlug: string;
@@ -49,6 +50,9 @@ export function HomeDealCard({
 }) {
   const href = offerPath(offer.productSlug, {
     posSlug: offer.posSlug || undefined,
+    lat,
+    lng,
+    tri: lat != null && lng != null ? "distance" : undefined,
   });
   const showCrossed = isStrictlyDiscounted(
     offer.priceRemise,
@@ -146,7 +150,11 @@ export function HomeDealCard({
             ) : null}
           </p>
           <div className="mt-3">
-            {direct && lat != null && lng != null ? (
+            {direct && offer.paymentsEnabled === false ? (
+              <p className="font-body-sm text-body-sm text-on-surface-variant">
+                Cette enseigne n’a pas encore activé l’encaissement.
+              </p>
+            ) : direct && lat != null && lng != null ? (
               <ReserveButton
                 offerId={offer.id}
                 posId={offer.posId}

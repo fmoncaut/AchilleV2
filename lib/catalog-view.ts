@@ -25,6 +25,7 @@ export type ShowcaseOffer = {
   condition: ProductCondition;
   isOnline: boolean;
   kind: "DIRECT" | "AFFILIATION";
+  paymentsEnabled: boolean;
   merchantUrl: string | null;
   merchantName: string;
   pos: ShowcasePos;

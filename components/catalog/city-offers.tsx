@@ -113,6 +113,7 @@ function CityOffersView({
                     posSlug: offer.posSlug,
                     lat,
                     lng,
+                    tri: lat != null && lng != null ? "distance" : undefined,
                   })}
                   signedIn={signedIn}
                   isProductFavorite={favoriteProductIds.includes(

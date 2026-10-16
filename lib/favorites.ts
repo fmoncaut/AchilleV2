@@ -11,7 +11,8 @@ export const favoriteInputSchema = z.object({
     .trim()
     .min(8, "Identifiant invalide")
     .max(40)
-    .regex(/^[a-z0-9]+$/i, "Identifiant invalide"),
+    .regex(/^[a-z0-9-]+$/i, "Identifiant invalide")
+    .refine((id) => /[a-z0-9]/i.test(id), "Identifiant invalide"),
 });
 
 export type FavoriteKind = z.infer<typeof favoriteKindSchema>;

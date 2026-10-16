@@ -11,6 +11,9 @@
 # testing
 /coverage
 
+# QA/UX screenshots (générés localement, jamais commités)
+/screenshots/
+
 # next.js
 /.next/
 /out/
