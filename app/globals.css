@@ -115,26 +115,26 @@
   --text-price-card--line-height: 24px;
   --text-body-lg: 18px;
   --text-body-lg--line-height: 28px;
-  --text-body-md: 15px;
-  --text-body-md--line-height: 22px;
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
   --text-body-sm: 13px;
   --text-body-sm--line-height: 18px;
   --text-label-lg: 14px;
   --text-label-lg--line-height: 20px;
   --text-label-md: 12px;
   --text-label-md--line-height: 16px;
-  --text-label-xs: 10px;
-  --text-label-xs--line-height: 12px;
+  --text-label-xs: 12px;
+  --text-label-xs--line-height: 16px;
 
   --shadow-sm: 0 1px 2px rgb(19 38 63 / 0.06);
   --shadow-md: 0 6px 20px rgb(19 38 63 / 0.08);
 }
 
 @theme inline {
-  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-headline-lg: var(--font-display);
   --font-headline-lg-mobile: var(--font-display);
   --font-headline-md: var(--font-display);
@@ -226,7 +226,7 @@
 
   body {
     @apply bg-background font-body text-body-md text-on-surface antialiased;
-    font-weight: 500;
+    font-weight: 400;
   }
 
   h1,

@@ -168,7 +168,7 @@ export function SearchForm({
   };
 
   const fieldClass =
-    "w-full border-0 bg-transparent font-body-sm text-body-sm text-on-surface outline-none placeholder:text-outline focus:ring-0";
+    "w-full border-0 bg-transparent font-body-md text-body-md text-on-surface outline-none placeholder:text-outline focus:ring-0";
 
   return (
     <form
@@ -367,7 +367,7 @@ export function SearchForm({
             inputMode="decimal"
             defaultValue={values.prixMin}
             placeholder="€"
-            className="bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline h-10 w-full rounded-full border-0 px-3 outline-none"
+            className="bg-surface-container-low font-body-md text-body-md text-on-surface placeholder:text-outline h-11 w-full rounded-full border-0 px-3 outline-none"
             suppressHydrationWarning
             {...ignorePasswordManagers}
           />
@@ -385,7 +385,7 @@ export function SearchForm({
             inputMode="decimal"
             defaultValue={values.prixMax}
             placeholder="€"
-            className="bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline h-10 w-full rounded-full border-0 px-3 outline-none"
+            className="bg-surface-container-low font-body-md text-body-md text-on-surface placeholder:text-outline h-11 w-full rounded-full border-0 px-3 outline-none"
             suppressHydrationWarning
             {...ignorePasswordManagers}
           />

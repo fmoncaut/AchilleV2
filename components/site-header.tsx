@@ -32,7 +32,7 @@ export async function SiteHeader() {
             name="q"
             type="search"
             placeholder="Rechercher un produit"
-            className="font-body-sm text-body-sm placeholder:text-outline min-w-0 flex-1 bg-transparent px-2 py-1 outline-none"
+            className="font-body-md text-body-md placeholder:text-outline min-w-0 flex-1 bg-transparent px-2 py-1 outline-none"
           />
           <Link
             href="/recherche?vue=carte"

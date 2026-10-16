@@ -52,7 +52,7 @@ export function AdminCard({
 }
 
 export const adminFieldClass =
-  "bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline focus-visible:ring-primary-container h-11 w-full rounded-full border-0 px-4 outline-none focus-visible:ring-2";
+  "bg-surface-container-low font-body-md text-body-md text-on-surface placeholder:text-outline focus-visible:ring-primary-container h-11 w-full rounded-full border-0 px-4 outline-none focus-visible:ring-2";
 
 export const adminLabelClass =
   "font-label-md text-label-md text-primary-container flex flex-col gap-1";

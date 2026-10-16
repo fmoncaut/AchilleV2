@@ -6,7 +6,7 @@ import { PwaRegister } from "@/components/pwa-register";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getAnalyticsConfig } from "@/lib/analytics";
-import { bricolage, manrope, materialSymbols, spaceGrotesk } from "@/lib/fonts";
+import { materialSymbols, spaceGrotesk } from "@/lib/fonts";
 import { getSiteUrl } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -55,8 +55,6 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={cn(
         "h-full",
-        bricolage.variable,
-        manrope.variable,
         materialSymbols.variable,
         spaceGrotesk.variable,
       )}
