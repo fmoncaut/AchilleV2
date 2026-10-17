@@ -60,7 +60,7 @@ function CityOffersView({
       <BuyerSection className="flex flex-1 flex-col gap-6 py-6 lg:py-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+            <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
               {cityName}
             </p>
             <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1">
@@ -85,12 +85,12 @@ function CityOffersView({
         </div>
 
         <div className="no-scrollbar flex items-center gap-1.5 overflow-x-auto">
-          <span className="font-label-md text-label-md bg-primary-container text-on-primary shrink-0 rounded-full px-3.5 py-1.5 font-bold">
+          <span className="font-label-md text-label-md bg-primary-container text-on-primary inline-flex h-11 shrink-0 items-center rounded-full px-4 font-bold">
             {categoryName}
           </span>
           <Link
             href="/recherche"
-            className="font-label-md text-label-md bg-surface-container-low text-on-surface-variant hover:bg-surface-container shrink-0 rounded-full px-3.5 py-1.5"
+            className="font-label-md text-label-md bg-surface-container-low text-on-surface-variant hover:bg-surface-container inline-flex h-11 shrink-0 items-center rounded-full px-4"
           >
             Toutes les offres
           </Link>

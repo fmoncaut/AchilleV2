@@ -25,8 +25,8 @@ structure des écrans, pas les couleurs, pas les polices, pas les images
 
 L'ambre `#F7A325` n'est jamais une couleur de texte, d'icône seule ou de focus sur fond clair.
 Le texte sur un fond ambre est Encre. Le prix remisé est Encre, gras ; l'ambre porte
-le badge. Les cartes d'offre (`OfferCard`) suivent cette règle. Les prix encore en
-`text-secondary` hors carte (fiche offre, tunnel) restent pour les vagues suivantes.
+le badge. Les cartes d'offre (`OfferCard`) et la fiche offre suivent cette règle.
+Le tunnel reste en `text-secondary` pour la Vague 4.
 
 ## Contrastes (WCAG 2.2, mesurés)
 
