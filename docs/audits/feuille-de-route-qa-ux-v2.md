@@ -23,7 +23,9 @@ Vu dans le navigateur, 1440 px et 390 px :
 - Anneau de focus Encre : non confirmé au clavier. Le champ de recherche du header a `outline-none`.
 - Pass de retrait, favori magasin connecté, quantité au-dessus du stock, conflit de panier, admin : non rejoués, session absente.
 
-P0 ouverts pour la suite : pins carte (Vague 2), prix encore en ambre foncé et écart en euros sur la carte (Vague 2), focus du header (Vague 1), e-mails (Vague 1), Payment Element (Vague 4).
+P0 ouverts pour la suite : pins carte (Vague 2), prix encore en ambre foncé et écart en euros sur la carte (Vague 2), Payment Element (Vague 4).
+
+Vague 1 (`design/v1-transversal`) : vouvoiement (« chez vous »), anneau de focus unique dans `app/globals.css`, header mobile avec recherche non collante, footer et CGU décrivent les deux modes (CGU à faire relire avant prod), gabarit e-mail PNG. L’e-mail de confirmation d’empreinte reste au backlog ci-dessus.
 
 La Vague 0 change la peau (tokens, police, primitives, états de chargement). Elle ne rebranche pas chaque écran sur les primitives. Aucun écran ne devient illisible : le texte ambre clair sur fond clair est remplacé par l'ambre foncé `#8A5300`. Les P0 ci-dessous sont les dettes visuelles reportées.
 
@@ -33,7 +35,8 @@ La Vague 0 change la peau (tokens, police, primitives, états de chargement). El
 | --- | --- | --- |
 | Pins et popup carte encore en hex Achille (`#002642`, `#FE9800`) | 2 | Ils ne suivent pas les tokens. La requête et les magasins sans offre ne bougent pas. |
 | Chiffre du prix encore en ambre foncé, cible Encre | 2 | Lisible (5,80:1). La hiérarchie « prix Encre + badge ambre » n'est pas encore posée partout. |
-| Gabarit e-mail (OTP, réservation) | 1 | HTML hors tokens. Rien en Vague 0. |
+| Gabarit e-mail (OTP, réservation) | 1 | Traité : tableau 600 px, logo PNG, clair et sombre. |
+| E-mail « réservation confirmée » absent | hors refonte | L’acheteur pose une empreinte sans recevoir d’e-mail. Pas de nouvel envoi dans la Vague 1. |
 | Payment Element (navy, Manrope) | 4 | `appearance` seulement, plus tard. |
 
 ## Écrans
