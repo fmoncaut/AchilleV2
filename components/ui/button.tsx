@@ -6,7 +6,7 @@ import { MaterialIcon } from "@/components/material-icon";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-full border border-transparent bg-clip-padding font-label-md text-label-md font-bold whitespace-nowrap transition-all select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:outline-error [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "group/button inline-flex shrink-0 items-center justify-center rounded-full border border-transparent bg-clip-padding font-label-md text-label-md font-bold whitespace-nowrap transition-all select-none active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:outline-error [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -17,11 +17,11 @@ const buttonVariants = cva(
         outline:
           "border-outline-variant bg-surface-container-lowest text-primary-container hover:bg-surface-container aria-expanded:bg-surface-container",
         secondary:
-          "bg-primary-container text-on-primary shadow-sm hover:bg-primary focus-visible:outline-secondary-container aria-expanded:bg-primary",
+          "bg-primary-container text-on-primary shadow-sm hover:bg-primary aria-expanded:bg-primary",
         ghost:
           "text-primary-container hover:bg-surface-container hover:text-on-surface aria-expanded:bg-surface-container",
         destructive:
-          "bg-error text-on-error hover:bg-error/90 focus-visible:outline-error",
+          "bg-error text-on-error hover:bg-error/90",
         link: "text-secondary underline-offset-4 hover:underline",
       },
       size: {
