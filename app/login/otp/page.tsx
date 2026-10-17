@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { resendOtpAction, verifyOtpAction } from "@/app/login/actions";
+import { OtpVerifyForm } from "@/app/login/otp/otp-form";
 import { UtilityCard } from "@/components/utility-page";
 import { Button } from "@/components/ui/button";
 import { OTP_RESEND_COOLDOWN_MS } from "@/lib/auth/otp";
@@ -52,10 +53,10 @@ export default async function LoginOtpPage({ searchParams }: OtpPageProps) {
         <p className="font-body-sm text-body-sm text-on-surface-variant mt-4">
           Recommencez depuis la page de connexion pour recevoir un code.
         </p>
-        <p className="mt-8">
+        <p className="mt-8 text-center">
           <Link
             href="/login"
-            className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+            className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center justify-center font-bold underline-offset-4 hover:underline"
           >
             Retour à la connexion
           </Link>
@@ -72,45 +73,17 @@ export default async function LoginOtpPage({ searchParams }: OtpPageProps) {
         expire dans 10 minutes.
       </p>
 
-      {message ? (
-        <p
-          className="font-body-sm bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2"
-          role="alert"
-        >
-          {message}
-        </p>
-      ) : null}
-
-      <form action={verifyOtpAction} className="mt-8 flex flex-col gap-3">
-        <input type="hidden" name="email" value={email} />
-        <input type="hidden" name="callbackUrl" value={callbackUrl} />
-        <label
-          htmlFor="code"
-          className="font-label-md text-label-md text-primary-container"
-        >
-          Code à 6 chiffres
-        </label>
-        <input
-          id="code"
-          name="code"
-          type="text"
-          inputMode="numeric"
-          autoComplete="one-time-code"
-          pattern="\d{6}"
-          maxLength={6}
-          required
-          placeholder="000000"
-          className="bg-surface-container-low font-display text-on-surface placeholder:text-outline focus-visible:ring-primary-container h-14 w-full rounded-full border-0 px-4 text-center text-2xl tracking-[0.4em] outline-none focus-visible:ring-2"
-        />
-        <Button type="submit" size="lg" className="w-full">
-          Valider
-        </Button>
-      </form>
+      <OtpVerifyForm
+        action={verifyOtpAction}
+        email={email}
+        callbackUrl={callbackUrl}
+        serverMessage={message}
+      />
 
       <form action={resendOtpAction} className="mt-4">
         <input type="hidden" name="email" value={email} />
         <input type="hidden" name="callbackUrl" value={callbackUrl} />
-        <Button type="submit" variant="ghost" size="sm" className="w-full">
+        <Button type="submit" variant="ghost" className="w-full">
           Renvoyer le code
         </Button>
       </form>
@@ -118,7 +91,7 @@ export default async function LoginOtpPage({ searchParams }: OtpPageProps) {
       <p className="mt-6 text-center">
         <Link
           href="/login"
-          className="font-label-md text-on-surface-variant underline-offset-4 hover:underline"
+          className="font-body-md text-body-md text-on-surface-variant inline-flex min-h-11 items-center justify-center underline-offset-4 hover:underline"
         >
           Changer d’e-mail
         </Link>

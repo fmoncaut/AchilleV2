@@ -56,7 +56,7 @@ export default async function OnboardingPage({ searchParams }: PageProps) {
 
       {params.erreur ? (
         <p
-          className="font-body-sm bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2"
+          className="font-body-md text-body-md bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2"
           role="alert"
         >
           {params.erreur}
@@ -75,13 +75,13 @@ export default async function OnboardingPage({ searchParams }: PageProps) {
 
         {macros.length > 0 ? <InterestPicker macros={macros} /> : null}
 
-        <label className="font-body-sm text-body-sm text-on-surface flex items-start gap-3">
+        <label className="font-body-md text-body-md text-on-surface flex min-h-11 items-center gap-3">
           <input
             type="checkbox"
             name="acceptTerms"
             value="1"
             required
-            className="border-outline mt-1 size-4 rounded"
+            className="border-outline size-4 shrink-0 rounded"
           />
           <span>
             J’accepte les{" "}
@@ -99,12 +99,12 @@ export default async function OnboardingPage({ searchParams }: PageProps) {
           </span>
         </label>
 
-        <label className="font-body-sm text-body-sm text-on-surface flex items-start gap-3">
+        <label className="font-body-md text-body-md text-on-surface flex min-h-11 items-center gap-3">
           <input
             type="checkbox"
             name="marketingOptIn"
             value="1"
-            className="border-outline mt-1 size-4 rounded"
+            className="border-outline size-4 shrink-0 rounded"
           />
           <span>
             J’accepte de recevoir des alertes bonnes affaires par e-mail
@@ -120,17 +120,17 @@ export default async function OnboardingPage({ searchParams }: PageProps) {
       <form action={completeOnboardingAction} className="mt-3 flex flex-col gap-3">
         <input type="hidden" name="callbackUrl" value={callbackUrl} />
         <input type="hidden" name="skipped" value="1" />
-        <label className="font-body-sm text-body-sm text-on-surface-variant flex items-start gap-3">
+        <label className="font-body-md text-body-md text-on-surface-variant flex min-h-11 items-center gap-3">
           <input
             type="checkbox"
             name="acceptTerms"
             value="1"
             required
-            className="border-outline mt-1 size-4 rounded"
+            className="border-outline size-4 shrink-0 rounded"
           />
           <span>J’accepte les CGU pour passer sans personnaliser.</span>
         </label>
-        <Button type="submit" variant="ghost" size="sm" className="w-full">
+        <Button type="submit" variant="ghost" className="w-full">
           Passer cette étape
         </Button>
       </form>

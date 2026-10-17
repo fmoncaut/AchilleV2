@@ -43,17 +43,26 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       </p>
 
       {erreur === "email" ? (
-        <p className="font-body-sm bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2">
+        <p
+          className="font-body-md text-body-md bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2"
+          role="alert"
+        >
           Saisissez une adresse e-mail valide.
         </p>
       ) : null}
       {erreur === "email_indisponible" || erreur === "envoi" ? (
-        <p className="font-body-sm bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2">
+        <p
+          className="font-body-md text-body-md bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2"
+          role="alert"
+        >
           Envoi impossible. Réessayez dans un instant.
         </p>
       ) : null}
       {authError === "Verification" || authError === "CallbackRouteError" ? (
-        <p className="font-body-sm bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2">
+        <p
+          className="font-body-md text-body-md bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2"
+          role="alert"
+        >
           Connexion expirée ou code déjà utilisé. Demandez un nouveau code.
         </p>
       ) : null}
@@ -110,7 +119,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       <p className="mt-8 text-center">
         <Link
           href="/"
-          className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+          className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center justify-center font-bold underline-offset-4 hover:underline"
         >
           Continuer sans compte
         </Link>
