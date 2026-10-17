@@ -284,6 +284,27 @@
       "opsz" 24;
   }
 
+  /* Tailles d'icône. Le glyphe Material fait 20 px par défaut (1.25 rem). */
+  .icon-xs {
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .icon-sm {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .icon-md {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .icon-lg {
+    font-size: 20px;
+    line-height: 1;
+  }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;

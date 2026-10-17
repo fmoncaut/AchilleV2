@@ -3,7 +3,7 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
 import { Distance } from "@/components/distance";
-import { HomeDealCard } from "@/components/home/deal-card";
+import { OfferCard } from "@/components/offer-card";
 import { OffersMapLoader } from "@/components/map/offers-map-loader";
 import { MaterialIcon } from "@/components/material-icon";
 import { SearchForm } from "@/components/search/search-form";
@@ -473,9 +473,10 @@ export default async function Home({ searchParams }: PageProps) {
             ) : (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {visible.map((offer) => (
-                  <HomeDealCard
+                  <OfferCard
                     key={`${offer.id}-${offer.condition}`}
                     offer={offer}
+                    cta="home"
                     lat={origin?.lat}
                     lng={origin?.lng}
                     signedIn={signedIn}

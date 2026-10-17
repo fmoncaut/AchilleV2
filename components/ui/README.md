@@ -1,6 +1,6 @@
 # Primitives UI
 
-Peau Akwire. Les classes Material 3 (`bg-primary-container`, `text-secondary`…) viennent de `app/globals.css`. Importer `cn` depuis `@/lib/utils`. Icônes : `MaterialIcon`, jamais Lucide.
+Peau Akwire. Les classes Material 3 (`bg-primary-container`, `text-secondary`…) viennent de `app/globals.css`. Importer `cn` depuis `@/lib/utils`. Icônes : `MaterialIcon`, jamais Lucide. Tailles nommées dans `app/globals.css` : `icon-xs` (14 px), `icon-sm` (16 px), `icon-md` (18 px), `icon-lg` (20 px). Sans classe, le glyphe fait 20 px.
 
 Ces primitives sont posées en Vague 0. Les vagues suivantes les branchent écran par écran. Ne pas réécrire un écran ici « pour voir ».
 
@@ -60,9 +60,7 @@ Icône, titre, texte, une action principale, une action secondaire optionnelle. 
 
 ## Price
 
-Prix vendu, prix barré, badge de remise. Tailles `hero` et `card`. Le nom accessible est « 12,90 €, au lieu de 19,90 € ». En Vague 0 le chiffre est en `text-secondary` (ambre foncé, lisible). La cible Vague 2 est l'Encre, l'ambre restant au badge.
-
-`PriceTag` délègue à `Price` et garde `size="md" | "lg"`.
+Prix vendu en Encre, prix barré en gris avec « Prix habituel » masqué visuellement, badge de remise en ambre. Tailles `hero` et `card`. Le nom accessible est « 12,90 €, au lieu de 19,90 € ». `showDiscount={false}` quand le badge est déjà sur l'image. Pas d'écart en euros.
 
 ## Section, PageHeader
 
