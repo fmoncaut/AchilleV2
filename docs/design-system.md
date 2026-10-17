@@ -115,6 +115,8 @@ Material Symbols Outlined reste la police d'icônes (auto-hébergée).
 
 `label-xs` ne descend pas sous 12 px. Le corps par défaut est 16/24, graisse 400. Les champs de saisie sont au minimum en 16 px (Safari iOS).
 
+Exception : le compteur d’un pin de carte (`components/map/offers-map.tsx`) reste en 10 px, sur une pastille de 20 px. Ce n’est pas une cible : le pin fait 44 px. Le chiffre est Encre sur Ambre (7,42:1).
+
 ## Motifs
 
 - CTA primaire : fond ambre, texte Encre, pilule, hauteur ≥ 44 px.
