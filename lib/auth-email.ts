@@ -8,6 +8,7 @@ import {
   smtpPort,
   smtpUser,
 } from "@/lib/auth-env";
+import { renderEmailLayout } from "@/lib/notifications/email-layout";
 
 type OtpMailParams = {
   identifier: string;
@@ -24,7 +25,11 @@ export function buildOtpMailContent(token: string): {
   return {
     subject: OTP_MAIL_SUBJECT,
     text: `Votre code de connexion Akwire : ${token}\n\nIl expire dans 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.`,
-    html: `<p>Votre code de connexion Akwire :</p><p style="font-size:28px;font-weight:700;letter-spacing:0.2em">${token}</p><p>Il expire dans 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.</p>`,
+    html: renderEmailLayout({
+      preheader: "Votre code de connexion Akwire",
+      title: "Votre code de connexion",
+      bodyHtml: `<p class="email-text" style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:24px;color:#0E1C2E;">Votre code de connexion Akwire :</p><p class="email-text" style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:28px;line-height:36px;font-weight:700;letter-spacing:0.2em;color:#13263F;">${token.replaceAll("&", "&amp;").replaceAll("<", "&lt;")}</p><p class="email-text" style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:24px;color:#0E1C2E;">Il expire dans 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.</p>`,
+    }),
   };
 }
 

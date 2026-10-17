@@ -12,7 +12,7 @@ structure des écrans, pas les couleurs, pas les polices, pas les images
 
 - Nom : Akwire. Wordmark en bas-de-casse, Space Grotesk 600 (`.brand-wordmark`).
 - Logo : `public/brand/akwire-mark.svg`, `public/brand/akwire-mark-mono.svg`. Ne pas redessiner.
-- Ton : français, direct. Le vouvoiement et le tutoiement coexistent encore ; la règle unique se tranche en Vague 1.
+- Ton : français, direct. Vouvoiement partout (interface, e-mails, back-office, pages légales).
 
 ## Palette
 

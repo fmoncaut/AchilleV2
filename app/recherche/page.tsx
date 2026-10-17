@@ -237,7 +237,7 @@ export default async function RecherchePage({
           <Breadcrumb
             items={[
               { href: "/", label: "Accueil" },
-              { label: "Offres autour de toi" },
+              { label: "Offres autour de vous" },
             ]}
           />
           <div>
@@ -246,7 +246,7 @@ export default async function RecherchePage({
               Recherche locale
             </p>
             <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
-              Bonnes affaires près de chez toi
+              Bonnes affaires près de chez vous
               {city ? (
                 <>
                   {" "}
@@ -350,7 +350,7 @@ export default async function RecherchePage({
             {stores.length > 0 ? (
               <section className="flex flex-col gap-4">
                 <h2 className="font-headline-sm text-headline-sm text-primary-container">
-                  Enseignes autour de toi
+                  Enseignes autour de vous
                 </h2>
                 <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {stores.slice(0, 8).map((store) => {
@@ -394,7 +394,7 @@ export default async function RecherchePage({
             {vendorGroups.length > 0 ? (
               <section className="bg-surface-container-lowest shadow-sm rounded-2xl p-5">
                 <h2 className="font-headline-sm text-headline-sm text-primary-container">
-                  Plusieurs vendeurs près de toi
+                  Plusieurs vendeurs près de vous
                 </h2>
                 <ul className="mt-4 flex flex-col gap-4">
                   {vendorGroups.slice(0, 3).map((group) => {

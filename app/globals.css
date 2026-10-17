@@ -216,7 +216,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
 
   html {
@@ -241,9 +241,7 @@
   }
 
   .bg-primary-container :focus-visible,
-  .bg-primary :focus-visible,
-  .bg-primary-container:focus-visible,
-  .bg-primary:focus-visible {
+  .bg-primary :focus-visible {
     outline-color: var(--color-secondary-container);
   }
 }

@@ -116,7 +116,7 @@ async function resolveUserOrigin(userId: string | undefined): Promise<{
   return {
     lat: user.lastLat,
     lng: user.lastLng,
-    city: near[0]?.city ?? "chez toi",
+    city: near[0]?.city ?? "chez vous",
   };
 }
 
@@ -248,7 +248,7 @@ export default async function Home({ searchParams }: PageProps) {
               {personalized ? "Pour vous" : "Radar déstockage"}
             </p>
             <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
-              Bonnes affaires près de chez toi
+              Bonnes affaires près de chez vous
               {origin ? (
                 <>
                   {" "}
@@ -487,7 +487,7 @@ export default async function Home({ searchParams }: PageProps) {
             {storeList.length > 0 && origin ? (
               <section className="flex flex-col gap-3">
                 <h2 className="font-headline-sm text-headline-sm text-primary-container">
-                  Enseignes physiques autour de toi
+                  Enseignes physiques autour de vous
                 </h2>
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                   {storeList.map((store) => {
