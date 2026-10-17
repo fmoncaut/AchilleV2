@@ -128,6 +128,7 @@ export function PosDrawer({
                 <li key={offer.id}>
                   <OfferCard
                     offer={offer}
+                    variant="drawer"
                     signedIn={signedIn}
                     isProductFavorite={favoriteSet.has(offer.productId)}
                     loginHref={loginHref}
