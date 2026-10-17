@@ -86,22 +86,47 @@ function merchantInitial(name: string): string {
   return (trimmed[0] ?? "?").toLocaleUpperCase("fr-FR");
 }
 
+const PIN_BUTTON =
+  "relative flex size-11 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 font-label-lg text-label-lg font-extrabold";
+
+function pinAriaLabel(pin: MapPosPin): string {
+  if (pin.state === "active") {
+    return `${pin.name}, ${pin.offerCount} offre${pin.offerCount > 1 ? "s" : ""}`;
+  }
+  if (pin.state === "active_empty") {
+    return `${pin.name}, plus d'offres disponibles en ce moment`;
+  }
+  return `${pin.name}, magasin non disponible actuellement`;
+}
+
+function pinButtonClass(pin: MapPosPin): string {
+  if (pin.state === "active") {
+    return pin.merchantLogoUrl
+      ? `${PIN_BUTTON} border-primary-container bg-surface-container-lowest`
+      : `${PIN_BUTTON} border-primary-container bg-primary-container text-on-primary`;
+  }
+  if (pin.state === "active_empty") {
+    return `${PIN_BUTTON} border-outline bg-surface-container text-primary-container`;
+  }
+  return `${PIN_BUTTON} border-dashed border-outline bg-surface-container text-on-surface-variant`;
+}
+
+function pinLogoClass(state: MapPosPin["state"]): string {
+  if (state === "active") {
+    return "size-full object-cover";
+  }
+  if (state === "active_empty") {
+    return "size-full object-cover grayscale opacity-70";
+  }
+  return "size-full object-cover grayscale opacity-50";
+}
+
 function createLogoMarkerElement(pin: MapPosPin): HTMLButtonElement {
-  const isActive = pin.state === "active";
   const element = document.createElement("button");
   element.type = "button";
-  element.className = [
-    "relative flex size-11 items-center justify-center overflow-hidden rounded-full border-2 border-[#002642] shadow-[0_2px_6px_rgba(0,38,66,0.15)]",
-    isActive ? "bg-white" : "bg-[#e6e8ec]",
-  ].join(" ");
-  element.setAttribute(
-    "aria-label",
-    isActive
-      ? `${pin.name}, ${pin.offerCount} offre${pin.offerCount > 1 ? "s" : ""}`
-      : pin.state === "active_empty"
-        ? `${pin.name}, plus d'offres disponibles en ce moment`
-        : `${pin.name}, magasin non disponible actuellement`,
-  );
+  element.className = pinButtonClass(pin);
+  element.style.boxShadow = "var(--shadow-md)";
+  element.setAttribute("aria-label", pinAriaLabel(pin));
 
   if (pin.merchantLogoUrl) {
     const img = document.createElement("img");
@@ -109,23 +134,16 @@ function createLogoMarkerElement(pin: MapPosPin): HTMLButtonElement {
     img.alt = "";
     img.decoding = "async";
     img.loading = "lazy";
-    img.className = [
-      "size-full object-cover",
-      isActive ? "" : "grayscale opacity-70",
-    ]
-      .filter(Boolean)
-      .join(" ");
+    img.className = pinLogoClass(pin.state);
     element.append(img);
   } else {
-    element.classList.add("bg-[#002642]", "text-white");
     element.textContent = merchantInitial(pin.merchantName || pin.name);
-    element.classList.add("text-sm", "font-extrabold");
   }
 
-  if (isActive && pin.offerCount > 0) {
+  if (pin.state === "active" && pin.offerCount > 0) {
     const badge = document.createElement("span");
     badge.className =
-      "absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#fe9800] px-1 text-[10px] font-extrabold text-[#002642] ring-2 ring-white";
+      "absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-secondary-container px-1 text-[10px] font-extrabold text-on-secondary-container ring-2 ring-surface-container-lowest";
     badge.textContent =
       pin.offerCount > 99 ? "99+" : String(pin.offerCount);
     element.append(badge);
@@ -151,6 +169,7 @@ export function OffersMap({
   const cameraLat = hasUserLocation ? centerLat : defaultCenter[1];
   const cameraZoom = hasUserLocation ? LOCAL_MAP_ZOOM : defaultZoom;
   const containerRef = useRef<HTMLDivElement>(null);
+  const pinButtonRef = useRef<HTMLButtonElement | null>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const markersRef = useRef<Marker[]>([]);
   const pinsRef = useRef(pins);
@@ -165,9 +184,18 @@ export function OffersMap({
   }, [pins]);
 
   const closeDrawer = useCallback(() => {
+    const pinButton = pinButtonRef.current;
+    pinButtonRef.current = null;
     setSelectedPin(null);
     setDrawerOffers(null);
     setDrawerLoading(false);
+    queueMicrotask(() => {
+      if (pinButton?.isConnected) {
+        pinButton.focus({ preventScroll: true });
+      } else {
+        containerRef.current?.focus({ preventScroll: true });
+      }
+    });
   }, []);
 
   const openActiveDrawer = useCallback((pin: MapPosPin) => {
@@ -247,8 +275,10 @@ export function OffersMap({
               const marker = new Marker({ element })
                 .setLngLat([pin.lng, pin.lat])
                 .addTo(created);
+              element.setAttribute("aria-label", pinAriaLabel(pin));
               element.addEventListener("click", (event) => {
                 event.stopPropagation();
+                pinButtonRef.current = element;
                 openActiveDrawer(pin);
               });
               markersRef.current.push(marker);
@@ -256,9 +286,10 @@ export function OffersMap({
             }
 
             const popupNode = document.createElement("div");
-            popupNode.className = "min-w-48 max-w-64 text-sm text-[#191c1e]";
+            popupNode.className =
+              "min-w-48 max-w-64 font-body-sm text-body-sm text-on-surface";
             const title = document.createElement("p");
-            title.className = "font-bold text-[#002642]";
+            title.className = "font-label-md text-label-md text-primary-container font-bold";
             title.textContent = pin.name;
             if (pin.state === "active_empty") {
               const message = document.createElement("p");
@@ -271,7 +302,7 @@ export function OffersMap({
               message.className = "mt-2";
               message.textContent = "Magasin non disponible actuellement";
               const invite = document.createElement("p");
-              invite.className = "mt-2 text-[#3d4948]";
+              invite.className = "font-body-sm text-body-sm text-on-surface-variant mt-2";
               invite.textContent =
                 "Ce point de vente n’est pas ouvert sur Akwire. Rejoignez Akwire pour y proposer vos stocks.";
               popupNode.append(title, message, invite);
@@ -287,6 +318,7 @@ export function OffersMap({
               .setLngLat([pin.lng, pin.lat])
               .setPopup(popup)
               .addTo(created);
+            element.setAttribute("aria-label", pinAriaLabel(pin));
 
             markersRef.current.push(marker);
           }
@@ -364,6 +396,7 @@ export function OffersMap({
     <div className="relative flex flex-col gap-4">
       <div
         ref={containerRef}
+        tabIndex={-1}
         className="ring-outline-variant h-[min(70vh,36rem)] min-h-80 w-full overflow-hidden rounded-2xl ring-1"
       />
       <PosDrawer
