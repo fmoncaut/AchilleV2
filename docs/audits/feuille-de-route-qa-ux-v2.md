@@ -31,13 +31,15 @@ Vague 2a (`design/v2a-offer-card`) : une seule `OfferCard` (grille, compact, dra
 
 Vague 2b (`design/v2b-feed-recherche`) : accueil et recherche. Filtres actifs (macro ou facette à l’accueil ; catégorie et prix en recherche — `q` n’est pas un filtre). États vides via `EmptyState`. Champs à 16 px / 44 px. Pas de « Ouvert » sur les cartes.
 
+Vague 2c (`design/v2c-carte`) : pins et popup en tokens, trois dessins (`active`, `active_empty`, `inactive_visible`). Les deux popups restent. Le tiroir est modal : l’overlay transparent intercepte encore les clics.
+
 La Vague 0 change la peau (tokens, police, primitives, états de chargement). Elle ne rebranche pas chaque écran sur les primitives. Aucun écran ne devient illisible : le texte ambre clair sur fond clair est remplacé par l'ambre foncé `#8A5300`. Les P0 ci-dessous sont les dettes visuelles reportées.
 
 ## P0 reportés
 
 | Sujet | Vague | Pourquoi |
 | --- | --- | --- |
-| Pins et popup carte encore en hex Achille (`#002642`, `#FE9800`) | 2 | Ils ne suivent pas les tokens. La requête et les magasins sans offre ne bougent pas. |
+| Pins et popup carte encore en hex Achille (`#002642`, `#FE9800`) | 2c | Traité : tokens, trois dessins, popups conservées. Compteur de pin en 10 px (exception documentée). |
 | Chiffre du prix encore en ambre foncé hors carte d'offre | 2d | Les cartes (`OfferCard`) sont en Encre. La fiche offre et le tunnel restent en ambre foncé. |
 | Gabarit e-mail (OTP, réservation) | 1 | Traité : tableau 600 px, logo PNG, clair et sombre. |
 | E-mail « réservation confirmée » absent | hors refonte | L’acheteur pose une empreinte sans recevoir d’e-mail. Pas de nouvel envoi dans la Vague 1. |
