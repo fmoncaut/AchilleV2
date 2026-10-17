@@ -29,6 +29,8 @@ Vague 1 (`design/v1-transversal`) : vouvoiement (« chez vous »), anneau de foc
 
 Vague 2a (`design/v2a-offer-card`) : une seule `OfferCard` (grille, compact, drawer). Prix en Encre, badge ambre, pas d’écart en euros. La carte affiliée mène à la fiche. « Réserver et retirer » et la phrase C6 gardent leurs conditions. « Ouvert » seulement si l’appelant a déjà la donnée.
 
+Vague 2b (`design/v2b-feed-recherche`) : accueil et recherche. Filtres actifs (macro ou facette à l’accueil ; catégorie et prix en recherche — `q` n’est pas un filtre). États vides via `EmptyState`. Champs à 16 px / 44 px. Pas de « Ouvert » sur les cartes.
+
 La Vague 0 change la peau (tokens, police, primitives, états de chargement). Elle ne rebranche pas chaque écran sur les primitives. Aucun écran ne devient illisible : le texte ambre clair sur fond clair est remplacé par l'ambre foncé `#8A5300`. Les P0 ci-dessous sont les dettes visuelles reportées.
 
 ## P0 reportés

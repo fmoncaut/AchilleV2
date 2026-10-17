@@ -1,11 +1,12 @@
-import Link from "next/link";
-
 import { auth } from "@/auth";
 import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
-import { Distance } from "@/components/distance";
-import { OfferCard } from "@/components/offer-card";
+import { FeedFacets } from "@/components/home/feed-facets";
+import { HomeFeed } from "@/components/home/home-feed";
+import { HomeHero } from "@/components/home/home-hero";
+import { HOME_VIEWS, homeHref, type HomeView } from "@/components/home/home-links";
+import { MacroNav } from "@/components/home/macro-nav";
 import { OffersMapLoader } from "@/components/map/offers-map-loader";
-import { MaterialIcon } from "@/components/material-icon";
+import { ActiveFilters } from "@/components/search/active-filters";
 import { SearchForm } from "@/components/search/search-form";
 import { prisma } from "@/lib/db";
 import {
@@ -29,14 +30,10 @@ import {
   type RadiusKm,
   type SearchQuery,
 } from "@/lib/search";
-import { loginWithReturn, magasinPath } from "@/lib/urls";
+import { loginWithReturn } from "@/lib/urls";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
-
-const HOME_VIEWS = ["split", "carte", "liste"] as const;
-
-type HomeView = (typeof HOME_VIEWS)[number];
 
 type PageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -64,33 +61,6 @@ function parseFilter(raw: string): FeedFacet {
     return raw;
   }
   return "tout";
-}
-
-function homeHref(input: {
-  r: RadiusKm;
-  vue: HomeView;
-  macro: string;
-  filtre: FeedFacet;
-  national?: boolean;
-}): string {
-  const params = new URLSearchParams();
-  if (input.r !== DEFAULT_RADIUS_KM) {
-    params.set("r", String(input.r));
-  }
-  if (input.vue !== "split") {
-    params.set("vue", input.vue);
-  }
-  if (input.macro) {
-    params.set("macro", input.macro);
-  }
-  if (input.filtre !== "tout") {
-    params.set("f", input.filtre);
-  }
-  if (input.national) {
-    params.set("scope", "national");
-  }
-  const encoded = params.toString();
-  return encoded ? `/?${encoded}` : "/";
 }
 
 async function resolveUserOrigin(userId: string | undefined): Promise<{
@@ -237,144 +207,104 @@ export default async function Home({ searchParams }: PageProps) {
   const titleScope = origin
     ? `dans un rayon de ${radiusKm} km`
     : "partout en France";
+  const facetMeta = [
+    ["tout", "Tout", "apps"],
+    ["express", "Déstockage express (−60 % et +)", "local_fire_department"],
+    ["direct", "Retrait magasin", "store"],
+    ["ouvert", "Ouvert maintenant", "schedule"],
+  ] as const;
+  const homeFilterChips = [
+    ...(selectedMacro
+      ? [
+          {
+            id: "macro",
+            href: homeHref({ ...chip, macro: "" }),
+            label: selectedMacro.name,
+            srPrefix: "Retirer le filtre",
+          },
+        ]
+      : []),
+    ...(filtre !== "tout"
+      ? [
+          {
+            id: "f",
+            href: homeHref({ ...chip, filtre: "tout" }),
+            label: facetMeta.find(([id]) => id === filtre)?.[1] ?? filtre,
+            srPrefix: "Retirer le filtre",
+          },
+        ]
+      : []),
+  ];
+  const clearFiltersHref =
+    homeFilterChips.length > 0
+      ? homeHref({ ...chip, macro: "", filtre: "tout" })
+      : null;
+  const franceHref = homeHref({ ...chip, national: true });
+  const interestName = pills.find((pill) => pill.isInterest)?.name ?? "intérêts";
+  const storeCards = origin
+    ? storeList.map((store) => ({
+        posId: store.posId,
+        posName: store.posName,
+        posSlug: store.posSlug,
+        distanceM: store.distanceM,
+        count: visible.filter((offer) => offer.posId === store.posId).length,
+        hours: hoursByPos.get(store.posId) ?? null,
+      }))
+    : [];
+
+  const viewItems = (
+    [
+      ["split", "vertical_split", "Vue partagée"],
+      ["carte", "map", "Carte"],
+      ["liste", "view_agenda", "Liste"],
+    ] as const
+  ).map(([id, icon, label]) => ({
+    id,
+    icon,
+    label,
+    href: homeHref({ ...chip, vue: id }),
+    current: vue === id,
+  }));
 
   return (
     <BuyerMain>
-      <section className="bg-surface-container-lowest shadow-sm">
-        <BuyerSection className="flex flex-col gap-4 py-4 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between">
-          <div>
-            <p className="font-label-xs text-label-xs text-secondary flex items-center gap-2 font-extrabold tracking-wider uppercase">
-              <span className="bg-secondary-container inline-flex size-2.5 rounded-full" />
-              {personalized ? "Pour vous" : "Radar déstockage"}
-            </p>
-            <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
-              Bonnes affaires près de chez vous
-              {origin ? (
-                <>
-                  {" "}
-                  à{" "}
-                  <span className="text-secondary decoration-secondary-container underline decoration-wavy underline-offset-4">
-                    {origin.city}
-                  </span>
-                </>
-              ) : null}
-            </h1>
-            <p className="font-body-sm text-body-sm text-on-surface-variant mt-1 flex items-center gap-1.5">
-              <MaterialIcon
-                name="check_circle"
-                className="text-on-tertiary-container text-[16px]"
-              />
-              <span>
-                <span className="text-on-surface font-bold">
-                  {visible.length} déstockage{visible.length > 1 ? "s" : ""}
-                </span>{" "}
-                {titleScope}
-                {feed.toppedUp ? " · complété national" : null}
-              </span>
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {origin ? (
-              <div className="bg-surface-container-low flex flex-wrap items-center gap-1 rounded-full p-1.5">
-                <span className="font-label-md text-label-md text-on-surface-variant flex items-center gap-1 pr-1 pl-2">
-                  <MaterialIcon name="near_me" className="text-secondary text-[18px]" />
-                  Rayon
-                </span>
-                {RADIUS_KM_OPTIONS.map((km) => {
-                  const active = km === radiusKm && !forceNational;
-                  return (
-                    <Link
-                      key={km}
-                      href={homeHref({ ...chip, r: km, national: false })}
-                      className={cn(
-                        "font-label-md text-label-md rounded-full px-3 py-1",
-                        active
-                          ? "bg-primary-container text-on-primary font-bold"
-                          : "text-on-surface-variant hover:bg-surface-container",
-                      )}
-                    >
-                      {km} km
-                    </Link>
-                  );
-                })}
-                <Link
-                  href={homeHref({ ...chip, national: true })}
-                  className={cn(
-                    "font-label-md text-label-md rounded-full px-3 py-1",
-                    forceNational
-                      ? "bg-primary-container text-on-primary font-bold"
-                      : "text-on-surface-variant hover:bg-surface-container",
-                  )}
-                >
-                  France
-                </Link>
-              </div>
-            ) : null}
-            <div className="bg-surface-container-low flex items-center gap-1 rounded-full p-1">
-              {(
-                [
-                  ["split", "vertical_split", "Split"],
-                  ["carte", "map", "Carte"],
-                  ["liste", "view_agenda", "Liste"],
-                ] as const
-              ).map(([id, icon, label]) => (
-                <Link
-                  key={id}
-                  href={homeHref({ ...chip, vue: id })}
-                  className={cn(
-                    "font-label-md text-label-md inline-flex items-center gap-1 rounded-full px-3 py-1.5",
-                    vue === id
-                      ? "bg-primary-container text-on-primary font-bold"
-                      : "text-on-surface-variant hover:text-on-surface",
-                  )}
-                >
-                  <MaterialIcon name={icon} className="text-[16px]" />
-                  <span className="hidden xl:inline">{label}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </BuyerSection>
-      </section>
-
-      <nav aria-label="Intérêts" className="border-outline-variant/30 border-b">
-        <BuyerSection className="flex gap-5 overflow-x-auto py-3">
-          <Link
-            href={homeHref({ ...chip, macro: "" })}
-            className={cn(
-              "font-label-md text-label-md shrink-0 whitespace-nowrap",
-              !selectedMacro
-                ? "text-primary-container font-bold"
-                : "text-on-surface-variant hover:text-on-surface",
-            )}
-          >
-            Pour vous
-          </Link>
-          {pills.map((pill) => (
-            <Link
-              key={pill.id}
-              href={homeHref({ ...chip, macro: pill.code })}
-              className={cn(
-                "font-label-md text-label-md inline-flex shrink-0 items-center gap-1 whitespace-nowrap",
-                selectedMacro?.id === pill.id
-                  ? "text-primary-container font-bold"
-                  : "text-on-surface-variant hover:text-on-surface",
-                pill.isInterest && selectedMacro?.id !== pill.id
-                  ? "text-on-surface"
-                  : null,
-              )}
-            >
-              {pill.icon ? (
-                <MaterialIcon name={pill.icon} className="text-[16px]" />
-              ) : null}
-              {pill.name}
-            </Link>
-          ))}
-        </BuyerSection>
-      </nav>
-
-      {!userId && !origin ? (
+      <HomeHero
+        personalized={personalized}
+        city={origin?.city ?? null}
+        count={visible.length}
+        titleScope={titleScope}
+        toppedUp={origin != null && feed.toppedUp}
+        showRadius={origin != null}
+        radii={RADIUS_KM_OPTIONS.map((km) => ({
+          km,
+          href: homeHref({ ...chip, r: km, national: false }),
+          current: km === radiusKm && !forceNational,
+        }))}
+        franceHref={franceHref}
+        franceCurrent={forceNational || origin == null}
+        views={viewItems}
+      />
+      <MacroNav
+        pourVousHref={homeHref({ ...chip, macro: "" })}
+        pourVousCurrent={!selectedMacro}
+        pills={pills.map((pill) => ({
+          id: pill.id,
+          name: pill.name,
+          icon: pill.icon,
+          href: homeHref({ ...chip, macro: pill.code }),
+          current: selectedMacro?.id === pill.id,
+        }))}
+      />
+      {homeFilterChips.length > 0 ? (
         <BuyerSection className="py-4">
+          <ActiveFilters
+            chips={homeFilterChips}
+            clearHref={clearFiltersHref ?? undefined}
+          />
+        </BuyerSection>
+      ) : null}
+      {!userId && !origin ? (
+        <BuyerSection className="pb-4">
           <SearchForm
             variant="hero"
             categories={categories}
@@ -391,19 +321,14 @@ export default async function Home({ searchParams }: PageProps) {
               vue: "liste",
             }}
           />
-          <p className="font-body-sm text-on-surface-variant mt-3">
+          <p className="font-body-sm text-body-sm text-on-surface-variant mt-3">
             Sans position, le fil affiche les bonnes affaires nationales (les
-            plus récentes). Indique un lieu pour trier par proximité.
+            plus récentes). Indiquez un lieu pour trier par proximité.
           </p>
         </BuyerSection>
       ) : null}
-
       <BuyerSection
-        as="div"
-        className={cn(
-          "grid items-start gap-6 py-4",
-          vue === "split" && "lg:grid-cols-12",
-        )}
+        className={cn("grid items-start gap-6 py-4", vue === "split" && "lg:grid-cols-12")}
       >
         {vue !== "carte" ? (
           <div
@@ -412,130 +337,46 @@ export default async function Home({ searchParams }: PageProps) {
               vue === "split" && "lg:col-span-7",
             )}
           >
-            <div className="flex gap-2 overflow-x-auto">
-              {(
-                [
-                  ["tout", "Tout", "apps"],
-                  ["express", "Déstockage express (−60 % et +)", "local_fire_department"],
-                  ["direct", "Retrait magasin", "store"],
-                  ["ouvert", "Ouvert maintenant", "schedule"],
-                ] as const
-              ).map(([id, label, icon]) => (
-                <Link
-                  key={id}
-                  href={homeHref({ ...chip, filtre: id })}
-                  className={cn(
-                    "font-label-md text-label-md inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 shadow-sm",
-                    filtre === id
-                      ? "bg-primary-container text-on-primary font-bold"
-                      : "bg-surface-container-lowest text-on-surface hover:bg-surface-container-low",
-                  )}
-                >
-                  <MaterialIcon name={icon} className="text-[16px]" />
-                  {label}
-                </Link>
-              ))}
-            </div>
-            <div className="flex items-end justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <span className="bg-secondary-container flex size-7 items-center justify-center rounded-lg text-[14px]">
-                  {personalized ? "✨" : "🔥"}
-                </span>
-                <div>
-                  <h2 className="font-headline-md text-headline-md text-primary-container leading-none">
-                    {selectedMacro
-                      ? selectedMacro.name
-                      : personalized
-                        ? "Sélection pour vous"
-                        : "Déstockages à proximité"}
-                  </h2>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant">
-                    Tri proximité · une carte par produit et état
-                    {personalized
-                      ? ` · ~70 % ${pills.find((p) => p.isInterest)?.name ?? "intérêts"}`
-                      : null}
-                  </p>
-                </div>
-              </div>
-              <Link
-                href={searchHref(searchQuery)}
-                className="font-label-md text-label-md text-secondary inline-flex items-center gap-1 hover:underline"
-              >
-                Recherche avancée
-                <MaterialIcon name="arrow_forward" className="text-[16px]" />
-              </Link>
-            </div>
-            {visible.length === 0 ? (
-              <p className="font-body-sm text-on-surface-variant bg-surface-container-lowest shadow-sm rounded-2xl p-5">
-                Aucune offre avec ces filtres. Élargis le rayon, passe en vue
-                France, ou retire un filtre.
-              </p>
-            ) : (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {visible.map((offer) => (
-                  <OfferCard
-                    key={`${offer.id}-${offer.condition}`}
-                    offer={offer}
-                    cta="home"
-                    lat={origin?.lat}
-                    lng={origin?.lng}
-                    signedIn={signedIn}
-                    isProductFavorite={favoriteProductIds.has(offer.productId)}
-                  />
-                ))}
-              </div>
-            )}
-            {storeList.length > 0 && origin ? (
-              <section className="flex flex-col gap-3">
-                <h2 className="font-headline-sm text-headline-sm text-primary-container">
-                  Enseignes physiques autour de vous
-                </h2>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  {storeList.map((store) => {
-                    const count = visible.filter(
-                      (offer) => offer.posId === store.posId,
-                    ).length;
-                    const hours = hoursByPos.get(store.posId);
-                    return (
-                      <Link
-                        key={store.posId}
-                        href={magasinPath(store.posSlug)}
-                        className="bg-surface-container-lowest shadow-sm hover:bg-surface-container-low flex flex-col gap-2 rounded-2xl p-3"
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="bg-secondary-fixed text-on-secondary-fixed font-label-md flex size-9 items-center justify-center rounded-full font-bold">
-                            {store.posName.trim().charAt(0).toUpperCase()}
-                          </span>
-                          {store.distanceM != null ? (
-                            <span className="bg-surface-container font-label-xs text-label-xs text-on-surface-variant rounded-full px-2 py-0.5">
-                              <Distance meters={store.distanceM} variant="plain" />
-                            </span>
-                          ) : null}
-                        </div>
-                        <p className="font-label-md text-label-md text-primary-container line-clamp-2 font-bold">
-                          {store.posName}
-                        </p>
-                        <p className="font-label-xs text-label-xs text-on-surface-variant">
-                          {count} déstockage{count > 1 ? "s" : ""}
-                        </p>
-                        {hours ? (
-                          <p
-                            className={cn(
-                              "font-label-xs text-label-xs font-semibold",
-                              hours.open
-                                ? "text-on-tertiary-container"
-                                : "text-on-surface-variant",
-                            )}
-                          >
-                            {hours.label}
-                          </p>
-                        ) : null}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </section>
-            ) : null}
+            <FeedFacets
+              facets={facetMeta.map(([id, label, icon]) => ({
+                id,
+                label,
+                icon,
+                href: homeHref({ ...chip, filtre: id }),
+                current: filtre === id,
+              }))}
+            />
+            <HomeFeed
+              title={
+                selectedMacro
+                  ? selectedMacro.name
+                  : personalized
+                    ? "Sélection pour vous"
+                    : "Déstockages à proximité"
+              }
+              subtitle={`Tri proximité · une carte par produit et état${
+                personalized ? ` · ~70 % ${interestName}` : ""
+              }`}
+              advancedHref={searchHref(searchQuery)}
+              offers={visible}
+              lat={origin?.lat}
+              lng={origin?.lng}
+              signedIn={signedIn}
+              favoriteProductIds={favoriteProductIds}
+              emptyAction={
+                clearFiltersHref
+                  ? { href: clearFiltersHref, label: "Effacer les filtres" }
+                  : origin && !forceNational
+                    ? { href: franceHref, label: "Voir toute la France" }
+                    : undefined
+              }
+              emptySecondary={
+                clearFiltersHref && origin && !forceNational
+                  ? { href: franceHref, label: "Voir toute la France" }
+                  : undefined
+              }
+              stores={storeCards}
+            />
           </div>
         ) : null}
         {vue !== "liste" ? (
@@ -567,3 +408,4 @@ export default async function Home({ searchParams }: PageProps) {
     </BuyerMain>
   );
 }
+

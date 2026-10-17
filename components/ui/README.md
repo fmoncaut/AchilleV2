@@ -34,7 +34,7 @@ Surface blanche, bordure `outline-variant`, rayon `2xl`. Avec `href`, un seul li
 
 ## Chip et ChipRow
 
-`Chip` est un bouton `aria-pressed`. `ChipRow` défile horizontalement avec un masque de bord. Prévu pour les macros et les rayons.
+Avec `href`, `Chip` est un lien et `aria-current="page"` quand `current` est vrai. Sans `href`, c’est un bouton `aria-pressed`. Hauteur 44 px. `ChipRow` défile horizontalement avec un masque de bord. Macros, rayons, facettes et filtres actifs.
 
 ## Dialog
 

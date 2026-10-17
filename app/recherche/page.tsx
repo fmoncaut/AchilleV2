@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { Breadcrumb } from "@/components/buyer/breadcrumb";
@@ -9,11 +8,11 @@ import {
   cityFromLieu,
 } from "@/components/buyer/shell";
 import { OffersMapLoader } from "@/components/map/offers-map-loader";
-import { MaterialIcon } from "@/components/material-icon";
-import { OfferCard } from "@/components/offer-card";
+import { ActiveFilters } from "@/components/search/active-filters";
 import { SearchForm } from "@/components/search/search-form";
+import { SearchResults } from "@/components/search/search-results";
+import { SearchStatus } from "@/components/search/search-status";
 import { ViewToggle } from "@/components/search/view-toggle";
-import { Distance } from "@/components/distance";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { getFavoriteFlags } from "@/lib/favorites";
@@ -22,7 +21,6 @@ import {
   findOffersNearby,
   findMapPosPinsNearby,
   toOfferCard,
-  type NearbyOfferCard,
 } from "@/lib/geo";
 import { geocodeAddress } from "@/lib/geocode";
 import {
@@ -32,49 +30,13 @@ import {
 } from "@/lib/map-config";
 import { formatEur } from "@/lib/money";
 import { parseSearchParams, searchHref, type SearchQuery } from "@/lib/search";
-import { loginWithReturn, magasinPath, offerPath } from "@/lib/urls";
+import { loginWithReturn } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
 type RecherchePageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function MapOverlay({
-  title,
-  description,
-  actionHref,
-  actionLabel,
-}: {
-  title: string;
-  description: string;
-  actionHref?: string;
-  actionLabel?: string;
-}) {
-  return (
-    <div className="pointer-events-none absolute top-3 left-3 z-10 max-h-[40%] w-[min(320px,calc(100%-1.5rem))]">
-      <div
-        className="bg-surface-container-lowest shadow-sm pointer-events-auto max-h-full overflow-y-auto rounded-2xl p-3"
-        role="status"
-      >
-        <p className="font-label-md text-label-md text-primary-container font-bold">
-          {title}
-        </p>
-        <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-          {description}
-        </p>
-        {actionHref && actionLabel ? (
-          <Link
-            href={actionHref}
-            className="font-label-md text-label-md text-secondary mt-2 inline-flex font-bold hover:underline"
-          >
-            {actionLabel}
-          </Link>
-        ) : null}
-      </div>
-    </div>
-  );
-}
 
 function formValues(query: SearchQuery) {
   return {
@@ -89,32 +51,6 @@ function formValues(query: SearchQuery) {
     sort: query.sort,
     vue: query.vue,
   };
-}
-
-function uniqueStores(offers: NearbyOfferCard[]): NearbyOfferCard[] {
-  const seen = new Set<string>();
-  const stores: NearbyOfferCard[] = [];
-  for (const offer of offers) {
-    if (seen.has(offer.posId)) {
-      continue;
-    }
-    seen.add(offer.posId);
-    stores.push(offer);
-  }
-  return stores;
-}
-
-function multiVendorGroups(offers: NearbyOfferCard[]): NearbyOfferCard[][] {
-  const byProduct = new Map<string, NearbyOfferCard[]>();
-  for (const offer of offers) {
-    const list = byProduct.get(offer.productId) ?? [];
-    list.push(offer);
-    byProduct.set(offer.productId, list);
-  }
-  return [...byProduct.values()].filter((group) => {
-    const posIds = new Set(group.map((offer) => offer.posId));
-    return posIds.size > 1;
-  });
 }
 
 export async function generateMetadata({
@@ -194,8 +130,54 @@ export default async function RecherchePage({
   const favorites = await getFavoriteFlags(session?.user?.id);
   const loginHref = loginWithReturn(recherchePath);
   const greyPinCount = pins.filter((pin) => pin.state !== "active").length;
-  const stores = uniqueStores(offers);
-  const vendorGroups = multiVendorGroups(offers);
+  const categoryName =
+    categories.find((category) => category.slug === query.cat)?.name ?? query.cat;
+  const searchChips = [
+    ...(query.q
+      ? [
+          {
+            id: "q",
+            href: searchHref({ ...query, q: "" }),
+            label: query.q,
+            srPrefix: "Retirer la recherche",
+          },
+        ]
+      : []),
+    ...(query.cat
+      ? [
+          {
+            id: "cat",
+            href: searchHref({ ...query, cat: "" }),
+            label: categoryName,
+            srPrefix: "Retirer le filtre",
+          },
+        ]
+      : []),
+    ...(query.prixMin != null
+      ? [
+          {
+            id: "prixMin",
+            href: searchHref({ ...query, prixMin: null }),
+            label: `Prix min ${formatEur(query.prixMin)}`,
+            srPrefix: "Retirer le filtre",
+          },
+        ]
+      : []),
+    ...(query.prixMax != null
+      ? [
+          {
+            id: "prixMax",
+            href: searchHref({ ...query, prixMax: null }),
+            label: `Prix max ${formatEur(query.prixMax)}`,
+            srPrefix: "Retirer le filtre",
+          },
+        ]
+      : []),
+  ];
+  const clearFiltersHref =
+    query.cat || query.prixMin != null || query.prixMax != null
+      ? searchHref({ ...query, cat: "", prixMin: null, prixMax: null })
+      : null;
   const showList = Boolean(origin) && query.vue === "liste" && offers.length > 0;
   const widenHref =
     origin && offers.length === 0 && pins.length === 0
@@ -211,18 +193,21 @@ export default async function RecherchePage({
   const overlay = geocodeFailed
     ? {
         title: "Lieu introuvable",
+        icon: "location_off",
         description:
           "Cette localisation n’a pas été reconnue. Essayez une ville ou une adresse plus précise (service BAN).",
       }
     : !origin
       ? {
           title: "Indiquez où chercher",
+          icon: "location_on",
           description:
             "Saisissez une ville ou une adresse, ou utilisez la géolocalisation du navigateur, puis choisissez un rayon.",
         }
       : offers.length === 0
         ? {
             title: "Aucune offre trouvée",
+            icon: "search_off",
             description:
               pins.length === 0
                 ? "Élargissez la zone, changez de lieu ou retirez des filtres (catégorie, prix, mot-clé)."
@@ -241,21 +226,13 @@ export default async function RecherchePage({
             ]}
           />
           <div>
-            <p className="font-label-xs text-label-xs text-secondary flex items-center gap-2 font-extrabold tracking-wider uppercase">
+            <p className="font-label-xs text-label-xs text-primary-container flex items-center gap-2 font-extrabold tracking-wider uppercase">
               <span className="bg-secondary-container inline-flex size-2.5 rounded-full" />
               Recherche locale
             </p>
             <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
               Bonnes affaires près de chez vous
-              {city ? (
-                <>
-                  {" "}
-                  à{" "}
-                  <span className="text-secondary decoration-secondary-container underline decoration-wavy underline-offset-4">
-                    {city}
-                  </span>
-                </>
-              ) : null}
+              {city ? ` à ${city}` : null}
             </h1>
             <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
               Géocodage via la Base Adresse Nationale. Carte IGN — aucune carte
@@ -268,6 +245,7 @@ export default async function RecherchePage({
             values={formValues(query)}
             categories={categories}
           />
+          <ActiveFilters chips={searchChips} clearHref={clearFiltersHref} />
         </BuyerSection>
       </section>
 
@@ -292,6 +270,16 @@ export default async function RecherchePage({
           </div>
         ) : null}
 
+        {overlay ? (
+          <SearchStatus
+            title={overlay.title}
+            description={overlay.description}
+            icon={overlay.icon}
+            actionHref={widenHref ?? undefined}
+            actionLabel={widenHref ? "Élargir à 50 km sans filtre" : undefined}
+          />
+        ) : null}
+
         {showList ? null : (
           <div className="relative">
             <OffersMapLoader
@@ -306,146 +294,19 @@ export default async function RecherchePage({
               favoriteProductIds={favorites.productIds}
               loginHref={loginHref}
             />
-            {overlay ? (
-              <MapOverlay
-                title={overlay.title}
-                description={overlay.description}
-                actionHref={widenHref ?? undefined}
-                actionLabel={widenHref ? "Élargir à 50 km sans filtre" : undefined}
-              />
-            ) : null}
           </div>
         )}
 
         {showList && origin ? (
-          <>
-              <section className="flex flex-col gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="bg-secondary-container font-headline-sm text-primary-container flex size-7 items-center justify-center rounded-lg text-sm">
-                    🔥
-                  </span>
-                  <h2 className="font-headline-md text-headline-md text-primary-container">
-                    Déstockages à proximité
-                  </h2>
-                </div>
-                <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                  {offers.map((offer) => (
-                    <li key={offer.id}>
-                      <OfferCard
-                        offer={offer}
-                        selected={offer.id === query.offre}
-                        signedIn={favorites.signedIn}
-                        isProductFavorite={favorites.productIds.includes(
-                          offer.productId,
-                        )}
-                        loginHref={loginHref}
-                        lat={origin.lat}
-                        lng={origin.lng}
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </section>
-
-            {stores.length > 0 ? (
-              <section className="flex flex-col gap-4">
-                <h2 className="font-headline-sm text-headline-sm text-primary-container">
-                  Enseignes autour de vous
-                </h2>
-                <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                  {stores.slice(0, 8).map((store) => {
-                    const count = offers.filter(
-                      (offer) => offer.posId === store.posId,
-                    ).length;
-                    return (
-                      <li key={store.posId}>
-                        <Link
-                          href={magasinPath(
-                            store.posSlug,
-                            origin.lat,
-                            origin.lng,
-                          )}
-                          className="bg-surface-container-lowest shadow-sm hover:shadow-md flex items-center gap-3 rounded-xl p-3 transition-shadow"
-                        >
-                          <span className="bg-primary-fixed font-headline-sm text-primary-container flex size-10 shrink-0 items-center justify-center rounded-lg font-extrabold">
-                            {store.merchantName.slice(0, 1)}
-                          </span>
-                          <span className="min-w-0">
-                            <span className="font-label-md text-label-md text-primary-container block truncate font-bold">
-                              {store.posName}
-                            </span>
-                            <span className="font-label-xs text-label-xs text-on-surface-variant flex items-center gap-1">
-                              {store.distanceM != null ? (
-                                <Distance meters={store.distanceM} />
-                              ) : null}
-                              <span>
-                                {count} offre{count > 1 ? "s" : ""}
-                              </span>
-                            </span>
-                          </span>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </section>
-            ) : null}
-
-            {vendorGroups.length > 0 ? (
-              <section className="bg-surface-container-lowest shadow-sm rounded-2xl p-5">
-                <h2 className="font-headline-sm text-headline-sm text-primary-container">
-                  Plusieurs vendeurs près de vous
-                </h2>
-                <ul className="mt-4 flex flex-col gap-4">
-                  {vendorGroups.slice(0, 3).map((group) => {
-                    const first = group[0];
-                    if (!first) {
-                      return null;
-                    }
-                    const cheapest = group.reduce((best, offer) =>
-                      Number(offer.priceRemise) < Number(best.priceRemise)
-                        ? offer
-                        : best,
-                    );
-                    const posCount = new Set(group.map((offer) => offer.posId))
-                      .size;
-                    return (
-                      <li
-                        key={first.productId}
-                        className="border-outline-variant/40 flex flex-col gap-2 border-t pt-4 first:border-t-0 first:pt-0 sm:flex-row sm:items-center sm:justify-between"
-                      >
-                        <div>
-                          <p className="font-headline-sm text-primary-container text-[16px]">
-                            {first.productName}
-                          </p>
-                          <p className="font-body-sm text-body-sm text-on-surface-variant">
-                            Chez {posCount} vendeurs · dès{" "}
-                            <span className="text-secondary font-bold">
-                              {formatEur(cheapest.priceRemise)}
-                            </span>
-                          </p>
-                        </div>
-                        <Link
-                          href={offerPath(first.productSlug, {
-                            lat: origin.lat,
-                            lng: origin.lng,
-                            tri: "distance",
-                          })}
-                          className="font-label-md text-label-md bg-primary-container text-on-primary inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 font-bold"
-                        >
-                          Comparer
-                          <MaterialIcon
-                            name="arrow_forward"
-                            className="text-[16px]"
-                          />
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </section>
-            ) : null}
-          </>
+          <SearchResults
+            offers={offers}
+            selectedOfferId={query.offre}
+            lat={origin.lat}
+            lng={origin.lng}
+            signedIn={favorites.signedIn}
+            favoriteProductIds={favorites.productIds}
+            loginHref={loginHref}
+          />
         ) : null}
       </BuyerSection>
     </BuyerMain>
