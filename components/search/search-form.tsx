@@ -5,6 +5,7 @@ import { useCallback, useId, useRef, useState, type FormEvent } from "react";
 
 import { MaterialIcon } from "@/components/material-icon";
 import { Button } from "@/components/ui/button";
+import { Chip, ChipRow } from "@/components/ui/chip";
 import { RADIUS_KM_OPTIONS } from "@/lib/search";
 import { cn } from "@/lib/utils";
 
@@ -168,7 +169,9 @@ export function SearchForm({
   };
 
   const fieldClass =
-    "w-full border-0 bg-transparent font-body-md text-body-md text-on-surface outline-none placeholder:text-outline focus:ring-0";
+    "w-full min-h-11 border-0 bg-transparent font-body-md text-body-md text-on-surface outline-none focus-visible:outline-none placeholder:text-outline";
+  const fieldShell =
+    "bg-surface-container-low focus-within:outline-primary-container flex min-h-11 items-center rounded-full focus-within:outline-2 focus-within:outline-offset-2";
 
   return (
     <form
@@ -194,10 +197,10 @@ export function SearchForm({
           <label htmlFor="lieu" className="sr-only">
             Où chercher
           </label>
-          <div className="bg-surface-container-low flex items-center gap-2 rounded-full px-3 py-1.5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]">
+          <div className={cn(fieldShell, "gap-2 px-3 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]")}>
             <MaterialIcon
               name="location_on"
-              className="text-secondary text-[18px]"
+              className="text-primary-container icon-md"
             />
             <input
               id="lieu"
@@ -222,7 +225,7 @@ export function SearchForm({
               type="button"
               onClick={() => void locateMe()}
               suppressHydrationWarning
-              className="font-label-xs text-label-xs bg-surface-container text-primary-container hover:bg-surface-container-high shrink-0 rounded-full px-2.5 py-1 font-bold"
+              className="font-label-md text-label-md bg-surface-container text-primary-container hover:bg-surface-container-high h-11 shrink-0 rounded-full px-3 font-bold"
             >
               {geoPending ? "…" : "Ma position"}
             </button>
@@ -252,17 +255,19 @@ export function SearchForm({
             </ul>
           ) : null}
           {geoError ? (
-            <p className="text-error mt-1 text-sm" role="status">
+            <p className="font-body-sm text-body-sm text-error mt-1" role="status">
               {geoError}
             </p>
           ) : null}
         </div>
 
-        <div className="bg-surface-container-low relative flex min-w-0 flex-[1.4] items-center rounded-full px-3 py-1.5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]">
-          <MaterialIcon
-            name="search"
-            className="text-outline mr-2 text-[20px]"
-          />
+        <div
+          className={cn(
+            fieldShell,
+            "relative min-w-0 flex-[1.4] gap-2 px-3 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]",
+          )}
+        >
+          <MaterialIcon name="search" className="text-on-surface-variant icon-lg" />
           <label htmlFor="q" className="sr-only">
             Produit
           </label>
@@ -277,81 +282,52 @@ export function SearchForm({
           />
           <Button
             type="submit"
-            size="icon-sm"
+            size="icon"
             suppressHydrationWarning
             className="ml-2 shrink-0"
             aria-label="Voir les offres"
           >
-            <MaterialIcon name="search" className="text-[18px]" />
+            <MaterialIcon name="search" className="icon-md" />
           </Button>
         </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
         <span className="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
-          <MaterialIcon
-            name="near_me"
-            className="text-secondary text-[16px]"
-          />
+          <MaterialIcon name="near_me" className="text-primary-container icon-sm" />
           Rayon
         </span>
-        <div className="bg-surface-container-low flex flex-wrap items-center gap-1 rounded-full p-1">
+        <div className="flex flex-wrap items-center gap-1">
           {RADIUS_KM_OPTIONS.map((km) => {
             const active = radius === String(km);
             return (
-              <button
+              <Chip
                 key={km}
-                type="button"
+                pressed={active}
                 onClick={() => setPickedRadius(String(km))}
-                className={cn(
-                  "font-label-md text-label-md rounded-full px-3 py-1 transition-colors",
-                  active
-                    ? "bg-primary-container text-on-primary shadow-sm font-bold"
-                    : "text-on-surface-variant hover:bg-surface-container",
-                )}
               >
                 {km} km
-                {active ? (
-                  <span className="bg-secondary-container ml-1 inline-block size-1.5 rounded-full" />
-                ) : null}
-              </button>
+              </Chip>
             );
           })}
         </div>
       </div>
 
-      <div className="no-scrollbar flex items-center gap-1.5 overflow-x-auto">
-        <button
-          type="button"
-          onClick={() => setCat("")}
-          className={cn(
-            "font-label-md text-label-md shrink-0 rounded-full px-3.5 py-1.5",
-            cat === ""
-              ? "bg-primary-container text-on-primary shadow-sm font-bold"
-              : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container",
-          )}
-        >
+      <ChipRow>
+        <Chip pressed={cat === ""} onClick={() => setCat("")}>
           Toutes les offres
-        </button>
-        {categories.map((category) => {
-          const active = cat === category.slug;
-          return (
-            <button
-              key={category.slug}
-              type="button"
-              onClick={() => setCat(category.slug)}
-              className={cn(
-                "font-label-md text-label-md shrink-0 rounded-full px-3.5 py-1.5 whitespace-nowrap",
-                active
-                  ? "bg-primary-container text-on-primary shadow-sm font-bold"
-                  : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container",
-              )}
-            >
-              {category.name}
-            </button>
-          );
-        })}
-      </div>
+        </Chip>
+        {categories.map((category) => (
+          <Chip
+            key={category.slug}
+            pressed={cat === category.slug}
+            onClick={() => setCat(category.slug)}
+            className="whitespace-nowrap"
+          >
+            {category.name}
+          </Chip>
+        ))}
+      </ChipRow>
 
       <div className="grid gap-3 sm:grid-cols-3">
         <div>
@@ -361,16 +337,18 @@ export function SearchForm({
           >
             Prix min
           </label>
-          <input
-            id="prixMin"
-            name="prixMin"
-            inputMode="decimal"
-            defaultValue={values.prixMin}
-            placeholder="€"
-            className="bg-surface-container-low font-body-md text-body-md text-on-surface placeholder:text-outline h-11 w-full rounded-full border-0 px-3 outline-none"
-            suppressHydrationWarning
-            {...ignorePasswordManagers}
-          />
+          <div className={fieldShell}>
+            <input
+              id="prixMin"
+              name="prixMin"
+              inputMode="decimal"
+              defaultValue={values.prixMin}
+              placeholder="€"
+              className={cn(fieldClass, "rounded-full px-3")}
+              suppressHydrationWarning
+              {...ignorePasswordManagers}
+            />
+          </div>
         </div>
         <div>
           <label
@@ -379,16 +357,18 @@ export function SearchForm({
           >
             Prix max
           </label>
-          <input
-            id="prixMax"
-            name="prixMax"
-            inputMode="decimal"
-            defaultValue={values.prixMax}
-            placeholder="€"
-            className="bg-surface-container-low font-body-md text-body-md text-on-surface placeholder:text-outline h-11 w-full rounded-full border-0 px-3 outline-none"
-            suppressHydrationWarning
-            {...ignorePasswordManagers}
-          />
+          <div className={fieldShell}>
+            <input
+              id="prixMax"
+              name="prixMax"
+              inputMode="decimal"
+              defaultValue={values.prixMax}
+              placeholder="€"
+              className={cn(fieldClass, "rounded-full px-3")}
+              suppressHydrationWarning
+              {...ignorePasswordManagers}
+            />
+          </div>
         </div>
         <div>
           <label
@@ -397,16 +377,18 @@ export function SearchForm({
           >
             Trier par
           </label>
-          <select
-            id="sort"
-            name="sort"
-            defaultValue={values.sort}
-            className="bg-surface-container-low font-body-sm text-body-sm text-on-surface h-10 w-full rounded-full border-0 px-3 outline-none"
-            suppressHydrationWarning
-          >
-            <option value="distance">Distance</option>
-            <option value="price">Prix croissant</option>
-          </select>
+          <div className={fieldShell}>
+            <select
+              id="sort"
+              name="sort"
+              defaultValue={values.sort}
+              className={cn(fieldClass, "rounded-full px-3")}
+              suppressHydrationWarning
+            >
+              <option value="distance">Distance</option>
+              <option value="price">Prix croissant</option>
+            </select>
+          </div>
         </div>
       </div>
 

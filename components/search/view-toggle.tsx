@@ -23,13 +23,13 @@ export function ViewToggle({ query }: ViewToggleProps) {
         href={listHref}
         aria-selected={query.vue === "liste"}
         className={cn(
-          "font-label-md text-label-md inline-flex items-center gap-1 rounded-full px-3 py-1.5",
+          "font-label-md text-label-md inline-flex h-11 items-center gap-1 rounded-full px-3",
           query.vue === "liste"
             ? "bg-primary-container text-on-primary shadow-sm"
             : "text-on-surface-variant hover:text-on-surface",
         )}
       >
-        <MaterialIcon name="view_agenda" className="text-[16px]" />
+        <MaterialIcon name="view_agenda" className="icon-sm" />
         Liste
       </Link>
       <Link
@@ -37,13 +37,13 @@ export function ViewToggle({ query }: ViewToggleProps) {
         href={mapHref}
         aria-selected={query.vue === "carte"}
         className={cn(
-          "font-label-md text-label-md inline-flex items-center gap-1 rounded-full px-3 py-1.5",
+          "font-label-md text-label-md inline-flex h-11 items-center gap-1 rounded-full px-3",
           query.vue === "carte"
             ? "bg-primary-container text-on-primary shadow-sm"
             : "text-on-surface-variant hover:text-on-surface",
         )}
       >
-        <MaterialIcon name="map" className="text-[16px]" />
+        <MaterialIcon name="map" className="icon-sm" />
         Carte
       </Link>
     </div>
