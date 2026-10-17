@@ -27,6 +27,8 @@ P0 ouverts pour la suite : pins carte (Vague 2), prix encore en ambre foncé et 
 
 Vague 1 (`design/v1-transversal`) : vouvoiement (« chez vous »), anneau de focus unique dans `app/globals.css`, header mobile avec recherche non collante, footer et CGU décrivent les deux modes (CGU à faire relire avant prod), gabarit e-mail PNG. L’e-mail de confirmation d’empreinte reste au backlog ci-dessus.
 
+Vague 2a (`design/v2a-offer-card`) : une seule `OfferCard` (grille, compact, drawer). Prix en Encre, badge ambre, pas d’écart en euros. La carte affiliée mène à la fiche. « Réserver et retirer » et la phrase C6 gardent leurs conditions. « Ouvert » seulement si l’appelant a déjà la donnée.
+
 La Vague 0 change la peau (tokens, police, primitives, états de chargement). Elle ne rebranche pas chaque écran sur les primitives. Aucun écran ne devient illisible : le texte ambre clair sur fond clair est remplacé par l'ambre foncé `#8A5300`. Les P0 ci-dessous sont les dettes visuelles reportées.
 
 ## P0 reportés
@@ -34,7 +36,7 @@ La Vague 0 change la peau (tokens, police, primitives, états de chargement). El
 | Sujet | Vague | Pourquoi |
 | --- | --- | --- |
 | Pins et popup carte encore en hex Achille (`#002642`, `#FE9800`) | 2 | Ils ne suivent pas les tokens. La requête et les magasins sans offre ne bougent pas. |
-| Chiffre du prix encore en ambre foncé, cible Encre | 2 | Lisible (5,80:1). La hiérarchie « prix Encre + badge ambre » n'est pas encore posée partout. |
+| Chiffre du prix encore en ambre foncé hors carte d'offre | 2d | Les cartes (`OfferCard`) sont en Encre. La fiche offre et le tunnel restent en ambre foncé. |
 | Gabarit e-mail (OTP, réservation) | 1 | Traité : tableau 600 px, logo PNG, clair et sombre. |
 | E-mail « réservation confirmée » absent | hors refonte | L’acheteur pose une empreinte sans recevoir d’e-mail. Pas de nouvel envoi dans la Vague 1. |
 | Payment Element (navy, Manrope) | 4 | `appearance` seulement, plus tard. |
