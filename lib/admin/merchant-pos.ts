@@ -360,7 +360,7 @@ export function supportMailto(details: {
 }): string {
   const to = process.env.SUPPORT_EMAIL || process.env.EMAIL_FROM || "support@akwire.fr";
   const subject = encodeURIComponent(
-    `[Achille] Géocodage magasin — ${details.merchantName}`,
+    `[Akwire] Géocodage magasin — ${details.merchantName}`,
   );
   const body = encodeURIComponent(
     `Bonjour,\n\nImpossible de géocoder cette adresse magasin :\n${details.address}\n${details.postalCode} ${details.city}\n\nEnseigne : ${details.merchantName}\n\nMerci de la positionner côté superadmin (fallback lat/lng).\n`,

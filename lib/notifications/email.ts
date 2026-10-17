@@ -8,6 +8,10 @@ import {
   smtpPort,
   smtpUser,
 } from "@/lib/auth-env";
+import {
+  renderEmailLayout,
+  textToEmailHtml,
+} from "@/lib/notifications/email-layout";
 import type { NotificationChannel, OutboundNotification } from "@/lib/notifications/types";
 
 /** Canal e-mail via le SMTP Brevo déjà utilisé pour l’auth. */
@@ -37,6 +41,11 @@ export const emailChannel: NotificationChannel = {
       from: requireEmailFrom(),
       subject: message.subject,
       text: message.text,
+      html: renderEmailLayout({
+        preheader: message.subject,
+        title: message.subject,
+        bodyHtml: textToEmailHtml(message.text),
+      }),
     });
   },
 };
