@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState, type FormEvent } from "react";
+import { useActionState, useId, useState, type FormEvent } from "react";
 
 import {
   addToCartAction,
@@ -8,7 +8,7 @@ import {
 } from "@/app/reservation/actions";
 import { MaterialIcon } from "@/components/material-icon";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 type ReserveButtonProps = {
   offerId: string;
@@ -29,6 +29,7 @@ export function ReserveButton({
   lng = null,
   ctaLabel = "Réserver en magasin",
 }: ReserveButtonProps) {
+  const formId = `reserve-${useId().replace(/:/g, "")}`;
   const [state, action, pending] = useActionState<CartActionState, FormData>(
     addToCartAction,
     {},
@@ -57,7 +58,13 @@ export function ReserveButton({
   }
 
   return (
-    <form action={action} onSubmit={onSubmit} noValidate className="flex flex-col gap-1.5">
+    <form
+      id={formId}
+      action={action}
+      onSubmit={onSubmit}
+      noValidate
+      className="flex flex-col gap-1.5"
+    >
       <input type="hidden" name="offerId" value={offerId} />
       <input type="hidden" name="posId" value={posId} />
       {lat != null && lng != null ? (
@@ -83,7 +90,7 @@ export function ReserveButton({
               setQtyMessage(null);
             }}
             disabled={stock < 1}
-            className="bg-surface-container-low w-20 rounded-full border-0 px-3 py-2 text-center"
+            className="bg-surface-container-low font-body-md text-body-md h-11 w-20 rounded-full border-0 px-3 text-center"
           />
         </label>
       )}
@@ -91,24 +98,33 @@ export function ReserveButton({
         type="submit"
         size={compact ? "default" : "lg"}
         disabled={disabled}
-        className={cn(!compact && "h-12 px-6 text-base")}
       >
-        <MaterialIcon name="shopping_bag" className="text-[18px]" />
+        <MaterialIcon name="shopping_bag" className="icon-md" />
         {stock < 1 ? "Rupture" : pending ? "Ajout…" : ctaLabel}
       </Button>
-      {showConflict ? (
-        <div className="bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
-          <p className="font-body-sm text-body-sm">
-            Votre panier concerne {state.conflictPosName}. Une réservation est
-            mono-magasin. Vider ce panier et réserver ici ?
-          </p>
-          <div className="mt-2 flex flex-wrap gap-2">
+      <Dialog
+        open={showConflict}
+        onOpenChange={(open) => {
+          if (!open) {
+            setHideConflict(true);
+          }
+        }}
+      >
+        <DialogContent
+          title="Panier d’un autre magasin"
+          description={
+            state.conflictPosName
+              ? `Votre panier concerne ${state.conflictPosName}. Une réservation est mono-magasin. Vider ce panier et réserver ici ?`
+              : "Une réservation est mono-magasin."
+          }
+        >
+          <div className="flex flex-wrap gap-2">
             <Button
               type="submit"
+              form={formId}
               name="replace"
               value="1"
               variant="secondary"
-              size="sm"
               disabled={pending}
             >
               Vider et remplacer
@@ -116,15 +132,14 @@ export function ReserveButton({
             <Button
               type="button"
               variant="outline"
-              size="sm"
               disabled={pending}
               onClick={() => setHideConflict(true)}
             >
               Annuler
             </Button>
           </div>
-        </div>
-      ) : null}
+        </DialogContent>
+      </Dialog>
       {qtyMessage ? (
         <p className="font-body-sm text-error font-medium" role="alert">
           {qtyMessage}

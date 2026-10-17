@@ -102,7 +102,7 @@ export default async function MagasinPage({ params }: MagasinPageProps) {
                     : pos.merchantName}
                 </span>
                 {pos.merchantName.length > 8 ? (
-                  <span className="bg-secondary-container text-primary mt-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold tracking-wider uppercase">
+                  <span className="bg-secondary-container text-primary font-label-xs text-label-xs mt-1 rounded-full px-2 py-0.5 font-extrabold tracking-wider uppercase">
                     {pos.merchantName.slice(5)}
                   </span>
                 ) : null}
@@ -111,14 +111,17 @@ export default async function MagasinPage({ params }: MagasinPageProps) {
                 <p className="font-label-md text-label-md text-secondary-container tracking-wider uppercase">
                   {pos.merchantName}
                 </p>
-                <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-on-primary mt-1 tracking-tight">
-                  {pos.name}
-                </h1>
+                <div className="mt-1 flex flex-wrap items-center gap-3">
+                  <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-on-primary tracking-tight">
+                    {pos.name}
+                  </h1>
+                  {/* Badge Ouvert / Fermé : composant client, après le correctif de lib/opening-hours.ts. */}
+                </div>
                 {address ? (
                   <p className="font-body-md text-body-md text-on-primary-container mt-2 flex items-center gap-1">
                     <MaterialIcon
                       name="location_on"
-                      className="text-secondary-container text-[18px]"
+                      className="text-secondary-container icon-md"
                     />
                     {address}
                   </p>
@@ -129,7 +132,7 @@ export default async function MagasinPage({ params }: MagasinPageProps) {
                       href={`tel:${pos.phone.replace(/\s+/g, "")}`}
                       className="text-on-primary inline-flex items-center gap-1 hover:underline"
                     >
-                      <MaterialIcon name="call" className="text-[16px]" />
+                      <MaterialIcon name="call" className="icon-sm" />
                       {pos.phone}
                     </a>
                   </p>

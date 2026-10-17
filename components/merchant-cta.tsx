@@ -40,7 +40,6 @@ export function MerchantCta({
             type="button"
             size={compact ? "default" : "lg"}
             disabled
-            className={cn(!compact && "h-12 px-6 text-base")}
           >
             Réserver en magasin
           </Button>
@@ -79,7 +78,6 @@ export function MerchantCta({
           type="button"
           size={compact ? "default" : "lg"}
           disabled
-          className={cn(!compact && "h-12 px-6 text-base")}
         >
           Voir l&apos;offre chez le marchand
         </Button>
@@ -98,14 +96,13 @@ export function MerchantCta({
       <Button
         asChild
         size={compact ? "default" : "lg"}
-        className={cn(!compact && "h-12 px-6 text-base")}
       >
         <a
           href={outboundPath(offerId, posSlug)}
           rel="nofollow sponsored noopener noreferrer"
           target="_blank"
         >
-          <MaterialIcon name="open_in_new" className="text-[18px]" />
+          <MaterialIcon name="open_in_new" className="icon-md" />
           Voir l&apos;offre chez le marchand
         </a>
       </Button>

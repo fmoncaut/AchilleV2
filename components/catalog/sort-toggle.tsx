@@ -23,8 +23,9 @@ export function SortToggle({
     >
       <Link
         href={prixHref}
+        aria-current={current === "prix" ? "true" : undefined}
         className={cn(
-          "font-label-md text-label-md rounded-full px-3.5 py-1.5",
+          "font-label-md text-label-md inline-flex h-11 items-center rounded-full px-4",
           current === "prix"
             ? "bg-primary-container text-on-primary shadow-sm font-bold"
             : "text-on-surface-variant hover:text-on-surface",
@@ -34,7 +35,7 @@ export function SortToggle({
       </Link>
       {distanceDisabled ? (
         <span
-          className="font-label-md text-label-md text-outline cursor-not-allowed rounded-full px-3.5 py-1.5"
+          className="font-label-md text-label-md text-outline inline-flex h-11 cursor-not-allowed items-center rounded-full px-4"
           title="Indiquez une localisation pour trier par distance"
         >
           Distance
@@ -42,8 +43,9 @@ export function SortToggle({
       ) : (
         <Link
           href={distanceHref}
+          aria-current={current === "distance" ? "true" : undefined}
           className={cn(
-            "font-label-md text-label-md rounded-full px-3.5 py-1.5",
+            "font-label-md text-label-md inline-flex h-11 items-center rounded-full px-4",
             current === "distance"
               ? "bg-primary-container text-on-primary shadow-sm font-bold"
               : "text-on-surface-variant hover:text-on-surface",
