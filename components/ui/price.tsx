@@ -7,12 +7,15 @@ function Price({
   priceReference,
   discountPct,
   size = "card",
+  showDiscount = true,
   className,
 }: {
   priceRemise: string;
   priceReference?: string | null;
   discountPct?: number | null;
   size?: "hero" | "card";
+  /** Faux quand le badge est déjà posé sur l'image de la carte. */
+  showDiscount?: boolean;
   className?: string;
 }) {
   const showCrossed = isStrictlyDiscounted(priceRemise, priceReference);
@@ -24,13 +27,13 @@ function Price({
   const label = usual ? `${sold}, au lieu de ${usual}` : sold;
 
   return (
-    <p className={cn("flex flex-wrap items-center gap-x-3 gap-y-2", className)} aria-label={label}>
-      {discount != null ? <DiscountBadge percent={discount} /> : null}
+    <p className={cn("flex flex-wrap items-baseline gap-x-2 gap-y-1", className)} aria-label={label}>
+      {showDiscount && discount != null ? <DiscountBadge percent={discount} /> : null}
       <span
         className={
           size === "hero"
-            ? "font-price-hero text-price-hero text-secondary font-extrabold"
-            : "font-price-card text-price-card text-secondary font-extrabold"
+            ? "font-price-hero text-price-hero text-primary-container font-extrabold"
+            : "font-price-card text-price-card text-primary-container font-extrabold"
         }
       >
         {sold}

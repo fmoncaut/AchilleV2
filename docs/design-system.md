@@ -24,10 +24,9 @@ structure des écrans, pas les couleurs, pas les polices, pas les images
 | Nuit | `#0E1C2E` | Texte courant, hover des surfaces Encre |
 
 L'ambre `#F7A325` n'est jamais une couleur de texte, d'icône seule ou de focus sur fond clair.
-Le texte sur un fond ambre est Encre. Le prix remisé cible est Encre ou Nuit, gras ;
-l'ambre porte le badge. En Vague 0, les prix qui étaient en `text-secondary-container`
-sur fond clair passent en `text-secondary` (`#8A5300`) pour rester lisibles. Le passage
-du chiffre en Encre est le sujet de la Vague 2.
+Le texte sur un fond ambre est Encre. Le prix remisé est Encre, gras ; l'ambre porte
+le badge. Les cartes d'offre (`OfferCard`) suivent cette règle. Les prix encore en
+`text-secondary` hors carte (fiche offre, tunnel) restent pour les vagues suivantes.
 
 ## Contrastes (WCAG 2.2, mesurés)
 
