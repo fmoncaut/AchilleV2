@@ -20,7 +20,7 @@ Champs en 16 px, rayon `xl`, hauteur 44 px. Relier l'erreur avec `aria-invalid` 
 
 ## OtpInput
 
-Six cases, collage, flèches, `inputmode="numeric"`, `autocomplete="one-time-code"` sur la première. Un champ caché `name="code"` (le même que `/login/otp`) porte la valeur soumise. Ne pas le brancher sur la page de login avant la Vague 3.
+Six cases, collage, flèches, `inputmode="numeric"`, `autocomplete="one-time-code"` sur la première. Un champ caché `name="code"` porte la valeur. **Non utilisé par `/login/otp`.** Le remplissage automatique (iOS, Android, Chrome) écrit les 6 chiffres d’un coup dans la première case. `maxLength={1}` et `.slice(-1)` n’en gardent qu’un : le code soumis est faux, un essai est consommé, et le compte peut se verrouiller. La page OTP garde un seul champ `name="code"`.
 
 ## Card
 
