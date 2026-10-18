@@ -11,7 +11,7 @@ type ProductImageProps = {
   name: string;
   className?: string;
   imgClassName?: string;
-  variant?: "card" | "gallery" | "thumb";
+  variant?: "card" | "gallery" | "thumb" | "hero";
 };
 
 export function ProductImage({
@@ -25,13 +25,14 @@ export function ProductImage({
   const [failed, setFailed] = useState(false);
   const showImage = Boolean(src) && !failed;
   const initial = name.trim().slice(0, 1).toUpperCase() || "?";
+  const hero = variant === "hero";
 
   return (
     <div
       className={cn(
         "bg-surface-container relative overflow-hidden",
         variant === "card" && "aspect-[4/3] w-full",
-        variant === "gallery" && "h-80 w-full",
+        (variant === "gallery" || variant === "hero") && "h-80 w-full",
         variant === "thumb" && "size-12 shrink-0 rounded-lg",
         className,
       )}
@@ -41,10 +42,17 @@ export function ProductImage({
         <img
           src={src ?? undefined}
           alt={alt}
+          width={hero ? 800 : undefined}
+          height={hero ? 320 : undefined}
+          fetchPriority={hero ? "high" : undefined}
+          loading={hero ? "eager" : "lazy"}
+          decoding="async"
           onError={() => setFailed(true)}
           className={cn(
             "absolute inset-0 h-full w-full",
-            variant === "gallery" ? "object-contain p-4" : "object-cover",
+            variant === "gallery" || variant === "hero"
+              ? "object-contain p-4"
+              : "object-cover",
             imgClassName,
           )}
         />
@@ -61,7 +69,7 @@ export function ProductImage({
             className={
               variant === "thumb"
                 ? "text-outline text-[22px]"
-                : variant === "gallery"
+                : variant === "gallery" || variant === "hero"
                   ? "text-outline text-[48px]"
                   : "text-outline text-[40px]"
             }
