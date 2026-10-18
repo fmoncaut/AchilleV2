@@ -20,7 +20,27 @@ async function expectError(run: () => Promise<unknown>, needle: string) {
   throw new Error(`Attendu une erreur contenant « ${needle} ».`);
 }
 
+/** Le script crée des utilisateurs, offres et réservations : base locale jetable seulement. */
+function assertDisposable(): void {
+  let host = "";
+  let name = "";
+  try {
+    const url = new URL(process.env.DATABASE_URL ?? "");
+    host = url.hostname;
+    name = url.pathname.replace(/^\//, "");
+  } catch {
+    // URL absente ou illisible : refus ci-dessous.
+  }
+  if (!["localhost", "127.0.0.1"].includes(host) || !name.endsWith("_jetable")) {
+    throw new Error(
+      "Refus : verify-reservations n'écrit que dans une base locale *_jetable " +
+        "(ex. DATABASE_URL=postgresql://…@localhost:5433/achille_reservations_jetable).",
+    );
+  }
+}
+
 async function main() {
+  assertDisposable();
   const pos = await prisma.pos.findUnique({
     where: { slug: "bricomarche-lyon-8e" },
   });
@@ -179,7 +199,20 @@ async function main() {
       where: { id: ready.id },
       data: { pickupDeadline: new Date(Date.now() - 60_000) },
     });
-    await transitionReservationForMerchant(pos.merchantId, ready.id, "NO_SHOW");
+    // Depuis le cron horaire (d97e592), toute transition marchand lance d'abord
+    // expireDueReservations : un READY_FOR_PICKUP échu passe NO_SHOW tout seul,
+    // et la transition manuelle NO_SHOW est alors refusée. On teste ce chemin réel.
+    const noShowSummary = await expireDueReservations();
+    const noShowRow = await prisma.reservation.findUnique({ where: { id: ready.id } });
+    if (noShowSummary.noShow < 1 || noShowRow?.status !== "NO_SHOW") {
+      throw new Error(
+        `L’échéance dépassée n’a pas donné de no-show (statut ${noShowRow?.status}, noShow=${noShowSummary.noShow}).`,
+      );
+    }
+    await expectError(
+      () => transitionReservationForMerchant(pos.merchantId, ready.id, "NO_SHOW"),
+      "refusée",
+    );
     const afterNoShow = await prisma.offer.findUnique({ where: { id: offer.id } });
     if (afterNoShow?.stock !== 1) {
       throw new Error("Le no-show n’a pas rendu le stock.");
