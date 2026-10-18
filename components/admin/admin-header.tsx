@@ -1,6 +1,5 @@
-import Link from "next/link";
-
 import { signOutAction } from "@/app/compte/actions";
+import { AdminNav, type AdminNavLink } from "@/components/admin/admin-nav";
 import { MaterialIcon } from "@/components/material-icon";
 import { Button } from "@/components/ui/button";
 
@@ -21,92 +20,64 @@ export function AdminHeader({
   showMerchantStores = false,
   unreadReservations = 0,
 }: AdminHeaderProps) {
+  const links: AdminNavLink[] = [];
+
+  if (showPlatform) {
+    links.push(
+      { href: "/admin", label: "Vue d’ensemble" },
+      { href: "/admin/enseignes", label: "Enseignes" },
+      { href: "/admin/magasins", label: "Magasins" },
+      { href: "/admin/vendeurs", label: "Vendeurs" },
+      { href: "/admin/brokers", label: "Brokers" },
+      { href: "/admin/affiliation/categories", label: "Catégories" },
+      { href: "/admin/affiliation/produits", label: "Produits à créer" },
+      { href: "/admin/affiliation/runs", label: "Ingestion" },
+    );
+  }
+
+  if (showOffers) {
+    if (showMerchantStores) {
+      links.push({ href: "/admin/mes-magasins", label: "Mes magasins" });
+    }
+    links.push({ href: "/admin/offres", label: "Offres" });
+    if (showPending) {
+      links.push({
+        href: "/admin/affiliation/en-attente",
+        label: "En attente",
+      });
+    }
+    links.push(
+      { href: "/admin/offres/import", label: "Import CSV" },
+      {
+        href: "/admin/reservations",
+        label: "Réservations",
+        badge: unreadReservations,
+      },
+      { href: "/admin/paiements", label: "Paiements" },
+    );
+  } else if (showPlatform) {
+    links.push({ href: "/admin/paiements", label: "Paiements" });
+  }
+
+  links.push({ href: "/admin/renvois", label: "Renvois" });
+
   return (
     <div className="bg-surface-container-lowest print:hidden shadow-sm">
-      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:px-6">
         <p className="font-headline-sm text-primary-container flex items-center gap-2 text-[16px] font-bold">
           <MaterialIcon
             name="storefront"
-            className="text-secondary text-[20px]"
+            className="text-primary-container text-[20px]"
           />
           Back-office · {merchantName}
         </p>
-        <nav className="flex flex-wrap items-center gap-2">
-          {showPlatform ? (
-            <>
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin">Vue d’ensemble</Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/enseignes">Enseignes</Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/magasins">Magasins</Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/vendeurs">Vendeurs</Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/brokers">Brokers</Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/affiliation/categories">Catégories</Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/affiliation/produits">Produits à créer</Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/affiliation/runs">Ingestion</Link>
-              </Button>
-            </>
-          ) : null}
-          {showOffers ? (
-            <>
-              {showMerchantStores ? (
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/admin/mes-magasins">Mes magasins</Link>
-                </Button>
-              ) : null}
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/offres">Offres</Link>
-              </Button>
-              {showPending ? (
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/admin/affiliation/en-attente">En attente</Link>
-                </Button>
-              ) : null}
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/offres/import">Import CSV</Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/reservations">
-                  Réservations
-                  {unreadReservations > 0 ? (
-                    <span className="bg-secondary-container text-on-secondary-container ml-1 inline-flex min-w-5 justify-center rounded-full px-1 text-[10px]">
-                      {unreadReservations}
-                    </span>
-                  ) : null}
-                </Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/paiements">Paiements</Link>
-              </Button>
-            </>
-          ) : null}
-          {showPlatform && !showOffers ? (
-            <Button asChild variant="ghost" size="sm">
-              <Link href="/admin/paiements">Paiements</Link>
-            </Button>
-          ) : null}
-          <Button asChild variant="ghost" size="sm">
-            <Link href="/admin/renvois">Renvois</Link>
-          </Button>
+        <AdminNav links={links}>
           <form action={signOutAction}>
-            <Button type="submit" variant="outline" size="sm">
+            <Button type="submit" variant="outline">
               Déconnexion
             </Button>
           </form>
-        </nav>
+        </AdminNav>
       </div>
     </div>
   );

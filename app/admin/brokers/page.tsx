@@ -4,6 +4,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
 } from "@/components/admin/admin-shell";
 import { Button } from "@/components/ui/button";
@@ -40,14 +41,16 @@ export default async function BrokersPage() {
           Aucun broker. Créez-en un pour tracer les renvois d’affiliation.
         </p>
       ) : (
-        <AdminTable className="min-w-[40rem]">
+        <AdminTable caption="Brokers" className="min-w-[40rem]">
           <AdminThead>
             <tr>
-              <th className="px-4 py-3">Nom</th>
-              <th className="px-4 py-3">Type</th>
-              <th className="px-4 py-3">Offres</th>
-              <th className="px-4 py-3">Gabarit</th>
-              <th className="px-4 py-3" />
+              <AdminTh className="px-4 py-3">Nom</AdminTh>
+              <AdminTh className="px-4 py-3">Type</AdminTh>
+              <AdminTh className="px-4 py-3">Offres</AdminTh>
+              <AdminTh className="px-4 py-3">Gabarit</AdminTh>
+              <AdminTh className="px-4 py-3">
+                <span className="sr-only">Actions</span>
+              </AdminTh>
             </tr>
           </AdminThead>
           <tbody>

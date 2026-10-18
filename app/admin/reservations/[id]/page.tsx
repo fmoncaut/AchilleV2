@@ -3,10 +3,10 @@ import { notFound } from "next/navigation";
 
 import { AdminMain } from "@/components/admin/admin-shell";
 import { ReservationMessages } from "@/components/messages/reservation-messages";
+import { ReservationStatusBadge } from "@/components/reservation/reservation-status";
 import { requireDashboardActor } from "@/lib/admin/actor";
 import { prisma } from "@/lib/db";
 import { formatEur } from "@/lib/money";
-import { STATUS_LABELS } from "@/lib/reservations/service";
 
 export const metadata = {
   title: "Réservation | Back-office Akwire",
@@ -43,9 +43,12 @@ export default async function SellerReservationPage({ params }: PageProps) {
   return (
     <AdminMain>
       <div>
-        <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
-          {STATUS_LABELS[reservation.status]} · {actor.merchantName ?? "Support"}
-        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <ReservationStatusBadge status={reservation.status} />
+          <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
+            {actor.merchantName ?? "Support"}
+          </p>
+        </div>
         <h1 className="font-headline-lg text-primary-container mt-1">
           {reservation.items
             .map((item) => `${item.offer.product.name} × ${item.quantity}`)

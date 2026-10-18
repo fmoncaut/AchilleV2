@@ -8,7 +8,7 @@ import {
   type CsvImportState,
   type CsvPreviewState,
 } from "@/app/admin/actions";
-import { AdminTable, AdminThead } from "@/components/admin/admin-shell";
+import { AdminTable, AdminTh, AdminThead } from "@/components/admin/admin-shell";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -86,13 +86,13 @@ export function CsvImportWizard() {
             </p>
           )}
           {rows.length > 0 ? (
-            <AdminTable className="min-w-[40rem]">
+            <AdminTable caption="Aperçu de l’import" className="min-w-[40rem]">
               <AdminThead>
                 <tr>
-                  <th className="px-3 py-2">Ligne</th>
-                  <th className="px-3 py-2">EAN</th>
-                  <th className="px-3 py-2">Nom</th>
-                  <th className="px-3 py-2">Statut</th>
+                  <AdminTh className="px-3 py-2">Ligne</AdminTh>
+                  <AdminTh className="px-3 py-2">EAN</AdminTh>
+                  <AdminTh className="px-3 py-2">Nom</AdminTh>
+                  <AdminTh className="px-3 py-2">Statut</AdminTh>
                 </tr>
               </AdminThead>
               <tbody>

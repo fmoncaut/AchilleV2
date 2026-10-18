@@ -7,6 +7,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
   adminFieldClass,
 } from "@/components/admin/admin-shell";
@@ -110,13 +111,13 @@ export default async function AdminPaymentsPage({ searchParams }: PageProps) {
           </p>
         </AdminCard>
       ) : (
-        <AdminTable className="min-w-[40rem]">
+        <AdminTable caption="Paiements" className="min-w-[40rem]">
           <AdminThead>
             <tr>
-              <th className="px-4 py-3">Enseigne</th>
-              <th className="px-4 py-3">Connect</th>
-              <th className="px-4 py-3">Commission</th>
-              <th className="px-4 py-3">Actions</th>
+              <AdminTh className="px-4 py-3">Enseigne</AdminTh>
+              <AdminTh className="px-4 py-3">Connect</AdminTh>
+              <AdminTh className="px-4 py-3">Commission</AdminTh>
+              <AdminTh className="px-4 py-3">Actions</AdminTh>
             </tr>
           </AdminThead>
           <tbody>

@@ -6,15 +6,14 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
 } from "@/components/admin/admin-shell";
+import { ReservationStatusBadge } from "@/components/reservation/reservation-status";
 import { requireAdminActor } from "@/lib/admin/actor";
 import { unreadReservationIds } from "@/lib/messages/service";
 import { formatEur } from "@/lib/money";
-import {
-  STATUS_LABELS,
-  listReservationsForMerchant,
-} from "@/lib/reservations/service";
+import { listReservationsForMerchant } from "@/lib/reservations/service";
 
 export const metadata = {
   title: "Réservations | Back-office Akwire",
@@ -71,16 +70,16 @@ export default async function AdminReservationsPage() {
           Aucune réservation pour votre enseigne.
         </p>
       ) : (
-        <AdminTable className="min-w-[48rem]">
+        <AdminTable caption="Réservations" className="min-w-[48rem]">
           <AdminThead>
             <tr>
-              <th className="px-4 py-3">Offre</th>
-              <th className="px-4 py-3">Magasin</th>
-              <th className="px-4 py-3">Montant</th>
-              <th className="px-4 py-3">Statut</th>
-              <th className="px-4 py-3">Paiement</th>
-              <th className="px-4 py-3">Limite</th>
-              <th className="px-4 py-3">Actions</th>
+              <AdminTh className="px-4 py-3">Offre</AdminTh>
+              <AdminTh className="px-4 py-3">Magasin</AdminTh>
+              <AdminTh className="px-4 py-3">Montant</AdminTh>
+              <AdminTh className="px-4 py-3">Statut</AdminTh>
+              <AdminTh className="px-4 py-3">Paiement</AdminTh>
+              <AdminTh className="px-4 py-3">Limite</AdminTh>
+              <AdminTh className="px-4 py-3">Actions</AdminTh>
             </tr>
           </AdminThead>
           <tbody>
@@ -107,9 +106,7 @@ export default async function AdminReservationsPage() {
                   {formatEur(reservation.totalAmount)}
                 </td>
                 <td className="px-4 py-3">
-                  <span className="font-label-xs text-label-xs bg-primary-container text-on-primary rounded-full px-2.5 py-1 font-bold">
-                    {STATUS_LABELS[reservation.status]}
-                  </span>
+                  <ReservationStatusBadge status={reservation.status} />
                 </td>
                 <td className="font-body-sm text-on-surface-variant px-4 py-3">
                   {PAYMENT_LABELS[reservation.paymentState]}

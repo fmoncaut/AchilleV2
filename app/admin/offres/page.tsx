@@ -6,6 +6,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
   adminFieldClass,
   adminLabelClass,
@@ -125,20 +126,20 @@ export default async function AdminOffresPage({ searchParams }: OffresPageProps)
           Aucune offre pour ces filtres. Créez-en une ou importez un CSV.
         </p>
       ) : (
-        <AdminTable className="min-w-[64rem]">
+        <AdminTable caption="Offres" className="min-w-[64rem]">
           <AdminThead>
             <tr>
-              <th className="px-3 py-3">Image</th>
-              <th className="px-3 py-3">EAN</th>
-              <th className="px-3 py-3">Nom</th>
-              <th className="px-3 py-3">Prix remisé</th>
-              <th className="px-3 py-3">Référence</th>
-              <th className="px-3 py-3">Stock</th>
-              <th className="px-3 py-3">État</th>
-              <th className="px-3 py-3">Catégorie</th>
-              <th className="px-3 py-3">En ligne</th>
-              <th className="px-3 py-3">Modifié</th>
-              <th className="px-3 py-3">Actions</th>
+              <AdminTh className="px-3 py-3">Image</AdminTh>
+              <AdminTh className="px-3 py-3">EAN</AdminTh>
+              <AdminTh className="px-3 py-3">Nom</AdminTh>
+              <AdminTh className="px-3 py-3">Prix remisé</AdminTh>
+              <AdminTh className="px-3 py-3">Référence</AdminTh>
+              <AdminTh className="px-3 py-3">Stock</AdminTh>
+              <AdminTh className="px-3 py-3">État</AdminTh>
+              <AdminTh className="px-3 py-3">Catégorie</AdminTh>
+              <AdminTh className="px-3 py-3">En ligne</AdminTh>
+              <AdminTh className="px-3 py-3">Modifié</AdminTh>
+              <AdminTh className="px-3 py-3">Actions</AdminTh>
             </tr>
           </AdminThead>
           <tbody>
