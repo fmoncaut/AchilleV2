@@ -764,6 +764,13 @@ export async function transitionReservationForMerchant(
     throw new ReservationError("Réservation introuvable.");
   }
 
+  // expireDueReservations (ci-dessus) passe déjà en NO_SHOW une réservation prête
+  // dont l'échéance est dépassée, avec libération d'empreinte et e-mail. Le bouton
+  // « No-show » du marchand arrive donc toujours après : c'est fait, pas une erreur.
+  if (target === "NO_SHOW" && current.status === "NO_SHOW") {
+    return;
+  }
+
   const allowed =
     (current.status === "PENDING" && target === "CONFIRMED") ||
     (current.status === "CONFIRMED" && target === "READY_FOR_PICKUP") ||
