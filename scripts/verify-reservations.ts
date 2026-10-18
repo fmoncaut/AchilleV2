@@ -201,7 +201,8 @@ async function main() {
     });
     // Depuis le cron horaire (d97e592), toute transition marchand lance d'abord
     // expireDueReservations : un READY_FOR_PICKUP échu passe NO_SHOW tout seul,
-    // et la transition manuelle NO_SHOW est alors refusée. On teste ce chemin réel.
+    // et le bouton « No-show » du marchand arrive après : il doit réussir sans
+    // rien refaire (le stock vérifié ci-dessous ne doit pas être rendu deux fois).
     const noShowSummary = await expireDueReservations();
     const noShowRow = await prisma.reservation.findUnique({ where: { id: ready.id } });
     if (noShowSummary.noShow < 1 || noShowRow?.status !== "NO_SHOW") {
@@ -209,10 +210,11 @@ async function main() {
         `L’échéance dépassée n’a pas donné de no-show (statut ${noShowRow?.status}, noShow=${noShowSummary.noShow}).`,
       );
     }
-    await expectError(
-      () => transitionReservationForMerchant(pos.merchantId, ready.id, "NO_SHOW"),
-      "refusée",
-    );
+    await transitionReservationForMerchant(pos.merchantId, ready.id, "NO_SHOW");
+    const stillNoShow = await prisma.reservation.findUnique({ where: { id: ready.id } });
+    if (stillNoShow?.status !== "NO_SHOW") {
+      throw new Error("Le no-show marchand après le cron a changé le statut.");
+    }
     const afterNoShow = await prisma.offer.findUnique({ where: { id: offer.id } });
     if (afterNoShow?.stock !== 1) {
       throw new Error("Le no-show n’a pas rendu le stock.");

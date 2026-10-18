@@ -466,13 +466,11 @@ async function main() {
     const capturesBeforePenalty = captureCount();
     // Depuis le cron horaire (d97e592), toute transition marchand lance d'abord
     // expireDueReservations : un READY_FOR_PICKUP échu passe NO_SHOW tout seul,
-    // et la transition manuelle NO_SHOW est alors refusée. On teste ce chemin réel.
+    // et le bouton « No-show » du marchand arrive après : il doit réussir sans
+    // rien refaire (pas de seconde capture, cf. captureCount plus bas).
     const expireSummary = await expireDueReservations();
     assert(expireSummary.noShow >= 1 && expireSummary.errors === 0, "Le cron passe le no-show.");
-    await expectError(
-      () => transitionReservationForMerchant(pos.merchantId, noShowRow.id, "NO_SHOW"),
-      "Transition",
-    );
+    await transitionReservationForMerchant(pos.merchantId, noShowRow.id, "NO_SHOW");
     const noShow = await prisma.reservation.findUniqueOrThrow({ where: { id: noShowRow.id } });
     const penaltyIntent = intents.get(noShow.paymentIntentId ?? "");
     assert(noShow.status === "NO_SHOW" && noShow.paymentState === "CAPTURED", "No-show partiel capturé.");

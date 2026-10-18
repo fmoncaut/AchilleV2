@@ -83,13 +83,13 @@ export async function merchantReservationAction(
     throw error;
   }
 
-  if (intent === "ready" || intent === "pickup" || intent === "noshow") {
+  // No-show : expireDueReservations a déjà prévenu l’acheteur (« Réservation non
+  // retirée »). Pas de second e-mail.
+  if (intent === "ready" || intent === "pickup") {
     const note =
       intent === "ready"
         ? ["Commande prête au retrait", "Votre réservation est prête au comptoir."]
-        : intent === "pickup"
-          ? ["Retrait confirmé", "Le magasin a validé la remise. Le paiement est capturé."]
-          : ["Retrait non effectué", "Le délai est dépassé. L’empreinte est libérée."];
+        : ["Retrait confirmé", "Le magasin a validé la remise. Le paiement est capturé."];
     try {
       await notifyReservationEvent(id, note[0], note[1], "buyer");
     } catch (error) {
@@ -101,6 +101,12 @@ export async function merchantReservationAction(
     return {
       reservationId: id,
       ok: "Remise validée. Le paiement est capturé.",
+    };
+  }
+  if (intent === "noshow") {
+    return {
+      reservationId: id,
+      ok: "Réservation passée en non retirée. Le stock est rendu.",
     };
   }
   return {};
