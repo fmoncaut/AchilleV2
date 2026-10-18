@@ -47,7 +47,7 @@ export default async function MerchantPendingPage({
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Produits en attente
         </h1>
-        <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+        <p className="font-body-md text-body-md text-on-surface-variant mt-2">
           Ces lignes attendent la création du produit par Akwire. Lecture seule.
         </p>
       </div>
@@ -62,18 +62,20 @@ export default async function MerchantPendingPage({
         <tbody>
           {feeds.length === 0 ? (
             <tr>
-              <td className="text-on-surface-variant px-4 py-6" colSpan={3}>
+              <td className="font-body-md text-body-md text-on-surface-variant px-4 py-6" colSpan={3}>
                 Aucune ligne en attente.
               </td>
             </tr>
           ) : (
             feeds.map((feed) => (
               <tr key={feed.id} className="border-surface-container-high border-t">
-                <td className="px-4 py-3">{feed.network}</td>
-                <td className="px-4 py-3">{feed.status === "ACTIVE" ? "Actif" : "En pause"}</td>
+                <td className="font-body-sm text-body-sm px-4 py-3">{feed.network}</td>
+                <td className="font-body-sm text-body-sm px-4 py-3">
+                  {feed.status === "ACTIVE" ? "Actif" : "En pause"}
+                </td>
                 <td className="px-4 py-3">
                   <Link
-                    className="text-primary-container font-bold underline"
+                    className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center font-bold underline"
                     href={`/admin/affiliation/en-attente?feed=${feed.id}`}
                   >
                     {feed.pending}
@@ -96,11 +98,13 @@ export default async function MerchantPendingPage({
           <tbody>
             {detail.lines.map((line) => (
               <tr key={line.id} className="border-surface-container-high border-t">
-                <td className="px-4 py-3">
+                <td className="font-body-md text-body-md text-primary-container px-4 py-3 font-bold">
                   {textOf(line.payload, line.feed.profile.titleColumn, line.externalProductKey)}
                 </td>
-                <td className="px-4 py-3">{line.externalProductKey}</td>
-                <td className="px-4 py-3">{line.externalCategoryRaw ?? "—"}</td>
+                <td className="font-body-sm text-body-sm px-4 py-3">{line.externalProductKey}</td>
+                <td className="font-body-sm text-body-sm px-4 py-3">
+                  {line.externalCategoryRaw ?? "—"}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -108,7 +112,7 @@ export default async function MerchantPendingPage({
             <tr>
               <td className="px-4 py-3" colSpan={3}>
                 {page > 0 ? (
-                  <Button asChild variant="outline" size="sm">
+                  <Button asChild variant="outline">
                     <Link href={`/admin/affiliation/en-attente?feed=${feedId}&page=${page - 1}`}>
                       Page précédente
                     </Link>

@@ -114,7 +114,7 @@ export default async function AdminPaymentsPage({ searchParams }: PageProps) {
           </p>
         </AdminCard>
       ) : (
-        <AdminTable caption="Paiements" className="text-body-md min-w-[40rem]">
+        <AdminTable caption="Paiements" className="min-w-[40rem]">
           <AdminThead>
             <tr>
               <AdminTh className="px-4 py-3">Enseigne</AdminTh>
@@ -138,17 +138,17 @@ export default async function AdminPaymentsPage({ searchParams }: PageProps) {
                   )}
                 </td>
                 <td className="px-4 py-3">
-                  <span className="font-label-xs text-label-xs bg-primary-container text-on-primary rounded-full px-2.5 py-1 font-bold">
+                  <span className="font-body-sm text-body-sm bg-primary-container text-on-primary rounded-full px-2.5 py-1 font-bold">
                     {connectLabel(merchant)}
                   </span>
                   {merchant.detailsSubmitted ? (
-                    <span className="font-body-sm text-on-surface-variant mt-1 block">
+                    <span className="font-body-sm text-body-sm text-on-surface-variant mt-1 block">
                       Dossier envoyé
                       {merchant.payoutsEnabled ? " · virements actifs" : ""}
                     </span>
                   ) : null}
                 </td>
-                <td className="font-body-sm text-on-surface-variant px-4 py-3">
+                <td className="font-body-md text-body-md text-primary-container px-4 py-3 font-bold">
                   {merchant.feeRate == null
                     ? "Défaut (STRIPE_DEFAULT_FEE_RATE)"
                     : `${merchant.feeRate.mul(100).toString()} %`}

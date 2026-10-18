@@ -44,7 +44,7 @@ export default async function AffiliationProductsPage({
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Produits à créer
         </h1>
-        <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+        <p className="font-body-md text-body-md text-on-surface-variant mt-2">
           Lignes en attente, groupées par flux. La création passe la ligne en prêt à publier
           et prévient le marchand.
         </p>
@@ -61,19 +61,23 @@ export default async function AffiliationProductsPage({
         <tbody>
           {feeds.length === 0 ? (
             <tr>
-              <td className="text-on-surface-variant px-4 py-6" colSpan={4}>
+              <td className="font-body-md text-body-md text-on-surface-variant px-4 py-6" colSpan={4}>
                 Aucune ligne en attente.
               </td>
             </tr>
           ) : (
             feeds.map((feed) => (
               <tr key={feed.id} className="border-surface-container-high border-t">
-                <td className="px-4 py-3">{feed.merchantName}</td>
-                <td className="px-4 py-3">{feed.network}</td>
-                <td className="px-4 py-3">{feed.status === "ACTIVE" ? "Actif" : "En pause"}</td>
+                <td className="font-body-md text-body-md text-primary-container px-4 py-3 font-bold">
+                  {feed.merchantName}
+                </td>
+                <td className="font-body-sm text-body-sm px-4 py-3">{feed.network}</td>
+                <td className="font-body-sm text-body-sm px-4 py-3">
+                  {feed.status === "ACTIVE" ? "Actif" : "En pause"}
+                </td>
                 <td className="px-4 py-3">
                   <Link
-                    className="text-primary-container font-bold underline"
+                    className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center font-bold underline"
                     href={`/admin/affiliation/produits?feed=${feed.id}`}
                   >
                     {feed.pending}
@@ -103,15 +107,17 @@ export default async function AffiliationProductsPage({
             <tbody>
               {detail.lines.map((line) => (
                 <tr key={line.id} className="border-surface-container-high border-t">
-                  <td className="px-4 py-3">
+                  <td className="font-body-md text-body-md text-primary-container px-4 py-3 font-bold">
                     {textOf(line.payload, line.feed.profile.titleColumn, line.externalProductKey)}
                   </td>
-                  <td className="px-4 py-3">{line.externalProductKey}</td>
-                  <td className="px-4 py-3">{line.externalCategoryRaw ?? "—"}</td>
+                  <td className="font-body-sm text-body-sm px-4 py-3">{line.externalProductKey}</td>
+                  <td className="font-body-sm text-body-sm px-4 py-3">
+                    {line.externalCategoryRaw ?? "—"}
+                  </td>
                   <td className="px-4 py-3">
                     <form action={publishPendingLineAction}>
                       <input type="hidden" name="lineId" value={line.id} />
-                      <Button type="submit" size="sm">
+                      <Button type="submit">
                         Créer le produit
                       </Button>
                     </form>
@@ -122,14 +128,14 @@ export default async function AffiliationProductsPage({
           </AdminTable>
           <div className="flex gap-2">
             {page > 0 ? (
-              <Button asChild variant="outline" size="sm">
+              <Button asChild variant="outline">
                 <Link href={`/admin/affiliation/produits?feed=${feedId}&page=${page - 1}`}>
                   Page précédente
                 </Link>
               </Button>
             ) : null}
             {(page + 1) * 50 < detail.total ? (
-              <Button asChild variant="outline" size="sm">
+              <Button asChild variant="outline">
                 <Link href={`/admin/affiliation/produits?feed=${feedId}&page=${page + 1}`}>
                   Page suivante
                 </Link>

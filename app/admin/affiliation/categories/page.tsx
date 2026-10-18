@@ -79,7 +79,7 @@ export default async function AffiliationCategoriesPage({
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Catégories d&apos;affiliation
         </h1>
-        <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+        <p className="font-body-md text-body-md text-on-surface-variant mt-2">
           Une décision par valeur exacte. Le premier segment regroupe les chemins ;
           s&apos;il est identique partout, le groupe est le segment suivant.
         </p>
@@ -103,7 +103,7 @@ export default async function AffiliationCategoriesPage({
             <h2 className="text-primary-container text-xl font-bold">
               {network} · {group || "Catégorie absente"}
             </h2>
-            <Button asChild variant="ghost" size="sm">
+            <Button asChild variant="ghost">
               <Link href={network ? `/admin/affiliation/categories?network=${network}` : "/admin/affiliation/categories"}>
                 Retour aux groupes
               </Link>
@@ -131,12 +131,18 @@ export default async function AffiliationCategoriesPage({
                 return (
                   <tr key={value.raw} className="border-surface-container-high border-t">
                     <td className="px-4 py-3 align-top">
-                      <p className="font-medium">{value.raw || "Catégorie absente"}</p>
+                      <p className="font-body-md text-body-md text-primary-container font-bold">
+                        {value.raw || "Catégorie absente"}
+                      </p>
                       {value.sampleLabel ? (
-                        <p className="text-on-surface-variant text-xs">{value.sampleLabel}</p>
+                        <p className="font-body-sm text-body-sm text-on-surface-variant">
+                          {value.sampleLabel}
+                        </p>
                       ) : null}
                     </td>
-                    <td className="px-4 py-3 align-top">{value.lines}</td>
+                    <td className="font-body-md text-body-md text-primary-container px-4 py-3 align-top font-bold">
+                      {value.lines}
+                    </td>
                     <td className="px-4 py-3">
                       <form action={assignCategoryAction} className="flex flex-wrap items-end gap-2">
                         <input type="hidden" name="network" value={network} />
@@ -146,19 +152,19 @@ export default async function AffiliationCategoriesPage({
                           candidates={candidates}
                           defaultId={value.categoryId}
                         />
-                        <Button type="submit" size="sm">
+                        <Button type="submit">
                           Enregistrer
                         </Button>
-                        <Button type="submit" name="unclassified" value="1" size="sm" variant="outline">
+                        <Button type="submit" name="unclassified" value="1" variant="outline">
                           Non classé
                         </Button>
                       </form>
                       {value.decided ? (
-                        <p className="text-on-surface-variant mt-1 text-xs">
+                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
                           {value.categoryName ?? "Non classé"}
                         </p>
                       ) : (
-                        <p className="text-on-surface-variant mt-1 text-xs">À traiter</p>
+                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">À traiter</p>
                       )}
                     </td>
                   </tr>
@@ -181,7 +187,7 @@ export default async function AffiliationCategoriesPage({
           <tbody>
             {groups.length === 0 ? (
               <tr>
-                <td className="text-on-surface-variant px-4 py-6" colSpan={5}>
+                <td className="font-body-md text-body-md text-on-surface-variant px-4 py-6" colSpan={5}>
                   Aucune catégorie externe importée.
                 </td>
               </tr>
@@ -191,18 +197,24 @@ export default async function AffiliationCategoriesPage({
                   key={`${item.network}-${item.label}`}
                   className="border-surface-container-high border-t"
                 >
-                  <td className="px-4 py-3">{item.network}</td>
+                  <td className="font-body-sm text-body-sm px-4 py-3">{item.network}</td>
                   <td className="px-4 py-3">
                     <Link
-                      className="text-primary-container font-bold underline"
+                      className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center font-bold underline"
                       href={`/admin/affiliation/categories?network=${item.network}&group=${encodeURIComponent(item.label)}`}
                     >
                       {item.label || "Catégorie absente"}
                     </Link>
                   </td>
-                  <td className="px-4 py-3">{item.values}</td>
-                  <td className="px-4 py-3">{item.lines}</td>
-                  <td className="px-4 py-3">{item.open}</td>
+                  <td className="font-body-md text-body-md text-primary-container px-4 py-3 font-bold">
+                    {item.values}
+                  </td>
+                  <td className="font-body-md text-body-md text-primary-container px-4 py-3 font-bold">
+                    {item.lines}
+                  </td>
+                  <td className="font-body-md text-body-md text-primary-container px-4 py-3 font-bold">
+                    {item.open}
+                  </td>
                 </tr>
               ))
             )}

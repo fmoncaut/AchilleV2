@@ -9,6 +9,12 @@ import {
 } from "@/app/admin/platform-actions";
 import { adminFieldClass } from "@/components/admin/admin-shell";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 type Option = { id: string; label: string };
 
@@ -40,12 +46,15 @@ export function UserRoleForm({
       <input type="hidden" name="merchantId" value={merchantId} />
       <input type="hidden" name="role" value={role} />
       {state.error ? (
-        <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
+        <p
+          className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+          role="alert"
+        >
           {state.error}
         </p>
       ) : null}
       {state.ok ? (
-        <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
+        <p className="font-body-md text-body-md bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
           Rattachement enregistré. Le rôle est lu en base à chaque requête :
           rechargez la page de l’utilisateur concerné, sans nouvelle connexion.
         </p>
@@ -67,7 +76,7 @@ export function UserRoleForm({
             ))}
           </select>
           {state.fieldErrors?.userId ? (
-            <span className="font-body-sm text-error">{state.fieldErrors.userId}</span>
+            <span className="font-body-md text-body-md text-error">{state.fieldErrors.userId}</span>
           ) : null}
         </label>
         <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1">
@@ -85,7 +94,7 @@ export function UserRoleForm({
             ))}
           </select>
           {state.fieldErrors?.merchantId ? (
-            <span className="font-body-sm text-error">
+            <span className="font-body-md text-body-md text-error">
               {state.fieldErrors.merchantId}
             </span>
           ) : null}
@@ -103,7 +112,7 @@ export function UserRoleForm({
             <option value="ADMIN">Administrateur (ADMIN)</option>
           </select>
           {state.fieldErrors?.role ? (
-            <span className="font-body-sm text-error">{state.fieldErrors.role}</span>
+            <span className="font-body-md text-body-md text-error">{state.fieldErrors.role}</span>
           ) : null}
         </label>
       </div>
@@ -118,17 +127,32 @@ export function UserRoleForm({
         >
           {pending ? "Enregistrement…" : "Rattacher"}
         </Button>
-        <Button
-          type="submit"
-          variant="outline"
-          disabled={pending || !userId}
-          formAction={(formData) => {
-            formData.set("intent", "revoke");
-            formAction(formData);
-          }}
-        >
-          Retirer l’accès
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button type="button" variant="outline" disabled={pending || !userId}>
+              Retirer l’accès
+            </Button>
+          </DialogTrigger>
+          <DialogContent
+            title="Retirer l’accès ?"
+            description="Le compte reste. Il n’aura plus ce rôle ni cette enseigne."
+          >
+            <form action={formAction} className="flex flex-wrap gap-3">
+              <input type="hidden" name="userId" value={userId} />
+              <input type="hidden" name="merchantId" value={merchantId} />
+              <input type="hidden" name="role" value={role} />
+              <input type="hidden" name="intent" value="revoke" />
+              <Button type="submit" variant="destructive" disabled={pending}>
+                {pending ? "Enregistrement…" : "Retirer l’accès"}
+              </Button>
+              <DialogClose asChild>
+                <Button type="button" variant="outline">
+                  Annuler
+                </Button>
+              </DialogClose>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     </form>
   );

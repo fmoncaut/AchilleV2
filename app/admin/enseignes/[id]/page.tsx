@@ -42,18 +42,21 @@ export default async function EditEnseignePage({
         </h1>
       </div>
       {query.ok === "1" ? (
-        <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
+        <p className="font-body-md text-body-md bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
           Enseigne enregistrée. Slug {merchant.slug}.
         </p>
       ) : null}
       {query.publish === "ok" ? (
-        <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
+        <p className="font-body-md text-body-md bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
           Publication des magasins enregistrée. Les décisions manuelles n’ont pas
           été modifiées.
         </p>
       ) : null}
       {query.publish === "erreur" && publishMessage ? (
-        <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
+        <p
+          className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+          role="alert"
+        >
           {publishMessage}
         </p>
       ) : null}
@@ -62,14 +65,14 @@ export default async function EditEnseignePage({
           <h2 className="font-headline-sm text-primary-container">
             Publier les POS de cette enseigne
           </h2>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">
             {publication.eligibleOffers === 0
               ? "Aucune offre active (flux enseigne ou vente directe). Republier ne masque pas les magasins déjà visibles ; aucun nouveau POS AUTO n’est activé. Le ciblage magasin n’est pas pris en compte."
               : publication.enseigneOffers > 0
                 ? `${publication.enseigneOffers} offre${publication.enseigneOffers > 1 ? "s" : ""} de flux enseigne : tous les magasins en règle seront publiés.`
                 : `${publication.directOffers} vente${publication.directOffers > 1 ? "s" : ""} directe${publication.directOffers > 1 ? "s" : ""} : seuls les magasins qui portent une offre seront publiés.`}
           </p>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-1">
             {publication.autoCount} magasin{publication.autoCount > 1 ? "s" : ""}{" "}
             en règle, {publication.manualCount} décision
             {publication.manualCount > 1 ? "s" : ""} manuelle

@@ -126,7 +126,7 @@ export default async function AdminOffresPage({ searchParams }: OffresPageProps)
           Aucune offre pour ces filtres. Créez-en une ou importez un CSV.
         </p>
       ) : (
-        <AdminTable caption="Offres" className="text-body-md min-w-[64rem]">
+        <AdminTable caption="Offres" className="min-w-[64rem]">
           <AdminThead>
             <tr>
               <AdminTh className="px-3 py-3">Image</AdminTh>

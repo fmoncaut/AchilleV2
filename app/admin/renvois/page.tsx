@@ -68,7 +68,7 @@ export default async function AdminRenvoisPage({
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
             Renvois vers les marchands
           </h1>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">
             Clics trackés sur « Voir l’offre chez le marchand » — {periodLabel}.
             Aucun paiement chez Akwire.
           </p>
@@ -80,13 +80,13 @@ export default async function AdminRenvoisPage({
       </div>
 
       <AdminCard>
-        <p className="font-label-xs text-label-xs text-on-surface-variant font-extrabold tracking-wider uppercase">
+        <p className="font-body-sm text-body-sm text-on-surface-variant font-bold tracking-wider uppercase">
           Total
         </p>
         <p className="font-display text-primary-container mt-1 text-4xl font-extrabold">
           {formatCount(dashboard.total)}
         </p>
-        <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
+        <p className="font-body-md text-body-md text-on-surface-variant mt-1">
           renvoi{dashboard.total > 1 ? "s" : ""} sur la période
         </p>
       </AdminCard>
@@ -96,7 +96,7 @@ export default async function AdminRenvoisPage({
           <h2 className="font-headline-sm text-headline-sm text-primary-container">
             Aucun renvoi
           </h2>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">
             Aucun clic tracké sur cette période
             {actor.role === "MERCHANT" ? " pour votre enseigne" : ""}. Les
             renvois apparaissent après un clic sur le bouton marchand d’une
@@ -122,10 +122,10 @@ export default async function AdminRenvoisPage({
                     key={String(row.day)}
                     className="border-surface-container-high border-t"
                   >
-                    <td className="font-body-sm text-primary-container px-4 py-3">
+                    <td className="font-body-md text-body-md text-primary-container px-4 py-3">
                       {formatDay(row.day)}
                     </td>
-                    <td className="font-headline-sm text-primary-container px-4 py-3 font-bold">
+                    <td className="font-body-md text-body-md text-primary-container px-4 py-3 font-bold">
                       {formatCount(row.count)}
                     </td>
                   </tr>
@@ -152,13 +152,13 @@ export default async function AdminRenvoisPage({
                     key={row.brokerId ?? "sans-broker"}
                     className="border-surface-container-high border-t"
                   >
-                    <td className="font-body-sm text-primary-container px-4 py-3">
+                    <td className="font-body-md text-body-md text-primary-container px-4 py-3">
                       {row.brokerName}
                     </td>
-                    <td className="font-body-sm text-on-surface-variant px-4 py-3">
+                    <td className="font-body-sm text-body-sm text-on-surface-variant px-4 py-3">
                       {row.billingType ?? "—"}
                     </td>
-                    <td className="font-headline-sm text-primary-container px-4 py-3 font-bold">
+                    <td className="font-body-md text-body-md text-primary-container px-4 py-3 font-bold">
                       {formatCount(row.count)}
                     </td>
                   </tr>
@@ -184,10 +184,10 @@ export default async function AdminRenvoisPage({
                     key={row.merchantId}
                     className="border-surface-container-high border-t"
                   >
-                    <td className="font-body-sm text-primary-container px-4 py-3">
+                    <td className="font-body-md text-body-md text-primary-container px-4 py-3">
                       {row.merchantName}
                     </td>
-                    <td className="font-headline-sm text-primary-container px-4 py-3 font-bold">
+                    <td className="font-body-md text-body-md text-primary-container px-4 py-3 font-bold">
                       {formatCount(row.count)}
                     </td>
                   </tr>
@@ -218,17 +218,17 @@ export default async function AdminRenvoisPage({
                     className="border-surface-container-high border-t"
                   >
                     {actor.role === "ADMIN" ? (
-                      <td className="font-body-sm text-primary-container px-4 py-3">
+                      <td className="font-body-md text-body-md text-primary-container px-4 py-3">
                         {row.merchantName}
                       </td>
                     ) : null}
-                    <td className="font-body-sm text-primary-container px-4 py-3">
+                    <td className="font-body-md text-body-md text-primary-container px-4 py-3">
                       {row.productName}
                     </td>
-                    <td className="font-body-sm text-on-surface-variant px-4 py-3">
+                    <td className="font-body-sm text-body-sm text-on-surface-variant px-4 py-3">
                       {row.posName}
                     </td>
-                    <td className="font-headline-sm text-primary-container px-4 py-3 font-bold">
+                    <td className="font-body-md text-body-md text-primary-container px-4 py-3 font-bold">
                       {formatCount(row.count)}
                     </td>
                   </tr>

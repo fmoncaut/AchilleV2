@@ -36,7 +36,7 @@ export default async function EnseignesPage() {
         </Button>
       </div>
       {merchants.length === 0 ? (
-        <p className="font-body-sm text-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Aucune enseigne. Créez-en une pour y rattacher des magasins.
         </p>
       ) : (
@@ -65,13 +65,15 @@ export default async function EnseignesPage() {
                     variant="thumb"
                   />
                 </td>
-                <td className="font-headline-sm text-primary-container px-3 py-2 text-[15px]">
+                <td className="font-body-md text-body-md text-primary-container px-3 py-2 font-bold">
                   {merchant.name}
                 </td>
-                <td className="font-body-sm text-on-surface-variant px-3 py-2">
+                <td className="font-body-sm text-body-sm text-on-surface-variant px-3 py-2">
                   {merchant.slug}
                 </td>
-                <td className="font-body-sm px-3 py-2">{merchant._count.pos}</td>
+                <td className="font-body-md text-body-md text-primary-container px-3 py-2">
+                  {merchant._count.pos}
+                </td>
                 <td className="px-3 py-2">
                   <StatusChip
                     active={merchant.posPublished}
@@ -86,7 +88,7 @@ export default async function EnseignesPage() {
                   <div className="flex flex-wrap items-center gap-2">
                     <Link
                       href={`/admin/enseignes/${merchant.id}`}
-                      className="font-label-md text-primary-container text-xs font-bold underline-offset-4 hover:underline"
+                      className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
                     >
                       Éditer
                     </Link>
@@ -99,7 +101,7 @@ export default async function EnseignesPage() {
                       />
                       <button
                         type="submit"
-                        className="font-label-xs text-label-xs text-primary-container font-bold underline-offset-4 hover:underline"
+                        className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
                       >
                         {merchant.isActive ? "Désactiver" : "Activer"}
                       </button>
