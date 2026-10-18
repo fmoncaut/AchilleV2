@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
-const INCOMPLETE_CODE = "Code incorrect. Réessayez.";
+const INCOMPLETE_CODE = "Saisissez les 6 chiffres du code.";
 
 type OtpVerifyFormProps = {
   action: (formData: FormData) => void | Promise<void>;
@@ -72,6 +72,15 @@ export function OtpVerifyForm({
           onInvalid={(event) => {
             event.preventDefault();
             rejectIncomplete();
+          }}
+          onPaste={(event) => {
+            event.preventDefault();
+            const digits = event.clipboardData
+              .getData("text")
+              .replace(/\D/g, "")
+              .slice(0, 6);
+            event.currentTarget.value = digits;
+            if (clientMessage) setClientMessage(null);
           }}
           onChange={() => {
             if (clientMessage) setClientMessage(null);
