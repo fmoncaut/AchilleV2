@@ -35,6 +35,8 @@ export function SortToggle({
       </Link>
       {distanceDisabled ? (
         <span
+          role="link"
+          aria-disabled="true"
           className="font-label-md text-label-md text-outline inline-flex h-11 cursor-not-allowed items-center rounded-full px-4"
           title="Indiquez une localisation pour trier par distance"
         >
