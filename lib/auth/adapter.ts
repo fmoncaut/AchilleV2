@@ -49,6 +49,15 @@ export function createAuthAdapter(): Adapter {
       }
       return result;
     },
+    /**
+     * Idempotent : la suppression de compte retire déjà les sessions, puis signOut
+     * rappelle deleteSession. Le delete() de PrismaAdapter levait alors P2025 et
+     * l'utilisateur voyait une erreur alors que son compte était bien supprimé.
+     */
+    async deleteSession(sessionToken) {
+      await prisma.session.deleteMany({ where: { sessionToken } });
+      return null;
+    },
     async createVerificationToken(data) {
       const identifier = normalizeEmail(data.identifier);
       await prisma.verificationToken.deleteMany({ where: { identifier } });
