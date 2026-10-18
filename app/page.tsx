@@ -194,10 +194,14 @@ export default async function Home({ searchParams }: PageProps) {
     ? `dans un rayon de ${radiusKm} km`
     : "partout en France";
   const facetMeta = [
-    ["tout", "Tout", "apps"],
-    ["express", "Déstockage express (−60 % et +)", "local_fire_department"],
-    ["direct", "Retrait magasin", "store"],
-    ["ouvert", "Ouvert maintenant", "schedule"],
+    { id: "tout", label: "Tout", icon: "apps" },
+    {
+      id: "express",
+      label: "Déstockage express (−60 % et +)",
+      icon: "local_fire_department",
+    },
+    { id: "direct", label: "Retrait magasin", icon: "store" },
+    { id: "ouvert", label: "Ouvert maintenant", icon: "schedule" },
   ] as const;
   const homeFilterChips = [
     ...(selectedMacro
@@ -215,7 +219,7 @@ export default async function Home({ searchParams }: PageProps) {
           {
             id: "f",
             href: homeHref({ ...chip, filtre: "tout" }),
-            label: facetMeta.find(([id]) => id === filtre)?.[1] ?? filtre,
+            label: facetMeta.find((facet) => facet.id === filtre)?.label ?? filtre,
             srPrefix: "Retirer le filtre",
           },
         ]
@@ -240,16 +244,14 @@ export default async function Home({ searchParams }: PageProps) {
 
   const viewItems = (
     [
-      ["split", "vertical_split", "Vue partagée"],
-      ["carte", "map", "Carte"],
-      ["liste", "view_agenda", "Liste"],
+      { id: "split", icon: "vertical_split", label: "Vue partagée" },
+      { id: "carte", icon: "map", label: "Carte" },
+      { id: "liste", icon: "view_agenda", label: "Liste" },
     ] as const
-  ).map(([id, icon, label]) => ({
-    id,
-    icon,
-    label,
-    href: homeHref({ ...chip, vue: id }),
-    current: vue === id,
+  ).map((view) => ({
+    ...view,
+    href: homeHref({ ...chip, vue: view.id }),
+    current: vue === view.id,
   }));
 
   return (
@@ -325,13 +327,13 @@ export default async function Home({ searchParams }: PageProps) {
           >
             <FeedFacets
               facets={facetMeta
-                .filter(([id]) => id !== "ouvert" || showOpenFacet)
-                .map(([id, label, icon]) => ({
-                  id,
-                  label,
-                  icon,
-                  href: homeHref({ ...chip, filtre: id }),
-                  current: filtre === id,
+                .filter((facet) => facet.id !== "ouvert" || showOpenFacet)
+                .map((facet) => ({
+                  id: facet.id,
+                  label: facet.label,
+                  icon: facet.icon,
+                  href: homeHref({ ...chip, filtre: facet.id }),
+                  current: filtre === facet.id,
                 }))}
             />
             <HomeFeed

@@ -62,7 +62,7 @@ export function OfferHero({
           <ProductImage
             src={product.imageUrl}
             name={product.name}
-            variant="gallery"
+            variant="hero"
           />
           {currentDiscount != null ? (
             <span className="absolute top-4 left-4">

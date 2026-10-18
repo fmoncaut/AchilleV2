@@ -1,6 +1,6 @@
 # Primitives UI
 
-Peau Akwire. Les classes Material 3 (`bg-primary-container`, `text-secondary`…) viennent de `app/globals.css`. Importer `cn` depuis `@/lib/utils`. Icônes : `MaterialIcon`, jamais Lucide. Tailles nommées dans `app/globals.css` : `icon-xs` (14 px), `icon-sm` (16 px), `icon-md` (18 px), `icon-lg` (20 px). Sans classe, le glyphe fait 20 px.
+Peau Akwire. Les classes Material 3 (`bg-primary-container`, `text-secondary`…) viennent de `app/globals.css`. Importer `cn` depuis `@/lib/utils`. Icônes : `MaterialIcon`, jamais Lucide. Nouvelle icône = l'ajouter à la liste et régénérer le sous-ensemble (`app/fonts/material-symbols-icons.txt`, puis le woff2 auto-hébergé). `npm run verify-icons` échoue si un nom littéral n'est pas dans la liste. Tailles nommées dans `app/globals.css` : `icon-xs` (14 px), `icon-sm` (16 px), `icon-md` (18 px), `icon-lg` (20 px). Sans classe, le glyphe fait 20 px.
 
 Ces primitives sont posées en Vague 0. Les vagues suivantes les branchent écran par écran. Ne pas réécrire un écran ici « pour voir ».
 
