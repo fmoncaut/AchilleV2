@@ -48,13 +48,13 @@ export default async function VendeursPage({ searchParams }: VendeursPageProps) 
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Vendeurs
         </h1>
-        <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+        <p className="font-body-md text-body-md text-on-surface-variant mt-2">
           Le compte doit déjà exister (connexion sur Akwire). Rattachez-le à
           une enseigne en vendeur, ou donnez-lui le rôle administrateur.
         </p>
       </div>
       {saved ? (
-        <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
+        <p className="font-body-md text-body-md bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
           Rôle mis à jour.
         </p>
       ) : null}
@@ -85,7 +85,7 @@ export default async function VendeursPage({ searchParams }: VendeursPageProps) 
         </Button>
       </form>
       {users.length === 0 ? (
-        <p className="font-body-sm text-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Aucun compte pour cette recherche.
         </p>
       ) : (
@@ -101,10 +101,10 @@ export default async function VendeursPage({ searchParams }: VendeursPageProps) 
           <tbody>
             {users.map((user) => (
               <tr key={user.id} className="border-surface-container-high border-t">
-                <td className="font-body-sm text-primary-container px-3 py-2">
+                <td className="font-body-md text-body-md text-primary-container px-3 py-2 font-bold">
                   {user.email ?? "—"}
                 </td>
-                <td className="font-body-sm px-3 py-2">{user.name ?? "—"}</td>
+                <td className="font-body-md text-body-md px-3 py-2">{user.name ?? "—"}</td>
                 <td className="px-3 py-2">
                   <StatusChip
                     active={user.role !== "USER"}
@@ -112,7 +112,7 @@ export default async function VendeursPage({ searchParams }: VendeursPageProps) 
                     inactiveLabel={roleLabel.USER}
                   />
                 </td>
-                <td className="font-body-sm text-on-surface-variant px-3 py-2">
+                <td className="font-body-sm text-body-sm text-on-surface-variant px-3 py-2">
                   {user.merchant?.name ?? "—"}
                 </td>
               </tr>

@@ -51,7 +51,7 @@ export default async function EditMagasinPage({
         </h1>
       </div>
       {query.ok === "1" ? (
-        <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
+        <p className="font-body-md text-body-md bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
           Magasin enregistré. Position {pos.lat.toFixed(5)}, {pos.lng.toFixed(5)}.
         </p>
       ) : null}

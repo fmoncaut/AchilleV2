@@ -89,7 +89,7 @@ export function CsvImportWizard() {
             </p>
           )}
           {rows.length > 0 ? (
-            <AdminTable caption="Aperçu de l’import" className="text-body-md min-w-[40rem]">
+            <AdminTable caption="Aperçu de l’import" className="min-w-[40rem]">
               <AdminThead>
                 <tr>
                   <AdminTh className="px-3 py-2">Ligne</AdminTh>

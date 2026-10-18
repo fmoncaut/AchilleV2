@@ -49,11 +49,14 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
     <form action={formAction} className="flex flex-col gap-5">
       {posId ? <input type="hidden" name="id" value={posId} /> : null}
       {state.error ? (
-        <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
+        <p
+          className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+          role="alert"
+        >
           {state.error}
         </p>
       ) : null}
-      <p className="font-body-sm text-body-sm text-on-surface-variant">
+      <p className="font-body-md text-body-md text-on-surface-variant">
         L’adresse est géocodée via la Base Adresse Nationale. Si elle ne trouve
         rien, les coordonnées saisies sont enregistrées. Une adresse reconnue
         les remplace. Enregistrer fixe une décision manuelle : la publication
@@ -75,7 +78,7 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
           ))}
         </select>
         {state.fieldErrors?.merchantId ? (
-          <span className="font-body-sm text-error">
+          <span className="font-body-md text-body-md text-error">
             {state.fieldErrors.merchantId}
           </span>
         ) : null}
@@ -89,7 +92,7 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
           className={adminFieldClass}
         />
         {state.fieldErrors?.name ? (
-          <span className="font-body-sm text-error">{state.fieldErrors.name}</span>
+          <span className="font-body-md text-body-md text-error">{state.fieldErrors.name}</span>
         ) : null}
       </label>
       {defaults?.slug ? (
@@ -109,7 +112,7 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
             className={adminFieldClass}
           />
           {state.fieldErrors?.address ? (
-            <span className="font-body-sm text-error">{state.fieldErrors.address}</span>
+            <span className="font-body-md text-body-md text-error">{state.fieldErrors.address}</span>
           ) : null}
         </label>
         <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1">
@@ -122,7 +125,7 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
             className={adminFieldClass}
           />
           {state.fieldErrors?.postalCode ? (
-            <span className="font-body-sm text-error">
+            <span className="font-body-md text-body-md text-error">
               {state.fieldErrors.postalCode}
             </span>
           ) : null}
@@ -136,7 +139,7 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
             className={adminFieldClass}
           />
           {state.fieldErrors?.city ? (
-            <span className="font-body-sm text-error">{state.fieldErrors.city}</span>
+            <span className="font-body-md text-body-md text-error">{state.fieldErrors.city}</span>
           ) : null}
         </label>
         <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1 sm:col-span-2">
@@ -147,7 +150,7 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
             className={adminFieldClass}
           />
           {state.fieldErrors?.phone ? (
-            <span className="font-body-sm text-error">{state.fieldErrors.phone}</span>
+            <span className="font-body-md text-body-md text-error">{state.fieldErrors.phone}</span>
           ) : null}
         </label>
       </div>
@@ -169,7 +172,7 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
                 className={adminFieldClass}
               />
               {state.fieldErrors?.[`hours.${day}`] ? (
-                <span className="font-body-sm text-error">
+                <span className="font-body-md text-body-md text-error">
                   {state.fieldErrors[`hours.${day}`]}
                 </span>
               ) : null}
@@ -188,7 +191,7 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
             className={adminFieldClass}
           />
           {state.fieldErrors?.lat ? (
-            <span className="font-body-sm text-error">{state.fieldErrors.lat}</span>
+            <span className="font-body-md text-body-md text-error">{state.fieldErrors.lat}</span>
           ) : null}
         </label>
         <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1">
@@ -201,7 +204,7 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
             className={adminFieldClass}
           />
           {state.fieldErrors?.lng ? (
-            <span className="font-body-sm text-error">{state.fieldErrors.lng}</span>
+            <span className="font-body-md text-body-md text-error">{state.fieldErrors.lng}</span>
           ) : null}
         </label>
       </div>
@@ -220,7 +223,7 @@ export function PosForm({ mode, posId, merchants, defaults }: PosFormProps) {
           ))}
         </select>
         {state.fieldErrors?.status ? (
-          <span className="font-body-sm text-error">{state.fieldErrors.status}</span>
+          <span className="font-body-md text-body-md text-error">{state.fieldErrors.status}</span>
         ) : null}
       </label>
       <div>

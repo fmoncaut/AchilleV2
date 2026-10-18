@@ -32,7 +32,7 @@ export function AffiliationRefreshButton() {
         {pending ? "Lancement…" : "Relancer l’ingestion"}
       </Button>
       {error ? (
-        <p className="font-body-sm text-body-sm text-error" role="alert">
+        <p className="font-body-md text-body-md text-error" role="alert">
           {error}
         </p>
       ) : null}

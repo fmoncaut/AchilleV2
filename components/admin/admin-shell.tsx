@@ -68,7 +68,7 @@ export function AdminTable({
 }) {
   return (
     <div className="bg-surface-container-lowest shadow-sm overflow-x-auto rounded-2xl">
-      <table className={cn("w-full text-left text-sm", className)}>
+      <table className={cn("w-full text-left", className)}>
         <caption className="sr-only">{caption}</caption>
         {children}
       </table>
@@ -109,8 +109,8 @@ export function StatusChip({
     <span
       className={
         active
-          ? "font-label-xs text-label-xs bg-tertiary-fixed text-on-tertiary-container rounded-full px-2.5 py-1 font-bold"
-          : "font-label-xs text-label-xs bg-surface-container text-on-surface-variant rounded-full px-2.5 py-1 font-bold"
+          ? "font-body-sm text-body-sm bg-tertiary-fixed text-on-tertiary-container rounded-full px-2.5 py-1 font-bold"
+          : "font-body-sm text-body-sm bg-surface-container text-on-surface-variant rounded-full px-2.5 py-1 font-bold"
       }
     >
       {active ? activeLabel : inactiveLabel}

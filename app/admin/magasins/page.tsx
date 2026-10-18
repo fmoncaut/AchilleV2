@@ -117,7 +117,7 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
             Magasins
           </h1>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">
             {result.total.toLocaleString("fr-FR")} magasin
             {result.total > 1 ? "s" : ""}. Une décision manuelle n’est pas
             écrasée par la publication de l’enseigne.
@@ -127,7 +127,7 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
           <Link href="/admin/magasins/nouveau">Nouveau magasin</Link>
         </Button>
       </div>
-      <p className="font-body-sm text-body-sm text-on-surface-variant">
+      <p className="font-body-md text-body-md text-on-surface-variant">
         Réimport de masse : <code>npm run import-pos</code>, lancé par un
         développeur. Un rejeu ne modifie ni le statut ni une décision manuelle.
       </p>
@@ -137,7 +137,7 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
           <select
             name="enseigne"
             defaultValue={filters.enseigne}
-            className="bg-surface-container-low h-11 rounded-full px-4"
+            className="bg-surface-container-low font-body-md text-body-md h-11 rounded-full px-4"
           >
             <option value="">Toutes</option>
             {merchants.map((merchant) => (
@@ -152,7 +152,7 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
           <select
             name="status"
             defaultValue={filters.status}
-            className="bg-surface-container-low h-11 rounded-full px-4"
+            className="bg-surface-container-low font-body-md text-body-md h-11 rounded-full px-4"
           >
             {STATUS_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
@@ -166,7 +166,7 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
           <select
             name="source"
             defaultValue={filters.source}
-            className="bg-surface-container-low h-11 rounded-full px-4"
+            className="bg-surface-container-low font-body-md text-body-md h-11 rounded-full px-4"
           >
             {SOURCE_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
@@ -180,7 +180,7 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
           <select
             name="reseau"
             defaultValue={filters.reseau}
-            className="bg-surface-container-low h-11 rounded-full px-4"
+            className="bg-surface-container-low font-body-md text-body-md h-11 rounded-full px-4"
           >
             <option value="">Tous</option>
             <option value="none">Non renseigné</option>
@@ -197,7 +197,7 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
             name="q"
             defaultValue={filters.q}
             placeholder="Nom du magasin"
-            className="bg-surface-container-low h-11 rounded-full px-4"
+            className="bg-surface-container-low font-body-md text-body-md h-11 rounded-full px-4"
           />
         </label>
         <div className="flex items-end">
@@ -205,7 +205,7 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
         </div>
       </form>
       {result.rows.length === 0 ? (
-        <p className="font-body-sm text-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Aucun magasin pour ces filtres.
         </p>
       ) : (
@@ -222,34 +222,34 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
           <tbody>
             {result.rows.map((pos) => (
               <tr key={pos.id} className="border-surface-container-high border-t">
-                <td className="font-body-sm text-primary-container px-3 py-2">
+                <td className="font-body-md text-body-md text-primary-container px-3 py-2 font-bold">
                   {pos.merchant.name}
                   {pos.merchant.legacyNetwork ? (
-                    <span className="text-on-surface-variant block text-xs">
+                    <span className="font-body-sm text-body-sm text-on-surface-variant block font-normal">
                       {pos.merchant.legacyNetwork}
                     </span>
                   ) : null}
                 </td>
                 <td className="px-3 py-2">
-                  <p className="font-headline-sm text-primary-container text-[15px]">
+                  <p className="font-body-md text-body-md text-primary-container font-bold">
                     {pos.name}
                   </p>
-                  <p className="font-body-sm text-on-surface-variant text-xs">
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">
                     {[pos.address, pos.postalCode].filter(Boolean).join(", ")}
                   </p>
                 </td>
-                <td className="font-body-sm px-3 py-2">{pos.city ?? "—"}</td>
+                <td className="font-body-sm text-body-sm px-3 py-2">{pos.city ?? "—"}</td>
                 <td className="px-3 py-2">
                   <span
-                    className={`font-label-xs text-label-xs rounded-full px-2.5 py-1 font-bold ${statusClass(pos.status)}`}
+                    className={`font-body-sm text-body-sm rounded-full px-2.5 py-1 font-bold ${statusClass(pos.status)}`}
                   >
                     {STATUS_LABEL[pos.status] ?? pos.status}
                   </span>
-                  <p className="font-body-sm text-on-surface-variant mt-1 text-xs">
+                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
                     {pos.statusSource === "MANUAL" ? "Manuel" : "Règle enseigne"}
                   </p>
                   {pos.merchantClosedAt ? (
-                    <p className="font-label-xs text-error mt-1 font-bold">
+                    <p className="font-body-sm text-body-sm text-error mt-1 font-bold">
                       Fermé par le marchand le{" "}
                       {pos.merchantClosedAt.toLocaleDateString("fr-FR")}
                     </p>
@@ -259,7 +259,7 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
                   <div className="flex flex-wrap items-center gap-2">
                     <Link
                       href={`/admin/magasins/${pos.id}`}
-                      className="font-label-md text-primary-container text-xs font-bold underline-offset-4 hover:underline"
+                      className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
                     >
                       Éditer
                     </Link>
@@ -269,7 +269,7 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
                         name="status"
                         defaultValue={pos.status}
                         aria-label={`Visibilité de ${pos.name}`}
-                        className="bg-surface-container-low h-9 rounded-full px-3 text-xs"
+                        className="bg-surface-container-low font-body-md text-body-md h-11 rounded-full px-3"
                       >
                         <option value="ACTIVE_VISIBLE">Publié</option>
                         <option value="INACTIVE_VISIBLE">Sur la carte</option>
@@ -277,7 +277,7 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
                       </select>
                       <button
                         type="submit"
-                        className="font-label-xs text-label-xs text-primary-container font-bold underline-offset-4 hover:underline"
+                        className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
                       >
                         Appliquer
                       </button>
@@ -294,20 +294,20 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
           {result.page > 1 ? (
             <Link
               href={pageHref(filters, result.page - 1)}
-              className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+              className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
             >
               Page précédente
             </Link>
           ) : (
             <span />
           )}
-          <p className="font-body-sm text-on-surface-variant">
+          <p className="font-body-sm text-body-sm text-on-surface-variant">
             Page {result.page} sur {pageCount}
           </p>
           {result.page < pageCount ? (
             <Link
               href={pageHref(filters, result.page + 1)}
-              className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+              className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
             >
               Page suivante
             </Link>

@@ -74,6 +74,6 @@ Header collant, contenu, footer, bannière cookies, toasts, enregistrement PWA. 
 
 `AdminTable`, `AdminThead` et `AdminTh` sont dans `components/admin/admin-shell.tsx`. Pas de bibliothèque de grille.
 
-`AdminTable` prend une `caption` rendue en `sr-only` : le titre visible de la page reste le `h1`. Le tableau garde `text-sm`. `AdminTh` pose `scope="col"`. Le conteneur a `overflow-x-auto` : sous `md`, les colonnes défilent horizontalement. L’en-tête n’est pas collant, parce que `sticky` dans ce conteneur ne suit pas la fenêtre.
+`AdminTable` prend une `caption` rendue en `sr-only` : le titre visible de la page reste le `h1`. Le tableau ne fixe pas de taille de texte : chaque cellule porte la sienne (donnée en 16 px, métadonnée en 13 px). `AdminTh` pose `scope="col"`. Le conteneur a `overflow-x-auto` : sous `md`, les colonnes défilent horizontalement. L’en-tête n’est pas collant, parce que `sticky` dans ce conteneur ne suit pas la fenêtre.
 
-La densité (donnée en 16 px, métadonnée en 13 px, montants en Encre) se règle écran par écran. Le statut d’une réservation passe par `ReservationStatusBadge`, pas par une pastille unique.
+Les montants sont en Encre. Le statut d’une réservation passe par `ReservationStatusBadge`, pas par une pastille unique.

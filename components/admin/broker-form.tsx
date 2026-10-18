@@ -32,7 +32,10 @@ export function BrokerForm({ mode, brokerId, defaults }: BrokerFormProps) {
     <form action={formAction} className="flex flex-col gap-5">
       {brokerId ? <input type="hidden" name="id" value={brokerId} /> : null}
       {state.error ? (
-        <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
+        <p
+          className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+          role="alert"
+        >
           {state.error}
         </p>
       ) : null}
@@ -45,16 +48,16 @@ export function BrokerForm({ mode, brokerId, defaults }: BrokerFormProps) {
           className={adminFieldClass}
         />
         {state.fieldErrors?.name ? (
-          <span className="font-body-sm text-error font-medium">
+          <span className="font-body-md text-body-md text-error font-medium">
             {state.fieldErrors.name}
           </span>
         ) : null}
         {defaults?.slug ? (
-          <span className="font-body-sm text-on-surface-variant font-medium">
+          <span className="font-body-sm text-body-sm text-on-surface-variant font-medium">
             Slug : {defaults.slug}
           </span>
         ) : (
-          <span className="font-body-sm text-on-surface-variant font-medium">
+          <span className="font-body-sm text-body-sm text-on-surface-variant font-medium">
             Le slug est généré à partir du nom.
           </span>
         )}
@@ -81,12 +84,12 @@ export function BrokerForm({ mode, brokerId, defaults }: BrokerFormProps) {
           }
           className={adminFieldClass}
         />
-        <span className="font-body-sm text-on-surface-variant font-medium">
+        <span className="font-body-sm text-body-sm text-on-surface-variant font-medium">
           Placeholders : {"{merchant_url}"}, {"{click_id}"}, {"{sub_id}"}. Le
           click_id est celui du renvoi, enregistré avant la redirection.
         </span>
         {state.fieldErrors?.urlTemplate ? (
-          <span className="font-body-sm text-error font-medium">
+          <span className="font-body-md text-body-md text-error font-medium">
             {state.fieldErrors.urlTemplate}
           </span>
         ) : null}

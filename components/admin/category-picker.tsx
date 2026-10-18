@@ -46,7 +46,7 @@ export function CategoryPicker({
         aria-label="Catégorie Akwire"
       />
       {picked ? (
-        <p className="text-on-surface-variant text-xs">
+        <p className="font-body-sm text-body-sm text-on-surface-variant">
           Sélection : {picked.name}
           {candidates.length === 1 ? " · proposition Google" : ""}
         </p>
@@ -57,7 +57,7 @@ export function CategoryPicker({
             <li key={category.id}>
               <button
                 type="button"
-                className="hover:bg-surface-container-low w-full px-3 py-2 text-left text-sm"
+                className="hover:bg-surface-container-low font-body-md text-body-md min-h-11 w-full px-3 text-left"
                 onClick={() => {
                   setPicked(category);
                   setQuery("");

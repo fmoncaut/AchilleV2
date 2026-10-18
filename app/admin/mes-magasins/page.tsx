@@ -94,7 +94,7 @@ export default async function MesMagasinsPage({ searchParams }: PageProps) {
         </Button>
       </form>
 
-      <AdminTable caption="Mes magasins" className="text-body-md mt-6">
+      <AdminTable caption="Mes magasins" className="mt-6">
         <AdminThead>
           <tr>
             <AdminTh className="px-3 py-2 text-left">Magasin</AdminTh>

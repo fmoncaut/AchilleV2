@@ -32,7 +32,10 @@ export function MerchantForm({ mode, merchantId, defaults }: MerchantFormProps) 
     <form action={formAction} className="flex flex-col gap-5">
       {merchantId ? <input type="hidden" name="id" value={merchantId} /> : null}
       {state.error ? (
-        <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
+        <p
+          className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+          role="alert"
+        >
           {state.error}
         </p>
       ) : null}
@@ -45,16 +48,16 @@ export function MerchantForm({ mode, merchantId, defaults }: MerchantFormProps) 
           className={adminFieldClass}
         />
         {state.fieldErrors?.name ? (
-          <span className="font-body-sm text-error">{state.fieldErrors.name}</span>
+          <span className="font-body-md text-body-md text-error">{state.fieldErrors.name}</span>
         ) : null}
       </label>
       {defaults?.slug ? (
-        <p className="font-body-sm text-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Slug actuel : <span className="text-primary-container font-bold">{defaults.slug}</span>
           . Il est recalculé à partir du nom à l’enregistrement.
         </p>
       ) : (
-        <p className="font-body-sm text-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Le slug est généré automatiquement à partir du nom, et reste unique.
         </p>
       )}
@@ -68,10 +71,10 @@ export function MerchantForm({ mode, merchantId, defaults }: MerchantFormProps) 
           className={adminFieldClass}
         />
         {state.fieldErrors?.logoUrl ? (
-          <span className="font-body-sm text-error">{state.fieldErrors.logoUrl}</span>
+          <span className="font-body-md text-body-md text-error">{state.fieldErrors.logoUrl}</span>
         ) : null}
       </label>
-      <label className="font-label-md text-label-md text-primary-container flex items-center gap-2">
+      <label className="font-label-md text-label-md text-primary-container flex min-h-11 items-center gap-2">
         <input
           type="checkbox"
           name="isActive"

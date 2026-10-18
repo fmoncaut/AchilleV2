@@ -82,7 +82,7 @@ export default async function AdminReservationsPage() {
       ) : (
         <AdminTable
           caption="Réservations"
-          className="text-body-md max-lg:block lg:min-w-[48rem]"
+          className="max-lg:block lg:min-w-[48rem]"
         >
           <AdminThead>
             <tr className="max-lg:hidden">

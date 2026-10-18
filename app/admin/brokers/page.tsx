@@ -27,7 +27,7 @@ export default async function BrokersPage() {
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
             Flux d’affiliation
           </h1>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">
             Brokers CPC ou CPA. Le gabarit construit l’URL de sortie après
             l’enregistrement du clic.
           </p>
@@ -37,7 +37,7 @@ export default async function BrokersPage() {
         </Button>
       </div>
       {brokers.length === 0 ? (
-        <p className="font-body-sm text-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Aucun broker. Créez-en un pour tracer les renvois d’affiliation.
         </p>
       ) : (
@@ -60,28 +60,28 @@ export default async function BrokersPage() {
                 className="border-surface-container-high border-t"
               >
                 <td className="px-4 py-3">
-                  <p className="font-headline-sm text-primary-container">
+                  <p className="font-body-md text-body-md text-primary-container font-bold">
                     {broker.name}
                   </p>
-                  <p className="font-body-sm text-on-surface-variant text-xs">
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">
                     {broker.slug}
                   </p>
                 </td>
                 <td className="px-4 py-3">
-                  <span className="font-label-xs text-label-xs bg-secondary-fixed text-on-secondary-fixed rounded-full px-2.5 py-1 font-bold">
+                  <span className="font-body-sm text-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-full px-2.5 py-1 font-bold">
                     {broker.billingType}
                   </span>
                 </td>
-                <td className="font-body-sm text-primary-container px-4 py-3">
+                <td className="font-body-md text-body-md text-primary-container px-4 py-3 font-bold">
                   {broker._count.offers}
                 </td>
-                <td className="font-body-sm text-on-surface-variant max-w-xs truncate px-4 py-3">
+                <td className="font-body-sm text-body-sm text-on-surface-variant max-w-xs truncate px-4 py-3">
                   {broker.urlTemplate}
                 </td>
                 <td className="px-4 py-3">
                   <Link
                     href={`/admin/brokers/${broker.id}`}
-                    className="font-label-md text-primary-container text-xs font-bold underline-offset-4 hover:underline"
+                    className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
                   >
                     Éditer
                   </Link>
