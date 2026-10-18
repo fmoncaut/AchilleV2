@@ -5,6 +5,7 @@ import { Breadcrumb } from "@/components/buyer/breadcrumb";
 import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
 import { PosDistance, PosOfferList } from "@/components/catalog/pos-offers";
 import { FavoriteButton } from "@/components/favorite-button";
+import { merchantInitials } from "@/components/merchant-mark";
 import { MaterialIcon } from "@/components/material-icon";
 import { OpeningHoursList } from "@/components/opening-hours";
 import { EmptyState } from "@/components/search/empty-state";
@@ -95,17 +96,24 @@ export default async function MagasinPage({ params }: MagasinPageProps) {
         <header className="bg-primary-container text-on-primary shadow-md overflow-hidden rounded-2xl">
           <div className="flex flex-col gap-6 p-6 md:flex-row md:items-end md:justify-between md:p-8">
             <div className="flex items-start gap-4">
-              <div className="border-primary bg-surface-container-lowest shadow-md flex size-24 shrink-0 flex-col items-center justify-center rounded-2xl border-4 p-2 text-center">
-                <span className="font-headline-sm text-primary leading-tight font-extrabold tracking-tighter uppercase">
-                  {pos.merchantName.length > 8
-                    ? pos.merchantName.slice(0, 5)
-                    : pos.merchantName}
-                </span>
-                {pos.merchantName.length > 8 ? (
-                  <span className="bg-secondary-container text-primary font-label-xs text-label-xs mt-1 rounded-full px-2 py-0.5 font-extrabold tracking-wider uppercase">
-                    {pos.merchantName.slice(5)}
+              <div className="border-primary bg-surface-container-lowest shadow-md flex size-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4">
+                {pos.merchantLogoUrl ? (
+                  // Logos d'enseigne : next.config.ts n'autorise aucun domaine distant.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={pos.merchantLogoUrl}
+                    alt={pos.merchantName}
+                    className="size-full object-cover"
+                  />
+                ) : (
+                  <span
+                    role="img"
+                    aria-label={pos.merchantName}
+                    className="font-headline-sm text-primary leading-none font-extrabold tracking-tight"
+                  >
+                    {merchantInitials(pos.merchantName)}
                   </span>
-                ) : null}
+                )}
               </div>
               <div>
                 <p className="font-label-md text-label-md text-secondary-container tracking-wider uppercase">

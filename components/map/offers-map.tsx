@@ -8,6 +8,7 @@ import type {
 } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
+import { merchantInitials } from "@/components/merchant-mark";
 import { PosDrawer } from "@/components/map/pos-drawer";
 import { EmptyState } from "@/components/search/empty-state";
 import type { MapPosPin, NearbyOfferCard } from "@/lib/geo";
@@ -81,11 +82,6 @@ function rasterStyle(tilesUrl: string): StyleSpecification {
   };
 }
 
-function merchantInitial(name: string): string {
-  const trimmed = name.trim();
-  return (trimmed[0] ?? "?").toLocaleUpperCase("fr-FR");
-}
-
 const PIN_BUTTON =
   "relative flex size-11 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 font-label-lg text-label-lg font-extrabold";
 
@@ -137,7 +133,7 @@ function createLogoMarkerElement(pin: MapPosPin): HTMLButtonElement {
     img.className = pinLogoClass(pin.state);
     element.append(img);
   } else {
-    element.textContent = merchantInitial(pin.merchantName || pin.name);
+    element.textContent = merchantInitials(pin.merchantName || pin.name);
   }
 
   if (pin.state === "active" && pin.offerCount > 0) {

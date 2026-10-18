@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 
 import { MaterialIcon } from "@/components/material-icon";
+import { merchantInitials } from "@/components/merchant-mark";
 import { OfferCard } from "@/components/offer-card";
 import { EmptyState } from "@/components/search/empty-state";
 import type { MapPosPin, NearbyOfferCard } from "@/lib/geo";
@@ -117,8 +118,12 @@ export function PosDrawer({
                 className="size-full object-cover"
               />
             ) : (
-              <span className="font-headline-sm text-headline-sm font-extrabold">
-                {(pin.merchantName || pin.name).slice(0, 1).toLocaleUpperCase("fr-FR")}
+              <span
+                role="img"
+                aria-label={pin.merchantName || pin.name}
+                className="font-headline-sm text-headline-sm font-extrabold"
+              >
+                {merchantInitials(pin.merchantName || pin.name)}
               </span>
             )}
           </div>

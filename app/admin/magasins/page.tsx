@@ -266,6 +266,7 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
                     <form action={setPosStatusAction} className="flex items-center gap-2">
                       <input type="hidden" name="id" value={pos.id} />
                       <select
+                        key={`${pos.id}-${pos.status}`}
                         name="status"
                         defaultValue={pos.status}
                         aria-label={`Visibilité de ${pos.name}`}

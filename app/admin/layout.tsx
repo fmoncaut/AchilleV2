@@ -55,7 +55,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="bg-background flex flex-1 flex-col">
+    <div className="bg-background flex min-w-0 flex-1 flex-col">
       <AdminHeader
         merchantName={actor.merchantName ?? "Administration"}
         showOffers={canManageOffers(actor)}
