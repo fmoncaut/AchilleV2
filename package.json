@@ -36,6 +36,7 @@
     "verify-affiliation": "tsx scripts/verify-affiliation.ts",
     "verify-affiliation-http": "tsx scripts/verify-affiliation-http.ts",
     "verify-payments": "tsx scripts/verify-payments.ts",
+    "verify-opening-hours": "tsx scripts/verify-opening-hours.ts",
     "postinstall": "prisma generate",
     "gen-icons": "tsx scripts/gen-icons.ts",
     "capture:staging": "tsx scripts/capture-screens.ts staging",
