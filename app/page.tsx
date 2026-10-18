@@ -137,6 +137,11 @@ export default async function Home({ searchParams }: PageProps) {
   const openByPos = new Map(
     [...hoursByPos.entries()].map(([id, hours]) => [id, hours?.open === true]),
   );
+  // Les magasins importés n'ont pas d'horaires : sans aucun horaire lisible dans le
+  // fil, « Ouvert maintenant » donnerait toujours une liste vide. On la masque,
+  // sauf si le filtre est déjà actif (pour pouvoir le retirer).
+  const showOpenFacet =
+    filtre === "ouvert" || [...hoursByPos.values()].some((hours) => hours !== null);
 
   let visible = feed.items.map(toFeedOfferCard);
   if (filtre === "ouvert") {
@@ -319,13 +324,15 @@ export default async function Home({ searchParams }: PageProps) {
             )}
           >
             <FeedFacets
-              facets={facetMeta.map(([id, label, icon]) => ({
-                id,
-                label,
-                icon,
-                href: homeHref({ ...chip, filtre: id }),
-                current: filtre === id,
-              }))}
+              facets={facetMeta
+                .filter(([id]) => id !== "ouvert" || showOpenFacet)
+                .map(([id, label, icon]) => ({
+                  id,
+                  label,
+                  icon,
+                  href: homeHref({ ...chip, filtre: id }),
+                  current: filtre === id,
+                }))}
             />
             <HomeFeed
               title={
