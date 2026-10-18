@@ -647,8 +647,23 @@ async function main() {
       }),
     );
   } finally {
+    // Sans ce nettoyage, chaque passage laisse ses offres aux mêmes coordonnées :
+    // dès le 2e passage, elles remplissent la page et le test de dédup échoue.
+    await cleanupFixtures(db, stamp).catch((error) => {
+      console.error("Nettoyage incomplet :", error);
+    });
     await db.$disconnect();
   }
+}
+
+async function cleanupFixtures(db: PrismaClient, stamp: string) {
+  const merchantSlug = `feed-${stamp}`;
+  await db.offerPos.deleteMany({ where: { offer: { merchant: { slug: merchantSlug } } } });
+  await db.offer.deleteMany({ where: { merchant: { slug: merchantSlug } } });
+  await db.pos.deleteMany({ where: { merchant: { slug: merchantSlug } } });
+  await db.product.deleteMany({ where: { slug: { endsWith: `-${stamp}` } } });
+  await db.merchant.deleteMany({ where: { slug: merchantSlug } });
+  await db.user.deleteMany({ where: { email: `feed-${stamp}@example.com` } });
 }
 
 main().catch((e) => {

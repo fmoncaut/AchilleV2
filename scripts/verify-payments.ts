@@ -148,7 +148,27 @@ function assert(condition: unknown, message: string): asserts condition {
   }
 }
 
+/** Le script écrit (comptes Stripe des enseignes, réservations) : base locale jetable seulement. */
+function assertDisposable(): void {
+  let host = "";
+  let name = "";
+  try {
+    const url = new URL(process.env.DATABASE_URL ?? "");
+    host = url.hostname;
+    name = url.pathname.replace(/^\//, "");
+  } catch {
+    // URL absente ou illisible : refus ci-dessous.
+  }
+  if (!["localhost", "127.0.0.1"].includes(host) || !name.endsWith("_jetable")) {
+    throw new Error(
+      "Refus : verify-payments n'écrit que dans une base locale *_jetable " +
+        "(ex. DATABASE_URL=postgresql://…@localhost:5433/achille_payments_jetable).",
+    );
+  }
+}
+
 async function main() {
+  assertDisposable();
   process.env.STRIPE_DEFAULT_FEE_RATE = "0.08";
   process.env.STRIPE_NOSHOW_MODE = "cancel";
   delete process.env.STRIPE_NOSHOW_PENALTY_RATE;
@@ -444,7 +464,15 @@ async function main() {
     process.env.STRIPE_NOSHOW_MODE = "partial";
     process.env.STRIPE_NOSHOW_PENALTY_RATE = "0.50";
     const capturesBeforePenalty = captureCount();
-    await transitionReservationForMerchant(pos.merchantId, noShowRow.id, "NO_SHOW");
+    // Depuis le cron horaire (d97e592), toute transition marchand lance d'abord
+    // expireDueReservations : un READY_FOR_PICKUP échu passe NO_SHOW tout seul,
+    // et la transition manuelle NO_SHOW est alors refusée. On teste ce chemin réel.
+    const expireSummary = await expireDueReservations();
+    assert(expireSummary.noShow >= 1 && expireSummary.errors === 0, "Le cron passe le no-show.");
+    await expectError(
+      () => transitionReservationForMerchant(pos.merchantId, noShowRow.id, "NO_SHOW"),
+      "Transition",
+    );
     const noShow = await prisma.reservation.findUniqueOrThrow({ where: { id: noShowRow.id } });
     const penaltyIntent = intents.get(noShow.paymentIntentId ?? "");
     assert(noShow.status === "NO_SHOW" && noShow.paymentState === "CAPTURED", "No-show partiel capturé.");
