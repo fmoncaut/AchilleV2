@@ -30,6 +30,7 @@ import {
   type RadiusKm,
   type SearchQuery,
 } from "@/lib/search";
+import { openStatusAt } from "@/lib/opening-hours";
 import { loginWithReturn } from "@/lib/urls";
 import { cn } from "@/lib/utils";
 
@@ -90,26 +91,6 @@ async function resolveUserOrigin(userId: string | undefined): Promise<{
   };
 }
 
-function todayHours(openingHours: unknown): { open: boolean; label: string } | null {
-  if (!openingHours || typeof openingHours !== "object") return null;
-  const days = openingHours as Record<string, { open?: string; close?: string } | null>;
-  const dayKey = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"][new Date().getDay()];
-  if (!dayKey) return null;
-  const slot = days[dayKey] ?? days[dayKey.toUpperCase()];
-  if (!slot?.open || !slot?.close) return null;
-  const start = slot.open;
-  const end = slot.close;
-  const now = new Date();
-  const clock = { minutes: now.getHours() * 60 + now.getMinutes() };
-  const toMinutes = (value: string) => {
-    const [hours, minutes] = value.split(":").map((part) => Number(part));
-    return (hours ?? 0) * 60 + (minutes ?? 0);
-  };
-  const open = clock.minutes >= toMinutes(start) && clock.minutes < toMinutes(end);
-  const endLabel = end.replace(":", "h");
-  return { open, label: open ? `Ouvert · jusqu'à ${endLabel}` : "Fermé aujourd'hui" };
-}
-
 export default async function Home({ searchParams }: PageProps) {
   const query = await searchParams;
   const radiusKm = parseRadius(first(query.r));
@@ -151,7 +132,7 @@ export default async function Home({ searchParams }: PageProps) {
       })
     : [];
   const hoursByPos = new Map(
-    hourRows.map((row) => [row.id, todayHours(row.openingHours)]),
+    hourRows.map((row) => [row.id, openStatusAt(row.openingHours)]),
   );
   const openByPos = new Map(
     [...hoursByPos.entries()].map(([id, hours]) => [id, hours?.open === true]),
