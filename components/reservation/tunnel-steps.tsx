@@ -21,7 +21,7 @@ export function TunnelSteps({ current }: { current: TunnelStep }) {
         const active = step.id === current;
         const disabled = step.href == null && !done && !active;
         const className = cn(
-          "font-label-md text-label-md inline-flex items-center gap-2 rounded-full px-3 py-1.5",
+          "font-body-md text-body-md inline-flex h-11 items-center gap-2 rounded-full px-4",
           active && "bg-primary-container text-on-primary shadow-md",
           !active &&
             done &&

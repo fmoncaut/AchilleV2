@@ -9,6 +9,7 @@ import {
   beginAuthorizationAction,
   finalizeAuthorizationAction,
 } from "@/app/reservation/actions";
+import { stripeAppearance } from "@/components/reservation/stripe-appearance";
 import { Button } from "@/components/ui/button";
 
 type ReservationPaymentProps = {
@@ -52,18 +53,21 @@ export function ReservationPayment({
 
   return (
     <section className="bg-surface-container-lowest shadow-sm rounded-2xl p-5">
-      <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+      <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
         Empreinte carte
       </p>
       <p className="font-headline-sm text-primary-container mt-1">
         Autoriser le montant
       </p>
-      <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+      <p className="font-body-md text-body-md text-on-surface-variant mt-2">
         Une empreinte est demandée maintenant. Rien n’est débité avant le
         retrait en magasin, validé par le vendeur.
       </p>
       {error ? (
-        <p className="font-body-sm bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2">
+        <p
+          className="font-body-md text-body-md bg-error-container text-on-error-container mt-4 rounded-2xl px-3 py-2"
+          role="alert"
+        >
           {error}
         </p>
       ) : null}
@@ -77,14 +81,7 @@ export function ReservationPayment({
             stripe={stripePromise}
             options={{
               clientSecret,
-              appearance: {
-                theme: "stripe",
-                variables: {
-                  colorPrimary: "#002642",
-                  borderRadius: "16px",
-                  fontFamily: "Manrope, sans-serif",
-                },
-              },
+              appearance: stripeAppearance,
             }}
           >
             <HoldForm
@@ -174,7 +171,9 @@ function HoldForm({
     <div className="flex flex-col gap-4">
       <PaymentElement />
       {error ? (
-        <p className="font-body-sm text-error font-medium">{error}</p>
+        <p className="font-body-md text-body-md text-error font-medium" role="alert">
+          {error}
+        </p>
       ) : null}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
         <Button

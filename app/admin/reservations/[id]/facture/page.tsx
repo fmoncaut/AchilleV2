@@ -22,7 +22,7 @@ export default async function SellerInvoicePage({ params }: PageProps) {
 
   return (
     <AdminMain>
-      <p className="font-body-sm text-primary-container">
+      <p className="font-body-md text-body-md text-primary-container print:hidden">
         Imprimez la facture au moment de la remise, depuis cet écran.
       </p>
       <InvoiceSheet
@@ -31,7 +31,7 @@ export default async function SellerInvoicePage({ params }: PageProps) {
       />
       <Link
         href="/admin/reservations"
-        className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+          className="font-body-md text-body-md text-primary-container print:hidden inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
       >
         Retour aux réservations
       </Link>

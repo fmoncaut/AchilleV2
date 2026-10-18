@@ -5,14 +5,14 @@ export function InvoiceActions({ downloadHref }: { downloadHref: string }) {
     <div className="mt-6 flex flex-wrap gap-3 print:hidden">
       <button
         type="button"
-        className="bg-primary-container text-on-primary font-label-md text-label-md rounded-full px-4 py-2 font-bold"
+        className="bg-primary-container text-on-primary font-body-md text-body-md inline-flex h-11 items-center rounded-full px-4 font-bold"
         onClick={() => window.print()}
       >
         Imprimer une facture
       </button>
       <a
         href={downloadHref}
-        className="font-label-md text-label-md text-primary-container rounded-full px-4 py-2 font-bold underline-offset-4 hover:underline"
+        className="font-body-md text-body-md text-primary-container inline-flex h-11 items-center rounded-full px-4 font-bold underline-offset-4 hover:underline"
       >
         Télécharger
       </a>

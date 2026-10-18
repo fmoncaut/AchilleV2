@@ -42,20 +42,20 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
       <BuyerSection className="flex flex-1 flex-col gap-6 py-8">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+            <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
               Panier Click & Collect
             </p>
             <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1">
               {cart ? cart.posName : "Mon panier"}
             </h1>
-            <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+            <p className="font-body-md text-body-md text-on-surface-variant mt-2">
               Un seul magasin par réservation. L’étape suivante autorise une
               empreinte du total : le débit n’a lieu qu’au retrait.
             </p>
           </div>
           {cart ? (
             <p className="bg-primary-container text-on-primary font-label-md text-label-md inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-bold">
-              <MaterialIcon name="store" className="text-[16px]" />
+              <MaterialIcon name="store" className="icon-sm" />
               Panier 100 % mono-magasin
             </p>
           ) : null}
@@ -86,10 +86,7 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
                 </h2>
                 {cart.distanceM != null ? (
                   <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 flex items-center gap-1">
-                    <MaterialIcon
-                      name="near_me"
-                      className="text-secondary text-[16px]"
-                    />
+                    <MaterialIcon name="near_me" className="text-primary-container icon-sm" />
                     À <Distance meters={cart.distanceM} variant="plain" />
                   </p>
                 ) : null}
@@ -118,7 +115,7 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
                           {line.stock} en magasin
                         </p>
                       </div>
-                      <p className="font-price-card text-secondary font-extrabold">
+                      <p className="font-price-card text-price-card text-primary-container font-extrabold">
                         {formatEur(line.subtotal)}
                       </p>
                     </div>
@@ -135,7 +132,7 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
                       />
                       <form action={removeCartOfferAction}>
                         <input type="hidden" name="offerId" value={line.offerId} />
-                        <Button type="submit" variant="ghost" size="sm">
+                        <Button type="submit" variant="ghost">
                           Retirer
                         </Button>
                       </form>
@@ -161,7 +158,7 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
                   <dt className="font-label-md text-label-md text-primary-container font-bold">
                     Total à régler au retrait
                   </dt>
-                  <dd className="font-price-hero text-secondary font-extrabold">
+                  <dd className="font-price-hero text-price-hero text-primary-container font-extrabold">
                     {formatEur(cart.total)}
                   </dd>
                 </div>
@@ -169,7 +166,7 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
               {cart.canConfirm ? (
                 <Button asChild size="lg" className="w-full">
                   <Link href="/reservation/retrait">
-                    Procéder au paiement sécurisé
+                    Continuer vers l’empreinte bancaire
                   </Link>
                 </Button>
               ) : (
@@ -177,7 +174,7 @@ export default async function ReservationRecapPage({ searchParams }: PageProps) 
                   Ajustez les quantités au stock disponible pour continuer.
                 </p>
               )}
-              <p className="font-label-xs text-label-xs text-on-surface-variant">
+              <p className="font-body-md text-body-md text-on-surface-variant">
                 Empreinte bancaire maintenant, débit uniquement quand le magasin
                 valide le retrait. Fenêtre de retrait : {pickupWindowHours()} h
                 après l’empreinte. Passé ce délai, l’empreinte est libérée.

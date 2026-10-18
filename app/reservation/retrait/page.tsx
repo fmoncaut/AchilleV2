@@ -50,7 +50,7 @@ export default async function ReservationPickupPage({ searchParams }: PageProps)
     <BuyerMain>
       <BuyerSection className="flex flex-1 flex-col gap-6 py-10">
         <div>
-          <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+          <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
             Retrait en magasin
           </p>
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1">
@@ -59,7 +59,10 @@ export default async function ReservationPickupPage({ searchParams }: PageProps)
         </div>
         <TunnelSteps current="payment" />
         {error ? (
-          <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
+          <p
+            className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+            role="alert"
+          >
             {error}
           </p>
         ) : null}
@@ -68,10 +71,7 @@ export default async function ReservationPickupPage({ searchParams }: PageProps)
             {cart.merchantName}
           </p>
           <h2 className="font-headline-sm text-primary-container mt-1 flex items-center gap-2">
-            <MaterialIcon
-              name="storefront"
-              className="text-secondary text-[20px]"
-            />
+            <MaterialIcon name="storefront" className="text-primary-container icon-lg" />
             {cart.posName}
           </h2>
           {address ? (
@@ -87,7 +87,7 @@ export default async function ReservationPickupPage({ searchParams }: PageProps)
           <div className="mt-4">
             <OpeningHoursList value={cart.openingHours} />
           </div>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-4">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-4">
             Présentez le code de retrait en magasin. La réservation est
             conservée {cart.pickupHours} h. Total {formatEur(cart.total)}.
             L’empreinte est autorisée ci-dessous et capturée seulement au
@@ -102,17 +102,20 @@ export default async function ReservationPickupPage({ searchParams }: PageProps)
               returnOrigin={getSiteUrl()}
             />
           ) : (
-            <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
+            <p
+              className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+              role="alert"
+            >
               Paiement non configuré.
             </p>
           )
         ) : session?.user?.id && cart.canConfirm ? (
-          <p className="font-body-sm bg-surface-container text-on-surface-variant rounded-2xl px-3 py-2">
+          <p className="font-body-md text-body-md bg-surface-container text-on-surface-variant rounded-2xl px-3 py-2">
             Cette enseigne n’a pas encore activé l’encaissement. La réservation
             payée n’est pas possible.
           </p>
         ) : session?.user?.id ? (
-          <p className="font-body-sm text-error font-medium">
+          <p className="font-body-md text-body-md text-error font-medium" role="alert">
             Le panier ne peut pas être confirmé en l’état.
           </p>
         ) : null}

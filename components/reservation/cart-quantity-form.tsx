@@ -44,7 +44,7 @@ export function CartQuantityForm({
       className="flex flex-wrap items-center gap-2"
     >
       <input type="hidden" name="offerId" value={offerId} />
-      <label className="font-label-md text-label-md text-primary-container flex items-center gap-2">
+      <label className="font-label-md text-label-md text-primary-container flex min-h-11 items-center gap-2">
         Quantité
         <input
           name="quantity"
@@ -56,19 +56,19 @@ export function CartQuantityForm({
             setQty(event.target.value);
             setQtyMessage(null);
           }}
-          className="bg-surface-container-low w-20 rounded-full border-0 px-3 py-2 text-center"
+          className="bg-surface-container-low font-body-md text-body-md text-on-surface focus-visible:ring-primary-container h-11 w-20 rounded-full border-0 px-3 text-center outline-none focus-visible:ring-2"
         />
       </label>
-      <Button type="submit" variant="outline" size="sm" disabled={pending || stock < 1}>
+      <Button type="submit" variant="outline" disabled={pending || stock < 1}>
         {pending ? "Mise à jour…" : "Mettre à jour"}
       </Button>
       {qtyMessage ? (
-        <p className="font-body-sm text-error w-full font-medium" role="alert">
+        <p className="font-body-md text-body-md text-error w-full font-medium" role="alert">
           {qtyMessage}
         </p>
       ) : null}
       {state.error ? (
-        <p className="font-body-sm text-error w-full font-medium" role="alert">
+        <p className="font-body-md text-body-md text-error w-full font-medium" role="alert">
           {state.error}
         </p>
       ) : null}

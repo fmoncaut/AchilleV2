@@ -18,11 +18,11 @@ export function InvoiceSheet({
   downloadHref: string;
 }) {
   return (
-    <article className="bg-surface-container-lowest text-on-surface shadow-sm rounded-2xl p-6 print:shadow-none">
-      <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+    <article className="bg-surface-container-lowest text-on-surface shadow-sm rounded-2xl p-6 print:rounded-none print:bg-white print:p-0 print:text-black print:shadow-none">
+      <p className="font-label-xs text-label-xs text-primary-container print:text-black font-extrabold tracking-wider uppercase">
         Facture
       </p>
-      <h1 className="font-headline-lg text-primary-container mt-1">{invoice.number}</h1>
+      <h1 className="font-headline-lg text-primary-container print:text-black mt-1">{invoice.number}</h1>
       <p className="font-body-sm text-on-surface-variant mt-2">
         Émise le {formatWhen(invoice.issuedAt)} au retrait en magasin.
       </p>
@@ -55,7 +55,7 @@ export function InvoiceSheet({
       <p className="font-body-sm text-on-surface-variant mt-4">
         Total HT {formatEur(invoice.totalHt)} · TVA {formatEur(invoice.totalVat)}
       </p>
-      <p className="font-price-hero text-secondary mt-1 text-2xl font-extrabold">
+      <p className="font-price-hero text-price-hero text-primary-container print:text-black mt-1 font-extrabold">
         Total TTC {formatEur(invoice.totalTtc)}
       </p>
       {invoice.audience === "seller" && invoice.commissionAmount ? (

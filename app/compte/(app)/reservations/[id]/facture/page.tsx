@@ -33,7 +33,7 @@ export default async function BuyerInvoicePage({ params }: PageProps) {
         />
         <Link
           href="/compte/reservations"
-          className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+          className="font-body-md text-body-md text-primary-container print:hidden inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
         >
           Retour aux réservations
         </Link>
