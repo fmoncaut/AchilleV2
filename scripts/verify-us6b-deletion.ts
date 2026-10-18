@@ -10,6 +10,7 @@ import {
   deletedEmailTombstone,
   countActiveReservations,
 } from "../lib/account/deletion";
+import { createAuthAdapter } from "../lib/auth/adapter";
 import { completeOnboarding } from "../lib/auth/onboarding";
 import { TERMS_VERSION } from "../lib/auth/terms";
 import { loadBuyerInvoice } from "../lib/invoices/pickup";
@@ -192,6 +193,9 @@ async function main() {
     (await prisma.session.count({ where: { userId: user.id } })) === 0,
     "sessions gone",
   );
+  // signOut, après la suppression, rappelle deleteSession sur une session déjà
+  // retirée : ça ne doit plus lever (sinon page d’erreur après suppression).
+  await createAuthAdapter().deleteSession?.(`tok-${stamp}`);
   assert(
     (await prisma.account.count({ where: { userId: user.id } })) === 0,
     "accounts gone",
@@ -219,7 +223,6 @@ async function main() {
   );
 
   // Login gate: getUserByEmail via adapter path
-  const { createAuthAdapter } = await import("../lib/auth/adapter");
   const adapter = createAuthAdapter();
   const byEmail = await adapter.getUserByEmail?.(user.email!);
   // email is tombstone now — lookup original email
