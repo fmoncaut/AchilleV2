@@ -62,12 +62,12 @@ export default async function MesMagasinsPage({ searchParams }: PageProps) {
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
             Mes magasins
           </h1>
-          <p className="font-body-sm text-on-surface-variant mt-1">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-1">
             {result.total} point{result.total > 1 ? "s" : ""} de vente. La
             publication vitrine reste gérée par Akwire.
           </p>
         </div>
-        <Button asChild size="sm">
+        <Button asChild>
           <Link href="/admin/mes-magasins/nouveau">Ajouter un magasin</Link>
         </Button>
       </div>
@@ -77,24 +77,24 @@ export default async function MesMagasinsPage({ searchParams }: PageProps) {
           name="q"
           defaultValue={filters.q}
           placeholder="Ville, nom, adresse…"
-          className="border-outline-variant/40 bg-surface-container-lowest font-body-sm min-w-[12rem] flex-1 rounded-full border px-3 py-2"
+          className="border-outline-variant/40 bg-surface-container-lowest font-body-md text-body-md h-11 min-w-[12rem] flex-1 rounded-full border px-4"
         />
         <select
           name="status"
           defaultValue={filters.status}
-          className="border-outline-variant/40 bg-surface-container-lowest font-body-sm rounded-full border px-3 py-2"
+          className="border-outline-variant/40 bg-surface-container-lowest font-body-md text-body-md h-11 rounded-full border px-4"
         >
           <option value="">Tous les statuts admin</option>
           <option value="ACTIVE_VISIBLE">Publié</option>
           <option value="INACTIVE_VISIBLE">Sur la carte</option>
           <option value="INACTIVE_HIDDEN">Masqué</option>
         </select>
-        <Button type="submit" variant="secondary" size="sm">
+        <Button type="submit" variant="secondary">
           Filtrer
         </Button>
       </form>
 
-      <AdminTable caption="Mes magasins" className="mt-6">
+      <AdminTable caption="Mes magasins" className="text-body-md mt-6">
         <AdminThead>
           <tr>
             <AdminTh className="px-3 py-2 text-left">Magasin</AdminTh>
@@ -109,7 +109,7 @@ export default async function MesMagasinsPage({ searchParams }: PageProps) {
             <tr>
               <td
                 colSpan={5}
-                className="font-body-sm text-on-surface-variant px-3 py-8 text-center"
+                className="font-body-md text-body-md text-on-surface-variant px-3 py-8 text-center"
               >
                 Aucun magasin pour ces filtres.
               </td>
@@ -120,16 +120,16 @@ export default async function MesMagasinsPage({ searchParams }: PageProps) {
                 <td className="px-3 py-2">
                   <Link
                     href={`/admin/mes-magasins/${pos.id}`}
-                    className="font-label-md text-primary-container font-bold hover:underline"
+                    className="font-body-md text-body-md text-primary-container font-bold hover:underline"
                   >
                     {pos.name}
                   </Link>
                 </td>
-                <td className="font-body-sm px-3 py-2">{pos.city ?? "—"}</td>
-                <td className="font-body-sm px-3 py-2">
+                <td className="font-body-sm text-body-sm px-3 py-2">{pos.city ?? "—"}</td>
+                <td className="font-body-sm text-body-sm px-3 py-2">
                   {STATUS_LABEL[pos.status] ?? pos.status}
                 </td>
-                <td className="font-body-sm px-3 py-2">
+                <td className="font-body-sm text-body-sm px-3 py-2">
                   {pos.merchantClosedAt ? (
                     <span className="text-error font-semibold">Fermé</span>
                   ) : (
@@ -137,7 +137,7 @@ export default async function MesMagasinsPage({ searchParams }: PageProps) {
                   )}
                 </td>
                 <td className="px-3 py-2 text-right">
-                  <Button asChild variant="ghost" size="sm">
+                  <Button asChild variant="ghost">
                     <Link href={`/admin/mes-magasins/${pos.id}`}>Éditer</Link>
                   </Button>
                 </td>
@@ -150,15 +150,15 @@ export default async function MesMagasinsPage({ searchParams }: PageProps) {
       {pageCount > 1 ? (
         <nav className="mt-4 flex justify-center gap-2">
           {page > 1 ? (
-            <Button asChild variant="ghost" size="sm">
+            <Button asChild variant="ghost">
               <Link href={pageHref(filters, page - 1)}>Précédent</Link>
             </Button>
           ) : null}
-          <span className="font-label-md self-center">
+          <span className="font-body-sm text-body-sm self-center">
             {page} / {pageCount}
           </span>
           {page < pageCount ? (
-            <Button asChild variant="ghost" size="sm">
+            <Button asChild variant="ghost">
               <Link href={pageHref(filters, page + 1)}>Suivant</Link>
             </Button>
           ) : null}

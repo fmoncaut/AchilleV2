@@ -35,15 +35,18 @@ export function ReservationControls({
     state.reservationId === reservationId && state.ok ? state.ok : undefined;
 
   return (
-    <form action={action} className="flex flex-col items-start gap-2">
+    <form action={action} className="flex w-full flex-col items-stretch gap-3">
       <input type="hidden" name="id" value={reservationId} />
       {status === "PENDING" && paymentState === "REQUIRES_ACTION" ? (
-        <p className="font-body-sm text-on-surface-variant">En attente d’empreinte</p>
+        <p className="font-body-md text-body-md text-on-surface-variant">
+          En attente d’empreinte
+        </p>
       ) : null}
       {status === "PENDING" && paymentState !== "REQUIRES_ACTION" ? (
         <Button
           type="submit"
-          size="sm"
+          size="lg"
+          className="w-full"
           disabled={pending}
           formAction={(formData) => {
             formData.set("intent", "confirm");
@@ -56,7 +59,8 @@ export function ReservationControls({
       {status === "CONFIRMED" ? (
         <Button
           type="submit"
-          size="sm"
+          size="lg"
+          className="w-full"
           disabled={pending}
           formAction={(formData) => {
             formData.set("intent", "ready");
@@ -67,14 +71,15 @@ export function ReservationControls({
         </Button>
       ) : null}
       {status === "READY_FOR_PICKUP" ? (
-        <div className="flex max-w-xs flex-col gap-2">
-          <p className="font-body-sm text-primary-container font-semibold">
+        <div className="flex w-full flex-col gap-3">
+          <p className="font-body-md text-body-md text-primary-container font-semibold">
             La capture n’a lieu qu’ici, au comptoir, après un code correct.
           </p>
           <PickupCodeField value={code} onChange={setCode} />
           <Button
             type="submit"
-            size="sm"
+            size="lg"
+            className="w-full"
             disabled={pending || code.trim().length === 0}
             formAction={(formData) => {
               formData.set("intent", "pickup");
@@ -89,8 +94,9 @@ export function ReservationControls({
       {status === "READY_FOR_PICKUP" && deadlinePassed ? (
         <Button
           type="submit"
-          size="sm"
+          size="lg"
           variant="outline"
+          className="w-full"
           disabled={pending}
           formAction={(formData) => {
             formData.set("intent", "noshow");
@@ -100,9 +106,18 @@ export function ReservationControls({
           No-show
         </Button>
       ) : null}
-      {error ? <p className="font-body-sm text-error font-medium">{error}</p> : null}
+      {error ? (
+        <p
+          className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+          role="alert"
+        >
+          {error}
+        </p>
+      ) : null}
       {done ? (
-        <p className="font-body-sm text-on-tertiary-container font-medium">{done}</p>
+        <p className="font-body-md text-body-md text-on-tertiary-container font-medium" role="alert">
+          {done}
+        </p>
       ) : null}
     </form>
   );

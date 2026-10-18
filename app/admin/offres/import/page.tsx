@@ -20,7 +20,7 @@ export default async function ImportOffresPage() {
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Import CSV
         </h1>
-        <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+        <p className="font-body-md text-body-md text-on-surface-variant mt-2">
           Les lignes invalides sont rapportées et ignorées. Les lignes valides
           créent ou mettent à jour les offres de votre enseigne uniquement.
         </p>

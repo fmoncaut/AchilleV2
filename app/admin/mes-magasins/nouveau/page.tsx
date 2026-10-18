@@ -21,11 +21,11 @@ export default async function NouveauMesMagasinPage() {
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
             Ajouter un magasin
           </h1>
-          <p className="font-body-sm text-on-surface-variant mt-1">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-1">
             Démarre masqué. Choisissez une adresse BAN. Akwire publie ensuite.
           </p>
         </div>
-        <Button asChild variant="ghost" size="sm">
+        <Button asChild variant="ghost">
           <Link href="/admin/mes-magasins">Retour</Link>
         </Button>
       </div>

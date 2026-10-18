@@ -27,7 +27,7 @@ export default async function NouvelleOffrePage() {
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Nouvelle offre
         </h1>
-        <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+        <p className="font-body-md text-body-md text-on-surface-variant mt-2">
           Si l’EAN existe déjà, le produit est réutilisé. Le % de remise est
           calculé automatiquement.
         </p>

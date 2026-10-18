@@ -73,27 +73,27 @@ export default async function EditMesMagasinPage({
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
             {pos.name}
           </h1>
-          <p className="font-body-sm text-on-surface-variant mt-1">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-1">
             Le statut de publication reste géré par Akwire.
           </p>
         </div>
-        <Button asChild variant="ghost" size="sm">
+        <Button asChild variant="ghost">
           <Link href="/admin/mes-magasins">Retour</Link>
         </Button>
       </div>
 
       {ok ? (
-        <p className="font-body-sm bg-tertiary-fixed text-on-tertiary-container rounded-2xl px-3 py-2">
+        <p className="font-body-md text-body-md bg-tertiary-fixed text-on-tertiary-container rounded-2xl px-3 py-2">
           Magasin enregistré.
         </p>
       ) : null}
       {closed ? (
-        <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
+        <p className="font-body-md text-body-md bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
           Magasin fermé (hors vitrine). Vous pouvez le rouvrir à tout moment.
         </p>
       ) : null}
       {reopened ? (
-        <p className="font-body-sm bg-tertiary-fixed text-on-tertiary-container rounded-2xl px-3 py-2">
+        <p className="font-body-md text-body-md bg-tertiary-fixed text-on-tertiary-container rounded-2xl px-3 py-2">
           Magasin rouvert. La publication vitrine dépend encore du statut admin.
         </p>
       ) : null}
@@ -104,7 +104,7 @@ export default async function EditMesMagasinPage({
             <p className="font-label-md text-primary-container font-bold">
               Fermeture douce
             </p>
-            <p className="font-body-sm text-on-surface-variant mt-1">
+            <p className="font-body-md text-body-md text-on-surface-variant mt-1">
               {pos.merchantClosedAt
                 ? `Fermé depuis le ${pos.merchantClosedAt.toLocaleString("fr-FR")}. Hors vitrine quel que soit le statut admin.`
                 : "Ouvert côté enseigne. Ne remplace pas la validation de publication Akwire."}
@@ -113,14 +113,14 @@ export default async function EditMesMagasinPage({
           {pos.merchantClosedAt ? (
             <form action={reopenMerchantPosAction}>
               <input type="hidden" name="id" value={pos.id} />
-              <Button type="submit" variant="secondary" size="sm">
+              <Button type="submit" variant="secondary">
                 Rouvrir
               </Button>
             </form>
           ) : (
             <form action={closeMerchantPosAction}>
               <input type="hidden" name="id" value={pos.id} />
-              <Button type="submit" variant="outline" size="sm">
+              <Button type="submit" variant="outline">
                 Fermer le magasin
               </Button>
             </form>

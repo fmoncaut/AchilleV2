@@ -63,7 +63,10 @@ export function OfferForm({
     <form action={formAction} className="flex flex-col gap-5">
       {offerId ? <input type="hidden" name="id" value={offerId} /> : null}
       {state.error ? (
-        <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
+        <p
+          className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+          role="alert"
+        >
           {state.error}
         </p>
       ) : null}
@@ -121,7 +124,7 @@ export function OfferForm({
               ))}
             </select>
             {state.fieldErrors?.posId ? (
-              <span className="font-body-sm text-error font-medium">
+              <span className="font-body-md text-body-md text-error font-medium">
                 {state.fieldErrors.posId}
               </span>
             ) : null}
@@ -154,7 +157,7 @@ export function OfferForm({
               ))}
             </div>
             {state.fieldErrors?.posIds ? (
-              <span className="font-body-sm text-error font-medium">
+              <span className="font-body-md text-body-md text-error font-medium">
                 {state.fieldErrors.posIds}
               </span>
             ) : null}
@@ -177,7 +180,7 @@ export function OfferForm({
             inputMode="numeric"
           />
           {state.fieldErrors?.ean ? (
-            <span className="font-body-sm text-error font-medium">
+            <span className="font-body-md text-body-md text-error font-medium">
               {state.fieldErrors.ean}
             </span>
           ) : null}
@@ -191,7 +194,7 @@ export function OfferForm({
             className={adminFieldClass}
           />
           {state.fieldErrors?.name ? (
-            <span className="font-body-sm text-error font-medium">
+            <span className="font-body-md text-body-md text-error font-medium">
               {state.fieldErrors.name}
             </span>
           ) : null}
@@ -212,7 +215,7 @@ export function OfferForm({
             ))}
           </select>
           {state.fieldErrors?.categoryId ? (
-            <span className="font-body-sm text-error font-medium">
+            <span className="font-body-md text-body-md text-error font-medium">
               {state.fieldErrors.categoryId}
             </span>
           ) : null}
@@ -226,7 +229,7 @@ export function OfferForm({
             className={adminFieldClass}
           />
           {state.fieldErrors?.priceRemise ? (
-            <span className="font-body-sm text-error font-medium">
+            <span className="font-body-md text-body-md text-error font-medium">
               {state.fieldErrors.priceRemise}
             </span>
           ) : null}
@@ -240,7 +243,7 @@ export function OfferForm({
             className={adminFieldClass}
           />
           {state.fieldErrors?.priceReference ? (
-            <span className="font-body-sm text-error font-medium">
+            <span className="font-body-md text-body-md text-error font-medium">
               {state.fieldErrors.priceReference}
             </span>
           ) : null}
@@ -303,7 +306,7 @@ export function OfferForm({
                 className={adminFieldClass}
               />
               {state.fieldErrors?.brokerRate ? (
-                <span className="font-body-sm text-error font-medium">
+                <span className="font-body-md text-body-md text-error font-medium">
                   {state.fieldErrors.brokerRate}
                 </span>
               ) : null}
@@ -322,7 +325,7 @@ export function OfferForm({
                 gabarit et d’un click_id, après enregistrement du clic.
               </span>
               {state.fieldErrors?.merchantUrl ? (
-                <span className="font-body-sm text-error font-medium">
+                <span className="font-body-md text-body-md text-error font-medium">
                   {state.fieldErrors.merchantUrl}
                 </span>
               ) : null}
@@ -347,7 +350,7 @@ export function OfferForm({
         </label>
       </div>
 
-      <label className="font-label-md text-label-md text-primary-container flex items-center gap-2">
+      <label className="font-body-md text-body-md text-primary-container flex min-h-11 items-center gap-2">
         <input
           type="checkbox"
           name="isOnline"

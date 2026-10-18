@@ -122,11 +122,11 @@ export default async function AdminOffresPage({ searchParams }: OffresPageProps)
       </AdminCard>
 
       {offers.length === 0 ? (
-        <p className="font-body-sm text-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Aucune offre pour ces filtres. Créez-en une ou importez un CSV.
         </p>
       ) : (
-        <AdminTable caption="Offres" className="min-w-[64rem]">
+        <AdminTable caption="Offres" className="text-body-md min-w-[64rem]">
           <AdminThead>
             <tr>
               <AdminTh className="px-3 py-3">Image</AdminTh>
@@ -155,31 +155,31 @@ export default async function AdminOffresPage({ searchParams }: OffresPageProps)
                     variant="thumb"
                   />
                 </td>
-                <td className="font-body-sm text-on-surface-variant px-3 py-2">
+                <td className="font-body-sm text-body-sm text-on-surface-variant px-3 py-2">
                   {offer.productEan ?? "—"}
                 </td>
                 <td className="px-3 py-2">
                   <Link
                     href={`/admin/offres/${offer.id}`}
-                    className="font-headline-sm text-primary-container text-[15px] underline-offset-4 hover:underline"
+                    className="font-body-md text-body-md text-primary-container font-bold underline-offset-4 hover:underline"
                   >
                     {offer.productName}
                   </Link>
-                  <p className="font-body-sm text-on-surface-variant text-xs">
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">
                     {offer.scopeLabel} · {offer.posName}
                   </p>
                 </td>
-                <td className="font-headline-sm text-secondary px-3 py-2 font-extrabold">
+                <td className="font-body-md text-body-md text-primary-container px-3 py-2 font-bold">
                   {formatEur(offer.priceRemise)}
                 </td>
-                <td className="font-body-sm text-on-surface-variant px-3 py-2 line-through">
+                <td className="font-body-sm text-body-sm text-on-surface-variant px-3 py-2 line-through">
                   {offer.priceReference ? formatEur(offer.priceReference) : "—"}
                 </td>
-                <td className="font-body-sm px-3 py-2">{offer.stock}</td>
-                <td className="font-body-sm px-3 py-2">
+                <td className="font-body-sm text-body-sm px-3 py-2">{offer.stock}</td>
+                <td className="font-body-sm text-body-sm px-3 py-2">
                   {conditionLabel(offer.condition)}
                 </td>
-                <td className="font-body-sm px-3 py-2">
+                <td className="font-body-sm text-body-sm px-3 py-2">
                   {offer.categoryName ?? "—"}
                 </td>
                 <td className="px-3 py-2">
@@ -189,22 +189,22 @@ export default async function AdminOffresPage({ searchParams }: OffresPageProps)
                       type="submit"
                       className={
                         offer.isOnline
-                          ? "font-label-xs text-label-xs bg-tertiary-fixed text-on-tertiary-container rounded-full px-2.5 py-1 font-bold"
-                          : "font-label-xs text-label-xs bg-surface-container text-on-surface-variant rounded-full px-2.5 py-1 font-bold"
+                          ? "font-body-sm text-body-sm bg-tertiary-fixed text-on-tertiary-container inline-flex min-h-11 items-center rounded-full px-3 font-bold"
+                          : "font-body-sm text-body-sm bg-surface-container text-on-surface-variant inline-flex min-h-11 items-center rounded-full px-3 font-bold"
                       }
                     >
                       {offer.isOnline ? "Oui" : "Non"}
                     </button>
                   </form>
                 </td>
-                <td className="font-body-sm text-on-surface-variant px-3 py-2 whitespace-nowrap">
+                <td className="font-body-sm text-body-sm text-on-surface-variant px-3 py-2 whitespace-nowrap">
                   {formatUpdatedAt(offer.updatedAt)}
                 </td>
                 <td className="px-3 py-2">
                   <div className="flex flex-col items-start gap-2">
                     <Link
                       href={`/admin/offres/${offer.id}`}
-                      className="font-label-md text-primary-container text-xs font-bold underline-offset-4 hover:underline"
+                      className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
                     >
                       Éditer
                     </Link>
