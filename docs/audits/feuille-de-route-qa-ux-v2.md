@@ -35,6 +35,8 @@ Vague 2c (`design/v2c-carte`) : pins et popup en tokens, trois dessins (`active`
 
 Vague 2d (`design/v2d-fiches`) : fiche offre (`Price` hero et comparateur, une phrase « Vous économisez »), fiche magasin, ville. Le badge Ouvert / Fermé attend le correctif de `lib/opening-hours.ts` ; l’emplacement est réservé à côté du nom du magasin.
 
+Vague 3 (`design/v3-auth`) : connexion, code OTP et onboarding. Le code reste un seul champ (`name="code"`, remplissage automatique). `OtpInput` n’est pas branché : les 6 chiffres d’un coup dans la première case ne garderaient qu’un chiffre. Compteur « N sur 5 » partagé avec les réglages. `UtilityCard` en Encre, y compris `/compte`.
+
 La Vague 0 change la peau (tokens, police, primitives, états de chargement). Elle ne rebranche pas chaque écran sur les primitives. Aucun écran ne devient illisible : le texte ambre clair sur fond clair est remplacé par l'ambre foncé `#8A5300`. Les P0 ci-dessous sont les dettes visuelles reportées.
 
 ## P0 reportés

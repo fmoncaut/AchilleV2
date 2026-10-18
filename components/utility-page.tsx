@@ -28,12 +28,12 @@ export function UtilityCard({
           )}
         >
           {icon ? (
-            <div className="bg-surface-container text-secondary mx-auto mb-4 flex size-12 items-center justify-center rounded-full">
-              <MaterialIcon name={icon} className="text-[24px]" />
+            <div className="bg-surface-container text-primary-container mx-auto mb-4 flex size-12 items-center justify-center rounded-full">
+              <MaterialIcon name={icon} className="icon-lg" />
             </div>
           ) : null}
           {kicker ? (
-            <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+            <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
               {kicker}
             </p>
           ) : null}
