@@ -89,29 +89,32 @@ export default async function AdminPaymentsPage({ searchParams }: PageProps) {
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Paiements
         </h1>
-        <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+        <p className="font-body-md text-body-md text-on-surface-variant mt-2">
           Compte Stripe Connect de l’enseigne. Sans compte activé, les
           réservations en retrait payées sont refusées.
         </p>
       </div>
       {error ? (
-        <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
+        <p
+          className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+          role="alert"
+        >
           {error}
         </p>
       ) : null}
       {first(query.enregistre) === "1" ? (
-        <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
+        <p className="font-body-md text-body-md bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
           Commission enregistrée.
         </p>
       ) : null}
       {merchants.length === 0 ? (
         <AdminCard>
-          <p className="font-body-sm text-on-surface-variant">
+          <p className="font-body-md text-body-md text-on-surface-variant">
             Aucune enseigne à configurer.
           </p>
         </AdminCard>
       ) : (
-        <AdminTable caption="Paiements" className="min-w-[40rem]">
+        <AdminTable caption="Paiements" className="text-body-md min-w-[40rem]">
           <AdminThead>
             <tr>
               <AdminTh className="px-4 py-3">Enseigne</AdminTh>
@@ -126,10 +129,10 @@ export default async function AdminPaymentsPage({ searchParams }: PageProps) {
                 key={merchant.id}
                 className="border-surface-container-high border-t"
               >
-                <td className="font-body-sm text-primary-container px-4 py-3">
+                <td className="font-body-md text-body-md text-primary-container px-4 py-3">
                   {merchant.name}
                   {merchant.isActive ? null : (
-                    <span className="text-on-surface-variant block text-xs">
+                    <span className="font-body-sm text-body-sm text-on-surface-variant block">
                       Enseigne inactive
                     </span>
                   )}
@@ -161,7 +164,7 @@ export default async function AdminPaymentsPage({ searchParams }: PageProps) {
                           className={adminFieldClass}
                         />
                       </div>
-                      <Button type="submit" size="sm" variant="outline">
+                      <Button type="submit" variant="outline">
                         Enregistrer
                       </Button>
                     </form>
@@ -170,7 +173,7 @@ export default async function AdminPaymentsPage({ searchParams }: PageProps) {
                 <td className="px-4 py-3">
                   <form action={startOnboardingAction}>
                     <input type="hidden" name="merchantId" value={merchant.id} />
-                    <Button type="submit" size="sm">
+                    <Button type="submit">
                       {merchant.stripeAccountId
                         ? "Continuer l’onboarding"
                         : "Activer l’encaissement"}

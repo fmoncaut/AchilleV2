@@ -54,15 +54,18 @@ export default async function SellerReservationPage({ params }: PageProps) {
             .map((item) => `${item.offer.product.name} × ${item.quantity}`)
             .join(", ")}
         </h1>
-        <p className="font-body-sm text-on-surface-variant mt-2">
-          {reservation.pos.name} · {formatEur(reservation.totalAmount)} ·{" "}
-          {reservation.user.name ?? reservation.user.email ?? "Acheteur"}
+        <p className="font-body-md text-body-md text-on-surface-variant mt-2">
+          {reservation.pos.name} ·{" "}
+          <span className="text-primary-container font-bold">
+            {formatEur(reservation.totalAmount)}
+          </span>{" "}
+          · {reservation.user.name ?? reservation.user.email ?? "Acheteur"}
         </p>
       </div>
       <ReservationMessages reservationId={reservation.id} />
       <Link
         href="/admin/reservations"
-        className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+        className="font-body-md text-body-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
       >
         Retour aux réservations
       </Link>

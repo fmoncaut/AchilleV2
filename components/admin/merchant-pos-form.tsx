@@ -96,10 +96,13 @@ export function MerchantPosForm({
       <input type="hidden" name="address" value={address} />
 
       {state.error ? (
-        <div className="bg-error-container text-on-error-container rounded-2xl px-3 py-2">
-          <p className="font-body-sm">{state.error}</p>
+        <div
+          className="bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+          role="alert"
+        >
+          <p className="font-body-md text-body-md">{state.error}</p>
           {state.supportHref ? (
-            <p className="font-body-sm mt-2">
+            <p className="font-body-md text-body-md mt-2">
               <a href={state.supportHref} className="underline font-bold">
                 Signaler au support
               </a>{" "}
@@ -112,7 +115,7 @@ export function MerchantPosForm({
       {state.duplicates && state.duplicates.length > 0 ? (
         <div className="bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-3">
           <p className="font-label-md font-bold">Magasins proches détectés</p>
-          <ul className="font-body-sm mt-2 list-disc pl-5">
+          <ul className="font-body-md text-body-md mt-2 list-disc pl-5">
             {state.duplicates.map((dup) => (
               <li key={dup.id}>
                 {dup.name}
@@ -123,7 +126,7 @@ export function MerchantPosForm({
               </li>
             ))}
           </ul>
-          <label className="font-label-md mt-3 flex items-center gap-2">
+          <label className="font-body-md text-body-md mt-3 flex min-h-11 items-center gap-2">
             <input type="checkbox" name="confirmDuplicate" />
             Confirmer quand même l’enregistrement
           </label>
@@ -139,7 +142,7 @@ export function MerchantPosForm({
           className={adminFieldClass}
         />
         {state.fieldErrors?.name ? (
-          <span className="font-body-sm text-error">{state.fieldErrors.name}</span>
+          <span className="font-body-md text-body-md text-error">{state.fieldErrors.name}</span>
         ) : null}
       </label>
 
@@ -166,7 +169,7 @@ export function MerchantPosForm({
               <li key={`${hit.lat}-${hit.lng}-${hit.label}`}>
                 <button
                   type="button"
-                  className="font-body-sm hover:bg-surface-container w-full px-3 py-2 text-left"
+                  className="font-body-md text-body-md hover:bg-surface-container min-h-11 w-full px-3 text-left"
                   onClick={() => pickHit(hit)}
                 >
                   {hit.label}
@@ -176,16 +179,16 @@ export function MerchantPosForm({
           </ul>
         ) : null}
         {state.fieldErrors?.banLat || state.fieldErrors?.address ? (
-          <span className="font-body-sm text-error">
+          <span className="font-body-md text-body-md text-error">
             {state.fieldErrors.banLat || state.fieldErrors.address}
           </span>
         ) : null}
         {banLabel ? (
-          <p className="font-label-xs text-on-tertiary-container">
+          <p className="font-body-sm text-body-sm text-on-tertiary-container">
             Adresse confirmée : {banLabel}
           </p>
         ) : (
-          <p className="font-label-xs text-on-surface-variant">
+          <p className="font-body-sm text-body-sm text-on-surface-variant">
             Choisissez une suggestion pour valider les coordonnées.
           </p>
         )}
@@ -202,7 +205,7 @@ export function MerchantPosForm({
             className={adminFieldClass}
           />
           {state.fieldErrors?.postalCode ? (
-            <span className="font-body-sm text-error">
+            <span className="font-body-md text-body-md text-error">
               {state.fieldErrors.postalCode}
             </span>
           ) : null}
@@ -217,7 +220,7 @@ export function MerchantPosForm({
             className={adminFieldClass}
           />
           {state.fieldErrors?.city ? (
-            <span className="font-body-sm text-error">{state.fieldErrors.city}</span>
+            <span className="font-body-md text-body-md text-error">{state.fieldErrors.city}</span>
           ) : null}
         </label>
         <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1">
@@ -238,7 +241,7 @@ export function MerchantPosForm({
             className={adminFieldClass}
           />
           {state.fieldErrors?.logoUrl ? (
-            <span className="font-body-sm text-error">
+            <span className="font-body-md text-body-md text-error">
               {state.fieldErrors.logoUrl}
             </span>
           ) : null}

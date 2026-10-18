@@ -56,7 +56,7 @@ export default async function EditOffrePage({
         <DeleteOfferButton offerId={offer.id} />
       </div>
       {saved ? (
-        <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
+        <p className="font-body-md text-body-md bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
           Offre enregistrée. Remise {offer.discountPct ?? "—"}&nbsp;%.
         </p>
       ) : null}

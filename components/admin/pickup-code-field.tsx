@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { adminFieldClass } from "@/components/admin/admin-shell";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type Detector = {
   detect: (source: CanvasImageSource) => Promise<Array<{ rawValue: string }>>;
@@ -15,6 +17,7 @@ export function PickupCodeField({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const fieldId = useId();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [scanning, setScanning] = useState(false);
   const [hint, setHint] = useState<string | null>(null);
@@ -84,34 +87,55 @@ export function PickupCodeField({
   }, [scanning, onChange]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex w-full flex-col gap-2">
       {scanning ? (
         <video
           ref={videoRef}
           muted
           playsInline
-          className="bg-primary-container h-36 w-48 rounded-xl object-cover"
+          className="bg-primary-container h-36 w-full rounded-xl object-cover"
         />
       ) : null}
+      <label
+        htmlFor={fieldId}
+        className="font-body-md text-body-md text-primary-container font-bold"
+      >
+        Code de retrait
+      </label>
       <input
+        id={fieldId}
         name="pickupCode"
         value={value}
         placeholder="Code de retrait"
+        autoCapitalize="characters"
+        autoCorrect="off"
+        spellCheck={false}
         autoComplete="off"
-        className={adminFieldClass}
-        onChange={(event) => onChange(event.target.value)}
+        className={cn(
+          adminFieldClass,
+          "text-primary-container h-12 min-h-12 text-[20px] tracking-[0.2em] font-bold",
+        )}
+        onChange={(event) =>
+          onChange(event.target.value.replace(/[\s-]/g, ""))
+        }
       />
-      <button
+      <Button
         type="button"
-        className="font-label-md text-label-md text-primary-container text-left font-bold underline-offset-4 hover:underline"
+        variant="outline"
+        size="lg"
+        className="w-full"
         onClick={() => {
           setHint(null);
           setScanning((current) => !current);
         }}
       >
         {scanning ? "Arrêter le scan" : "Scanner le QR"}
-      </button>
-      {hint ? <p className="font-body-sm text-error">{hint}</p> : null}
+      </Button>
+      {hint ? (
+        <p className="font-body-md text-body-md text-error" role="status">
+          {hint}
+        </p>
+      ) : null}
     </div>
   );
 }

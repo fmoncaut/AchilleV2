@@ -35,6 +35,16 @@ function formatWhen(value: Date): string {
   });
 }
 
+function FieldLabel({ children }: { children: string }) {
+  return (
+    <span className="font-body-sm text-body-sm text-on-surface-variant mb-1 block lg:hidden">
+      {children}
+    </span>
+  );
+}
+
+const cellClass = "max-lg:block max-lg:w-full max-lg:px-0 max-lg:py-2 px-4 py-3";
+
 export default async function AdminReservationsPage() {
   const actor = await requireAdminActor();
   const reservations = await listReservationsForMerchant(actor.merchantId);
@@ -51,14 +61,14 @@ export default async function AdminReservationsPage() {
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Réservations
         </h1>
-        <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+        <p className="font-body-md text-body-md text-on-surface-variant mt-2">
           Click & collect de votre enseigne. Le client présente son pass au
           comptoir. La capture part uniquement ici, quand le code est validé.
           Il n’y a pas de casier à déverrouiller.
         </p>
       </div>
       <AdminCard>
-        <p className="font-body-sm text-primary-container">
+        <p className="font-body-md text-body-md text-primary-container">
           Les réservations en attente ou confirmées dont la date limite est
           dépassée passent expirées et le stock est rendu. Une réservation
           prête au retrait se clôt par le code, ou en no-show après la date
@@ -66,13 +76,16 @@ export default async function AdminReservationsPage() {
         </p>
       </AdminCard>
       {reservations.length === 0 ? (
-        <p className="font-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Aucune réservation pour votre enseigne.
         </p>
       ) : (
-        <AdminTable caption="Réservations" className="min-w-[48rem]">
+        <AdminTable
+          caption="Réservations"
+          className="text-body-md max-lg:block lg:min-w-[48rem]"
+        >
           <AdminThead>
-            <tr>
+            <tr className="max-lg:hidden">
               <AdminTh className="px-4 py-3">Offre</AdminTh>
               <AdminTh className="px-4 py-3">Magasin</AdminTh>
               <AdminTh className="px-4 py-3">Montant</AdminTh>
@@ -82,39 +95,46 @@ export default async function AdminReservationsPage() {
               <AdminTh className="px-4 py-3">Actions</AdminTh>
             </tr>
           </AdminThead>
-          <tbody>
+          <tbody className="max-lg:block">
             {reservations.map((reservation) => (
               <tr
                 key={reservation.id}
-                className="border-surface-container-high border-t"
+                className="border-surface-container-high max-lg:mb-4 max-lg:block max-lg:rounded-2xl max-lg:border max-lg:p-4 lg:border-t"
               >
-                <td className="font-body-sm text-primary-container px-4 py-3">
+                <td className={`${cellClass} font-body-md text-body-md text-primary-container`}>
+                  <FieldLabel>Offre</FieldLabel>
                   {reservation.items
                     .map(
                       (item) =>
                         `${item.offer.product.name} × ${item.quantity}`,
                     )
                     .join(", ")}
-                  <p className="text-on-surface-variant text-xs">
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">
                     {reservation.user.email ?? reservation.user.name ?? "Acheteur"}
                   </p>
                 </td>
-                <td className="font-body-sm text-on-surface-variant px-4 py-3">
+                <td className={`${cellClass} font-body-sm text-body-sm text-on-surface-variant`}>
+                  <FieldLabel>Magasin</FieldLabel>
                   {reservation.pos.name}
                 </td>
-                <td className="font-headline-sm text-secondary px-4 py-3 font-extrabold">
+                <td className={`${cellClass} font-body-md text-body-md text-primary-container font-bold`}>
+                  <FieldLabel>Montant</FieldLabel>
                   {formatEur(reservation.totalAmount)}
                 </td>
-                <td className="px-4 py-3">
+                <td className={cellClass}>
+                  <FieldLabel>Statut</FieldLabel>
                   <ReservationStatusBadge status={reservation.status} />
                 </td>
-                <td className="font-body-sm text-on-surface-variant px-4 py-3">
+                <td className={`${cellClass} font-body-sm text-body-sm text-on-surface-variant`}>
+                  <FieldLabel>Paiement</FieldLabel>
                   {PAYMENT_LABELS[reservation.paymentState]}
                 </td>
-                <td className="font-body-sm text-on-surface-variant px-4 py-3 whitespace-nowrap">
+                <td className={`${cellClass} font-body-sm text-body-sm text-on-surface-variant lg:whitespace-nowrap`}>
+                  <FieldLabel>Limite</FieldLabel>
                   {formatWhen(reservation.pickupDeadline)}
                 </td>
-                <td className="px-4 py-3">
+                <td className={cellClass}>
+                  <FieldLabel>Actions</FieldLabel>
                   <ReservationControls
                     reservationId={reservation.id}
                     status={reservation.status}
@@ -123,14 +143,14 @@ export default async function AdminReservationsPage() {
                   />
                   <Link
                     href={`/admin/reservations/${reservation.id}`}
-                    className="font-label-md text-primary-container mt-2 inline-block font-bold underline-offset-4 hover:underline"
+                    className="font-body-md text-body-md text-primary-container mt-2 inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
                   >
                     {unreadIds.has(reservation.id) ? "Message non lu" : "Messages"}
                   </Link>
                   {reservation.status === "PICKED_UP" ? (
                     <Link
                       href={`/admin/reservations/${reservation.id}/facture`}
-                      className="font-label-md text-primary-container mt-2 inline-block font-bold underline-offset-4 hover:underline"
+                      className="font-body-md text-body-md text-primary-container mt-2 inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
                     >
                       Imprimer une facture
                     </Link>

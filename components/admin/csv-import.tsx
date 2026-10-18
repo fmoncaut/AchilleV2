@@ -34,7 +34,7 @@ export function CsvImportWizard() {
 
   return (
     <div className="flex flex-col gap-6">
-      <ol className="font-label-md text-label-md flex flex-wrap gap-3">
+      <ol className="font-body-sm text-body-sm flex flex-wrap gap-3">
         <StepChip n={1} label="Upload" active={step === 1} done={step > 1} />
         <StepChip n={2} label="Validation" active={step === 2} done={step > 2} />
         <StepChip n={3} label="Import" active={step === 3} done={false} />
@@ -49,7 +49,7 @@ export function CsvImportWizard() {
               name="file"
               accept=".csv,text/csv"
               required
-              className="bg-surface-container-low font-body-sm text-on-surface rounded-2xl px-4 py-3"
+              className="bg-surface-container-low font-body-md text-body-md text-on-surface min-h-11 rounded-2xl px-4 py-3"
             />
           </label>
           <p className="font-body-sm text-body-sm text-on-surface-variant">
@@ -75,18 +75,21 @@ export function CsvImportWizard() {
       {step === 2 ? (
         <div className="flex flex-col gap-4">
           {preview.error ? (
-            <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
+            <p
+              className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+              role="alert"
+            >
               {preview.error}
             </p>
           ) : (
-            <p className="font-body-sm text-body-sm text-primary-container">
+            <p className="font-body-md text-body-md text-primary-container">
               {validCount} ligne{validCount > 1 ? "s" : ""} valide
               {validCount > 1 ? "s" : ""} · {invalidCount} en erreur. Les
               erreurs n’empêchent pas l’import des lignes valides.
             </p>
           )}
           {rows.length > 0 ? (
-            <AdminTable caption="Aperçu de l’import" className="min-w-[40rem]">
+            <AdminTable caption="Aperçu de l’import" className="text-body-md min-w-[40rem]">
               <AdminThead>
                 <tr>
                   <AdminTh className="px-3 py-2">Ligne</AdminTh>
@@ -101,16 +104,16 @@ export function CsvImportWizard() {
                     key={row.line}
                     className="border-surface-container-high border-t"
                   >
-                    <td className="font-body-sm px-3 py-2">{row.line}</td>
-                    <td className="font-body-sm px-3 py-2">{row.raw.ean}</td>
-                    <td className="font-body-sm px-3 py-2">{row.raw.nom}</td>
+                    <td className="font-body-sm text-body-sm px-3 py-2">{row.line}</td>
+                    <td className="font-body-sm text-body-sm px-3 py-2">{row.raw.ean}</td>
+                    <td className="font-body-md text-body-md px-3 py-2">{row.raw.nom}</td>
                     <td className="px-3 py-2">
                       {row.ok ? (
                         <span className="font-label-xs text-label-xs bg-tertiary-fixed text-on-tertiary-container rounded-full px-2.5 py-1 font-bold">
                           OK
                         </span>
                       ) : (
-                        <span className="font-body-sm text-error">
+                        <span className="font-body-md text-body-md text-on-error-container" role="alert">
                           {row.errors.join(" · ")}
                         </span>
                       )}
@@ -138,13 +141,15 @@ export function CsvImportWizard() {
       {step === 3 ? (
         <div className="bg-surface-container-low rounded-2xl p-6">
           {imported.error ? (
-            <p className="font-body-sm text-error">{imported.error}</p>
+            <p className="font-body-md text-body-md text-on-error-container" role="alert">
+              {imported.error}
+            </p>
           ) : (
             <>
               <h2 className="font-headline-sm text-headline-sm text-primary-container">
                 Import terminé
               </h2>
-              <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+              <p className="font-body-md text-body-md text-on-surface-variant mt-2">
                 {imported.imported ?? 0} offre
                 {(imported.imported ?? 0) > 1 ? "s" : ""} créée
                 {(imported.imported ?? 0) > 1 ? "s" : ""} ou mise
@@ -154,7 +159,7 @@ export function CsvImportWizard() {
                 {(imported.skipped ?? 0) > 1 ? "s" : ""}.
               </p>
               {(imported.errors ?? []).length > 0 ? (
-                <ul className="font-body-sm text-error mt-4 list-disc pl-5">
+                <ul className="font-body-md text-body-md text-on-error-container mt-4 list-disc pl-5">
                   {imported.errors?.map((row) => (
                     <li key={row.line}>
                       Ligne {row.line} : {row.errors.join(" · ")}
@@ -184,7 +189,7 @@ function StepChip({
   return (
     <li
       className={cn(
-        "inline-flex items-center rounded-full px-3 py-1 font-bold",
+        "inline-flex min-h-11 items-center rounded-full px-3 font-bold",
         active
           ? "bg-primary-container text-on-primary shadow-sm"
           : done
