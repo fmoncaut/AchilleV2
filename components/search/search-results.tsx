@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Distance } from "@/components/distance";
 import { MaterialIcon } from "@/components/material-icon";
+import { merchantInitials } from "@/components/merchant-mark";
 import { OfferCard } from "@/components/offer-card";
 import type { NearbyOfferCard } from "@/lib/geo";
 import { formatEur } from "@/lib/money";
@@ -90,8 +91,12 @@ export function SearchResults({
                     href={magasinPath(store.posSlug, lat, lng)}
                     className="bg-surface-container-lowest shadow-sm hover:shadow-md flex items-center gap-3 rounded-2xl p-3"
                   >
-                    <span className="bg-primary-fixed font-headline-sm text-primary-container flex size-10 shrink-0 items-center justify-center rounded-lg font-extrabold">
-                      {store.merchantName.slice(0, 1)}
+                    <span
+                      role="img"
+                      aria-label={store.merchantName}
+                      className="bg-primary-fixed font-headline-sm text-primary-container flex size-10 shrink-0 items-center justify-center rounded-lg font-extrabold"
+                    >
+                      {merchantInitials(store.merchantName)}
                     </span>
                     <span className="min-w-0">
                       <span className="font-label-md text-label-md text-primary-container block truncate font-bold">

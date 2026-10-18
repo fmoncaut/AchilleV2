@@ -14,7 +14,7 @@ export function AdminMain({
   return (
     <main
       className={cn(
-        "bg-background mx-auto flex w-full flex-1 flex-col gap-6 px-4 py-8 sm:px-6",
+        "bg-background mx-auto flex w-full min-w-0 flex-1 flex-col gap-6 px-4 py-8 sm:px-6",
         width === "wide" ? "max-w-6xl" : "max-w-3xl",
         className,
       )}
@@ -42,7 +42,7 @@ export function AdminCard({
   return (
     <div
       className={cn(
-        "bg-surface-container-lowest shadow-sm rounded-2xl p-5 sm:p-6",
+        "bg-surface-container-lowest shadow-sm min-w-0 rounded-2xl p-5 sm:p-6",
         className,
       )}
     >
@@ -67,7 +67,7 @@ export function AdminTable({
   className?: string;
 }) {
   return (
-    <div className="bg-surface-container-lowest shadow-sm overflow-x-auto rounded-2xl">
+    <div className="bg-surface-container-lowest shadow-sm w-full min-w-0 max-w-full overflow-x-auto rounded-2xl">
       <table className={cn("w-full text-left", className)}>
         <caption className="sr-only">{caption}</caption>
         {children}

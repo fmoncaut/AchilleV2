@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils";
 
 const STEPS = [
   { id: "recap", label: "Récapitulatif", href: "/reservation" },
-  { id: "pickup", label: "Retrait", href: "/reservation/retrait" },
-  { id: "payment", label: "Paiement", href: null },
+  { id: "pickup", label: "Retrait et empreinte", href: "/reservation/retrait" },
   { id: "confirmation", label: "Confirmation", href: null },
 ] as const;
 

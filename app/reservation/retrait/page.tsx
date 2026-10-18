@@ -15,7 +15,7 @@ import { getSiteUrl } from "@/lib/site";
 import { loginWithReturn } from "@/lib/urls";
 
 export const metadata = {
-  title: "Réservation — retrait | Akwire",
+  title: "Retrait et empreinte bancaire | Akwire",
 };
 
 type PageProps = {
@@ -54,10 +54,10 @@ export default async function ReservationPickupPage({ searchParams }: PageProps)
             Retrait en magasin
           </p>
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1">
-            Informations de retrait
+            Retrait et empreinte bancaire
           </h1>
         </div>
-        <TunnelSteps current="payment" />
+        <TunnelSteps current="pickup" />
         {error ? (
           <p
             className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"

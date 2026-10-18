@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SortToggle } from "@/components/catalog/sort-toggle";
 import { Distance } from "@/components/distance";
 import { MaterialIcon } from "@/components/material-icon";
+import { merchantInitials } from "@/components/merchant-mark";
 import { MerchantCta } from "@/components/merchant-cta";
 import { Price } from "@/components/ui/price";
 import {
@@ -90,8 +91,12 @@ export function OfferComparator({
                   <span className="bg-secondary-container absolute top-0 bottom-0 left-0 w-1.5" />
                 ) : null}
                 <div className="flex items-center gap-3 lg:col-span-4">
-                  <span className="bg-surface-container font-headline-sm text-headline-sm text-primary-container flex size-14 shrink-0 items-center justify-center rounded-2xl font-bold">
-                    {offer.merchantName.slice(0, 2).toUpperCase()}
+                  <span
+                    role="img"
+                    aria-label={offer.merchantName}
+                    className="bg-surface-container font-headline-sm text-headline-sm text-primary-container flex size-14 shrink-0 items-center justify-center rounded-2xl font-bold"
+                  >
+                    {merchantInitials(offer.merchantName)}
                   </span>
                   <div className="min-w-0">
                     <Link
