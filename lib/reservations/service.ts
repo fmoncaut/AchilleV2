@@ -4,6 +4,7 @@ import { Prisma, type PaymentState, type ReservationStatus } from "@prisma/clien
 
 import { prisma } from "@/lib/db";
 import { notifyReservationEvent } from "@/lib/messages/service";
+import { notifyReservationConfirmed } from "@/lib/reservations/confirmation-email";
 import {
   captureForPickup,
   releaseHold,
@@ -874,6 +875,14 @@ export async function markAuthorizationReady(paymentIntentId: string) {
     await prisma.reservationCart.deleteMany({
       where: { userId: current.userId, posId: current.posId },
     });
+    // Webhook et page de retour appellent tous deux cette fonction : seul celui
+    // qui a fait passer PENDING → CONFIRMED arrive ici, l'e-mail part une fois.
+    // Un échec d'envoi ne doit pas faire échouer le webhook Stripe.
+    try {
+      await notifyReservationConfirmed(current.id);
+    } catch (error) {
+      console.error("[notifications] confirmation réservation", error);
+    }
   }
 }
 
