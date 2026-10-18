@@ -22,7 +22,7 @@ export function AdminHeader({
   unreadReservations = 0,
 }: AdminHeaderProps) {
   return (
-    <div className="bg-surface-container-lowest shadow-sm">
+    <div className="bg-surface-container-lowest print:hidden shadow-sm">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
         <p className="font-headline-sm text-primary-container flex items-center gap-2 text-[16px] font-bold">
           <MaterialIcon

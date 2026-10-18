@@ -61,7 +61,7 @@ export async function SiteHeader() {
 
   return (
     <>
-      <header className="bg-surface-container-lowest/95 shadow-sm sticky top-0 z-header h-16 w-full backdrop-blur-md">
+      <header className="bg-surface-container-lowest/95 shadow-sm print:hidden sticky top-0 z-header h-16 w-full backdrop-blur-md">
         <div className="mx-auto flex h-full max-w-page items-center gap-2 px-4 sm:gap-3 sm:px-6 lg:px-8">
           <BrandLockup className="min-h-11 shrink-0" />
           <HeaderSearch
@@ -117,7 +117,7 @@ export async function SiteHeader() {
           </nav>
         </div>
       </header>
-      <div className="bg-surface-container-lowest px-4 py-2 sm:px-6 lg:hidden">
+      <div className="bg-surface-container-lowest print:hidden px-4 py-2 sm:px-6 lg:hidden">
         <HeaderSearch inputId="header-search-mobile" className="flex w-full" />
       </div>
     </>

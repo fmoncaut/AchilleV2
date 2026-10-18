@@ -110,7 +110,7 @@ export function ConsentBanner({ analytics }: ConsentBannerProps) {
         <div
           role="dialog"
           aria-labelledby="consent-title"
-          className="bg-surface-container-lowest shadow-md fixed inset-x-0 bottom-0 z-consent mx-auto max-w-3xl p-4 sm:bottom-4 sm:rounded-2xl"
+          className="bg-surface-container-lowest shadow-md print:hidden fixed inset-x-0 bottom-0 z-consent mx-auto max-w-3xl p-4 sm:bottom-4 sm:rounded-2xl"
         >
           <h2
             id="consent-title"

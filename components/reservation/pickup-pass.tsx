@@ -40,7 +40,7 @@ export function PickupPass({
           dangerouslySetInnerHTML={{ __html: svg }}
         />
         <div>
-          <p className="font-headline-lg text-secondary-container tracking-[0.3em]">
+          <p className="font-headline-lg text-headline-lg text-on-primary tracking-[0.3em]">
             {code}
           </p>
           <p className="font-body-sm text-body-sm text-surface-variant mt-2">
@@ -50,7 +50,7 @@ export function PickupPass({
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <button
               type="button"
-              className="bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full px-3.5 py-1.5 font-bold"
+              className="bg-secondary-container text-on-secondary-container font-body-md text-body-md inline-flex h-11 items-center rounded-full px-4 font-bold"
               onClick={() => dialogRef.current?.showModal()}
             >
               Afficher le pass
@@ -60,7 +60,7 @@ export function PickupPass({
                 href={directionsHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-label-md text-label-md text-secondary-container rounded-full px-3.5 py-1.5 font-bold underline-offset-4 hover:underline"
+                className="font-body-md text-body-md text-secondary-container inline-flex h-11 items-center rounded-full px-4 font-bold underline-offset-4 hover:underline"
               >
                 Itinéraire
               </a>
@@ -80,14 +80,14 @@ export function PickupPass({
             className="bg-surface-container-lowest w-56 rounded-2xl p-3"
             dangerouslySetInnerHTML={{ __html: svg }}
           />
-          <p className="font-headline-lg text-secondary-container tracking-[0.35em]">
+          <p className="font-headline-lg text-headline-lg text-on-primary tracking-[0.35em]">
             {code}
           </p>
           <div className="font-body-sm text-body-sm text-surface-variant space-y-1">
             <p className="text-on-primary font-semibold">{product}</p>
             <p>{storeName}</p>
             <p>{address || "Adresse non renseignée"}</p>
-            <p className="text-secondary-container font-extrabold">{amount}</p>
+            <p className="text-on-primary font-price-hero text-price-hero font-extrabold">{amount}</p>
             <p>À retirer avant le {deadline}</p>
           </div>
           {hours.length > 0 ? (
@@ -103,7 +103,7 @@ export function PickupPass({
           <form method="dialog">
             <button
               type="submit"
-              className="bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full px-4 py-2 font-bold"
+              className="bg-secondary-container text-on-secondary-container font-body-md text-body-md inline-flex h-11 items-center rounded-full px-4 font-bold"
             >
               Fermer
             </button>

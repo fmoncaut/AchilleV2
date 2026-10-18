@@ -123,26 +123,29 @@ export default async function ReservationConfirmationPage({
     <BuyerMain>
       <BuyerSection className="flex flex-1 flex-col gap-6 py-10">
         <div>
-          <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+          <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
             Retrait en magasin
           </p>
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1">
             {codeReady ? "Stock réservé" : "Réservation enregistrée"}
           </h1>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">
             {codeReady
               ? "Empreinte autorisée. Rien n’est débité avant le retrait en magasin."
               : `Statut : ${STATUS_LABELS[reservation.status]}. L’empreinte n’est pas confirmée.`}
           </p>
           {paymentError ? (
-            <p className="font-body-sm bg-error-container text-on-error-container mt-3 rounded-2xl px-3 py-2">
+            <p
+              className="font-body-md text-body-md bg-error-container text-on-error-container mt-3 rounded-2xl px-3 py-2"
+              role="alert"
+            >
               {paymentError}
             </p>
           ) : null}
         </div>
         <TunnelSteps current="confirmation" />
         {reservation.status === "EXPIRED" ? (
-          <p className="font-body-sm bg-surface-container text-on-surface-variant rounded-2xl px-3 py-2">
+          <p className="font-body-md text-body-md bg-surface-container text-on-surface-variant rounded-2xl px-3 py-2">
             Délai dépassé. L’empreinte a été libérée et le stock rendu.
           </p>
         ) : null}
@@ -186,14 +189,14 @@ export default async function ReservationConfirmationPage({
               <span className="font-body-md text-primary-container">
                 {item.offer.product.name} × {item.quantity}
               </span>
-              <span className="font-headline-sm text-secondary">
+              <span className="font-price-card text-price-card text-primary-container font-extrabold">
                 {formatEur(item.subtotal)}
               </span>
             </li>
           ))}
           <li className="border-surface-container-high flex items-baseline justify-between gap-3 border-t pt-3">
             <span className="font-label-md text-primary-container">Total</span>
-            <span className="font-price-hero text-secondary font-extrabold">
+            <span className="font-price-hero text-price-hero text-primary-container font-extrabold">
               {formatEur(reservation.totalAmount)}
             </span>
           </li>

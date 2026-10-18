@@ -5,6 +5,7 @@ import { Toaster as Sonner, toast } from "sonner";
 function Toaster() {
   return (
     <Sonner
+      className="print:hidden"
       position="top-center"
       closeButton
       toastOptions={{

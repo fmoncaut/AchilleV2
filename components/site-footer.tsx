@@ -4,7 +4,7 @@ import { BrandLockup } from "@/components/brand-lockup";
 
 export function SiteFooter() {
   return (
-    <footer className="bg-surface-container-low mt-auto w-full">
+    <footer className="bg-surface-container-low print:hidden mt-auto w-full">
       <div className="mx-auto flex max-w-page flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
         <div className="font-body-sm text-body-sm text-on-surface-variant flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
           <BrandLockup href="/" mono />

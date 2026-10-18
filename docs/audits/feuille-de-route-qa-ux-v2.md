@@ -37,6 +37,8 @@ Vague 2d (`design/v2d-fiches`) : fiche offre (`Price` hero et comparateur, une p
 
 Vague 3 (`design/v3-auth`) : connexion, code OTP et onboarding. Le code reste un seul champ (`name="code"`, remplissage automatique). `OtpInput` n’est pas branché : les 6 chiffres d’un coup dans la première case ne garderaient qu’un chiffre. Compteur « N sur 5 » partagé avec les réglages. `UtilityCard` en Encre, y compris `/compte`.
 
+Vague 4 (`design/v4-tunnel`) : panier, retrait, confirmation, pass et facture. Les prix du tunnel sont en Encre. Le Payment Element ne change que `appearance` (police système, pas de fichier de police). Le pass est blanc sur Encre, QR sur blanc. L’impression masque l’en-tête, le pied, la bannière cookies et les toasts.
+
 La Vague 0 change la peau (tokens, police, primitives, états de chargement). Elle ne rebranche pas chaque écran sur les primitives. Aucun écran ne devient illisible : le texte ambre clair sur fond clair est remplacé par l'ambre foncé `#8A5300`. Les P0 ci-dessous sont les dettes visuelles reportées.
 
 ## P0 reportés
@@ -44,10 +46,10 @@ La Vague 0 change la peau (tokens, police, primitives, états de chargement). El
 | Sujet | Vague | Pourquoi |
 | --- | --- | --- |
 | Pins et popup carte encore en hex Achille (`#002642`, `#FE9800`) | 2c | Traité : tokens, trois dessins, popups conservées. Compteur de pin en 10 px (exception documentée). |
-| Chiffre du prix encore en ambre foncé hors carte d'offre | 2d | Traité sur la fiche offre (`Price`, une phrase « Vous économisez »). Le tunnel reste en Vague 4. |
+| Chiffre du prix encore en ambre foncé hors carte d'offre | 2d | Traité sur la fiche offre (`Price`) et dans le tunnel (Vague 4, Encre). |
 | Gabarit e-mail (OTP, réservation) | 1 | Traité : tableau 600 px, logo PNG, clair et sombre. |
 | E-mail « réservation confirmée » absent | hors refonte | L’acheteur pose une empreinte sans recevoir d’e-mail. Pas de nouvel envoi dans la Vague 1. |
-| Payment Element (navy, Manrope) | 4 | `appearance` seulement, plus tard. |
+| Payment Element (navy, Manrope) | 4 | Traité : `appearance` Encre, police système. Pas d’option `fonts`. |
 
 ## Écrans
 
