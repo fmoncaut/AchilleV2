@@ -26,7 +26,7 @@ export function AdminMain({
 
 export function AdminKicker({ children }: { children: ReactNode }) {
   return (
-    <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+    <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
       {children}
     </p>
   );

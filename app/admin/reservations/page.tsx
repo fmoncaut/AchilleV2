@@ -9,13 +9,11 @@ import {
   AdminTh,
   AdminThead,
 } from "@/components/admin/admin-shell";
+import { ReservationStatusBadge } from "@/components/reservation/reservation-status";
 import { requireAdminActor } from "@/lib/admin/actor";
 import { unreadReservationIds } from "@/lib/messages/service";
 import { formatEur } from "@/lib/money";
-import {
-  STATUS_LABELS,
-  listReservationsForMerchant,
-} from "@/lib/reservations/service";
+import { listReservationsForMerchant } from "@/lib/reservations/service";
 
 export const metadata = {
   title: "Réservations | Back-office Akwire",
@@ -108,9 +106,7 @@ export default async function AdminReservationsPage() {
                   {formatEur(reservation.totalAmount)}
                 </td>
                 <td className="px-4 py-3">
-                  <span className="font-label-xs text-label-xs bg-primary-container text-on-primary rounded-full px-2.5 py-1 font-bold">
-                    {STATUS_LABELS[reservation.status]}
-                  </span>
+                  <ReservationStatusBadge status={reservation.status} />
                 </td>
                 <td className="font-body-sm text-on-surface-variant px-4 py-3">
                   {PAYMENT_LABELS[reservation.paymentState]}

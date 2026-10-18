@@ -42,7 +42,7 @@ export default async function AdminIndexPage() {
         <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1 tracking-tight">
           Vue d’ensemble
         </h1>
-        <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+        <p className="font-body-md text-body-md text-on-surface-variant mt-2">
           Enseignes, magasins et rattachement des vendeurs. Réservé aux
           collaborateurs Akwire.
         </p>
@@ -60,7 +60,7 @@ export default async function AdminIndexPage() {
             </AdminCard>
           );
           return card.href ? (
-            <Link key={card.label} href={card.href}>
+            <Link key={card.label} href={card.href} className="block rounded-2xl">
               {body}
             </Link>
           ) : (
