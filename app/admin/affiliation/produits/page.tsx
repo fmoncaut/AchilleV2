@@ -6,6 +6,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
 } from "@/components/admin/admin-shell";
 import { Button } from "@/components/ui/button";
@@ -48,13 +49,13 @@ export default async function AffiliationProductsPage({
           et prévient le marchand.
         </p>
       </div>
-      <AdminTable>
+      <AdminTable caption="Flux avec des produits à créer">
         <AdminThead>
           <tr>
-            <th className="px-4 py-3">Enseigne</th>
-            <th className="px-4 py-3">Réseau</th>
-            <th className="px-4 py-3">Flux</th>
-            <th className="px-4 py-3">En attente</th>
+            <AdminTh className="px-4 py-3">Enseigne</AdminTh>
+            <AdminTh className="px-4 py-3">Réseau</AdminTh>
+            <AdminTh className="px-4 py-3">Flux</AdminTh>
+            <AdminTh className="px-4 py-3">En attente</AdminTh>
           </tr>
         </AdminThead>
         <tbody>
@@ -88,13 +89,15 @@ export default async function AffiliationProductsPage({
           <h2 className="text-primary-container text-xl font-bold">
             {detail.lines[0]?.feed.merchant.name ?? "Flux"} · {detail.total} lignes
           </h2>
-          <AdminTable>
+          <AdminTable caption="Lignes du flux">
             <AdminThead>
               <tr>
-                <th className="px-4 py-3">Produit</th>
-                <th className="px-4 py-3">Clé</th>
-                <th className="px-4 py-3">Catégorie</th>
-                <th className="px-4 py-3"></th>
+                <AdminTh className="px-4 py-3">Produit</AdminTh>
+                <AdminTh className="px-4 py-3">Clé</AdminTh>
+                <AdminTh className="px-4 py-3">Catégorie</AdminTh>
+                <AdminTh className="px-4 py-3">
+                  <span className="sr-only">Actions</span>
+                </AdminTh>
               </tr>
             </AdminThead>
             <tbody>

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -58,15 +58,20 @@ export const adminLabelClass =
   "font-label-md text-label-md text-primary-container flex flex-col gap-1";
 
 export function AdminTable({
+  caption,
   children,
   className,
 }: {
+  caption: string;
   children: ReactNode;
   className?: string;
 }) {
   return (
     <div className="bg-surface-container-lowest shadow-sm overflow-x-auto rounded-2xl">
-      <table className={cn("w-full text-left text-sm", className)}>{children}</table>
+      <table className={cn("w-full text-left text-sm", className)}>
+        <caption className="sr-only">{caption}</caption>
+        {children}
+      </table>
     </div>
   );
 }
@@ -76,6 +81,18 @@ export function AdminThead({ children }: { children: ReactNode }) {
     <thead className="font-label-md text-label-md bg-surface-container-high/60 text-on-surface-variant tracking-wider uppercase">
       {children}
     </thead>
+  );
+}
+
+export function AdminTh({
+  className,
+  children,
+  ...props
+}: Omit<ComponentProps<"th">, "scope">) {
+  return (
+    <th scope="col" className={className} {...props}>
+      {children}
+    </th>
   );
 }
 

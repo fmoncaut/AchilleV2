@@ -4,6 +4,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
 } from "@/components/admin/admin-shell";
 import { Button } from "@/components/ui/button";
@@ -93,14 +94,14 @@ export default async function MesMagasinsPage({ searchParams }: PageProps) {
         </Button>
       </form>
 
-      <AdminTable className="mt-6">
+      <AdminTable caption="Mes magasins" className="mt-6">
         <AdminThead>
           <tr>
-            <th className="px-3 py-2 text-left">Magasin</th>
-            <th className="px-3 py-2 text-left">Ville</th>
-            <th className="px-3 py-2 text-left">Statut admin</th>
-            <th className="px-3 py-2 text-left">Fermeture</th>
-            <th className="px-3 py-2 text-right">Actions</th>
+            <AdminTh className="px-3 py-2 text-left">Magasin</AdminTh>
+            <AdminTh className="px-3 py-2 text-left">Ville</AdminTh>
+            <AdminTh className="px-3 py-2 text-left">Statut admin</AdminTh>
+            <AdminTh className="px-3 py-2 text-left">Fermeture</AdminTh>
+            <AdminTh className="px-3 py-2 text-right">Actions</AdminTh>
           </tr>
         </AdminThead>
         <tbody>

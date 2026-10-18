@@ -6,6 +6,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
 } from "@/components/admin/admin-shell";
 import { Button } from "@/components/ui/button";
@@ -104,15 +105,15 @@ export default async function AffiliationRunsPage({
           </p>
         </AdminCard>
       ) : (
-        <AdminTable>
+        <AdminTable caption="Ingestions">
           <AdminThead>
             <tr>
-              <th className="px-4 py-3">Début</th>
-              <th className="px-4 py-3">Flux</th>
-              <th className="px-4 py-3">Déclencheur</th>
-              <th className="px-4 py-3">Statut</th>
-              <th className="px-4 py-3">Compteurs</th>
-              <th className="px-4 py-3">Erreur</th>
+              <AdminTh className="px-4 py-3">Début</AdminTh>
+              <AdminTh className="px-4 py-3">Flux</AdminTh>
+              <AdminTh className="px-4 py-3">Déclencheur</AdminTh>
+              <AdminTh className="px-4 py-3">Statut</AdminTh>
+              <AdminTh className="px-4 py-3">Compteurs</AdminTh>
+              <AdminTh className="px-4 py-3">Erreur</AdminTh>
             </tr>
           </AdminThead>
           <tbody>

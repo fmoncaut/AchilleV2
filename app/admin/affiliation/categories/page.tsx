@@ -9,6 +9,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
   adminFieldClass,
 } from "@/components/admin/admin-shell";
@@ -114,12 +115,12 @@ export default async function AffiliationCategoriesPage({
             <CategoryPicker categories={options} candidates={[]} />
             <Button type="submit">Appliquer à tout le groupe</Button>
           </form>
-          <AdminTable>
+          <AdminTable caption="Valeurs du groupe">
             <AdminThead>
               <tr>
-                <th className="px-4 py-3">Valeur</th>
-                <th className="px-4 py-3">Lignes</th>
-                <th className="px-4 py-3">Décision</th>
+                <AdminTh className="px-4 py-3">Valeur</AdminTh>
+                <AdminTh className="px-4 py-3">Lignes</AdminTh>
+                <AdminTh className="px-4 py-3">Décision</AdminTh>
               </tr>
             </AdminThead>
             <tbody>
@@ -167,14 +168,14 @@ export default async function AffiliationCategoriesPage({
           </AdminTable>
         </section>
       ) : (
-        <AdminTable>
+        <AdminTable caption="Groupes de catégories">
           <AdminThead>
             <tr>
-              <th className="px-4 py-3">Réseau</th>
-              <th className="px-4 py-3">Groupe</th>
-              <th className="px-4 py-3">Valeurs</th>
-              <th className="px-4 py-3">Lignes</th>
-              <th className="px-4 py-3">Ouvertes</th>
+              <AdminTh className="px-4 py-3">Réseau</AdminTh>
+              <AdminTh className="px-4 py-3">Groupe</AdminTh>
+              <AdminTh className="px-4 py-3">Valeurs</AdminTh>
+              <AdminTh className="px-4 py-3">Lignes</AdminTh>
+              <AdminTh className="px-4 py-3">Ouvertes</AdminTh>
             </tr>
           </AdminThead>
           <tbody>

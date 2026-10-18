@@ -5,6 +5,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
   StatusChip,
 } from "@/components/admin/admin-shell";
@@ -39,16 +40,16 @@ export default async function EnseignesPage() {
           Aucune enseigne. Créez-en une pour y rattacher des magasins.
         </p>
       ) : (
-        <AdminTable className="min-w-[40rem]">
+        <AdminTable caption="Enseignes" className="min-w-[40rem]">
           <AdminThead>
             <tr>
-              <th className="px-3 py-3">Logo</th>
-              <th className="px-3 py-3">Nom</th>
-              <th className="px-3 py-3">Slug</th>
-              <th className="px-3 py-3">Magasins</th>
-              <th className="px-3 py-3">Publication POS</th>
-              <th className="px-3 py-3">Statut</th>
-              <th className="px-3 py-3">Actions</th>
+              <AdminTh className="px-3 py-3">Logo</AdminTh>
+              <AdminTh className="px-3 py-3">Nom</AdminTh>
+              <AdminTh className="px-3 py-3">Slug</AdminTh>
+              <AdminTh className="px-3 py-3">Magasins</AdminTh>
+              <AdminTh className="px-3 py-3">Publication POS</AdminTh>
+              <AdminTh className="px-3 py-3">Statut</AdminTh>
+              <AdminTh className="px-3 py-3">Actions</AdminTh>
             </tr>
           </AdminThead>
           <tbody>

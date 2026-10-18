@@ -6,6 +6,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
 } from "@/components/admin/admin-shell";
 import { requireAdminActor } from "@/lib/admin/actor";
@@ -71,16 +72,16 @@ export default async function AdminReservationsPage() {
           Aucune réservation pour votre enseigne.
         </p>
       ) : (
-        <AdminTable className="min-w-[48rem]">
+        <AdminTable caption="Réservations" className="min-w-[48rem]">
           <AdminThead>
             <tr>
-              <th className="px-4 py-3">Offre</th>
-              <th className="px-4 py-3">Magasin</th>
-              <th className="px-4 py-3">Montant</th>
-              <th className="px-4 py-3">Statut</th>
-              <th className="px-4 py-3">Paiement</th>
-              <th className="px-4 py-3">Limite</th>
-              <th className="px-4 py-3">Actions</th>
+              <AdminTh className="px-4 py-3">Offre</AdminTh>
+              <AdminTh className="px-4 py-3">Magasin</AdminTh>
+              <AdminTh className="px-4 py-3">Montant</AdminTh>
+              <AdminTh className="px-4 py-3">Statut</AdminTh>
+              <AdminTh className="px-4 py-3">Paiement</AdminTh>
+              <AdminTh className="px-4 py-3">Limite</AdminTh>
+              <AdminTh className="px-4 py-3">Actions</AdminTh>
             </tr>
           </AdminThead>
           <tbody>

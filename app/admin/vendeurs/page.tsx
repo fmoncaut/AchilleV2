@@ -3,6 +3,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
   StatusChip,
   adminFieldClass,
@@ -88,13 +89,13 @@ export default async function VendeursPage({ searchParams }: VendeursPageProps) 
           Aucun compte pour cette recherche.
         </p>
       ) : (
-        <AdminTable className="min-w-[40rem]">
+        <AdminTable caption="Vendeurs" className="min-w-[40rem]">
           <AdminThead>
             <tr>
-              <th className="px-3 py-3">E-mail</th>
-              <th className="px-3 py-3">Nom</th>
-              <th className="px-3 py-3">Rôle</th>
-              <th className="px-3 py-3">Enseigne</th>
+              <AdminTh className="px-3 py-3">E-mail</AdminTh>
+              <AdminTh className="px-3 py-3">Nom</AdminTh>
+              <AdminTh className="px-3 py-3">Rôle</AdminTh>
+              <AdminTh className="px-3 py-3">Enseigne</AdminTh>
             </tr>
           </AdminThead>
           <tbody>

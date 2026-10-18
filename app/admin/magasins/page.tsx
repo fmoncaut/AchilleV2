@@ -5,6 +5,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
 } from "@/components/admin/admin-shell";
 import { Button } from "@/components/ui/button";
@@ -208,14 +209,14 @@ export default async function MagasinsPage({ searchParams }: MagasinsPageProps) 
           Aucun magasin pour ces filtres.
         </p>
       ) : (
-        <AdminTable className="min-w-[56rem]">
+        <AdminTable caption="Magasins" className="min-w-[56rem]">
           <AdminThead>
             <tr>
-              <th className="px-3 py-3">Enseigne</th>
-              <th className="px-3 py-3">Magasin</th>
-              <th className="px-3 py-3">Ville</th>
-              <th className="px-3 py-3">Statut</th>
-              <th className="px-3 py-3">Actions</th>
+              <AdminTh className="px-3 py-3">Enseigne</AdminTh>
+              <AdminTh className="px-3 py-3">Magasin</AdminTh>
+              <AdminTh className="px-3 py-3">Ville</AdminTh>
+              <AdminTh className="px-3 py-3">Statut</AdminTh>
+              <AdminTh className="px-3 py-3">Actions</AdminTh>
             </tr>
           </AdminThead>
           <tbody>

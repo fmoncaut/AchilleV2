@@ -6,6 +6,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
 } from "@/components/admin/admin-shell";
 import { Button } from "@/components/ui/button";
@@ -50,12 +51,12 @@ export default async function MerchantPendingPage({
           Ces lignes attendent la création du produit par Akwire. Lecture seule.
         </p>
       </div>
-      <AdminTable>
+      <AdminTable caption="Flux en attente">
         <AdminThead>
           <tr>
-            <th className="px-4 py-3">Réseau</th>
-            <th className="px-4 py-3">Flux</th>
-            <th className="px-4 py-3">En attente</th>
+            <AdminTh className="px-4 py-3">Réseau</AdminTh>
+            <AdminTh className="px-4 py-3">Flux</AdminTh>
+            <AdminTh className="px-4 py-3">En attente</AdminTh>
           </tr>
         </AdminThead>
         <tbody>
@@ -84,12 +85,12 @@ export default async function MerchantPendingPage({
         </tbody>
       </AdminTable>
       {detail ? (
-        <AdminTable>
+        <AdminTable caption="Lignes en attente">
           <AdminThead>
             <tr>
-              <th className="px-4 py-3">Produit</th>
-              <th className="px-4 py-3">Clé</th>
-              <th className="px-4 py-3">Catégorie</th>
+              <AdminTh className="px-4 py-3">Produit</AdminTh>
+              <AdminTh className="px-4 py-3">Clé</AdminTh>
+              <AdminTh className="px-4 py-3">Catégorie</AdminTh>
             </tr>
           </AdminThead>
           <tbody>

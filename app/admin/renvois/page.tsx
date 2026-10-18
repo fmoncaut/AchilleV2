@@ -5,6 +5,7 @@ import {
   AdminKicker,
   AdminMain,
   AdminTable,
+  AdminTh,
   AdminThead,
 } from "@/components/admin/admin-shell";
 import {
@@ -108,11 +109,11 @@ export default async function AdminRenvoisPage({
             <h2 className="font-headline-sm text-headline-sm text-primary-container">
               Par jour
             </h2>
-            <AdminTable className="min-w-[20rem]">
+            <AdminTable caption="Renvois par jour" className="min-w-[20rem]">
               <AdminThead>
                 <tr>
-                  <th className="px-4 py-3">Jour</th>
-                  <th className="px-4 py-3">Renvois</th>
+                  <AdminTh className="px-4 py-3">Jour</AdminTh>
+                  <AdminTh className="px-4 py-3">Renvois</AdminTh>
                 </tr>
               </AdminThead>
               <tbody>
@@ -137,12 +138,12 @@ export default async function AdminRenvoisPage({
             <h2 className="font-headline-sm text-headline-sm text-primary-container">
               Par broker
             </h2>
-            <AdminTable className="min-w-[20rem]">
+            <AdminTable caption="Renvois par broker" className="min-w-[20rem]">
               <AdminThead>
                 <tr>
-                  <th className="px-4 py-3">Broker</th>
-                  <th className="px-4 py-3">Type</th>
-                  <th className="px-4 py-3">Renvois</th>
+                  <AdminTh className="px-4 py-3">Broker</AdminTh>
+                  <AdminTh className="px-4 py-3">Type</AdminTh>
+                  <AdminTh className="px-4 py-3">Renvois</AdminTh>
                 </tr>
               </AdminThead>
               <tbody>
@@ -170,11 +171,11 @@ export default async function AdminRenvoisPage({
             <h2 className="font-headline-sm text-headline-sm text-primary-container">
               Par enseigne
             </h2>
-            <AdminTable className="min-w-[20rem]">
+            <AdminTable caption="Renvois par enseigne" className="min-w-[20rem]">
               <AdminThead>
                 <tr>
-                  <th className="px-4 py-3">Enseigne</th>
-                  <th className="px-4 py-3">Renvois</th>
+                  <AdminTh className="px-4 py-3">Enseigne</AdminTh>
+                  <AdminTh className="px-4 py-3">Renvois</AdminTh>
                 </tr>
               </AdminThead>
               <tbody>
@@ -199,15 +200,15 @@ export default async function AdminRenvoisPage({
             <h2 className="font-headline-sm text-headline-sm text-primary-container">
               Par offre
             </h2>
-            <AdminTable className="min-w-[28rem]">
+            <AdminTable caption="Renvois par offre" className="min-w-[28rem]">
               <AdminThead>
                 <tr>
                   {actor.role === "ADMIN" ? (
-                    <th className="px-4 py-3">Enseigne</th>
+                    <AdminTh className="px-4 py-3">Enseigne</AdminTh>
                   ) : null}
-                  <th className="px-4 py-3">Offre</th>
-                  <th className="px-4 py-3">Magasin</th>
-                  <th className="px-4 py-3">Renvois</th>
+                  <AdminTh className="px-4 py-3">Offre</AdminTh>
+                  <AdminTh className="px-4 py-3">Magasin</AdminTh>
+                  <AdminTh className="px-4 py-3">Renvois</AdminTh>
                 </tr>
               </AdminThead>
               <tbody>
