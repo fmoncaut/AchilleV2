@@ -31,14 +31,14 @@ export default async function AccountDangerSettingsPage({
     <section className="bg-surface-container-lowest shadow-sm flex flex-col gap-5 rounded-2xl p-5">
       <div>
         <h2 className="font-headline-sm text-primary-container">Compte</h2>
-        <p className="font-body-sm text-on-surface-variant mt-1">
+        <p className="font-body-md text-body-md text-on-surface-variant mt-1">
           Gestion de votre compte Akwire.
         </p>
       </div>
 
       {params.erreur ? (
         <p
-          className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+          className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
           role="alert"
         >
           {params.erreur}
@@ -49,7 +49,7 @@ export default async function AccountDangerSettingsPage({
         <p className="font-label-md text-primary-container font-bold">
           Supprimer mon compte
         </p>
-        <p className="font-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Efface vos données personnelles (profil, favoris, adresses, intérêts,
           notifications, sessions). Les réservations et factures sont conservées
           pour obligation légale, avec l’identité figée au moment de la

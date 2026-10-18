@@ -18,13 +18,13 @@ export default async function ReglagesLayout({
     <BuyerMain>
       <BuyerSection className="flex flex-1 flex-col gap-6 py-10">
         <div>
-          <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+          <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
             Compte
           </p>
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1">
             Réglages
           </h1>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">
             Profil, centres d’intérêt et notifications.
           </p>
         </div>
@@ -33,7 +33,7 @@ export default async function ReglagesLayout({
         <p>
           <Link
             href="/compte"
-            className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+            className="font-label-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
           >
             Retour au compte
           </Link>

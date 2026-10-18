@@ -8,6 +8,7 @@ import { OpeningHoursList } from "@/components/opening-hours";
 import { CancelReservationButton } from "@/components/reservation/cancel-reservation-button";
 import { PickupCountdown } from "@/components/reservation/pickup-countdown";
 import { PickupPass } from "@/components/reservation/pickup-pass";
+import { ReservationStatusBadge } from "@/components/reservation/reservation-status";
 import { Button } from "@/components/ui/button";
 import { mapsDirectionsUrl } from "@/lib/geo";
 import { invoiceNumber } from "@/lib/invoices/pickup";
@@ -115,16 +116,21 @@ export default async function BuyerReservationPage({ params }: PageProps) {
     <BuyerMain>
       <BuyerSection className="flex flex-1 flex-col gap-6 py-10">
         <div>
-          <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
-            {STATUS_LABELS[reservation.status]}
+          <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
+            Réservation
           </p>
-          <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1">
+          <div className="mt-2">
+            <ReservationStatusBadge status={reservation.status} />
+          </div>
+          <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-2">
             {product}
           </h1>
-          <p className="font-body-sm text-on-surface-variant mt-2">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">
             {store}
             {reservation.pos.city ? ` (${reservation.pos.city})` : ""} ·{" "}
-            {formatEur(reservation.totalAmount)}
+            <span className="font-price-card text-price-card text-primary-container font-extrabold">
+              {formatEur(reservation.totalAmount)}
+            </span>
           </p>
           {WITH_COUNTDOWN.has(reservation.status) ? (
             <div className="mt-3">
@@ -134,12 +140,12 @@ export default async function BuyerReservationPage({ params }: PageProps) {
               />
             </div>
           ) : reservation.status === "EXPIRED" ? (
-            <p className="font-body-sm text-on-surface-variant mt-3">
+            <p className="font-body-md text-body-md text-on-surface-variant mt-3">
               Délai dépassé le {formatWhen(reservation.pickupDeadline)}.
               L’empreinte a été libérée et le stock rendu.
             </p>
           ) : (
-            <p className="font-body-sm text-on-surface-variant mt-3">
+            <p className="font-body-md text-body-md text-on-surface-variant mt-3">
               Limite de retrait : {formatWhen(reservation.pickupDeadline)}
             </p>
           )}
@@ -159,7 +165,7 @@ export default async function BuyerReservationPage({ params }: PageProps) {
             directionsHref={directionsHref}
           />
         ) : CANCELABLE.has(reservation.status) ? (
-          <p className="font-body-sm text-primary-container">
+          <p className="font-body-md text-body-md text-primary-container">
             Code de retrait{" "}
             <span className="font-headline-sm tracking-widest">
               {reservation.pickupCode}
@@ -170,7 +176,7 @@ export default async function BuyerReservationPage({ params }: PageProps) {
         <section className="bg-surface-container-lowest shadow-sm flex flex-col gap-3 rounded-2xl p-5">
           <h2 className="font-headline-sm text-primary-container">Magasin</h2>
           <p className="font-body-md text-primary-container">{store}</p>
-          <p className="font-body-sm text-on-surface-variant">
+          <p className="font-body-md text-body-md text-on-surface-variant">
             {address || "Adresse non renseignée"}
           </p>
           <OpeningHoursList value={reservation.pos.openingHours} />
@@ -184,18 +190,18 @@ export default async function BuyerReservationPage({ params }: PageProps) {
             >
               <span className="font-body-md text-primary-container">
                 {item.offer.product.name} × {item.quantity}
-                <span className="font-body-sm text-on-surface-variant ml-2">
+                <span className="font-body-md text-body-md text-on-surface-variant ml-2">
                   {formatEur(item.unitPrice)} / u.
                 </span>
               </span>
-              <span className="font-headline-sm text-secondary">
+              <span className="font-price-card text-price-card text-primary-container font-extrabold">
                 {formatEur(item.subtotal)}
               </span>
             </li>
           ))}
           <li className="border-surface-container-high flex items-baseline justify-between gap-3 border-t pt-3">
             <span className="font-label-md text-primary-container">Total</span>
-            <span className="font-price-hero text-secondary font-extrabold">
+            <span className="font-price-hero text-price-hero text-primary-container font-extrabold">
               {formatEur(reservation.totalAmount)}
             </span>
           </li>
@@ -206,7 +212,7 @@ export default async function BuyerReservationPage({ params }: PageProps) {
             <CancelReservationButton reservationId={reservation.id} />
           ) : null}
           {invoiceRef ? (
-            <Button asChild variant="outline" size="sm">
+            <Button asChild variant="outline">
               <Link href={`/compte/reservations/${reservation.id}/facture`}>
                 Facture {invoiceRef}
               </Link>
@@ -216,7 +222,7 @@ export default async function BuyerReservationPage({ params }: PageProps) {
             href={directionsHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+            className="font-label-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
           >
             Itinéraire
           </a>
@@ -226,7 +232,7 @@ export default async function BuyerReservationPage({ params }: PageProps) {
 
         <Link
           href="/compte/reservations"
-          className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+          className="font-label-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
         >
           Retour aux réservations
         </Link>

@@ -2,6 +2,9 @@
 
 import { useState, type ReactNode } from "react";
 
+import { Chip, ChipRow } from "@/components/ui/chip";
+import { cn } from "@/lib/utils";
+
 export type ReservationGroup = {
   id: string;
   title: string;
@@ -17,7 +20,7 @@ export function ReservationBoard({ groups }: { groups: ReservationGroup[] }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex gap-2 overflow-x-auto">
+      <ChipRow>
         <FilterPill
           label="Tous"
           count={visible.reduce((sum, group) => sum + group.count, 0)}
@@ -33,7 +36,7 @@ export function ReservationBoard({ groups }: { groups: ReservationGroup[] }) {
             onClick={() => setActive(group.id)}
           />
         ))}
-      </div>
+      </ChipRow>
       {shown.map((group) => (
         <section key={group.id} className="flex flex-col gap-3">
           <div className="flex items-center justify-between gap-3">
@@ -63,25 +66,18 @@ function FilterPill({
   onClick: () => void;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`font-label-md text-label-md inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-bold ${
-        selected
-          ? "bg-primary-container text-on-primary"
-          : "bg-surface-container text-on-surface-variant"
-      }`}
-    >
+    <Chip pressed={selected} onClick={onClick}>
       {label}
       <span
-        className={`inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-extrabold ${
+        className={cn(
+          "font-label-xs text-label-xs inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1 font-extrabold",
           selected
             ? "bg-secondary-container text-on-secondary-container"
-            : "bg-surface-container-high text-on-surface"
-        }`}
+            : "bg-surface-container-high text-on-surface",
+        )}
       >
         {count}
       </span>
-    </button>
+    </Chip>
   );
 }

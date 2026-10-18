@@ -1,14 +1,12 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
-
 import { BuyerMain, BuyerSection } from "@/components/buyer/shell";
 import { FavoriteButton } from "@/components/favorite-button";
 import { ProductImage } from "@/components/product-image";
 import { EmptyState } from "@/components/search/empty-state";
+import { Chip } from "@/components/ui/chip";
 import { auth } from "@/auth";
 import { listFavoritesForUser } from "@/lib/favorites";
 import { loginWithReturn, magasinPath, offerPath } from "@/lib/urls";
-import { cn } from "@/lib/utils";
 
 export const metadata = {
   title: "Mes favoris — Akwire",
@@ -39,31 +37,28 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
     <BuyerMain>
       <BuyerSection className="flex flex-1 flex-col gap-6 py-10">
         <div>
-          <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+          <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
             Compte
           </p>
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-2 tracking-tight">
             Mes favoris
           </h1>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">
             Produits et magasins enregistrés sur votre compte — rien n’est
             partagé avec d’autres utilisateurs.
           </p>
         </div>
 
-        <nav
-          className="bg-surface-container-low inline-flex w-fit rounded-full p-1"
-          aria-label="Type de favoris"
-        >
-          <TabLink href="/compte/favoris" active={onglet === "produits"}>
+        <nav className="flex flex-wrap gap-2" aria-label="Type de favoris">
+          <Chip href="/compte/favoris" current={onglet === "produits"}>
             Produits ({products.length})
-          </TabLink>
-          <TabLink
+          </Chip>
+          <Chip
             href="/compte/favoris?onglet=magasins"
-            active={onglet === "magasins"}
+            current={onglet === "magasins"}
           >
             Magasins ({poses.length})
-          </TabLink>
+          </Chip>
         </nav>
 
         {onglet === "produits" ? (
@@ -87,6 +82,7 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
                         isFavorite
                         loginHref={loginHref}
                         variant="icon"
+                        className="size-11 min-h-11 min-w-11"
                       />
                     </div>
                     <Link
@@ -99,7 +95,7 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
                         variant="card"
                       />
                       <div className="flex flex-1 flex-col gap-1 p-4">
-                        <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+                        <p className="font-label-xs text-label-xs text-on-surface-variant font-extrabold tracking-wider uppercase">
                           {product.brand?.name ?? "Produit"}
                         </p>
                         <h2 className="font-headline-sm text-primary-container text-[16px] leading-tight">
@@ -132,15 +128,16 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
                       isFavorite
                       loginHref={loginHref}
                       variant="icon"
+                      className="size-11 min-h-11 min-w-11"
                     />
                   </div>
-                  <p className="font-label-xs text-label-xs text-secondary pr-12 font-extrabold tracking-wider uppercase">
+                  <p className="font-label-xs text-label-xs text-on-surface-variant pr-12 font-extrabold tracking-wider uppercase">
                     {pos.merchant.name}
                   </p>
                   <h2 className="font-headline-sm text-headline-sm text-primary-container mt-1">
                     {pos.name}
                   </h2>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+                  <p className="font-body-md text-body-md text-on-surface-variant mt-2">
                     {[pos.address, [pos.postalCode, pos.city].filter(Boolean).join(" ")]
                       .filter(Boolean)
                       .join(", ") || "Adresse non renseignée"}
@@ -148,7 +145,7 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
                   <p className="mt-4">
                     <Link
                       href={magasinPath(pos.slug)}
-                      className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+                      className="font-label-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
                     >
                       Voir le magasin
                     </Link>
@@ -162,36 +159,12 @@ export default async function FavorisPage({ searchParams }: FavorisPageProps) {
         <p>
           <Link
             href="/compte"
-            className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+            className="font-label-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
           >
             Retour au compte
           </Link>
         </p>
       </BuyerSection>
     </BuyerMain>
-  );
-}
-
-function TabLink({
-  href,
-  active,
-  children,
-}: {
-  href: string;
-  active: boolean;
-  children: ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      className={cn(
-        "font-label-md text-label-md rounded-full px-4 py-2 font-bold",
-        active
-          ? "bg-primary-container text-on-primary shadow-sm"
-          : "text-primary-container",
-      )}
-    >
-      {children}
-    </Link>
   );
 }
