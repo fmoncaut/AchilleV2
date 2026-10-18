@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 
 import { requireAdminActor } from "@/lib/admin/actor";
 import {
@@ -99,6 +99,8 @@ export async function createMerchantPosAction(
     revalidatePath("/admin/mes-magasins");
     redirect(`/admin/mes-magasins/${result.id}?ok=1`);
   } catch (error) {
+    // redirect() lève NEXT_REDIRECT : sans ça, le catch le renvoyait comme erreur.
+    unstable_rethrow(error);
     if (error instanceof MerchantPosError && error.code === "geocode") {
       return geocodeFailState(error, formData);
     }
@@ -136,6 +138,8 @@ export async function updateMerchantPosAction(
     revalidatePath(`/admin/mes-magasins/${posId}`);
     redirect(`/admin/mes-magasins/${posId}?ok=1`);
   } catch (error) {
+    // redirect() lève NEXT_REDIRECT : sans ça, le catch le renvoyait comme erreur.
+    unstable_rethrow(error);
     if (error instanceof MerchantPosError) {
       if (error.code === "geocode") {
         return geocodeFailState(error, formData);
