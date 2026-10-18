@@ -38,6 +38,7 @@
     "verify-payments": "tsx scripts/verify-payments.ts",
     "verify-confirmation-email": "tsx scripts/verify-confirmation-email.ts",
     "verify-opening-hours": "tsx scripts/verify-opening-hours.ts",
+    "verify-icons": "tsx scripts/verify-icons.ts",
     "postinstall": "prisma generate",
     "gen-icons": "tsx scripts/gen-icons.ts",
     "capture:staging": "tsx scripts/capture-screens.ts staging",

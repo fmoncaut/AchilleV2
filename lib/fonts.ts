@@ -28,12 +28,16 @@ export const spaceGrotesk = localFont({
   display: "swap",
 });
 
-/** Material Symbols Outlined — Apache 2.0, auto-hébergé (pas dans next/font/google). */
+/**
+ * Material Symbols Outlined — Apache 2.0, auto-hébergé.
+ * Sous-ensemble figé (app/fonts/material-symbols-icons.txt), axe FILL 0..1.
+ * Pas de requête Google à l'exécution.
+ */
 export const materialSymbols = localFont({
-  src: "../app/fonts/material-symbols-outlined.woff2",
+  src: "../app/fonts/material-symbols-outlined-subset.woff2",
   variable: "--font-material-symbols",
   display: "block",
   preload: true,
   adjustFontFallback: false,
-  weight: "100 700",
+  weight: "400",
 });
