@@ -39,6 +39,8 @@ Vague 3 (`design/v3-auth`) : connexion, code OTP et onboarding. Le code reste un
 
 Vague 4 (`design/v4-tunnel`) : panier, retrait, confirmation, pass et facture. Les prix du tunnel sont en Encre. Le Payment Element ne change que `appearance` (police système, pas de fichier de police). Le pass est blanc sur Encre, QR sur blanc. L’impression masque l’en-tête, le pied, la bannière cookies et les toasts.
 
+Vague 5 (`design/v5-compte`) : hub, favoris, réservations et réglages. Montants en Encre. Statuts en pastille avec le texte (`Prête au retrait` success, `Confirmée` info, `Non retirée` danger, les autres neutres). Suppression et annulation : formulaire entier dans le `Dialog`. Facture et intérêts inchangés.
+
 La Vague 0 change la peau (tokens, police, primitives, états de chargement). Elle ne rebranche pas chaque écran sur les primitives. Aucun écran ne devient illisible : le texte ambre clair sur fond clair est remplacé par l'ambre foncé `#8A5300`. Les P0 ci-dessous sont les dettes visuelles reportées.
 
 ## P0 reportés

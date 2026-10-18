@@ -34,20 +34,20 @@ export default async function NotificationsSettingsPage({
         <h2 className="font-headline-sm text-primary-container">
           Notifications
         </h2>
-        <p className="font-body-sm text-on-surface-variant mt-1">
+        <p className="font-body-md text-body-md text-on-surface-variant mt-1">
           Choisissez les e-mails que vous souhaitez recevoir.
         </p>
       </div>
 
       {params.ok === "1" ? (
-        <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
+        <p className="font-body-md text-body-md bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
           Préférences enregistrées.
         </p>
       ) : null}
 
       <ul className="flex flex-col gap-4">
         <li className="border-surface-container-high flex flex-col gap-1 border-b pb-4">
-          <label className="flex items-start gap-3 opacity-80">
+          <label className="flex min-h-11 items-start gap-3 opacity-80">
             <input
               type="checkbox"
               checked
@@ -60,7 +60,7 @@ export default async function NotificationsSettingsPage({
               <span className="font-label-md text-primary-container font-bold">
                 E-mails essentiels de commande
               </span>
-              <span className="font-body-sm text-on-surface-variant mt-1 block">
+              <span className="font-body-md text-body-md text-on-surface-variant mt-1 block">
                 Confirmation, prêt au retrait, annulation, expiration — toujours
                 activés
                 {orderUpdates?.emailEnabled === false
@@ -73,7 +73,7 @@ export default async function NotificationsSettingsPage({
 
         <li className="border-surface-container-high flex flex-col gap-3 border-b pb-4">
           <form action={updateDealAlertsAction} className="flex flex-col gap-3">
-            <label className="flex items-start gap-3">
+            <label className="flex min-h-11 items-start gap-3">
               <input
                 type="checkbox"
                 name="dealAlerts"
@@ -85,19 +85,19 @@ export default async function NotificationsSettingsPage({
                 <span className="font-label-md text-primary-container font-bold">
                   Alertes bonnes affaires
                 </span>
-                <span className="font-body-sm text-on-surface-variant mt-1 block">
+                <span className="font-body-md text-body-md text-on-surface-variant mt-1 block">
                   Offres et déstockages près de chez vous (facultatif).
                 </span>
               </span>
             </label>
-            <Button type="submit" size="sm" className="w-fit">
+            <Button type="submit" className="w-fit">
               Enregistrer
             </Button>
           </form>
         </li>
 
         <li className="flex flex-col gap-1 opacity-70">
-          <label className="flex items-start gap-3">
+          <label className="flex min-h-11 items-start gap-3">
             <input
               type="checkbox"
               disabled
@@ -108,7 +108,7 @@ export default async function NotificationsSettingsPage({
               <span className="font-label-md text-primary-container font-bold">
                 Notifications push
               </span>
-              <span className="font-body-sm text-on-surface-variant mt-1 block">
+              <span className="font-body-md text-body-md text-on-surface-variant mt-1 block">
                 Bientôt (application mobile).
               </span>
             </span>

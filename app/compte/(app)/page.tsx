@@ -38,7 +38,7 @@ export default async function AccountPage() {
           <dt className="font-label-md text-label-md text-on-surface-variant">
             Nom
           </dt>
-          <dd className="font-headline-sm text-primary-container text-[16px]">
+          <dd className="font-body-md text-body-md text-primary-container">
             {displayUserName(dbUser?.name ?? user.name)}
           </dd>
         </div>
@@ -46,7 +46,7 @@ export default async function AccountPage() {
           <dt className="font-label-md text-label-md text-on-surface-variant">
             E-mail
           </dt>
-          <dd className="font-headline-sm text-primary-container text-[16px]">
+          <dd className="font-body-md text-body-md text-primary-container">
             {dbUser?.email ?? user.email ?? "Non renseigné"}
           </dd>
         </div>
@@ -91,7 +91,7 @@ export default async function AccountPage() {
       <p className="mt-6 text-center">
         <Link
           href="/"
-          className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+          className="font-label-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
         >
           Retour à l&apos;accueil
         </Link>

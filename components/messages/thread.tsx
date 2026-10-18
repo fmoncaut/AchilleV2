@@ -7,6 +7,7 @@ import {
   type MessageActionState,
 } from "@/app/messages/actions";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 export type ThreadMessage = {
   id: string;
@@ -34,7 +35,7 @@ export function MessageThread({
   return (
     <section className="bg-surface-container-lowest shadow-sm flex flex-col gap-4 rounded-2xl p-5">
       <div>
-        <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+        <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
           Messagerie
         </p>
         <h2 className="font-headline-sm text-primary-container mt-1">
@@ -42,7 +43,7 @@ export function MessageThread({
         </h2>
       </div>
       {messages.length === 0 ? (
-        <p className="font-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Aucun message. Écrivez au magasin ou à l’acheteur depuis ce fil.
         </p>
       ) : (
@@ -60,8 +61,12 @@ export function MessageThread({
                 {message.author}
                 {message.unread ? " · non lu" : ""}
               </p>
-              <p className="font-body-sm mt-1 whitespace-pre-wrap">{message.body}</p>
-              <p className="font-label-xs text-label-xs mt-1 opacity-80">{message.when}</p>
+              <p className="font-body-md text-body-md mt-1 whitespace-pre-wrap">
+                {message.body}
+              </p>
+              <p className="font-label-xs text-label-xs mt-1 opacity-80">
+                {message.when}
+              </p>
             </li>
           ))}
         </ol>
@@ -71,23 +76,19 @@ export function MessageThread({
           <input type="hidden" name="reservationId" value={reservationId} />
           <label className="font-label-md text-label-md text-primary-container flex flex-col gap-1">
             Message
-            <textarea
-              name="body"
-              required
-              maxLength={2000}
-              rows={3}
-              className="border-outline-variant bg-surface font-body-sm rounded-2xl border px-3 py-2"
-            />
+            <Textarea name="body" required maxLength={2000} rows={3} />
           </label>
           {state.error ? (
-            <p className="font-body-sm text-error">{state.error}</p>
+            <p className="font-body-md text-body-md text-error" role="alert">
+              {state.error}
+            </p>
           ) : null}
-          <Button type="submit" disabled={pending}>
+          <Button type="submit" disabled={pending} className="w-fit">
             {pending ? "Envoi…" : "Envoyer"}
           </Button>
         </form>
       ) : (
-        <p className="font-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Lecture seule. Seuls l’acheteur et le vendeur de l’enseigne écrivent
           dans ce fil.
         </p>

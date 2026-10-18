@@ -6,6 +6,7 @@ import { CancelReservationButton } from "@/components/reservation/cancel-reserva
 import { PickupCountdown } from "@/components/reservation/pickup-countdown";
 import { PickupPass } from "@/components/reservation/pickup-pass";
 import { ReservationBoard } from "@/components/reservation/reservation-board";
+import { ReservationStatusBadge } from "@/components/reservation/reservation-status";
 import { EmptyState } from "@/components/search/empty-state";
 import { auth } from "@/auth";
 import { mapsDirectionsUrl } from "@/lib/geo";
@@ -105,17 +106,15 @@ function ReservationCard({
           ) : null}
           <div className="min-w-0">
             <p className="font-headline-sm text-primary-container">{product}</p>
-            <p className="font-body-sm text-on-surface-variant mt-1">
+            <p className="font-body-md text-body-md text-on-surface-variant mt-1">
               {store}
               {reservation.pos.city ? ` (${reservation.pos.city})` : ""}
             </p>
           </div>
         </div>
-        <span className="font-label-xs text-label-xs bg-primary-container text-on-primary rounded-full px-2.5 py-1 font-bold">
-          {STATUS_LABELS[reservation.status]}
-        </span>
+        <ReservationStatusBadge status={reservation.status} />
       </div>
-      <p className="font-price-hero text-secondary text-2xl font-extrabold">
+      <p className="font-price-card text-price-card text-primary-container font-extrabold">
         {formatEur(reservation.totalAmount)}
       </p>
       {WITH_COUNTDOWN.has(reservation.status) ? (
@@ -124,12 +123,12 @@ function ReservationCard({
           initialNowIso={nowIso}
         />
       ) : reservation.status === "EXPIRED" ? (
-        <p className="font-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Délai dépassé le {formatWhen(reservation.pickupDeadline)}. L’empreinte
           a été libérée et le stock rendu.
         </p>
       ) : (
-        <p className="font-body-sm text-on-surface-variant">
+        <p className="font-body-md text-body-md text-on-surface-variant">
           Limite de retrait : {formatWhen(reservation.pickupDeadline)}
         </p>
       )}
@@ -147,7 +146,7 @@ function ReservationCard({
           directionsHref={directionsHref}
         />
       ) : CANCELABLE.has(reservation.status) ? (
-        <p className="font-body-sm text-primary-container">
+        <p className="font-body-md text-body-md text-primary-container">
           Code de retrait{" "}
           <span className="font-headline-sm tracking-widest">
             {reservation.pickupCode}
@@ -157,13 +156,13 @@ function ReservationCard({
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <Link
           href={`/compte/reservations/${reservation.id}`}
-          className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+          className="font-label-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
         >
           Voir la réservation
         </Link>
         <Link
           href={`/compte/reservations/${reservation.id}`}
-          className="font-label-md text-on-surface-variant underline-offset-4 hover:underline"
+          className="font-label-md text-on-surface-variant inline-flex min-h-11 items-center underline-offset-4 hover:underline"
         >
           {unread ? "Message non lu" : "Messages"}
         </Link>
@@ -171,14 +170,14 @@ function ReservationCard({
           href={directionsHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-label-md text-on-surface-variant underline-offset-4 hover:underline"
+          className="font-label-md text-on-surface-variant inline-flex min-h-11 items-center underline-offset-4 hover:underline"
         >
           Itinéraire
         </a>
         {reservation.status === "PICKED_UP" ? (
           <Link
             href={`/compte/reservations/${reservation.id}/facture`}
-            className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+            className="font-label-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
           >
             Voir la facture
           </Link>
@@ -237,30 +236,33 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
     <BuyerMain>
       <BuyerSection className="flex flex-1 flex-col gap-6 py-10">
         <div>
-          <p className="font-label-xs text-label-xs text-secondary font-extrabold tracking-wider uppercase">
+          <p className="font-label-xs text-label-xs text-primary-container font-extrabold tracking-wider uppercase">
             Compte
           </p>
           <h1 className="font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-primary-container mt-1">
             Mes réservations
           </h1>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">
             Retrait en magasin. L’empreinte n’est débitée qu’au retrait. Si
             vous ne retirez pas à temps, elle est libérée.
           </p>
         </div>
         {createdId ? (
-          <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
+          <p className="font-body-md text-body-md bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
             Réservation enregistrée. Présentez le code de retrait en magasin.
           </p>
         ) : null}
         {first(query.annulee) === "1" ? (
-          <p className="font-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
+          <p className="font-body-md text-body-md bg-secondary-fixed text-on-secondary-fixed rounded-2xl px-3 py-2">
             Réservation annulée. Le stock a été rendu et l’empreinte, s’il y
             en avait une, est libérée.
           </p>
         ) : null}
         {error ? (
-          <p className="font-body-sm bg-error-container text-on-error-container rounded-2xl px-3 py-2">
+          <p
+            className="font-body-md text-body-md bg-error-container text-on-error-container rounded-2xl px-3 py-2"
+            role="alert"
+          >
             {error === "reservation" ? "Réservation introuvable." : error}
           </p>
         ) : null}
@@ -277,7 +279,7 @@ export default async function ReservationsPage({ searchParams }: PageProps) {
         <p>
           <Link
             href="/compte"
-            className="font-label-md text-primary-container font-bold underline-offset-4 hover:underline"
+            className="font-label-md text-primary-container inline-flex min-h-11 items-center font-bold underline-offset-4 hover:underline"
           >
             Retour au compte
           </Link>
