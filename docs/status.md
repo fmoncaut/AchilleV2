@@ -1,3 +1,5 @@
+> **Obsolète (20 septembre 2026).** État à jour : `docs/audits/point-etape-2026-10-19.md`.
+
 # Achille — où on en est
 
 **Date :** 20 septembre 2026  

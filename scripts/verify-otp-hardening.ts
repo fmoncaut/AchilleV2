@@ -1,6 +1,7 @@
 /**
  * Vérifs locales durcissement OTP (4 points).
  * Usage: npx tsx scripts/verify-otp-hardening.ts
+ * Envoi réel du code : OTP_TEST_EMAIL=<votre adresse> (sinon otp-test@example.com).
  */
 import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync, unlinkSync } from "node:fs";
@@ -139,7 +140,7 @@ async function main() {
       `
     import { sendOtpEmail, OTP_MAIL_SUBJECT } from "../lib/auth-email.ts";
     const code = String(Math.floor(100000 + Math.random() * 900000));
-    await sendOtpEmail({ identifier: "fmoncaut@gmail.com", token: code });
+    await sendOtpEmail({ identifier: process.env.OTP_TEST_EMAIL ?? "otp-test@example.com", token: code });
     console.log(JSON.stringify({ ok: true, subject: OTP_MAIL_SUBJECT, code }));
     `,
     );
