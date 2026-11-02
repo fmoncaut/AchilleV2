@@ -2,7 +2,7 @@
 
 Ce guide ne contient aucun secret. Les valeurs vivent dans la sauvegarde chiffrée `akwire-backup-2026-11-02`, hors dépôt, ou doivent être régénérées.
 
-La branche `pause-2026-11` part de l'état local `fix/recette-1` (`c8b75c7`). `origin/main` (`e1c08ea`) a trois commits de plus : la fusion de la recette et le rapport de recette expurgé. Le code applicatif de cette recette est déjà dans `c8b75c7`. Avant une remise en ligne, comparer cette branche avec `origin/main` et récupérer le rapport de recette s'il doit suivre le déploiement.
+La branche `pause-2026-11` part de l'état local `fix/recette-1` (`c8b75c7`). `origin/main` (`e1c08ea`) a des commits de documentation en plus. La fusion avec `origin/main` se fait uniquement à la reprise, jamais pendant la pause.
 
 ## Environnement local
 
@@ -65,21 +65,32 @@ Restauration de production, vérifiée le 2 novembre 2026 sur un conteneur jetab
 
 La restauration de staging dans `akwire-pause-local` (port 5434) a produit sept erreurs, listées dans le rapport de contrôle : `transaction_timeout`, `tiger`, `topology`, `plv8` (création et commentaire), `vector` (création et commentaire). Aucune table, colonne, fonction, vue ou index de l'application n'utilise `plv8` ni `vector`. `to_tsvector` est la recherche plein texte de PostgreSQL, pas pgvector.
 
-## Recréer staging, puis la production
+## Pendant la pause
 
-Ordre : staging d'abord, production seulement après un health check staging. Ne pas pousser sur `main` tant que l'application ne doit pas redémarrer : Clever déploie `main` sur staging.
+Les applications `akwire-staging` et `akwire-prod` restent arrêtées. Elles ne sont pas supprimées. Leurs scalers observés restent ceux du 2 novembre 2026 : staging 1 × S, production 1 × M, build dédié M, scalabilité automatique désactivée.
 
-1. Add-on PostgreSQL **dédié payant** (pas le plan DEV : pas de PostGIS), région `par`. Staging observée : plan `xs_sml`, PostgreSQL 15, PostGIS 3.6.4, add-on nommé `akwire`. Production observée : même plan, PostgreSQL 18, PostGIS 3.6.4, add-on nommé `akwire-prod-pg`.
-2. Application Node.js, région Paris. Staging : 1 scaler taille S, build dédié M. Production : 1 scaler taille M, build dédié M. Scalabilité automatique désactivée. `force-https` et zero-downtime activés, sessions collantes désactivées.
-3. Lier l'add-on. `DATABASE_URL` doit être une URL `postgresql://` réelle. La console n'interpole pas `$POSTGRESQL_ADDON_URI` : le hook `clevercloud/pre-run.sh` reprend l'URI de l'add-on si besoin.
-4. Variables, sans valeurs ici. Communes : `AUTH_SECRET`, `AUTH_URL`, `NEXT_PUBLIC_APP_URL`, `EMAIL_FROM`, `HOSTNAME` (`0.0.0.0`), `NODE_ENV`, `CC_NODE_VERSION` (`22`), `CC_PRE_RUN_HOOK` (`bash clevercloud/pre-run.sh`), `RESERVATION_PICKUP_HOURS`, `NEXT_PUBLIC_IGN_STYLE_URL`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_DEFAULT_FEE_RATE`, `STRIPE_NOSHOW_MODE`. Staging avait en plus `STRIPE_WEBHOOK_SECRET` et `STRIPE_WEBHOOK_SECRET_ACCOUNT`. Production avait en plus `SCALEWAY_ACCESS_KEY_ID`, `SCALEWAY_SECRET_ACCESS_KEY`, `SCALEWAY_BUCKET` (`akwire-media-prod`), `SCALEWAY_ENDPOINT`, `SCALEWAY_REGION`. Les variables `POSTGRESQL_ADDON_*` sont injectées par l'add-on.
-5. `engines.node` reste `22.x`. Le hook refuse de démarrer si le majeur Node diffère de `CC_NODE_VERSION`. Il lance `prisma migrate deploy` puis `npm run build`.
-6. Crons, fichier versionné `clevercloud/cron.json` : `0 2 * * *` `clevercloud/affiliation-scheduler.sh`, `0 * * * *` `clevercloud/expire-reservations.sh`.
-7. Dépôt GitHub, branche `main`, pour staging. Domaine observé : `staging.akwire.fr`, plus le domaine `cleverapps.io` de chaque application. La production n'avait pas de domaine personnalisé, seulement son hôte `cleverapps.io`. `AUTH_URL` doit correspondre à l'URL publique réelle.
-8. Webhooks Stripe, mode test tant que les clés sont des clés de test. Endpoints : `/api/stripe/webhook` (`STRIPE_WEBHOOK_SECRET`) et `/api/stripe/webhook/account-v2` (`STRIPE_WEBHOOK_SECRET_ACCOUNT`). Les recréer dans le Dashboard Stripe vers la nouvelle URL, puis coller les nouveaux secrets dans les variables. Ne pas réutiliser un secret d'endpoint supprimé.
-9. Health check : `/api/health` doit répondre 200. Ensuite seulement, répéter pour la production.
+Les bases sont supprimées, sauf si Fabrice décide de garder la base de staging. Add-ons observés : `akwire` (PostgreSQL 15.19, PostGIS 3.6.4, plan `xs_sml`, Paris) et `akwire-prod-pg` (PostgreSQL 18.6, PostGIS 3.6.4, même plan).
 
-Le DNS (GoDaddy ou autre) et les domaines Clever se règlent après la création de l'application. Ce guide ne modifie rien.
+Le CNAME `staging.akwire.fr` reste en place. Aucun changement DNS.
+
+Aucun push sur `main` pendant la pause. Clever déploie cette branche sur staging et peut relancer l'application.
+
+## À la reprise
+
+La fusion avec `origin/main` se fait à ce moment-là, avant de redémarrer. `origin/main` (`e1c08ea`) contient le rapport de recette expurgé, `docs/audits/point-etape-2026-10-19.md`, la mention d'obsolescence dans `docs/status.md`, le remplacement d'un destinataire en dur dans `scripts/verify-otp-hardening.ts`, et un ajustement d'un HTML d'audit. Les migrations sont identiques à celles de `pause-2026-11`. Fusionner `origin/main` dans la branche de reprise, puis pousser `main` seulement quand le redémarrage est voulu.
+
+Pour chaque environnement, dans cet ordre, staging d'abord :
+
+1. Recréer l'add-on PostgreSQL dédié payant (pas le plan DEV : pas de PostGIS), région `par`. Staging : PostgreSQL 15, PostGIS 3.6. Production : PostgreSQL 18, PostGIS 3.6. Même plan `xs_sml` qu'avant, sauf décision contraire.
+2. Restaurer le dump correspondant (`staging.dump` ou `prod.dump`) avec un client PostgreSQL 18, `--no-owner --no-acl`. Vérifier les comptages et les 26 migrations.
+3. Rattacher l'add-on à l'application existante, qui n'a pas été supprimée.
+4. Vérifier `DATABASE_URL` : ce doit être une URL `postgresql://` réelle. La console n'interpole pas `$POSTGRESQL_ADDON_URI`. Le hook `clevercloud/pre-run.sh` reprend l'URI de l'add-on si `DATABASE_URL` n'est pas une URL Postgres.
+5. Remettre les logos : renvoyer `media/akwire-media` et `media/akwire-media-prod` si les buckets ont été vidés, ou rebrancher les `logoUrl` locaux décrits plus bas. Variables Scaleway côté production : `SCALEWAY_ACCESS_KEY_ID`, `SCALEWAY_SECRET_ACCESS_KEY`, `SCALEWAY_BUCKET` (`akwire-media-prod`), `SCALEWAY_ENDPOINT`, `SCALEWAY_REGION`.
+6. Réactiver les webhooks Stripe vers `/api/stripe/webhook` (`STRIPE_WEBHOOK_SECRET`) et `/api/stripe/webhook/account-v2` (`STRIPE_WEBHOOK_SECRET_ACCOUNT`). Coller les secrets dans les variables de l'application. Les clés restent des clés de test tant que les préfixes sont `sk_test_` et `pk_test_`.
+7. Contrôler les autres variables déjà en place : `AUTH_SECRET`, `AUTH_URL`, `NEXT_PUBLIC_APP_URL`, `EMAIL_FROM`, `HOSTNAME` (`0.0.0.0`), `NODE_ENV`, `CC_NODE_VERSION` (`22`), `CC_PRE_RUN_HOOK` (`bash clevercloud/pre-run.sh`), `RESERVATION_PICKUP_HOURS`, `NEXT_PUBLIC_IGN_STYLE_URL`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_DEFAULT_FEE_RATE`, `STRIPE_NOSHOW_MODE`. `engines.node` reste `22.x`. Les crons restent dans `clevercloud/cron.json`.
+8. Redémarrer l'application. `/api/health` doit répondre 200. Ensuite seulement, enchaîner sur la production.
+
+`AUTH_URL` de staging reste `https://staging.akwire.fr`. La production n'avait pas de domaine personnalisé, seulement son hôte `cleverapps.io`.
 
 ## Secrets à régénérer
 
@@ -91,14 +102,6 @@ Après une suppression des ressources distantes, régénérer plutôt que réuti
 - clé SMTP Brevo (`SMTP_PASSWORD` / `SMTP_KEY`) et, si elle existe encore, `BREVO_API_KEY`
 
 Les jetons locaux `CLEVER_TOKEN` et `CLEVER_SECRET` étaient dans l'ancien `.env`. Les régénérer s'ils ont pu être exposés, et ne pas les remettre dans le dépôt.
-
-## Fusion avec origin/main
-
-À faire après la suppression des applications Clever, pas avant : un push sur `main` redéploie staging.
-
-`pause-2026-11` part de `c8b75c7` et ajoute ce guide. `origin/main` (`e1c08ea`) contient en plus le rapport de recette expurgé, `docs/audits/point-etape-2026-10-19.md`, la mention d'obsolescence dans `docs/status.md`, le remplacement d'un destinataire en dur dans `scripts/verify-otp-hardening.ts`, et un ajustement d'un HTML d'audit. Les migrations sont identiques.
-
-Quand la remise en ligne sera décidée : fusionner `origin/main` dans la branche de reprise, résoudre le seul fichier en conflit probable (`docs/pause-reprise.md` n'existe pas sur `main`), puis seulement ensuite pousser `main`.
 
 ## Logos locaux
 
