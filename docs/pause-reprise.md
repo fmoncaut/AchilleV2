@@ -50,6 +50,21 @@ Des erreurs peuvent être ignorées si les comptages métier redeviennent identi
 
 Vérifier avec `pg_restore -l`, puis des `SELECT count(*)` sur les tables métier, et `npx prisma migrate status`. S'il reste des migrations en attente, ne pas les appliquer sans décision explicite.
 
+### Écart PostgreSQL 15 / 18
+
+La staging Clever est en PostgreSQL 15.19. La production est en PostgreSQL 18.6. Les deux ont PostGIS 3.6.4. Les dossiers `prisma/migrations` de `e1c08ea`, de `49a4f6d` et de `pause-2026-11` ont le même arbre. On peut donc restaurer l'un ou l'autre dump sur le schéma du dépôt, à condition de choisir l'image du bon majeur.
+
+| Dump | Image | Point de montage Docker |
+|---|---|---|
+| `staging.dump` | `postgis/postgis:15-3.6` | `/var/lib/postgresql/data` |
+| `prod.dump` | `postgis/postgis:18-3.6` | `/var/lib/postgresql` |
+
+L'image PostgreSQL 18 refuse un volume monté directement sur `/var/lib/postgresql/data`. Le client `pg_restore` reste celui de PostgreSQL 18 pour les deux archives, car elles ont été produites par ce client.
+
+Restauration de production, vérifiée le 2 novembre 2026 sur un conteneur jetable (port 5435), puis conteneur et volume supprimés. Quatre erreurs, sans effet sur les comptages : schémas `tiger` et `topology` déjà créés, extension `vector` absente, commentaire de cette extension. `transaction_timeout` n'apparaît pas, le serveur est déjà en 18. Le dump de production ne contient pas `plv8`. 26 migrations, toutes terminées. Les comptages rejoignent ceux du rapport de pause.
+
+La restauration de staging dans `akwire-pause-local` (port 5434) a produit sept erreurs, listées dans le rapport de contrôle : `transaction_timeout`, `tiger`, `topology`, `plv8` (création et commentaire), `vector` (création et commentaire). Aucune table, colonne, fonction, vue ou index de l'application n'utilise `plv8` ni `vector`. `to_tsvector` est la recherche plein texte de PostgreSQL, pas pgvector.
+
 ## Recréer staging, puis la production
 
 Ordre : staging d'abord, production seulement après un health check staging. Ne pas pousser sur `main` tant que l'application ne doit pas redémarrer : Clever déploie `main` sur staging.
@@ -76,6 +91,26 @@ Après une suppression des ressources distantes, régénérer plutôt que réuti
 - clé SMTP Brevo (`SMTP_PASSWORD` / `SMTP_KEY`) et, si elle existe encore, `BREVO_API_KEY`
 
 Les jetons locaux `CLEVER_TOKEN` et `CLEVER_SECRET` étaient dans l'ancien `.env`. Les régénérer s'ils ont pu être exposés, et ne pas les remettre dans le dépôt.
+
+## Fusion avec origin/main
+
+À faire après la suppression des applications Clever, pas avant : un push sur `main` redéploie staging.
+
+`pause-2026-11` part de `c8b75c7` et ajoute ce guide. `origin/main` (`e1c08ea`) contient en plus le rapport de recette expurgé, `docs/audits/point-etape-2026-10-19.md`, la mention d'obsolescence dans `docs/status.md`, le remplacement d'un destinataire en dur dans `scripts/verify-otp-hardening.ts`, et un ajustement d'un HTML d'audit. Les migrations sont identiques.
+
+Quand la remise en ligne sera décidée : fusionner `origin/main` dans la branche de reprise, résoudre le seul fichier en conflit probable (`docs/pause-reprise.md` n'existe pas sur `main`), puis seulement ensuite pousser `main`.
+
+## Logos locaux
+
+Pour afficher les enseignes sans bucket Scaleway, la base locale seule a été adaptée le 2 novembre 2026. Le code applicatif n'a pas changé : les pages utilisent `logoUrl` tel quel dans un `<img>`, et `public/` est servi à la racine.
+
+1. Copier `media/akwire-media/` vers `public/local-logos/` (81 fichiers, dossier `merchants/`).
+2. Ajouter `public/local-logos/` dans `.git/info/exclude`. Ne pas committer ces fichiers.
+3. Sauver `Merchant.id` et `Merchant.logoUrl` (`db/merchant-logos-before.csv` dans la sauvegarde).
+4. Remplacer le préfixe `https://akwire-media.s3.fr-par.scw.cloud/` par `/local-logos/`, en gardant le chemin de fichier. Exemple de résultat : `/local-logos/merchants/electrodepot.png`. 82 lignes passent en local, une enseigne reste sans logo. `maliterie.png` est partagé par deux enseignes.
+5. Redémarrer `npm run dev` : la fiche magasin est mise en cache (`revalidate` et `unstable_cache`). Sans redémarrage, la page peut encore montrer l'ancienne URL.
+
+Les photos produit restent chez les marchands. Seuls les logos d'enseigne sont relocalisés.
 
 ## Logos si les buckets ont été supprimés
 
